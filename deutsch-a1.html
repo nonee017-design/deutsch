@@ -812,7 +812,7 @@ const ADD7=[
  {de:"spazieren gehen",zh:"散步（固定搭配）",g:null,cat:"動詞",lesson:"L7",ex:["Ich gehe gern spazieren.","我喜歡去散步。"]},
  {de:"spielen",zh:"玩、演奏（Fußball/Tennis/Gitarre spielen）",g:null,cat:"動詞",lesson:"L7",ex:["Ich spiele gern Gitarre.","我喜歡彈吉他。"]},
  {de:"tanzen",zh:"跳舞（字尾z：du/er只加t，不加st）",g:null,cat:"動詞",lesson:"L7",ex:["Du kannst wirklich toll tanzen.","你真的很會跳舞。"]},
- {de:"treffen",zh:"見面、遇到 — e→i 變音",g:null,cat:"動詞",lesson:"L7",ex:["Ich treffe heute Freunde.","我今天要跟朋友見面。"],ex2:["Triffst du sie am Wochenende?","你週末要跟她見面嗎？"]},
+ {de:"treffen",zh:"見面、遇到 — e→i 變音（wir treffen uns＝我們彼此碰面，uns 是反身用法）",g:null,cat:"動詞",lesson:"L7",ex:["Ich treffe heute Freunde.","我今天要跟朋友見面。"],ex2:["Triffst du sie am Wochenende?","你週末要跟她見面嗎？"]},
  {de:"fahren",zh:"開車、騎（交通工具）— a→ä 變音",g:null,cat:"動詞",lesson:"L7",ex:["Fährst du gern Ski?","你喜歡滑雪嗎？"],ex2:["Er fährt jeden Tag mit dem Fahrrad zur Arbeit.","他每天騎腳踏車去上班。"]},
  {de:"rauchen",zh:"抽菸",g:null,cat:"動詞",lesson:"L7",ex:["Kann ich hier rauchen?","我可以在這裡抽菸嗎？"]},
  {de:"immer",zh:"總是、一直",g:null,cat:"頻率",lesson:"L7",ex:["Ich koche immer selbst.","我總是自己煮飯。"]},
@@ -1288,8 +1288,20 @@ const ADDFIXF=[
 const ADDFIXV1=[
 {de:"können",zh:"能、會（情態動詞，ich kann/du kannst）",g:null,cat:"動詞",lesson:"L7",ex:["Ich kann ein bisschen Schach spielen.","我會下一點點西洋棋。"],ex2:["Kannst du mir helfen?","你能幫我嗎？"]},
 ];
+const ADDFIXL8=[
+{de:"leider",zh:"可惜、遺憾地（放句首時，主詞退到動詞後）",g:null,cat:"常用",lesson:"L8",
+ ex:["Leider habe ich keine Zeit.","可惜我沒空。"]},
+{de:"ins",zh:"去…（方向，in+das 縮合，回答 Wohin?）",g:null,cat:"常用",lesson:"L8",
+ ex:["Gehen wir ins Kino?","我們要去看電影嗎？"]},
+{de:"wollen",zh:"想要（提議句型 Wollen wir…?＝要不要一起…？；完整變位 A1.2 才學）",g:null,cat:"常用",lesson:"L8",
+ ex:["Wollen wir ins Kino gehen?","我們要不要去看電影？"]},
+{de:"Viertel",zh:"一刻鐘、四分之一（das Viertel；Viertel vor/nach ＋整點＝差一刻/過一刻）",g:"das",cat:"常用",lesson:"L8",
+ ex:["Es ist Viertel vor zehn.","現在是九點四十五分（差一刻十點）。"]},
+{de:"halb",zh:"半（halb ＋下一個整點＝半，不是上一個整點！）",g:null,cat:"常用",lesson:"L8",
+ ex:["Es ist halb zehn.","現在是九點半（不是十點半）。"]},
+];
 /* ===ANCHOR:VOCAB_ARRAYS===（新課單字陣列 const ADDn=[...] 宣告在這行上方，並把陣列名加進下面 VOCAB 合併行）*/
-const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1];
+const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8];
 VOCAB.forEach((v,i)=>v.id="v"+i);
 
 
@@ -2377,7 +2389,7 @@ function posOf(v){
   return"副詞·片語";
 }
 /* 副詞·片語桶的子分類（僅影響卡面小標籤，不動資料、不加 chip）。新字若屬介/連/疑/代，記得加進對應 Set */
-const POS_SUB_PREP=new Set(["ab","für","im","am","um","seit","unter","zwischen","ohne","von","bis","mit","nach","aus","bei","in","an","auf","vor","neben","hinter"]);
+const POS_SUB_PREP=new Set(["ab","für","im","am","ins","um","seit","unter","zwischen","ohne","von","bis","mit","nach","aus","bei","in","an","auf","vor","neben","hinter"]);
 const POS_SUB_CONJ=new Set(["aber","oder","denn","und","sondern"]);
 const POS_SUB_QW=new Set(["warum","wann","wo","wer","was","wie","woher","wohin"]);
 const POS_SUB_PRON=new Set(["man","etwas","nichts","alles","jemand","niemand","selbst"]);
@@ -2793,9 +2805,9 @@ const GRAM=[
   </div></details>
   <div class="note"><b>⚠️ 三個最容易錯</b><br>① 可分離動詞的 ge 塞在<b>字首和字幹中間</b>，不是黏在最前面：<span style="color:#b45309">an<b>ge</b>rufen</span>（不是 geanrufen）。<br>② 不可分離動詞（be-/ver-/er- 開頭）跟 -ieren 結尾動詞<b>永遠不加 ge</b>，這兩型是同一條「不加 ge」規則的兩個觸發條件，別搞混。<br>③ <b>sein 是例外，預設用 haben</b>——除非動詞明確是「移動／狀態改變」才換 sein，猜不準先用 haben。</div>
 </div>`},
-{l:"L13",html:`
+{ls:["L8","L13"],html:`
 <div class="card gcard">
-  <div class="gtitle">🧩 地方介係詞總表：wo? + Dativ <span class="lessontag">L13</span></div>
+  <div class="gtitle">🧩 地方介係詞總表：wo? + Dativ <span class="lessontag">L8</span><span class="lessontag">L13</span></div>
   <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：這 9 個介係詞是「兩用介係詞」（Wechselpräpositionen）——問「Wo?」（靜態位置）時配 <b>Dativ</b>，之後 A1.2 問「Wohin?」（往哪去）時同一批字會配 Akkusativ。這張卡先蓋 Dativ／wo? 這半邊，Akkusativ／wohin? 半邊 ⬜ 之後解鎖。</p>
   <details data-rule="lokal-neun"><summary>① 9 個介係詞 + Dativ 冠詞（配合🧩冠詞變格總表一起看）</summary><div class="dbody">
   <table>
@@ -2815,6 +2827,7 @@ const GRAM=[
   <p style="font-size:.9rem;margin:.1em 0">只有 <b>in+dem→im</b> 和 <b>an+dem→am</b> 會融合成一個字；an der／in der／neben dem 等其他組合都<b>不融合</b>，照原樣寫兩個字。</p>
   <p style="font-size:.9rem;margin:.1em 0">Ich bin <b>im</b> Zentrum.（= in dem Zentrum）　Das Hotel ist <b>am</b> Dom.（= an dem Dom）</p>
   </div></details>
+  <p style="font-size:.86rem;margin:.3em 0;color:#b45309">👀 提早出現（L8）：<b>ins Kino／ins Café</b>（in+das，方向 Wohin?→Akkusativ）先當固定用法背，完整 Wohin? 規則見上方 ⬜ 之後解鎖。</p>
   <details data-rule="lokal-plural"><summary>③ 複數：名詞字尾加 -n（本身已是 n/s 結尾則不加）</summary><div class="dbody">
   <p style="font-size:.9rem;margin:.1em 0">Dativ 複數除了冠詞變 <b>den</b>，名詞本身也要加 <b>-n</b>：die Frau→die Frauen→<b>den Frauen</b>（本來就 n 結尾，不變）；der Kalender→die Kalender→<b>den Kalendern</b>（加 n）。</p>
   <p style="font-size:.9rem;margin:.1em 0">已經是 -s 結尾的例外不加：das Auto→die Autos→<b>den Autos</b>。</p>
@@ -2879,7 +2892,7 @@ let LEMMA_V=null,LEMMA_N=null;
 const FUNC_GLOSS={
   /* 人稱代名詞 */
   ich:"我",du:"你",er:"他／它（陽性）",sie:"她／她們／他們（小寫）",es:"它（中性）",wir:"我們",ihr:"你們／她的",
-  mich:"我（Akkusativ 受格）",dich:"你（Akkusativ 受格)",mir:"我（Dativ 與格）",dir:"你（Dativ 與格）",uns:"我們（受格）",euch:"你們（受格）",man:"人們／大家（泛指）",
+  mich:"我（Akkusativ 受格）",dich:"你（Akkusativ 受格)",mir:"我（Dativ 與格）",dir:"你（Dativ 與格）",uns:"我們（受格；wir treffen uns＝我們碰面/約見面，sich treffen 反身動詞完整規則 A2 才學）",euch:"你們（受格）",man:"人們／大家（泛指）",
   /* 冠詞與其變格 */
   der:"定冠詞（陽性）／那個",die:"定冠詞（陰性／複數）",das:"定冠詞（中性）／這個",den:"der 的 Akkusativ 形",dem:"定冠詞 Dativ 形（陽/中）",
   ein:"一個（陽/中）",eine:"一個（陰）",einen:"ein 的陽性 Akkusativ 形",einem:"ein 的 Dativ 形（陽/中）",einer:"ein 的 Dativ 形（陰）",
@@ -2906,6 +2919,7 @@ const FUNC_GLOSS={
   /* 情態/助動詞原形（2026-07-16 修 bug：變位形經 LEMMA_V 還原後查此處；新情態動詞照此補一條原形即可） */
   sein:"是（動詞原形，變位 bin/bist/ist/sind/seid）／他的（所有格）",haben:"有／擁有（動詞原形，變位 habe/hast/hat/habt）",
   können:"能、會（情態動詞）",möchten:"想要（情態動詞，möchte 的原形）",
+  leider:"可惜、遺憾地",
   /* ===ANCHOR:FUNC_GLOSS===（新功能詞 "小寫形":"中文" 插在這行上方，記得上一行補逗號）*/
 };
 const PART2_STRONG={gegangen:"gehen",gesprochen:"sprechen",getroffen:"treffen",gegessen:"essen",getrunken:"trinken",geflogen:"fliegen",geschrieben:"schreiben",gewesen:"sein",genommen:"nehmen",verstanden:"verstehen",bekommen:"bekommen",aufgestanden:"aufstehen",gestanden:"stehen",ausgesehen:"aussehen"};
@@ -3235,6 +3249,11 @@ const GR_IRR8=[
  {l:"L4",sub:"wissen：er → ?",before:"Er ",after:" die Antwort nicht.",answer:"weiß",options:["weiß","weißt","wisst"],full:"Er weiß die Antwort nicht."},
 ];
 GR_IRR8.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+const GR8FIX=[
+ {l:"L8",sub:"地方介係詞：融合 in das = ?（方向 Wohin?）",before:"Wollen wir ",after:" Kino gehen?",answer:"ins",options:["ins","in","im","in das"],full:"Wollen wir ins Kino gehen?"},
+ {l:"L8",sub:"地方介係詞：ins（方向） vs im（位置）",before:"Wir gehen ",after:" Kino. (Wohin?)",answer:"ins",options:["ins","im","am"],full:"Wir gehen ins Kino."},
+];
+GR8FIX.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
   /* ===ANCHOR:GRAM_QUIZ===（新課文法填空題插在這行上方：宣告 const GRn=[{l,sub,before,after,answer,options,full},…]; 後接一行 GRn.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full})); ）*/
   return Q;
 }
