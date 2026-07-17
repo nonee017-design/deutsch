@@ -217,9 +217,9 @@
     <button class="lchip" data-lesson="L11" data-on="false">L11</button>
     <button class="lchip" data-lesson="L12" data-on="true">L12</button>
     </span>
-    <button class="lchip" data-lesson="L14" data-on="false">L14</button>
-    <!-- ===ANCHOR:LESSON_CHIPS===（A1.2 新課按鈕插在這行上方、span#bookA11 之外；L13 首次上線時順帶把上面 span#bookA11 的 style 改 display:none、#bookA11Fold 按鈕文字改「📕 A1.1 ▸」＝A1.1 預設收合，其餘 JS 不用動）-->
     <button class="lchip" data-lesson="L13" data-on="false">L13</button>
+    <button class="lchip" data-lesson="L14" data-on="false">L14</button>
+    <!-- ===ANCHOR:LESSON_CHIPS===（A1.2 新課按鈕插在這行上方、span#bookA11 之外）-->
     <button class="lchip" data-lesson="ALL" data-on="false">全選 · 模組複習</button>
     <span style="flex-basis:100%;font-size:.72rem;color:var(--mut)">單點換課 · 長按半秒加選複數課 · 📕 收合/展開整冊</span>
   </div>
@@ -631,7 +631,7 @@ const ADD4=[
   {de:"wirklich",zh:"真的、確實（wirklich schön）",g:null,cat:"常用",lesson:"L4",ex:["Der Tisch ist wirklich schön.","這桌子真的很美。"]},
   {de:"Möbel",zh:"傢俱（die Möbel，集合名詞·常用複數）",g:"die",cat:"傢俱",lesson:"L4",ex:["Die Möbel sind wirklich schön.","這些傢俱真的很美。"]},
   {de:"Geld",zh:"錢（das Geld，不可數）",g:"das",cat:"數字",lesson:"L4",ex:["Ich habe nicht viel Geld.","我錢不多。"]},
-  {de:"wissen",zh:"知道（事實）；不規則 ich weiß/du weißt",g:null,cat:"動詞",lesson:"L4",ex:["Weißt du das?","你知道嗎？"]},
+  {de:"wissen",zh:"知道（事實）；不規則 ich weiß/du weißt",g:null,cat:"動詞",lesson:"L4",ex:["Weißt du das?","你知道嗎？"],ex2:["Ich weiß es nicht genau.","我不太確定。"]},
   {de:"denn",zh:"語氣詞：讓問句更自然（無字面意思）；另義「因為」",g:null,cat:"常用",lesson:"L4",ex:["Wie viel kostet denn der Tisch?","這桌子多少錢呢？"]},
   {de:"oder",zh:"句尾 …, oder? =「對吧？」；一般義「或」",g:null,cat:"常用",lesson:"L4",ex:["Die Couch ist schön, oder?","這沙發很美，對吧？"]},
   {de:"aber",zh:"但是；語氣加強「也太…了！」",g:null,cat:"常用",lesson:"L4",ex:["Das ist aber günstig!","這也太便宜了吧！"]},
@@ -687,11 +687,11 @@ const ADD6=[
   {de:"Meer",zh:"海",g:"das",cat:"自然",lesson:"L6",ex:["Das Meer ist blau.","大海是藍的。"]},
   {de:"Fluss",zh:"河（複數 Flüsse 變音）",g:"der",cat:"自然",lesson:"L6",ex:["Der Fluss ist lang.","這條河很長。"]},
   /* 動詞（多為 Akkusativ 動詞）*/
-  {de:"möchten",zh:"想要（禮貌；ich möchte/du möchtest）",g:null,cat:"動詞",lesson:"L6",ex:["Ich möchte einen Kaffee.","我想要一杯咖啡。"]},
+  {de:"möchten",zh:"想要（禮貌；ich möchte/du möchtest）",g:null,cat:"動詞",lesson:"L6",ex:["Ich möchte einen Kaffee.","我想要一杯咖啡。"],ex2:["Möchtest du auch einen Kaffee?","你也想要一杯咖啡嗎？"]},
   {de:"bestellen",zh:"訂購",g:null,cat:"動詞",lesson:"L6",ex:["Ich möchte die Uhr bestellen.","我想訂這只錶。"]},
-  {de:"nehmen",zh:"拿／選（不規則：du nimmst/er nimmt）",g:null,cat:"動詞",lesson:"L6",ex:["Ich nehme den Stift.","我拿這支筆。"]},
+  {de:"nehmen",zh:"拿／選（不規則：du nimmst/er nimmt）",g:null,cat:"動詞",lesson:"L6",ex:["Ich nehme den Stift.","我拿這支筆。"],ex2:["Nimmst du den Bus oder das Auto?","你要搭公車還是開車？"]},
   {de:"suchen",zh:"找、尋找",g:null,cat:"動詞",lesson:"L6",ex:["Ich suche einen Stift.","我在找一支筆。"]},
-  {de:"geben",zh:"給（不規則：du gibst/er gibt）",g:null,cat:"動詞",lesson:"L6",ex:["Ich gebe dir das Buch.","我把書給你。"]},
+  {de:"geben",zh:"給（不規則：du gibst/er gibt）",g:null,cat:"動詞",lesson:"L6",ex:["Ich gebe dir das Buch.","我把書給你。"],ex2:["Er gibt mir seine Nummer.","他給我他的電話號碼。"]},
   /* 常用副詞 */
   {de:"heute",zh:"今天",g:null,cat:"常用",lesson:"L6",ex:["Heute habe ich einen Termin.","我今天有個約。"]},
   {de:"hier",zh:"這裡",g:null,cat:"常用",lesson:"L6",ex:["Hier ist mein Büro.","這是我的辦公室。"]},
@@ -758,8 +758,8 @@ const ADD123=[
   {de:"heißen",zh:"名叫、被稱為",g:null,cat:"動詞",lesson:"L1",ex:["Ich heiße Pinar.","我叫 Pinar。"]},
   {de:"fragen",zh:"問、詢問",g:null,cat:"動詞",lesson:"L1",ex:["Ich frage den Lehrer.","我問老師。"]},
   {de:"antworten",zh:"回答（字幹 -t → du/er/ihr 多加 e）",g:null,cat:"動詞",lesson:"L1",ex:["Ich antworte schnell.","我很快回答。"]},
-  {de:"sein",zh:"是（英 be，不規則）",g:null,cat:"動詞",lesson:"L1",ex:["Ich bin Studentin.","我是學生。"]},
-  {de:"haben",zh:"有（英 have，不規則）",g:null,cat:"動詞",lesson:"L1",ex:["Ich habe zwei Kinder.","我有兩個小孩。"]},
+  {de:"sein",zh:"是（英 be，不規則）",g:null,cat:"動詞",lesson:"L1",ex:["Ich bin Studentin.","我是學生。"],ex2:["Bist du müde?","你累了嗎？"]},
+  {de:"haben",zh:"有（英 have，不規則）",g:null,cat:"動詞",lesson:"L1",ex:["Ich habe zwei Kinder.","我有兩個小孩。"],ex2:["Hast du Zeit?","你有空嗎？"]},
   {de:"buchstabieren",zh:"拼讀（把字母一個一個唸出來）",g:null,cat:"動詞",lesson:"L1",ex:["Können Sie das buchstabieren?","您能拼一下嗎？"]},
   {de:"arbeiten",zh:"工作（字幹 -t；接 als/bei/in）",g:null,cat:"動詞",lesson:"L2",ex:["Ich arbeite als Lehrerin.","我當老師工作。"]},
   {de:"leben",zh:"生活、共同生活（比 wohnen 抽象）",g:null,cat:"動詞",lesson:"L2",ex:["Wir leben zusammen.","我們住在一起。"]},
@@ -782,10 +782,10 @@ const ADD123=[
   {de:"genau",zh:"正是、沒錯",g:null,cat:"常用語",lesson:"L3",ex:["Ja, genau!","對，沒錯！"]},
   {de:"doch",zh:"不，其實有（反駁否定）",g:null,cat:"常用語",lesson:"L3",ex:["Doch, ich bin verheiratet.","不，我（其實）結婚了。"]},
   {de:"mehr",zh:"更多（nicht mehr＝不再）",g:null,cat:"常用語",lesson:"L3",ex:["Ich brauche mehr Zeit.","我需要更多時間。"]},
-  {de:"sprechen",zh:"說（語言）— e→i 變音",g:null,cat:"動詞",lesson:"L3",ex:["Welche Sprachen sprichst du?","你說哪些語言？"]},
-  {de:"lesen",zh:"讀、閱讀 — e→ie 變音",g:null,cat:"動詞",lesson:"L3",ex:["Ich lese ein Buch.","我在讀一本書。"]},
+  {de:"sprechen",zh:"說（語言）— e→i 變音",g:null,cat:"動詞",lesson:"L3",ex:["Welche Sprachen sprichst du?","你說哪些語言？"],ex2:["Er spricht sehr gut Englisch.","他英文說得很好。"]},
+  {de:"lesen",zh:"讀、閱讀 — e→ie 變音",g:null,cat:"動詞",lesson:"L3",ex:["Ich lese ein Buch.","我在讀一本書。"],ex2:["Liest du gern Zeitungen?","你喜歡看報紙嗎？"]},
   {de:"hören",zh:"聽（廣義：聽到、聽音樂）",g:null,cat:"動詞",lesson:"L3",ex:["Ich höre gern Musik.","我喜歡聽音樂。"]},
-  {de:"sehen",zh:"看 — e→ie 變音",g:null,cat:"動詞",lesson:"L3",ex:["Er sieht einen Film.","他在看電影。"]},
+  {de:"sehen",zh:"看 — e→ie 變音",g:null,cat:"動詞",lesson:"L3",ex:["Er sieht einen Film.","他在看電影。"],ex2:["Siehst du das Schild dort?","你看到那邊的招牌嗎？"]},
   {de:"geboren",zh:"出生的（Wann bist du geboren?）",g:null,cat:"個人資料",lesson:"L3",ex:["Wann bist du geboren?","你哪一年出生？"]},
   {de:"zurzeit",zh:"目前、現在",g:null,cat:"時間副詞",lesson:"L3",ex:["Ich bin zurzeit arbeitslos.","我目前失業。"]},
 ];
@@ -812,8 +812,8 @@ const ADD7=[
  {de:"spazieren gehen",zh:"散步（固定搭配）",g:null,cat:"動詞",lesson:"L7",ex:["Ich gehe gern spazieren.","我喜歡去散步。"]},
  {de:"spielen",zh:"玩、演奏（Fußball/Tennis/Gitarre spielen）",g:null,cat:"動詞",lesson:"L7",ex:["Ich spiele gern Gitarre.","我喜歡彈吉他。"]},
  {de:"tanzen",zh:"跳舞（字尾z：du/er只加t，不加st）",g:null,cat:"動詞",lesson:"L7",ex:["Du kannst wirklich toll tanzen.","你真的很會跳舞。"]},
- {de:"treffen",zh:"見面、遇到 — e→i 變音",g:null,cat:"動詞",lesson:"L7",ex:["Ich treffe heute Freunde.","我今天要跟朋友見面。"]},
- {de:"fahren",zh:"開車、騎（交通工具）— a→ä 變音",g:null,cat:"動詞",lesson:"L7",ex:["Fährst du gern Ski?","你喜歡滑雪嗎？"]},
+ {de:"treffen",zh:"見面、遇到 — e→i 變音",g:null,cat:"動詞",lesson:"L7",ex:["Ich treffe heute Freunde.","我今天要跟朋友見面。"],ex2:["Triffst du sie am Wochenende?","你週末要跟她見面嗎？"]},
+ {de:"fahren",zh:"開車、騎（交通工具）— a→ä 變音",g:null,cat:"動詞",lesson:"L7",ex:["Fährst du gern Ski?","你喜歡滑雪嗎？"],ex2:["Er fährt jeden Tag mit dem Fahrrad zur Arbeit.","他每天騎腳踏車去上班。"]},
  {de:"rauchen",zh:"抽菸",g:null,cat:"動詞",lesson:"L7",ex:["Kann ich hier rauchen?","我可以在這裡抽菸嗎？"]},
  {de:"immer",zh:"總是、一直",g:null,cat:"頻率",lesson:"L7",ex:["Ich koche immer selbst.","我總是自己煮飯。"]},
  {de:"oft",zh:"常常",g:null,cat:"頻率",lesson:"L7",ex:["Ich gehe oft ins Kino.","我常常去看電影。"]},
@@ -890,8 +890,8 @@ const ADD9=[
  {de:"Kühlschrank",zh:"冰箱（複 Kühlschränke⚠️變音）",g:"der",cat:"飲食",lesson:"L9",ex:["Ich habe Milch im Kühlschrank.","我冰箱裡有牛奶。"]},
  {de:"Einladung",zh:"邀請",g:"die",cat:"飲食",lesson:"L9",ex:["Vielen Dank für die Einladung.","謝謝你的邀請。"]},
  {de:"Speisekarte",zh:"菜單",g:"die",cat:"飲食",lesson:"L9",ex:["Ich lese die Speisekarte.","我在看菜單。"]},
- {de:"essen",zh:"吃 — e→i 變音，且 du/er 同形 isst",g:null,cat:"動詞",lesson:"L9",ex:["Was isst du gern zum Frühstück?","你早餐喜歡吃什麼？"]},
- {de:"mögen",zh:"喜歡（一般性喜好，跟 möchten「想要」不同）",g:null,cat:"動詞",lesson:"L9",ex:["Ich mag keinen Käse.","我不喜歡起司。"]},
+ {de:"essen",zh:"吃 — e→i 變音，且 du/er 同形 isst",g:null,cat:"動詞",lesson:"L9",ex:["Was isst du gern zum Frühstück?","你早餐喜歡吃什麼？"],ex2:["Ich esse Fisch, aber er isst lieber Fleisch.","我吃魚，但他比較喜歡吃肉。"]},
+ {de:"mögen",zh:"喜歡（一般性喜好，跟 möchten「想要」不同）",g:null,cat:"動詞",lesson:"L9",ex:["Ich mag keinen Käse.","我不喜歡起司。"],ex2:["Magst du Sport?","你喜歡運動嗎？"]},
  {de:"frühstücken",zh:"吃早餐",g:null,cat:"動詞",lesson:"L9",ex:["Wann frühstückst du?","你什麼時候吃早餐？"]},
  {de:"schmecken",zh:"嚐起來（味道）",g:null,cat:"動詞",lesson:"L9",ex:["Wie schmeckt die Suppe?","這湯味道如何？"]},
  {de:"trinken",zh:"喝",g:null,cat:"動詞",lesson:"L9",ex:["Was möchten Sie trinken?","您想喝什麼？"]},
@@ -912,7 +912,7 @@ const ADD_EXPAND=[
  {de:"trainieren",zh:"訓練、健身",g:null,cat:"動詞",lesson:"L7",ex:["Ich trainiere dreimal die Woche.","我一週訓練三次。"]},
  /* L8 邀約：開口句型搭配單字 */
  {de:"Lust",zh:"興致（片語 Lust haben auf，不可數）",g:"die",cat:"邀約",lesson:"L8",ex:["Hast du Lust auf Kino?","你想去看電影嗎？"]},
- {de:"einladen",zh:"邀請（可分離＋不規則：du lädst ein / er lädt ein）",g:null,cat:"動詞",lesson:"L8",ex:["Ich lade dich zum Essen ein.","我請你吃飯。"]},
+ {de:"einladen",zh:"邀請（可分離＋不規則：du lädst ein / er lädt ein）",g:null,cat:"動詞",lesson:"L8",ex:["Ich lade dich zum Essen ein.","我請你吃飯。"],ex2:["Er lädt seine Nachbarn zur Party ein.","他邀請鄰居參加派對。"]},
  /* L9 飲食擴充：飲料/餐別/菜單結構/烹調方式/口味/肉類 */
  {de:"Wasser",zh:"水（不可數）",g:"das",cat:"飲食",lesson:"L9",ex:["Ich trinke viel Wasser.","我喝很多水。"]},
  {de:"Kaffee",zh:"咖啡（複 Kaffees，指幾杯咖啡）",g:"der",cat:"飲食",lesson:"L9",ex:["Ich möchte einen Kaffee.","我想要一杯咖啡。"]},
@@ -973,14 +973,14 @@ const ADD10=[
  {de:"also",zh:"那麼、也就是說",g:null,cat:"副詞",lesson:"L10",ex:["Also, ich steige in die U-Bahn ein.","那麼，我要上地鐵了。"]},
  {de:"also dann",zh:"那就這樣（掛電話用語）",g:null,cat:"慣用語",lesson:"L10",ex:["Also dann, auf Wiedersehen!","那就這樣，再見！"]},
  {de:"ankommen",zh:"抵達（可分離）",g:null,cat:"動詞",lesson:"L10",ex:["Der Zug kommt um 18 Uhr in Berlin an.","火車18點抵達柏林。"]},
- {de:"abfahren",zh:"出發、開走（可分離）",g:null,cat:"動詞",lesson:"L10",ex:["Der Bus fährt um 17 Uhr ab.","公車17點發車。"]},
+ {de:"abfahren",zh:"出發、開走（可分離）",g:null,cat:"動詞",lesson:"L10",ex:["Der Bus fährt um 17 Uhr ab.","公車17點發車。"],ex2:["Wann fährst du morgen ab?","你明天幾點出發？"]},
  {de:"abholen",zh:"去接（可分離）",g:null,cat:"動詞",lesson:"L10",ex:["Holst du mich am Bahnhof ab?","你會來車站接我嗎？"]},
  {de:"anrufen",zh:"打電話給（可分離）",g:null,cat:"動詞",lesson:"L10",ex:["Ich rufe dich heute Abend an.","我今晚打給你。"]},
  {de:"aussteigen",zh:"下車（可分離）",g:null,cat:"動詞",lesson:"L10",ex:["Wo steigen wir aus?","我們要在哪裡下車？"]},
  {de:"einsteigen",zh:"上車（可分離）",g:null,cat:"動詞",lesson:"L10",ex:["Ich steige jetzt in die U-Bahn ein.","我現在要上地鐵了。"]},
  {de:"umsteigen",zh:"轉車（可分離）",g:null,cat:"動詞",lesson:"L10",ex:["Wo steigst du um?","你在哪裡轉車？"]},
  {de:"einkaufen",zh:"採買（可分離）",g:null,cat:"動詞",lesson:"L10",ex:["Vielleicht kaufe ich noch etwas ein.","也許我還會去買點東西。"]},
- {de:"fernsehen",zh:"看電視（可分離）",g:null,cat:"動詞",lesson:"L10",ex:["Wir sehen heute Abend fern.","我們今晚看電視。"]},
+ {de:"fernsehen",zh:"看電視（可分離）",g:null,cat:"動詞",lesson:"L10",ex:["Wir sehen heute Abend fern.","我們今晚看電視。"],ex2:["Siehst du oft fern?","你常常看電視嗎？"]},
 ];
 const ADD11=[
  {de:"Arbeit",zh:"工作（不可數，一份工作說 Job/Stelle）",g:"die",cat:"日常",lesson:"L11",ex:["Ich habe heute viel Arbeit.","我今天工作很多。"]},
@@ -991,7 +991,7 @@ const ADD11=[
  {de:"Monat",zh:"月（時間單位）",g:"der",cat:"日常",lesson:"L11",ex:["Ein Monat hat vier Wochen.","一個月有四週。"]},
  {de:"Party",zh:"派對",g:"die",cat:"日常",lesson:"L11",ex:["Wir machen eine Party.","我們要辦派對。"]},
  {de:"Reise",zh:"旅行（Dienstreise 出差／Privatreise 私人旅遊）",g:"die",cat:"日常",lesson:"L11",ex:["Michi ist auf einer Dienstreise.","米奇在出差。"]},
- {de:"schlafen",zh:"睡覺（母音變：du schläfst）",g:null,cat:"動詞",lesson:"L11",ex:["Ich habe lange geschlafen.","我睡了很久。"]},
+ {de:"schlafen",zh:"睡覺（母音變：du schläfst）",g:null,cat:"動詞",lesson:"L11",ex:["Ich habe lange geschlafen.","我睡了很久。"],ex2:["Schläfst du schon?","你睡了嗎？"]},
  {de:"lernen",zh:"學習",g:null,cat:"動詞",lesson:"L11",ex:["Ich lerne jeden Tag Deutsch.","我每天學德文。"]},
  {de:"reden",zh:"聊天、說話",g:null,cat:"動詞",lesson:"L11",ex:["Wir haben lange geredet.","我們聊了很久。"]},
  {de:"lachen",zh:"笑",g:null,cat:"動詞",lesson:"L11",ex:["Wir haben viel gelacht.","我們笑得很開心。"]},
@@ -1033,12 +1033,12 @@ const ADD12=[
  {de:"Silvester",zh:"跨年夜（不可數）",g:"das",cat:"節慶",lesson:"L12",ex:["Ich möchte gern Silvester in Berlin feiern.","我想在柏林跨年。"]},
  {de:"Leute",zh:"人們（只有複數）",g:"plu",cat:"節慶",lesson:"L12",ex:["Ich habe viele nette Leute getroffen.","我認識了很多不錯的人。"]},
  {de:"Person",zh:"人、人物",g:"die",cat:"節慶",lesson:"L12",ex:["Wie viele Personen kommen?","有多少人要來？"]},
- {de:"anfangen",zh:"開始（可分離＋母音變：du fängst an）",g:null,cat:"動詞",lesson:"L12",ex:["Der Karneval fängt im November an.","嘉年華十一月開始。"]},
+ {de:"anfangen",zh:"開始（可分離＋母音變：du fängst an）",g:null,cat:"動詞",lesson:"L12",ex:["Der Karneval fängt im November an.","嘉年華十一月開始。"],ex2:["Wann fängst du mit der Arbeit an?","你什麼時候開始工作？"]},
  {de:"aufhören",zh:"結束、停止（可分離）",g:null,cat:"動詞",lesson:"L12",ex:["Der Karneval hört im Februar auf.","嘉年華二月結束。"]},
  {de:"feiern",zh:"慶祝",g:null,cat:"動詞",lesson:"L12",ex:["Wir haben letzte Woche gefeiert.","我們上週慶祝了。"]},
  {de:"dauern",zh:"持續（時間長度）",g:null,cat:"動詞",lesson:"L12",ex:["Das Oktoberfest dauert zwei Wochen.","啤酒節持續兩週。"]},
  {de:"fliegen",zh:"飛（sein 類動詞）",g:null,cat:"動詞",lesson:"L12",ex:["Er ist nach München geflogen.","他飛去慕尼黑了。"]},
- {de:"gefallen",zh:"合……的意（母音變：du gefällst；接 Dativ：mir/dir gefällt）",g:null,cat:"動詞",lesson:"L12",ex:["Wie hat es dir gefallen?","你覺得怎麼樣（喜歡嗎）？"]},
+ {de:"gefallen",zh:"合……的意（母音變：du gefällst；接 Dativ：mir/dir gefällt）",g:null,cat:"動詞",lesson:"L12",ex:["Wie hat es dir gefallen?","你覺得怎麼樣（喜歡嗎）？"],ex2:["Gefällt dir die neue Wohnung?","你喜歡這個新公寓嗎？"]},
  {de:"seit",zh:"自從（介係詞）",g:null,cat:"副詞",lesson:"L12",ex:["Das Oktoberfest gibt es seit 1810.","啤酒節從1810年就有了。"]},
  {de:"gestern",zh:"昨天",g:null,cat:"副詞",lesson:"L12",ex:["Gestern war ich im Kino.","我昨天去看電影。"]},
  {de:"im",zh:"在……（月份/季節用；im = in dem）",g:null,cat:"副詞",lesson:"L12",ex:["Das Oktoberfest ist im September und Oktober.","啤酒節在九月和十月。"]},
@@ -1174,11 +1174,11 @@ const ADD13=[
  /* 動詞：核心 Lernwortschatz */
  {de:"abbiegen",zh:"轉彎（可分離，sein 類動詞）",g:null,cat:"動詞",lesson:"L13",ex:["Biegen Sie hier links ab.","請在這裡左轉。"]},
  {de:"beschreiben",zh:"描述",g:null,cat:"動詞",lesson:"L13",ex:["Können Sie mir den Weg beschreiben?","您可以跟我描述路怎麼走嗎？"]},
- {de:"weiterfahren",zh:"繼續開／繼續走（可分離，sein 類動詞，母音變：du fährst weiter）",g:null,cat:"動詞",lesson:"L13",ex:["Fahren Sie hier weiter.","請從這裡繼續走。"]},
+ {de:"weiterfahren",zh:"繼續開／繼續走（可分離，sein 類動詞，母音變：du fährst weiter）",g:null,cat:"動詞",lesson:"L13",ex:["Fahren Sie hier weiter.","請從這裡繼續走。"],ex2:["Er fährt noch bis zur Ampel weiter.","他還要繼續開到紅綠燈那裡。"]},
  {de:"wenden",zh:"迴轉、調頭",g:null,cat:"動詞",lesson:"L13",ex:["Wenden Sie bitte hier.","請在這裡迴轉。"]},
- {de:"zurückfahren",zh:"開回去（可分離，sein 類動詞，母音變：du fährst zurück）",g:null,cat:"動詞",lesson:"L13",ex:["Fahren Sie zurück!","請開回去！"]},
+ {de:"zurückfahren",zh:"開回去（可分離，sein 類動詞，母音變：du fährst zurück）",g:null,cat:"動詞",lesson:"L13",ex:["Fahren Sie zurück!","請開回去！"],ex2:["Wann fährst du nach Taiwan zurück?","你什麼時候要回台灣？"]},
  {de:"anmachen",zh:"打開（可分離，開關類）",g:null,cat:"動詞",lesson:"L13",ex:["Machen Sie das Licht an.","請把燈打開。"]},
- {de:"helfen",zh:"幫助（母音變：du hilfst, er hilft；受詞用 Dativ！）",g:null,cat:"動詞",lesson:"L13",ex:["Können Sie mir helfen?","您可以幫我嗎？"]},
+ {de:"helfen",zh:"幫助（母音變：du hilfst, er hilft；受詞用 Dativ！）",g:null,cat:"動詞",lesson:"L13",ex:["Können Sie mir helfen?","您可以幫我嗎？"],ex2:["Er hilft seiner Oma oft im Garten.","他常常在花園裡幫他奶奶。"]},
  {de:"stimmen",zh:"正確、沒錯",g:null,cat:"動詞",lesson:"L13",ex:["Ja, das stimmt.","對，沒錯。"]},
  /* 動詞：延伸（老師骰子活動） */
  {de:"holen",zh:"去拿、去取（延伸）",g:null,cat:"動詞",lesson:"L13",ex:["Ich gehe Geld holen.","我去領錢。"]},
@@ -1227,7 +1227,7 @@ const ADD14=[
  {de:"Fabrik",zh:"工廠",g:"die",cat:"城市",lesson:"L14",ex:["Die Fabrik liegt außerhalb der Stadt.","工廠位於市郊。"]},
  {de:"Stadt",zh:"城市",g:"die",cat:"城市",lesson:"L14",ex:["Eine Polizistin sucht eine Wohnung in der Stadtmitte.","一位女警在找市中心的公寓。"]},
  {de:"Zelt",zh:"帳篷",g:"das",cat:"自然",lesson:"L14",ex:["Wir schlafen im Zelt.","我們睡在帳篷裡。"]},
- {de:"aussehen",zh:"看起來（可分離＋母音變 e→ie）",g:null,cat:"動詞",lesson:"L14",ex:["Wie sieht dein neues Haus aus?","你的新房子看起來怎麼樣？"]},
+ {de:"aussehen",zh:"看起來（可分離＋母音變 e→ie）",g:null,cat:"動詞",lesson:"L14",ex:["Wie sieht dein neues Haus aus?","你的新房子看起來怎麼樣？"],ex2:["Du siehst heute müde aus.","你今天看起來很累。"]},
  {de:"bezahlen",zh:"付款（be-前綴，Partizip 不加 ge-）",g:null,cat:"動詞",lesson:"L14",ex:["Ich bezahle die Miete jeden Monat.","我每個月付房租。"]},
  {de:"stehen",zh:"站立／位於（強變化，Partizip gestanden）",g:null,cat:"動詞",lesson:"L14",ex:["Im Garten steht ein Baum.","花園裡站著一棵樹。"]},
  {de:"hinten",zh:"後面",g:null,cat:"方位副詞",lesson:"L14",ex:["Da hinten ist seine Garage.","後面是他的車庫。"]},
@@ -1286,7 +1286,7 @@ const ADDFIXF=[
 {de:"niemand",zh:"沒有人",g:null,cat:"常用",lesson:"L14",ex:["Niemand ist hier.","這裡沒有人。"]},
 ];
 const ADDFIXV1=[
-{de:"können",zh:"能、會（情態動詞，ich kann/du kannst）",g:null,cat:"動詞",lesson:"L7",ex:["Ich kann ein bisschen Schach spielen.","我會下一點點西洋棋。"]},
+{de:"können",zh:"能、會（情態動詞，ich kann/du kannst）",g:null,cat:"動詞",lesson:"L7",ex:["Ich kann ein bisschen Schach spielen.","我會下一點點西洋棋。"],ex2:["Kannst du mir helfen?","你能幫我嗎？"]},
 ];
 /* ===ANCHOR:VOCAB_ARRAYS===（新課單字陣列 const ADDn=[...] 宣告在這行上方，並把陣列名加進下面 VOCAB 合併行）*/
 const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1];
@@ -2331,6 +2331,16 @@ function gramKeyOf(t){for(const[s,k]of GKEY_MAP)if(t.includes(s))return k;return
 function gramKeyOfCard(g){const m=g.html.match(/gtitle">([^<]+)/);return gramKeyOf(m?m[1]:g.html);}
 /* 題目→卡片映射（執行期分類，一題可命中多卡） */
 const KONJ2_VERBS=new Set(["können","möchten","mögen","müssen","wollen","dürfen","sollen","sein","haben","werden","wissen"]);
+/* 2026-07-17：測驗顯示層剝除「洩題」括號提示，資料與弱點統計 key 完全不動。
+   範圍刻意收窄：只處理「動詞變位型」（verb：person → ?）與「Partizip：」開頭，
+   以及 L13 地方介係詞語意選擇題（sub 直接把答案印在冒號後）。其餘 sub 的括號是必要資訊（如冠詞性別、情境說明），不動。 */
+function gramSubShow(sub){
+  if(/^地方介係詞·語意選擇：/.test(sub))return '地方介係詞·語意選擇';
+  if(/^Partizip：/.test(sub)||/^[a-zäöüß]+：\s*(ich|du|er|es|sie|wir|ihr|Sie)\s*→/.test(sub)){
+    return sub.replace(/（[^）]*）/g,'').replace(/^母音變化：/,'').trim();
+  }
+  return sub;
+}
 function gramCardsOfQ(q){
   const s=q.sub,ks=new Set();
   if(/代名詞/.test(s))ks.add('pron');
@@ -2426,6 +2436,8 @@ function render(){
     if(c.vm)html+=verbBackHTML(c.vm);
     /* 例句（單數）*/
     if(c.ex)html+=`<div class="exline"><div class="exde">${c.ex[0]}</div><button class="spk exspk" aria-label="唸例句"></button><div class="exzh">${c.ex[1]}</div></div>`;
+    /* 2026-07-17：例句②——目前只給不規則動詞用，補第二個變位人稱，兩句合計涵蓋 ≥2 個不規則變化形 */
+    if(c.ex2)html+=`<div class="exline"><div class="exde">${c.ex2[0]}</div><button class="spk ex2spk" aria-label="唸例句②"></button><div class="exzh">${c.ex2[1]}</div></div>`;
     /* 例句（複數）*/
     if(c.plEx)html+=`<div class="exline plex"><div class="exde">${c.plEx[0]}</div><button class="spk plexspk" aria-label="唸複數例句"></button><div class="exzh">${c.plEx[1]}</div></div>`;
     flashFace.innerHTML=html;
@@ -2434,6 +2446,7 @@ function render(){
       const ps=flashFace.querySelector('.plspk');if(ps){ps.innerHTML=SPK_SVG;ps.onclick=(e)=>{e.stopPropagation();speak('die '+c.pl);};}
     }
     if(c.ex){const b=flashFace.querySelector('.exspk');if(b){b.innerHTML=SPK_SVG;b.onclick=(e)=>{e.stopPropagation();speak(c.ex[0]);};}}
+    if(c.ex2){const b=flashFace.querySelector('.ex2spk');if(b){b.innerHTML=SPK_SVG;b.onclick=(e)=>{e.stopPropagation();speak(c.ex2[0]);};}}
     if(c.plEx){const b=flashFace.querySelector('.plexspk');if(b){b.innerHTML=SPK_SVG;b.onclick=(e)=>{e.stopPropagation();speak(c.plEx[0]);};}}
     if(c.vm){flashFace.querySelectorAll('.vform').forEach(el=>{el.onclick=(e)=>{e.stopPropagation();speak(el.dataset.say||el.textContent);};});}
   }
@@ -2987,6 +3000,30 @@ function renderTexts(){
     };});
     textsList.appendChild(card);
   });
+  /* 2026-07-17：🏆 單元整合閱讀常駐化——原本只在單元關卡進行中顯示、過關即消失；
+     現附掛在 📖 導覽分頁尾端當固定閱讀教材。互動改自由練習：不鎖第一次作答、不計分、不動 modul[] 進度。
+     顯示條件＝所選範圍含該單元最末課（或「全選」，因全選會把每課都納入 curLessons）。 */
+  MODULE_DEF.filter(md=>curLessons.has(md.lessons[md.lessons.length-1])).forEach(md=>{
+    const mt=MODUL_TEXTS[md.id];if(!mt)return;
+    const card=document.createElement('div');card.className='card gcard textcard';
+    const deHtml=mt.de.split(/(\s+)/).map(seg=>/\S/.test(seg)?`<span class="tok">${seg}</span>`:seg).join('');
+    card.innerHTML=`<div class="gtitle">🏆 ${mt.title} <span class="genretag">單元整合閱讀</span> <span class="lessontag">${md.name}</span></div>`
+      +`<div style="margin:6px 0"><button class="btn tplay">▶️ 整段連唸</button></div>`
+      +`<div class="tde">${deHtml}</div>`
+      +`<div class="tokpop">👆 點上面任何一個德文字查意思</div>`
+      +`<div class="tzh hidden">${mt.zh}</div>`
+      +`<div class="tq"><b style="font-size:.9rem">✏️ 自由練習（隨時可重答，不計分、不影響單元關卡進度）</b>${mt.qs.map((q,qi)=>`<div style="margin-top:8px;font-size:.92rem"><b>${qi+1}. ${q.q}</b>${q.options.map((o,oi)=>`<button class="opt" data-q="${qi}" data-o="${oi}">${o}</button>`).join('')}</div>`).join('')}</div>`;
+    card.querySelector('.tplay').onclick=()=>speak(mt.de);
+    const pop=card.querySelector('.tokpop');
+    card.querySelectorAll('.tok').forEach(el=>{el.onclick=()=>tokPopShow(pop,el.textContent);});
+    const z=card.querySelector('.tzh');z.onclick=()=>z.classList.toggle('hidden');
+    card.querySelectorAll('.tq .opt').forEach(b=>{b.onclick=()=>{
+      const q=mt.qs[+b.dataset.q],ok=+b.dataset.o===q.a;
+      b.classList.add(ok?'correct':'wrong');
+      if(!ok)card.querySelectorAll(`.tq .opt[data-q="${b.dataset.q}"]`).forEach(x=>{if(+x.dataset.o===q.a)x.classList.add('correct');});
+    };});
+    textsList.appendChild(card);
+  });
   if(!textsList.children.length)textsList.innerHTML='<p style="color:#888;padding:8px">此範圍還沒有導讀——換個課別範圍看看。</p>';
 }
 
@@ -3179,6 +3216,25 @@ const GR13B=[
  {l:"L13",sub:"地方介係詞·語意選擇：in",before:"Das Café ist ",after:" der Stadtmitte. (咖啡館在市中心)",answer:"in",options:["in","an","vor","neben"],full:"Das Café ist in der Stadtmitte."},
 ];
 GR13B.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+const GR_IRR8=[
+ {l:"L12",sub:"anfangen：du → ?",before:"Wann ",after:" du mit der Arbeit an?",answer:"fängst",options:["fängst","fangt","fangen"],full:"Wann fängst du mit der Arbeit an?"},
+ {l:"L12",sub:"anfangen：er → ?",before:"Der Film ",after:" um acht Uhr an.",answer:"fängt",options:["fängt","fange","fangt"],full:"Der Film fängt um acht Uhr an."},
+ {l:"L6",sub:"geben：du → ?",before:"Was ",after:" du mir?",answer:"gibst",options:["gibst","gebe","gebt"],full:"Was gibst du mir?"},
+ {l:"L6",sub:"geben：er → ?",before:"Er ",after:" mir seine Adresse.",answer:"gibt",options:["gibt","gebe","gebt"],full:"Er gibt mir seine Adresse."},
+ {l:"L13",sub:"helfen：du → ?",before:"",after:" du mir bitte?",answer:"Hilfst",options:["Hilfst","Helfe","Helft"],full:"Hilfst du mir bitte?"},
+ {l:"L13",sub:"helfen：er → ?",before:"Der Nachbar ",after:" oft im Garten.",answer:"hilft",options:["hilft","helfe","helft"],full:"Der Nachbar hilft oft im Garten."},
+ {l:"L3",sub:"lesen：du → ?",before:"",after:" du gern Romane?",answer:"Liest",options:["Liest","Lese","Lest"],full:"Liest du gern Romane?"},
+ {l:"L3",sub:"lesen：er → ?",before:"Mein Kollege ",after:" jeden Tag die Zeitung.",answer:"liest",options:["liest","lese","lest"],full:"Mein Kollege liest jeden Tag die Zeitung."},
+ {l:"L6",sub:"nehmen：du → ?",before:"",after:" du den Bus?",answer:"Nimmst",options:["Nimmst","Nehme","Nehmt"],full:"Nimmst du den Bus?"},
+ {l:"L6",sub:"nehmen：er → ?",before:"Er ",after:" immer den gleichen Weg.",answer:"nimmt",options:["nimmt","nehme","nehmt"],full:"Er nimmt immer den gleichen Weg."},
+ {l:"L11",sub:"schlafen：du → ?",before:"",after:" du gut?",answer:"Schläfst",options:["Schläfst","Schlafe","Schlaft"],full:"Schläfst du gut?"},
+ {l:"L11",sub:"schlafen：er → ?",before:"Das Baby ",after:" schon.",answer:"schläft",options:["schläft","schlafe","schlaft"],full:"Das Baby schläft schon."},
+ {l:"L3",sub:"sprechen：du → ?",before:"",after:" du Deutsch?",answer:"Sprichst",options:["Sprichst","Spreche","Sprecht"],full:"Sprichst du Deutsch?"},
+ {l:"L3",sub:"sprechen：er → ?",before:"Meine Schwester ",after:" drei Sprachen.",answer:"spricht",options:["spricht","spreche","sprecht"],full:"Meine Schwester spricht drei Sprachen."},
+ {l:"L4",sub:"wissen：du → ?",before:"",after:" du seine Telefonnummer?",answer:"Weißt",options:["Weißt","Weiß","Wisst"],full:"Weißt du seine Telefonnummer?"},
+ {l:"L4",sub:"wissen：er → ?",before:"Er ",after:" die Antwort nicht.",answer:"weiß",options:["weiß","weißt","wisst"],full:"Er weiß die Antwort nicht."},
+];
+GR_IRR8.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
   /* ===ANCHOR:GRAM_QUIZ===（新課文法填空題插在這行上方：宣告 const GRn=[{l,sub,before,after,answer,options,full},…]; 後接一行 GRn.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full})); ）*/
   return Q;
 }
@@ -3760,8 +3816,9 @@ function newQ(){
   }else if(m==='typed'){
     renderTyped(pre);
   }else{ // gram / dusie / plural
-    /* N11.5：複數題的 sub 含答案提示（如「複數：Tisch（+e）」），顯示時剝掉（…）與 ⚠️；資料與弱點統計照舊 */
-    const subShow=(m==='plural')?qCur.sub.replace(/（[^）]*）/g,'').replace(/⚠️\s*/g,'').trim():qCur.sub;
+    /* N11.5：複數題的 sub 含答案提示（如「複數：Tisch（+e）」），顯示時剝掉（…）與 ⚠️；資料與弱點統計照舊
+       2026-07-17：gram 題改走 gramSubShow()，剝掉動詞變位／Partizip 的洩題括號＋L13 語意選擇題答案洩漏 */
+    const subShow=(m==='plural')?qCur.sub.replace(/（[^）]*）/g,'').replace(/⚠️\s*/g,'').trim():gramSubShow(qCur.sub);
     qsub.textContent=pre+(m==='dusie'?'情境：':'')+subShow;
     qprompt.innerHTML=qCur.before+'<span class="blank">____</span>'+qCur.after;
     qSpeak=qCur.full;
@@ -3844,7 +3901,7 @@ function renderSatzbau(pre){
    答錯時若只差變音則附 iPhone 鍵盤長按提示。答錯進弱點排行（按原題型 gram/plural 記）＋插回牌堆中段。 */
 function renderTyped(pre){
   const w=qCur,q=w.src,ans=(q.answer||'').trim();
-  const subShow=(w.tm==='plural')?q.sub.replace(/（[^）]*）/g,'').replace(/⚠️\s*/g,'').trim():q.sub;
+  const subShow=(w.tm==='plural')?q.sub.replace(/（[^）]*）/g,'').replace(/⚠️\s*/g,'').trim():gramSubShow(q.sub);
   qsub.textContent=pre+'⌨️ '+subShow+'（打出答案）';
   qprompt.innerHTML=q.before+'<span class="blank">____</span>'+q.after;
   qSpeak=q.full;
@@ -3989,6 +4046,13 @@ function syncLessonChips(){
     else x.dataset.on=curLessons.has(x.dataset.lesson);
     x.classList.toggle('grad',x.dataset.lesson!=="ALL"&&!!grad[x.dataset.lesson]);
   });
+  /* 2026-07-17：A1.1 折疊跟隨目前選課——選課含 A1.1（L123/L4–L12）任一課就展開，否則收合。取代寫死 display:none。 */
+  const bkGrp=document.getElementById('bookA11'),bkBtn=document.getElementById('bookA11Fold');
+  if(bkGrp&&bkBtn){
+    const hasA11=[...bkGrp.querySelectorAll('[data-lesson]')].some(x=>curLessons.has(x.dataset.lesson));
+    bkGrp.style.display=hasA11?'contents':'none';
+    bkBtn.textContent=hasA11?'📕 A1.1 ▾':'📕 A1.1 ▸';
+  }
 }
 /* 單點＝切換單課（舊行為）；長按 0.5 秒＝加入/移出複選範圍；「全選」鈕單點即全選/收回 */
 function selectLesson(k,additive){
