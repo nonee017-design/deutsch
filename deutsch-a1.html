@@ -182,8 +182,8 @@
 <body>
 <div class="wrap">
   <header style="position:relative">
-    <div class="eyebrow">Menschen · A1 · Lektion 1–14</div>
-    <h1>Deutsch A1 — L1–L14</h1>
+    <div class="eyebrow">Menschen · A1 · Lektion 1–15</div>
+    <h1>Deutsch A1 — L1–L15</h1>
     <details class="helpbox" id="outline" style="margin-top:10px;text-align:left"><summary>📚 每課大綱（點開看）</summary><div class="panel-intro" style="margin:8px 0 2px;line-height:1.9">
       L1 打招呼·自我介紹（heißen/kommen aus/wohnen in）·sein·W 問句·拼讀·數字 0–100<br>
       L2 個人資料·職業·規則動詞變位全表·ihr（你們）<br>
@@ -199,6 +199,7 @@
       L12 季節/派對·Perfekt完成（sein）·im/seit<br>
       L13 問路·地方介係詞＋Dativ登場（in/an/auf/neben/hinter/vor/zwischen/unter/über）·helfen<br>
       L14 住屋·租屋·所有格 sein/ihr 全格位·Genitiv 專有名詞初登場<br>
+      L15 街區評價·Dativ動詞家族(gehören/danken/fehlen)·人稱代名詞Nom/Akk/Dativ全表<br>
       <!-- ===ANCHOR:OUTLINE===（新課大綱一行插在這行上方，格式照上）-->
     </div></details>
   </header>
@@ -219,6 +220,7 @@
     </span>
     <button class="lchip" data-lesson="L13" data-on="false">L13</button>
     <button class="lchip" data-lesson="L14" data-on="false">L14</button>
+    <button class="lchip" data-lesson="L15" data-on="false">L15</button>
     <!-- ===ANCHOR:LESSON_CHIPS===（A1.2 新課按鈕插在這行上方、span#bookA11 之外）-->
     <button class="lchip" data-lesson="ALL" data-on="false">全選 · 模組複習</button>
     <span style="flex-basis:100%;font-size:.72rem;color:var(--mut)">單點換課 · 長按半秒加選複數課 · 📕 收合/展開整冊</span>
@@ -480,7 +482,7 @@
 const SPK_SVG='<svg viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>';
 
 /* ===== 範圍（課別·可多選）===== */
-const DEFAULT_LESSON="L14"; /* ===ANCHOR:DEFAULT_LESSON===（新課上線時改成最新課號；chip 的 data-on 由 syncLessonChips 執行期同步，新 chip 一律 data-on="false"）*/
+const DEFAULT_LESSON="L15"; /* ===ANCHOR:DEFAULT_LESSON===（新課上線時改成最新課號；chip 的 data-on 由 syncLessonChips 執行期同步，新 chip 一律 data-on="false"）*/
 let curLessons=new Set([DEFAULT_LESSON]);
 /* L123 是 L1/L2/L3 的合併篩選鈕，資料本身仍各自標 L1/L2/L3，故用此函式統一判斷範圍是否命中 */
 function inLessonScope(l){
@@ -893,7 +895,7 @@ const ADD9=[
  {de:"essen",zh:"吃 — e→i 變音，且 du/er 同形 isst",g:null,cat:"動詞",lesson:"L9",ex:["Was isst du gern zum Frühstück?","你早餐喜歡吃什麼？"],ex2:["Ich esse Fisch, aber er isst lieber Fleisch.","我吃魚，但他比較喜歡吃肉。"]},
  {de:"mögen",zh:"喜歡（一般性喜好，跟 möchten「想要」不同）",g:null,cat:"動詞",lesson:"L9",ex:["Ich mag keinen Käse.","我不喜歡起司。"],ex2:["Magst du Sport?","你喜歡運動嗎？"]},
  {de:"frühstücken",zh:"吃早餐",g:null,cat:"動詞",lesson:"L9",ex:["Wann frühstückst du?","你什麼時候吃早餐？"]},
- {de:"schmecken",zh:"嚐起來（味道）",g:null,cat:"動詞",lesson:"L9",ex:["Wie schmeckt die Suppe?","這湯味道如何？"]},
+ {de:"schmecken",zh:"嚐起來（味道；接 Dativ：Das schmeckt mir.）",g:null,cat:"動詞",lesson:"L9",ex:["Wie schmeckt die Suppe?","這湯味道如何？"]},
  {de:"trinken",zh:"喝",g:null,cat:"動詞",lesson:"L9",ex:["Was möchten Sie trinken?","您想喝什麼？"]},
  {de:"kennen",zh:"認識、知道（人事物）",g:null,cat:"動詞",lesson:"L9",ex:["Kennst du dieses Gericht?","你認識這道菜嗎？"]},
  {de:"etwas",zh:"一些、某物",g:null,cat:"常用",lesson:"L9",ex:["Möchten Sie noch etwas Suppe?","您還想再喝點湯嗎？"]},
@@ -1300,8 +1302,64 @@ const ADDFIXL8=[
 {de:"halb",zh:"半（halb ＋下一個整點＝半，不是上一個整點！）",g:null,cat:"常用",lesson:"L8",
  ex:["Es ist halb zehn.","現在是九點半（不是十點半）。"]},
 ];
+const ADD15=[
+{de:"Bibliothek",zh:"圖書館",g:"die",cat:"城市",lesson:"L15",ex:["Die Bibliothek ist gleich um die Ecke.","圖書館就在附近轉角。"]},
+{de:"Geschäft",zh:"商店",g:"das",cat:"城市",lesson:"L15",ex:["In Giesing gibt es viele kleine Geschäfte.","Giesing 有很多小商店。"]},
+{de:"Laden",zh:"商店（同 Geschäft）",g:"der",cat:"城市",lesson:"L15",ex:["Der Laden gehört meinem Onkel.","這家店是我叔叔的。"]},
+{de:"Hafen",zh:"港口",g:"der",cat:"城市",lesson:"L15",ex:["Ich sehe den Hafen aus meinem Fenster.","我從窗戶看得到港口。"]},
+{de:"Jugendherberge",zh:"青年旅館",g:"die",cat:"城市",lesson:"L15",ex:["Wir übernachten in der Jugendherberge.","我們在青年旅館過夜。"]},
+{de:"Kindergarten",zh:"幼兒園",g:"der",cat:"城市",lesson:"L15",ex:["Der Kindergarten ist gleich um die Ecke.","幼兒園就在轉角附近。"]},
+{de:"Kirche",zh:"教堂",g:"die",cat:"城市",lesson:"L15",ex:["Wir treffen uns vor der Kirche.","我們在教堂前面碰面。"]},
+{de:"Markt",zh:"市場",g:"der",cat:"城市",lesson:"L15",ex:["Am Samstag gehe ich auf den Markt.","星期六我要去市場。"]},
+{de:"Rathaus",zh:"市政廳",g:"das",cat:"城市",lesson:"L15",ex:["Das Rathaus ist im Stadtzentrum.","市政廳在市中心。"]},
+{de:"Schloss",zh:"城堡",g:"das",cat:"城市",lesson:"L15",ex:["Ihm gefallen die Schlösser in Frankreich.","他喜歡法國的城堡。"]},
+{de:"Spielplatz",zh:"遊樂場",g:"der",cat:"城市",lesson:"L15",ex:["Die Kinder spielen auf dem Spielplatz.","孩子們在遊樂場玩。"]},
+{de:"Turm",zh:"塔",g:"der",cat:"城市",lesson:"L15",ex:["Der Chinesische Turm ist 25 Meter hoch.","中國塔有25公尺高。"]},
+{de:"Ausländer",zh:"外國人",g:"der",cat:"城市",lesson:"L15",ex:["In Giesing wohnen Deutsche und Ausländer zusammen.","德國人跟外國人一起住在 Giesing。"]},
+{de:"Blick",zh:"視野、目光",g:"der",cat:"城市",lesson:"L15",ex:["Der Blick aus meinem Fenster ist toll.","我窗外的視野很棒。"]},
+{de:"Mensch",zh:"人",g:"der",cat:"城市",lesson:"L15",ex:["Ich bin gern unter Menschen.","我喜歡跟人群在一起。"]},
+{de:"Reisebüro",zh:"旅行社",g:"das",cat:"城市",lesson:"L15",ex:["Das Reisebüro hilft Ihnen gern weiter.","旅行社很樂意幫您。"]},
+{de:"Rezept",zh:"食譜（也可指處方箋）",g:"das",cat:"常用",lesson:"L15",ex:["Kannst du mir das Rezept geben?","可以給我這道食譜嗎？"]},
+{de:"Urlaub",zh:"假期",g:"der",cat:"常用",lesson:"L15",ex:["Wo macht ihr dieses Jahr Urlaub?","你們今年去哪裡度假？"]},
+{de:"Wetter",zh:"天氣",g:"das",cat:"常用",lesson:"L15",ex:["Wie ist das Wetter heute?","今天天氣怎麼樣？"]},
+{de:"Stadtteil",zh:"城區、街區",g:"der",cat:"城市",lesson:"L15",ex:["Der Stadtteil gehört uns allen.","這個街區屬於我們大家。"]},
+{de:"Stadtviertel",zh:"街區（近義 Stadtteil／Viertel）",g:"das",cat:"城市",lesson:"L15",ex:["Marlene schreibt über ihr Stadtviertel.","Marlene 在寫她的街區。"]},
+{de:"Viertel",zh:"街區、地段（注意：跟 L8「一刻鐘」是同一個字、不同意思）",g:"das",cat:"城市",lesson:"L15",ex:["Was gefällt dir an diesem Viertel?","你喜歡這個街區的什麼？"]},
+{de:"Werkstatt",zh:"工作坊、修車廠",g:"die",cat:"城市",lesson:"L15",ex:["Hier gibt es viele kleine Werkstätten.","這裡有很多小工作坊。"]},
+{de:"Ruhe",zh:"安靜、寧靜",g:"die",cat:"常用",lesson:"L15",ex:["Er liebt die Ruhe auf dem Land.","他喜歡鄉下的寧靜。"]},
+{de:"Feier",zh:"慶祝活動",g:"die",cat:"常用",lesson:"L15",ex:["Am Wochenende ist eine Feier im Park.","週末公園有個慶祝活動。"]},
+{de:"Sehenswürdigkeit",zh:"景點",g:"die",cat:"城市",lesson:"L15",ex:["Der Dom ist die bekannteste Sehenswürdigkeit.","大教堂是最有名的景點。"]},
+{de:"Landschaft",zh:"風景、景色",g:"die",cat:"常用",lesson:"L15",ex:["Ich liebe diese Landschaft!","我很喜歡這片景色！"]},
+{de:"Land",zh:"鄉下（auf dem Land＝鄉下；注意：也可指「國家」，此課用鄉下義）",g:"das",cat:"常用",lesson:"L15",ex:["Ich wohne lieber in der Stadt als auf dem Land.","我比較喜歡住城市而不是鄉下。"]},
+{de:"Student",zh:"大學生（弱變化名詞：單數 Akk/Dativ 也要加 -en）",g:"der",cat:"常用",lesson:"L15",ex:["Hier wohnen viele Studenten.","這裡住了很多大學生。"]},
+{de:"Arbeiter",zh:"工人",g:"der",cat:"常用",lesson:"L15",ex:["Früher haben hier viele Arbeiter gewohnt.","以前這裡住了很多工人。"]},
+{de:"Kulturzentrum",zh:"文化中心",g:"das",cat:"城市",lesson:"L15",ex:["Das Kulturzentrum ist in einer alten Kirche.","文化中心在一座老教堂裡。"]},
+{de:"Altstadt",zh:"舊城區",g:"die",cat:"城市",lesson:"L15",ex:["Die Altstadt ist sehr schön.","舊城區很漂亮。"]},
+{de:"Friseur",zh:"美髮師、髮廊",g:"der",cat:"城市",lesson:"L15",ex:["Mein Friseur ist gleich um die Ecke.","我的髮廊就在轉角附近。"]},
+{de:"Einrichtung",zh:"（城市）設施",g:"die",cat:"城市",lesson:"L15",ex:["Welche Einrichtungen gibt es in deinem Stadtteil?","你的街區有哪些設施？"]},
+{de:"Fragebogen",zh:"問卷",g:"der",cat:"常用",lesson:"L15",ex:["Machen Sie einen Fragebogen für Ihren Kurs.","為你的課程做一份問卷。"]},
+{de:"Urlaubsort",zh:"度假地點",g:"der",cat:"常用",lesson:"L15",ex:["Was ist dein Lieblingsurlaubsort?","你最喜歡的度假地點是哪裡？"]},
+{de:"Ecke",zh:"角落、街角",g:"die",cat:"城市",lesson:"L15",ex:["Der Kindergarten ist gleich um die Ecke.","幼兒園就在轉角附近。"]},
+{de:"Heimatort",zh:"故鄉、家鄉",g:"der",cat:"常用",lesson:"L15",ex:["Was gibt es in deinem Heimatort?","你的家鄉有什麼？"]},
+{de:"Beratung",zh:"諮詢、輔導",g:"die",cat:"常用",lesson:"L15",ex:["Es gibt eine Beratung für Ausländer im Rathaus.","市政廳有給外國人的諮詢服務。"]},
+{de:"Eröffnung",zh:"開幕、開張",g:"die",cat:"常用",lesson:"L15",ex:["Die Eröffnung ist am Samstag.","開幕是在星期六。"]},
+{de:"Spaziergang",zh:"散步",g:"der",cat:"常用",lesson:"L15",ex:["Ich mache gern einen Spaziergang im Park.","我喜歡在公園散步。"]},
+{de:"Tourist",zh:"觀光客（弱變化名詞，同 Student）",g:"der",cat:"常用",lesson:"L15",ex:["Der Biergarten ist bei Touristen sehr beliebt.","這家啤酒花園很受觀光客歡迎。"]},
+{de:"gehören",zh:"屬於（接 Dativ：Das gehört mir.）",g:null,cat:"動詞",lesson:"L15",ex:["Wem gehört das Buch?","這本書是誰的？"],ex2:["Das gehört meiner Schwester.","這是我妹妹的。"]},
+{de:"danken",zh:"感謝（接 Dativ：Ich danke dir.）",g:null,cat:"動詞",lesson:"L15",ex:["Ich danke dir für deine Hilfe.","謝謝你的幫忙。"]},
+{de:"fehlen",zh:"缺少、想念（接 Dativ：Mir fehlt die Zeit.）",g:null,cat:"動詞",lesson:"L15",ex:["Mir fehlt die Zeit.","我缺乏時間。"],ex2:["Was fehlt in deinem Stadtteil?","你的街區缺少什麼？"]},
+{de:"umziehen",zh:"搬家（可分離：ich ziehe um）",g:null,cat:"動詞",lesson:"L15",ex:["Peter und Anja ziehen um.","Peter 跟 Anja 要搬家。"],ex2:["Wir ziehen nächsten Monat um.","我們下個月要搬家。"]},
+{de:"korrigieren",zh:"改正、訂正",g:null,cat:"動詞",lesson:"L15",ex:["Was ist falsch? Korrigieren Sie.","哪裡錯了？請訂正。"]},
+{de:"Käsebrot",zh:"起司三明治（建議問老師求證性別複數）",g:"das",cat:"食物",lesson:"L15",ex:["Ich esse ein Käsebrot.","我在吃一個起司三明治。"]},
+{de:"Wasserflasche",zh:"水瓶（建議問老師求證性別複數）",g:"die",cat:"常用",lesson:"L15",ex:["Wem gehört die Wasserflasche?","這個水瓶是誰的？"]},
+];
+const ADD15B=[
+{de:"wichtig",zh:"重要的",g:null,cat:"形容詞",lesson:"L15",ex:["Das ist sehr wichtig für mich.","這對我來說很重要。"]},
+{de:"alle",zh:"全部的、所有人／所有東西（複數；比較 alles＝不可數的「全部」）",g:null,cat:"常用",lesson:"L15",ex:["Alle sind heute gekommen.","今天大家都來了。"]},
+{de:"wenig",zh:"少（↔ viel）",g:null,cat:"常用",lesson:"L15",ex:["Ich habe wenig Zeit.","我沒什麼時間。"]},
+];
 /* ===ANCHOR:VOCAB_ARRAYS===（新課單字陣列 const ADDn=[...] 宣告在這行上方，並把陣列名加進下面 VOCAB 合併行）*/
-const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8];
+const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B];
 VOCAB.forEach((v,i)=>v.id="v"+i);
 
 
@@ -1435,6 +1493,19 @@ const NOUN_PL={
   "Kommode":"Kommoden","Sideboard":"Sideboards","Vitrine":"Vitrinen","Kissen":"Kissen","Schublade":"Schubladen","Griff":"Griffe",
   "Kilometer":"Kilometer",
   "Meter":"Meter",
+  "Bibliothek":"Bibliotheken","Geschäft":"Geschäfte","Laden":"Läden","Hafen":"Häfen",
+  "Jugendherberge":"Jugendherbergen","Kindergarten":"Kindergärten","Kirche":"Kirchen",
+  "Markt":"Märkte","Rathaus":"Rathäuser","Schloss":"Schlösser","Spielplatz":"Spielplätze",
+  "Turm":"Türme","Ausländer":"Ausländer","Blick":"Blicke","Mensch":"Menschen",
+  "Reisebüro":"Reisebüros","Rezept":"Rezepte","Käsebrot":"Käsebrote","Wasserflasche":"Wasserflaschen",
+  "Park":"Parks",
+  "Stadtteil":"Stadtteile","Stadtviertel":"Stadtviertel","Viertel":"Viertel",
+  "Werkstatt":"Werkstätten","Feier":"Feiern","Sehenswürdigkeit":"Sehenswürdigkeiten",
+  "Landschaft":"Landschaften","Land":"Länder","Student":"Studenten","Arbeiter":"Arbeiter",
+  "Kulturzentrum":"Kulturzentren","Altstadt":"Altstädte","Friseur":"Friseure",
+  "Einrichtung":"Einrichtungen","Fragebogen":"Fragebögen","Urlaubsort":"Urlaubsorte",
+  "Ecke":"Ecken","Heimatort":"Heimatorte","Beratung":"Beratungen","Eröffnung":"Eröffnungen",
+  "Spaziergang":"Spaziergänge","Tourist":"Touristen",
   /* ===ANCHOR:NOUN_PL===（新名詞複數 "單數":"複數", 插在這行上方）*/
 };
 const NOUN_PL_NOTE={
@@ -1533,6 +1604,22 @@ const NOUN_PL_NOTE={
   "Fußballplatz":"複數 die Fußballplätze：a→ä 變音 → Forvo。",
   "Kilometer":"-er 結尾：單複數同形（der Kilometer → die Kilometer），複數只能靠數詞判斷（zwei Kilometer）。",
   "Meter":"-er 結尾：單複數同形（der Meter → die Meter），Dativ 複數會加 -n：Metern（如「Nach 600 Metern」）。",
+  "Laden":"複數 die Läden：a→ä 變音 → Forvo 聽真人。",
+  "Hafen":"複數 die Häfen：a→ä 變音 → Forvo。",
+  "Kindergarten":"複數 die Kindergärten：a→ä 變音 → Forvo。",
+  "Markt":"複數 die Märkte：a→ä 變音 → Forvo。",
+  "Rathaus":"複數 die Rathäuser：a→ä 變音 → Forvo。",
+  "Schloss":"複數 die Schlösser：o→ö 變音 → Forvo。",
+  "Spielplatz":"複數 die Spielplätze：a→ä 變音 → Forvo。",
+  "Turm":"複數 die Türme：u→ü 變音 → Forvo。",
+  "Ausländer":"-er 結尾：單複數同形（der Ausländer → die Ausländer）。",
+  "Werkstatt":"複數 die Werkstätten：a→ä 變音 → Forvo。",
+  "Land":"複數 die Länder：a→ä 變音 → Forvo。注意此字有「國家／鄉下」兩義，但複數只用在「國家」義，「auf dem Land」鄉下義通常只用單數。",
+  "Altstadt":"複數 die Altstädte：a→ä 變音 → Forvo。",
+  "Fragebogen":"複數 die Fragebögen：o→ö 變音 → Forvo。",
+  "Spaziergang":"複數 die Spaziergänge：a→ä 變音 → Forvo。",
+  "Student":"弱變化陽性名詞（單數 Akk/Dativ/Genitiv 都加 -en：den/dem/des Studenten），跟一般名詞規則不同。",
+  "Tourist":"弱變化陽性名詞，同 Student（den/dem/des Touristen）。",
   /* ===ANCHOR:NOUN_PL_NOTE===（變音／同形／不規則等複數警語插在這行上方）*/
 };
 const NOUN_PLEX={
@@ -1641,6 +1728,48 @@ const NOUN_PLEX={
   "Moment":["Das waren schöne Momente.","那些是美好的時刻。"],
   "Kilometer":["Der Weg ist zehn Kilometer lang.","這條路長十公里。"],
   "Meter":["Der Park ist zweihundert Meter von hier entfernt.","公園離這裡兩百公尺。"],
+  "Bibliothek":["Es gibt zwei Bibliotheken im Stadtteil.","街區裡有兩間圖書館。"],
+  "Geschäft":["Hier gibt es viele kleine Geschäfte.","這裡有很多小商店。"],
+  "Laden":["Die Läden gehören alle einer Familie.","這些店都屬於同一個家庭。"],
+  "Hafen":["München und Hamburg haben beide einen Hafen, aber die Häfen sind sehr verschieden.","慕尼黑和漢堡都有港口，但港口很不一樣。"],
+  "Jugendherberge":["Es gibt drei Jugendherbergen in der Stadt.","這座城市有三間青年旅館。"],
+  "Kindergarten":["In diesem Viertel gibt es zwei Kindergärten.","這個街區有兩間幼兒園。"],
+  "Kirche":["In der Altstadt stehen viele Kirchen.","舊城區裡有很多教堂。"],
+  "Markt":["Am Wochenende gibt es zwei Märkte in der Stadt.","週末城裡有兩個市場。"],
+  "Rathaus":["Viele Städte haben schöne Rathäuser.","很多城市都有漂亮的市政廳。"],
+  "Schloss":["Ihm gefallen die Schlösser in Frankreich.","他喜歡法國的那些城堡。"],
+  "Spielplatz":["In dem Viertel gibt es viele Spielplätze.","這個街區有很多遊樂場。"],
+  "Turm":["München hat mehrere berühmte Türme.","慕尼黑有好幾座知名的塔。"],
+  "Ausländer":["In Giesing wohnen viele Ausländer.","Giesing 住了很多外國人。"],
+  "Blick":["Von hier hat man zwei schöne Blicke auf die Stadt.","從這裡可以看到兩個漂亮的城市景色。"],
+  "Mensch":["Hier leben viele verschiedene Menschen zusammen.","這裡住著很多不同的人。"],
+  "Reisebüro":["In der Stadt gibt es drei Reisebüros.","城裡有三間旅行社。"],
+  "Rezept":["Kannst du mir deine Rezepte geben?","可以把你的食譜給我嗎？"],
+  "Käsebrot":["Wir haben noch zwei Käsebrote.","我們還有兩個起司三明治。"],
+  "Wasserflasche":["Bring bitte drei Wasserflaschen mit.","請帶三瓶水過來。"],
+  "Park":["In dieser Stadt gibt es viele schöne Parks.","這座城市有很多漂亮的公園。"],
+  "Stadtteil":["München hat viele interessante Stadtteile.","慕尼黑有很多有趣的街區。"],
+  "Stadtviertel":["Die Stadt hat viele bunte Stadtviertel.","這座城市有很多多彩的街區。"],
+  "Viertel":["Welche Viertel gefallen dir am besten?","你最喜歡哪些街區？"],
+  "Werkstatt":["Hier gibt es viele kleine Werkstätten.","這裡有很多小工作坊。"],
+  "Feier":["Nächste Woche gibt es zwei Feiern im Park.","下週公園裡有兩場慶祝活動。"],
+  "Sehenswürdigkeit":["München hat viele Sehenswürdigkeiten.","慕尼黑有很多景點。"],
+  "Landschaft":["Auf Korsika gibt es wunderschöne Landschaften.","科西嘉島上有很多美麗的風景。"],
+  "Land":["Er kennt viele Länder in Europa.","他認識歐洲很多國家。"],
+  "Student":["Hier wohnen viele Studenten.","這裡住了很多大學生。"],
+  "Arbeiter":["Früher haben hier viele Arbeiter gewohnt.","以前這裡住了很多工人。"],
+  "Kulturzentrum":["Die Stadt hat zwei Kulturzentren.","這座城市有兩個文化中心。"],
+  "Altstadt":["Viele deutsche Städte haben schöne Altstädte.","很多德國城市都有漂亮的舊城區。"],
+  "Friseur":["In diesem Viertel gibt es drei Friseure.","這個街區有三家髮廊。"],
+  "Einrichtung":["Welche Einrichtungen gibt es in deinem Stadtteil?","你的街區有哪些設施？"],
+  "Fragebogen":["Wir haben zehn Fragebögen gemischt.","我們把十份問卷混在一起。"],
+  "Urlaubsort":["Das sind meine drei Lieblingsurlaubsorte.","這是我最愛的三個度假地點。"],
+  "Ecke":["Der Kindergarten und die Bibliothek sind an zwei Ecken.","幼兒園和圖書館分別在兩個街角。"],
+  "Heimatort":["Wir haben unterschiedliche Heimatorte.","我們的家鄉不一樣。"],
+  "Beratung":["Es gibt mehrere Beratungen für Ausländer.","有好幾場給外國人的諮詢。"],
+  "Eröffnung":["Diesen Monat gibt es zwei Eröffnungen im Viertel.","這個月街區有兩場開幕活動。"],
+  "Spaziergang":["Wir machen gern lange Spaziergänge im Park.","我們喜歡在公園裡散長長的步。"],
+  "Tourist":["Im Sommer kommen viele Touristen.","夏天有很多觀光客來。"],
   /* ===ANCHOR:NOUN_PLEX===（複數例句 "單數":["德文","中文"], 插在這行上方）*/
 };
 const VERB_META={
@@ -1746,6 +1875,11 @@ const VERB_META={
   bezahlen:{t:"reg"},
   aussehen:{t:"irr",f:["sehe … aus","siehst … aus","sieht … aus","sehen … aus","seht … aus","sehen … aus"]},
   stehen:{t:"reg"},
+  gehören:{t:"reg"},
+  danken:{t:"reg"},
+  fehlen:{t:"reg"},
+  umziehen:{t:"irr",f:["ziehe … um","ziehst … um","zieht … um","ziehen … um","zieht … um","ziehen … um"]},
+  korrigieren:{t:"reg"},
   /* ===ANCHOR:VERB_META===（新動詞變位 動詞:{t:"reg"|"stemt"|"vowel"|"irr",...}, 插在這行上方）*/
 };
 VOCAB.forEach(v=>{
@@ -2129,6 +2263,30 @@ const SENTENCES=[
   {de:"Ich liebe Davids Haus, es hat sieben Zimmer und zwei Bäder.",zh:"我很喜歡 David 的房子，它有七個房間和兩間浴室。",lesson:"L14"},
   {de:"Sein Haus ist nicht schlecht, aber seinen Garten mag ich gar nicht.",zh:"他的房子還不錯，但我完全不喜歡他的花園。",lesson:"L14"},
   {de:"Möchtest du einen Fußballplatz vor dem Haus? Sehr gern, die Idee ist cool.",zh:"你想要房子前面有個足球場嗎？很想，這個主意很酷。",lesson:"L14"},
+  {de:"Wo macht Peter oft Urlaub? – In Frankreich.",zh:"Peter常去哪度假？──法國。",lesson:"L15"},
+  {de:"Was gefällt ihm in Frankreich besonders? – Ihm gefallen die Schlösser besonders gut.",zh:"他特別喜歡法國的什麼？──他特別喜歡那些城堡。",lesson:"L15"},
+  {de:"Wem gehört das denn? – Das gehört mir.",zh:"這是誰的？──是我的。",lesson:"L15"},
+  {de:"Giesing ist ganz normal, und das finde ich gut so.",zh:"Giesing很普通，我覺得這樣就好（可換城市/街區名）。",lesson:"L15"},
+  {de:"Gibt es hier eigentlich auch ein Kino?",zh:"這裡也有電影院嗎？（可換 Café/Park）",lesson:"L15"},
+  {de:"In Giesing gibt es leider nur sehr wenige Geschäfte.",zh:"Giesing的商店很少（可換地名/名詞）。",lesson:"L15"},
+  {de:"Was gefällt Ihnen an dem Viertel nicht?",zh:"您不喜歡這個街區的什麼？",lesson:"L15"},
+  {de:"Ich danke dir für deine Hilfe.",zh:"謝謝你的幫忙。",lesson:"L15"},
+  {de:"Mir fehlt die Zeit.",zh:"我缺乏時間（可換 das Geld/die Ruhe）。",lesson:"L15"},
+  {de:"Was gefällt Silvia und André in Schweden? – Ihnen gefällt das Meer.",zh:"Silvia和André喜歡瑞典的什麼？──他們喜歡海。",lesson:"L15"},
+  {de:"Hier leben Junge und Alte, Arbeiter und Studenten, Deutsche und Ausländer zusammen.",zh:"這裡老少、工人與學生、德國人與外國人都住在一起。",lesson:"L15"},
+  {de:"Ich wohne lieber in der Stadt als auf dem Land.",zh:"我比較喜歡住城市而不是鄉下。",lesson:"L15"},
+  {de:"Was gibt es in deinem Stadtteil?",zh:"你的街區有什麼？",lesson:"L15"},
+  {de:"Mein Friseur ist gleich um die Ecke.",zh:"我的髮廊就在轉角（可換 Kindergarten/Bibliothek）。",lesson:"L15"},
+  {de:"Peter und Anja ziehen um, und ich helfe ihnen.",zh:"Peter和Anja要搬家，我幫他們。",lesson:"L15"},
+  {de:"Welche Einrichtungen gibt es in deinem Stadtteil?",zh:"你的街區有哪些設施？",lesson:"L15"},
+  {de:"Ich sehe eine Straße. Was siehst du?",zh:"我看到一條街。你看到什麼？（可換 Park/Hafen/Meer）",lesson:"L15"},
+  {de:"Wir danken dir für deine Hilfe. – Ich habe euch gern geholfen.",zh:"我們謝謝你的幫忙。──我很樂意幫你們。",lesson:"L15"},
+  {de:"Schmeckt euch der Kuchen? – Ja, sehr gut.",zh:"你們覺得蛋糕好吃嗎？──對，很好吃。",lesson:"L15"},
+  {de:"Was für Leute wohnen in deinem Stadtteil?",zh:"你的街區住著什麼樣的人？",lesson:"L15"},
+  {de:"Was fehlt in deinem Stadtteil?",zh:"你的街區缺少什麼？",lesson:"L15"},
+  {de:"Was brauchst du in deinem Stadtteil? – Einen Park. Ich gehe oft spazieren.",zh:"你的街區需要什麼？──一個公園。我常去散步。",lesson:"L15"},
+  {de:"Haben Sie einen Lieblingspark oder einen Lieblingsplatz?",zh:"您有喜歡的公園或地方嗎？",lesson:"L15"},
+  {de:"Es ist in Giesing immer etwas los.",zh:"Giesing總是很熱鬧（有事情發生）。",lesson:"L15"},
   /* ===ANCHOR:SENTENCES===（新例句／Redemittel {de,zh,lesson} 插在這行上方）*/
 ];
 
@@ -2221,6 +2379,11 @@ const TEXTS=[
    de:"Schöne 2-Zimmer-Wohnung im Zentrum, 48 Quadratmeter. Küche und Bad sind neu, ein Balkon ist auch da. Ein Aufzug ist im Haus. Miete: 620 Euro plus Nebenkosten. Rufen Sie an: 040 335577.\n\nKleines Haus mit Garten in der Nähe vom Wald. Es hat drei Zimmer, eine Küche und ein Bad. Im Garten stehen viele Blumen und ein Baum. Miete: 890 Euro plus Nebenkosten. Schreiben Sie eine E-Mail: haus14@post.de.\n\nGemütliche Wohnung im Erdgeschoss, möbliert. Die Küche hat einen Kühlschrank und einen Herd. Ein Keller und ein Stellplatz sind auch da. Miete: 540 Euro, keine Nebenkosten. Rufen Sie an: 040 998877.",
    zh:"市中心漂亮的兩房公寓，48平方公尺。廚房和浴室都是新的，也有一個陽台。屋內有電梯。房租：620歐元，外加額外費用。請來電：040 335577。\n\n森林附近的小房子，附花園。有三個房間、一間廚房和一間浴室。花園裡種了很多花和一棵樹。房租：890歐元，外加額外費用。請寄 E-Mail：haus14@post.de。\n\n一樓的舒適公寓，附家具。廚房有冰箱和爐灶。還有地下室和停車位。房租：540歐元，不含額外費用。請來電：040 998877。",
    qs:[{q:"第一則廣告的公寓在哪裡？",options:["市中心","森林附近","一樓","車站旁"],a:0},{q:"第二則廣告的房子有什麼？",options:["電梯","花園和樹","地下室","游泳池"],a:1},{q:"第三則廣告為什麼說「möbliert」？",options:["公寓附家具","公寓要出售","公寓在地下室","公寓有花園"],a:0}]},
+  {id:"t-l15-1",lesson:"L15",genre:"部落格",title:"Mein Stadtteil: Giesing",src:"AI 生成 · 未經母語者校對",
+   map:"<b>本課重點</b>：① Dativ 動詞家族擴大：gehören／danken／fehlen／schmecken（連同 L12 gefallen、L13 helfen，共六個）；② 人稱代名詞 Nom/Akk/Dativ 全表登場（ich/mich/mir…）；③ 街區評價詞彙（Stadtteil/Viertel/Ausländer/Studenten…）。<br><b>建議走法</b>：讀完本文 → 文法「🧩人稱代名詞總表」＋「🧩動詞支配格表」Dativ 動詞群 → 單字卡城市/常用類 → 例句 → 測驗（本課代名詞對比題重要）→ 🎓。",
+   de:"Ich heiße Mailin und wohne seit zwei Jahren in Giesing. Giesing ist ganz normal, und das finde ich gut so. Hier wohnen Studenten und Arbeiter, Deutsche und Ausländer zusammen, und genau das gefällt mir. Es gibt viele kleine Geschäfte und eine Werkstatt an der Ecke. Der Kindergarten ist gleich um die Ecke, und mein Friseur ist auch in der Nähe. Am Wochenende gehe ich oft auf den Markt oder mache einen Spaziergang im Park. Was fehlt in Giesing? Vielleicht ein Kino. Aber hier ist immer etwas los — und genau das gefällt mir an meinem Stadtteil.",
+   zh:"我叫 Mailin，已經在 Giesing 住兩年了。Giesing 很普通，我覺得這樣就好。這裡住著大學生和工人、德國人和外國人，大家住在一起——我很喜歡這一點。這裡有很多小商店，轉角還有一間工作坊。幼兒園就在轉角附近，我的髮廊也在附近。週末我常去市場，或是去公園散步。Giesing 缺少什麼呢？也許是一間電影院。但這裡總是很熱鬧——我就是喜歡我的街區這一點。",
+   qs:[{q:"Mailin 覺得 Giesing 怎麼樣？",options:["很普通，但她喜歡","很無聊","太吵","太貴"],a:0},{q:"根據短文，Giesing 缺少什麼？",options:["電影院","市場","公園","幼兒園"],a:0},{q:"「und genau das gefällt mir」中 gefällt 為什麼接 mir？",options:["gefallen 是 Dativ 動詞，喜歡的人用 Dativ","拼錯了","mir 是所有格","固定用法沒有原因"],a:0}]},
   /* ===ANCHOR:TEXTS_ARRAYS===（新課導讀 {id,lesson,genre,title,src,map,de,zh,qs} 插在這行上方；de 只准用該課及之前的單字＋功能詞，寫完必跑 ROADMAP N12 的白名單驗證腳本）*/
 ];
 
@@ -2392,7 +2555,7 @@ function posOf(v){
 const POS_SUB_PREP=new Set(["ab","für","im","am","ins","um","seit","unter","zwischen","ohne","von","bis","mit","nach","aus","bei","in","an","auf","vor","neben","hinter"]);
 const POS_SUB_CONJ=new Set(["aber","oder","denn","und","sondern"]);
 const POS_SUB_QW=new Set(["warum","wann","wo","wer","was","wie","woher","wohin"]);
-const POS_SUB_PRON=new Set(["man","etwas","nichts","alles","jemand","niemand","selbst"]);
+const POS_SUB_PRON=new Set(["man","etwas","nichts","alles","alle","jemand","niemand","selbst"]);
 function subPosOf(v){
   const d=v.de;
   if(POS_SUB_PREP.has(d))return"介係詞";
@@ -2509,17 +2672,31 @@ function runSearch(qRaw){runSearchInto(qRaw,document.getElementById('searchResul
 document.getElementById('searchBox').addEventListener('input',e=>runSearch(e.target.value));
 /* ---------- GRAMMAR (filterable) ---------- */
 const GRAM=[
-{l:"L4",html:`
+{ls:["L4","L15"],html:`
 <div class="card gcard">
-  <div class="gtitle">⭐ 人稱代名詞 er / es / sie — 代替「物」 <span class="lessontag">L4</span></div>
-  <p style="font-size:.88rem;margin:.2em 0 .6em">系統先抓：德文的「它」跟著名詞<b>性別</b>走，不是一律 it。<b>der→er、das→es、die→sie</b>。這是你的命門，測驗會狂練。</p>
+  <div class="gtitle">🧩 人稱代名詞 Nom/Akk/Dativ 總表 <span class="lessontag">L4</span><span class="lessontag">L15</span></div>
+  <p style="font-size:.88rem;margin:.2em 0 .6em">系統先抓：德文的「它/他/她」跟著名詞<b>性別</b>走，不是一律 it（der→er、das→es、die→sie，這條先別忘）。而同一個代名詞當「受詞」時還要看<b>格</b>再變一次形——是 Akkusativ 還是 Dativ，由<b>動詞</b>決定（見🧩動詞支配格表）。L15 起補齊 Akk/Dativ 兩欄，就是完整系統了。</p>
   <table>
-    <tr><th>名詞</th><th>它</th><th>例句</th></tr>
+    <tr><th>Nominativ</th><th>Akkusativ</th><th>Dativ</th></tr>
+    <tr><td class="de2">ich</td><td class="de2">mich</td><td class="de2">mir</td></tr>
+    <tr><td class="de2">du</td><td class="de2">dich</td><td class="de2">dir</td></tr>
+    <tr><td class="de2">er</td><td class="de2">ihn</td><td class="de2">ihm</td></tr>
+    <tr><td class="de2">es</td><td class="de2">es</td><td class="de2">ihm</td></tr>
+    <tr><td class="de2">sie</td><td class="de2">sie</td><td class="de2">ihr</td></tr>
+    <tr><td class="de2">wir</td><td class="de2">uns</td><td class="de2">uns</td></tr>
+    <tr><td class="de2">ihr</td><td class="de2">euch</td><td class="de2">euch</td></tr>
+    <tr><td class="de2">sie/Sie</td><td class="de2">sie/Sie</td><td class="de2">ihnen/Ihnen</td></tr>
+  </table>
+  <p style="font-size:.86rem;margin:.5em 0 .2em"><b>對照例句</b>——同樣是及物動詞，受詞的格由動詞決定：</p>
+  <p style="font-size:.9rem;margin:.1em 0">Akkusativ：<span class="de2">lesen: ich lese ihn (den Text)</span> ／ <span class="de2">sehen: ich sehe es (das Haus)</span></p>
+  <p style="font-size:.9rem;margin:.1em 0 .4em">Dativ：<span class="de2">gefallen: das gefällt mir</span> ／ <span class="de2">gehören: der Stift gehört dir</span> ／ <span class="de2">danken: ich danke dir</span> ／ <span class="de2">helfen: bitte helft mir</span></p>
+  <table>
+    <tr><th>名詞</th><th>它（Nom）</th><th>例句</th></tr>
     <tr><td class="de2">der Tisch</td><td><b style="color:var(--der)">er</b></td><td class="de2">Der Tisch ist schön. Er kostet 80 Euro.</td></tr>
     <tr><td class="de2">das Bett</td><td><b style="color:var(--das)">es</b></td><td class="de2">Das Bett ist groß. Es kostet 1499 Euro.</td></tr>
     <tr><td class="de2">die Lampe</td><td><b style="color:var(--die)">sie</b></td><td class="de2">Die Lampe ist modern. Sie kostet 119 Euro.</td></tr>
   </table>
-  <div class="note"><b>最容易錯：</b>der→<b>er</b>（不是 sie）、das→<b>es</b>。中文腦容易全用「它」混過去，德文逼你分性別。</div>
+  <div class="note"><b>最容易錯：</b>① Nominativ 階段 der→<b>er</b>（不是 sie）、das→<b>es</b>；② es 當 Akkusativ 不變、但當 Dativ 變成 <b>ihm</b>（跟 er 一樣）；③ sie（她/單數）的 Dativ 是 <b>ihr</b>，別跟 ihr（你們/Nom）搞混——完全同形但語意不同，要靠句子角色判斷。</div>
 </div>`},
 {l:"L6",ls:["L4","L5","L6"],html:`
 <div class="card gcard">
@@ -2693,9 +2870,9 @@ const GRAM=[
   <p style="font-size:.86rem;margin:.3em 0">已學會塞進框的：<b>möchten</b>／<b>können</b>＋原形（L6/L7）、<b>可分離動詞</b>（L10）、<b>Perfekt</b> haben/sein＋P.II（L10–L12）。<br>⬜ 之後塞進同一框：müssen／wollen／dürfen、未來式——A1.2／A2 解鎖。</p>
   <div class="note"><b>⚠️ 兩個最容易錯</b><br>① 換 Leider／Heute 到位置一後，主詞要退到動詞後面：<b>Leider habe ich</b>…（❌ Leider ich habe…）。<br>② <b>nicht 貼在句尾原形動詞前面</b>：Ich kann heute <span style="color:#b45309">nicht</span> kommen. 原形動詞是框的右牆，nicht 站牆內側。（否定名詞才用 kein，見冠詞表；否定動作／形容詞用 nicht。）</div>
 </div>`},
-{ls:["L6","L7","L8","L9","L10","L12","L13"],html:`
+{ls:["L6","L7","L8","L9","L10","L12","L13","L15"],html:`
 <div class="card gcard">
-  <div class="gtitle">🧩 動詞支配格表（動詞吃哪個格） <span class="lessontag">L6</span><span class="lessontag">L7</span><span class="lessontag">L8</span><span class="lessontag">L9</span><span class="lessontag">L10</span><span class="lessontag">L12</span><span class="lessontag">L13</span></div>
+  <div class="gtitle">🧩 動詞支配格表（動詞吃哪個格） <span class="lessontag">L6</span><span class="lessontag">L7</span><span class="lessontag">L8</span><span class="lessontag">L9</span><span class="lessontag">L10</span><span class="lessontag">L12</span><span class="lessontag">L13</span><span class="lessontag">L15</span></div>
   <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：及物動詞後面的名詞要用哪個「格」，是<b>動詞決定的</b>。老師說 90% 的德文動詞吃 Akkusativ——所以你目前遇到的幾乎全是 Akk。這張表現在看似多餘，但先把格子留好，A2 一出現吃 Dativ 的動詞（那 10%）你才不會措手不及。</p>
   <details data-rule="rekt-akk"><summary>① Akkusativ 動詞群：你目前學的動詞 90% 都在這格</summary><div class="dbody">
   <table>
@@ -2705,11 +2882,15 @@ const GRAM=[
   <p style="font-size:.9rem;margin:.3em 0 .1em">Ich bestelle <b>einen</b> Salat und ein Wasser.（我點一份沙拉和一杯水）</p>
   <p style="font-size:.9rem;margin:.1em 0">Ich finde <b>den</b> Film super.（我覺得這部電影很棒）</p>
   </div></details>
-  <details data-rule="rekt-dativ"><summary>② Dativ 動詞群登場：gefallen, helfen（附：介係詞也各自吃格）</summary><div class="dbody">
+  <details data-rule="rekt-dativ"><summary>② Dativ 動詞群：gefallen, helfen, gehören, danken, fehlen, schmecken（附：介係詞也各自吃格）</summary><div class="dbody">
   <table>
     <tr><th>動詞</th><th>用法</th></tr>
-    <tr><td class="de2">gefallen（Es gefällt <b>mir</b>／Hat es <b>dir</b> gefallen?）</td><td class="de2">先當固定用法記住；完整 Dativ 人稱代名詞（mir/dir/ihm…）⬜ A2 才系統學。</td></tr>
+    <tr><td class="de2">gefallen（Es gefällt <b>mir</b>／Hat es <b>dir</b> gefallen?）</td><td class="de2">完整 Dativ 人稱代名詞見「🧩人稱代名詞總表」（L15 起系統學）。</td></tr>
     <tr><td class="de2">helfen（Können Sie <b>mir</b> helfen? ／ Ich helfe <b>dem</b> Mann.）</td><td class="de2">L13 第一個「受詞用 Dativ 名詞」的動詞（不只代名詞）——別跟 Akkusativ 動詞搞混：Ich sehe <b>den</b> Mann（Akk）vs Ich helfe <b>dem</b> Mann（Dativ）。</td></tr>
+    <tr><td class="de2">gehören（Wem gehört das? – Das gehört <b>mir</b>.）</td><td class="de2">L15 新登場：東西「屬於」誰用 Dativ，問句用 <b>Wem</b>（不是 Wer/Wen）。</td></tr>
+    <tr><td class="de2">danken（Ich danke <b>dir</b> für deine Hilfe.）</td><td class="de2">L15 新登場：「感謝某人」的某人用 Dativ，跟中文「謝謝你」的受格直覺一致，好記。</td></tr>
+    <tr><td class="de2">fehlen（Mir fehlt die Zeit.）</td><td class="de2">L15 新登場：「缺少」的主體用 Dativ、缺少的東西才是句子的 Nominativ 主詞——中文語感容易顛倒，要小心。</td></tr>
+    <tr><td class="de2">schmecken（Schmeckt <b>dir</b> das Essen? – Ja, es schmeckt <b>mir</b> sehr gut.）</td><td class="de2">L9 舊字，L15 正式併入 Dativ 動詞家族：「對誰而言好吃」用 Dativ。</td></tr>
   </table>
   <p style="font-size:.86rem;margin:.4em 0 .2em">附帶一提——<b>介係詞也各自吃格</b>（跟動詞是兩套系統，但同樣「後面名詞看前面的字決定格」）：</p>
   <p style="font-size:.9rem;margin:.1em 0"><b>um</b> ＋ Akk：um 8 Uhr（八點）。<b>am／in der</b>（＝an dem／in der）其實是 Dativ 縮寫，L8 先當固定片語用：am Montag、in der Nacht。</p>
@@ -2922,7 +3103,7 @@ const FUNC_GLOSS={
   leider:"可惜、遺憾地",
   /* ===ANCHOR:FUNC_GLOSS===（新功能詞 "小寫形":"中文" 插在這行上方，記得上一行補逗號）*/
 };
-const PART2_STRONG={gegangen:"gehen",gesprochen:"sprechen",getroffen:"treffen",gegessen:"essen",getrunken:"trinken",geflogen:"fliegen",geschrieben:"schreiben",gewesen:"sein",genommen:"nehmen",verstanden:"verstehen",bekommen:"bekommen",aufgestanden:"aufstehen",gestanden:"stehen",ausgesehen:"aussehen"};
+const PART2_STRONG={gegangen:"gehen",gesprochen:"sprechen",getroffen:"treffen",gegessen:"essen",getrunken:"trinken",geflogen:"fliegen",geschrieben:"schreiben",gewesen:"sein",genommen:"nehmen",verstanden:"verstehen",bekommen:"bekommen",aufgestanden:"aufstehen",gestanden:"stehen",ausgesehen:"aussehen",gefunden:"finden"};
 function buildLemma(){
   LEMMA_V={};LEMMA_N={};
   const addV=(form,inf)=>{const k=(form||'').toLowerCase();if(k&&k!=='…'&&!LEMMA_V[k])LEMMA_V[k]=inf;};
@@ -3254,6 +3435,17 @@ const GR8FIX=[
  {l:"L8",sub:"地方介係詞：ins（方向） vs im（位置）",before:"Wir gehen ",after:" Kino. (Wohin?)",answer:"ins",options:["ins","im","am"],full:"Wir gehen ins Kino."},
 ];
 GR8FIX.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+const GR15=[
+ {l:"L15",sub:"⭐ 人稱代名詞：Akkusativ vs Dativ - sehen → ?",before:"Ich sehe ",after:" (den Mann).",answer:"ihn",options:["ihn","ihm","ihr"],full:"Ich sehe ihn."},
+ {l:"L15",sub:"⭐ 人稱代名詞：Dativ 動詞 helfen → ?",before:"Ich helfe ",after:" (dem Mann).",answer:"ihm",options:["ihm","ihn","ihr"],full:"Ich helfe ihm."},
+ {l:"L15",sub:"⭐ 人稱代名詞：Dativ 動詞 gehören → ?",before:"Das Buch gehört ",after:" (die Frau).",answer:"ihr",options:["ihr","ihn","ihm"],full:"Das Buch gehört ihr."},
+ {l:"L15",sub:"⭐ 人稱代名詞：Dativ 動詞 gefallen（du）→ ?",before:"Das Konzert gefällt ",after:" bestimmt gut. (du)",answer:"dir",options:["dir","mir","euch"],full:"Das Konzert gefällt dir bestimmt gut."},
+ {l:"L15",sub:"⭐ 人稱代名詞：Dativ 動詞 helfen（wir）→ ?",before:"Der Nachbar hilft ",after:" oft. (wir)",answer:"uns",options:["uns","euch","ihnen"],full:"Der Nachbar hilft uns oft."},
+ {l:"L15",sub:"⭐ 人稱代名詞：Dativ 動詞 danken（Sie，您）→ ?",before:"Ich danke ",after:" für die Einladung. (Sie，您)",answer:"Ihnen",options:["Ihnen","ihnen","euch"],full:"Ich danke Ihnen für die Einladung."},
+ {l:"L15",sub:"⭐ 人稱代名詞：Dativ 動詞 helfen，Nominativ 角色（er）→ ?",before:"",after:" hilft mir jeden Tag. (er)",answer:"Er",options:["Er","Ihm","Ihn"],full:"Er hilft mir jeden Tag."},
+ {l:"L15",sub:"⭐ 人稱代名詞：Dativ 動詞 helfen，Dativ 角色（er）→ ?",before:"Ich helfe ",after:" jeden Tag. (er)",answer:"ihm",options:["ihm","er","ihn"],full:"Ich helfe ihm jeden Tag."},
+];
+GR15.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
   /* ===ANCHOR:GRAM_QUIZ===（新課文法填空題插在這行上方：宣告 const GRn=[{l,sub,before,after,answer,options,full},…]; 後接一行 GRn.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full})); ）*/
   return Q;
 }
@@ -3434,6 +3626,7 @@ const MODULE_DEF=[
   {id:"M2",name:"Modul 2（L4–6）",lessons:["L4","L5","L6"]},
   {id:"M3",name:"Modul 3（L7–9）",lessons:["L7","L8","L9"]},
   {id:"M4",name:"Modul 4（L10–12）",lessons:["L10","L11","L12"]},
+  {id:"M5",name:"Modul 5（L13–15）",lessons:["L13","L14","L15"]},
   /* ===ANCHOR:MODULE_DEF===（新單元湊滿 3 課時在這行上方登記 {id,name,lessons}）*/
 ];
 const MODUL_TOPICS={
@@ -3441,6 +3634,7 @@ const MODUL_TOPICS={
   M2:{title:"我的房間／我的桌子",task:"描述 3–5 樣傢俱或物品：是什麼、什麼顏色或材料、貴不貴。至少一句用 Akkusativ（Ich habe einen …）、一句用 kein/keine 否定。",req:["Tisch","Lampe","haben","kosten","kein/keine","Farbe"],rm:["Das ist ein … Er ist … und kostet …","Ich habe einen/ein/eine …"]},
   M3:{title:"我的一週",task:"寫 3–5 句你的一週安排：星期幾做什麼、幾點、和誰。至少一句用 können、一句用 am＋星期或 um＋時間。注意動詞永遠在第二位。",req:["am + 星期","um + 時間","können","treffen","Hobby"],rm:["Am Montag gehe ich …","Um 19 Uhr treffe ich …","Ich kann gut …"]},
   M4:{title:"我的上個週末（Perfekt）",task:"用現在完成式寫 3–5 句上個週末做了什麼。至少一句用 sein 當助動詞（gefahren/gegangen）、一句用可分離動詞（eingekauft/aufgeräumt）。注意句框：haben/sein 第二位、Partizip 句尾。",req:["haben/sein + Partizip","zuerst / dann / danach","einkaufen","fahren"],rm:["Am Samstag habe ich … gemacht.","Dann bin ich nach … gefahren."]},
+  M5:{title:"我的新家與新街區",task:"寫 4–6 句描述你（可假想）搬到一個新住處：① 房子/公寓的樣子，用所有格 sein/ihr 或 Genitiv；② 怎麼找到那裡，用地方介係詞或 helfen；③ 對新街區的評價，用 gefallen/gehören/fehlen 等 Dativ 動詞。至少一句要用到完整 Dativ 人稱代名詞（mir/dir/ihm…）。",req:["所有格 sein/ihr","地方介係詞","Dativ 動詞（gefallen/gehören/fehlen/danken）","umziehen"],rm:["Ich bin nach … umgezogen.","Die Wohnung ist neben/an/in der Nähe von …","Was mir an … gefällt, ist …"]},
   /* ===ANCHOR:MODUL_TOPICS===（新單元寫作題插在這行上方，key 對齊 MODULE_DEF 的 id）*/
 };
 /* 單元整合閱讀（🏆 第②關）：一篇串起單元三課單字、動詞人稱 ≥4 種的文章；生成規則見 ROADMAP「導讀生成管線 v2」，白名單以單元最後一課為截止。4 題以第一次作答計分，答對 ≥3 過關 */
@@ -3473,6 +3667,13 @@ const MODUL_TEXTS={
       {q:"誰吃了兩份烤雞？",options:["Mia","Paul","Anna","她媽媽"],a:2},
       {q:"Mia 買禮物給誰？",options:["Anna","Paul","她媽媽","自己"],a:2},
       {q:"「Ich bin nach München gefahren」為什麼用 bin 不用 habe？",options:["fahren 是移動類動詞，Perfekt 用 sein","拼錯了","因為是過去","因為在句首"],a:0}]},
+ M5:{title:"Mein Umzug nach Ottensen",
+  de:"Liebe Sofie, wie geht es dir? Ich bin nach Ottensen umgezogen! Ich habe die Wohnung nicht gefunden, aber ein Nachbar hat mir geholfen: Er hat gesagt: „Gehen Sie geradeaus und dann rechts an der Kirche.“ Die Wohnung ist klein, aber gemütlich, und ein kleines Café ist gleich um die Ecke — das gehört einer netten Familie. Ottensen ist ganz normal, und das finde ich gut so: Hier wohnen Studenten, Arbeiter, Deutsche und Ausländer zusammen. Es gibt einen Markt, eine Bibliothek und viele kleine Geschäfte. Am Wochenende mache ich oft einen Spaziergang im Park. Was fehlt in Ottensen? Vielleicht ein Kino, aber hier ist immer etwas los. Ich danke dir für deine Hilfe! Wie gefällt dir dein neues Viertel? Schreib mir bald! Viele Grüße, Nina",
+  zh:"親愛的 Sofie，你好嗎？我搬到 Ottensen 了！一開始我找不到那間公寓，但一位鄰居幫了我：他說：「請直走，然後在教堂那裡右轉。」公寓很小，但很舒適，轉角還有一間小咖啡廳——那是屬於一戶很親切的人家。Ottensen 很普通，我覺得這樣就好：這裡住著大學生、工人、德國人和外國人。這裡有一個市場、一間圖書館和很多小商店。週末我常在公園散步。Ottensen 缺少什麼呢？也許是一間電影院，但這裡總是很熱鬧。謝謝你的幫忙！你喜歡你的新街區嗎？快寫信給我！祝好，Nina",
+  qs:[{q:"Nina 搬到哪個街區？",options:["Ottensen","Giesing","慕尼黑","漢堡市中心"],a:0},
+      {q:"誰幫 Nina 找到公寓？",options:["Sofie","一位鄰居","咖啡廳老闆","文中沒說"],a:1},
+      {q:"轉角的咖啡廳屬於誰？",options:["Nina","一戶親切的人家","Sofie","市政府"],a:1},
+      {q:"「Er hat mir geholfen」的 mir 為什麼用 Dativ？",options:["helfen 是 Dativ 動詞，受詞用 Dativ","拼錯了","mir 是所有格","固定用法沒有原因"],a:0}]},
  /* ===ANCHOR:MODUL_TEXTS===（新單元整合閱讀插在這行上方，key 對齊 MODULE_DEF 的 id；先跑白名單驗證再入庫）*/
 };
 let modulRun=null; /* 進行中的單元挑戰 id；手動換課別/題型＝放棄本輪判定 */
