@@ -4250,7 +4250,7 @@ function newQ(){
     qsub.textContent=pre+'它是哪個性別？';
     qprompt.textContent=qCur.de+'　('+qCur.zh+')';
     qSpeak=qCur.g+' '+qCur.de;
-    ['der','die','das'].sort(()=>Math.random()-.5).forEach(g=>addOpt(GLABEL[g],g===qCur.g));
+    ['der','die','das'].forEach(g=>addOpt(GLABEL[g],g===qCur.g));
   }else if(m==='listen'){
     renderListen(pre);
   }else if(m==='satzbau'){
