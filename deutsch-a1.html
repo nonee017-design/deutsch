@@ -2693,7 +2693,7 @@ function logAnswer(){
 function weekCount(){const cut=Date.now()-7*864e5;let n=0;Object.entries(qlog).forEach(([k,v])=>{const ts=new Date(k+'T00:00:00').getTime();if(isFinite(ts)&&ts>=cut)n+=(+v||0);});return n;}
 function updateDash(){const el=document.getElementById('dash');if(el)el.textContent=`已畢業 ${Object.keys(mastered).length} / ${VOCAB.length} 字 · 本週答題 ${weekCount()} 題`;}
 /* 文法卡穩定 key：由標題衍生（改標題會孤兒化標記，與例句 de-key 同一取捨） */
-const GKEY_MAP=[["人稱代名詞","pron"],["陰陽性線索","gclue"],["複數線索","pclue"],["所有格","poss"],["時間介係詞","zeit"],["地方介係詞","lokal"],["冠詞變格","art"],["句框","satz"],["動詞支配格","rekt"],["動詞變位①","konj1"],["動詞變位②","konj2"],["Perfekt 現在完成式","pii"],["價格唸法","preis"],["字母表","abc"],["挑任一數字","numtry"],["大數字","bignum"],["數字測驗","numquiz"],["數字的系統","numsys"]];
+const GKEY_MAP=[["人稱代名詞","pron"],["陰陽性線索","gclue"],["複數線索","pclue"],["所有格","poss"],["schon vs erst","advw"],["時間介係詞","zeit"],["地方介係詞","lokal"],["冠詞變格","art"],["句框","satz"],["動詞支配格","rekt"],["動詞變位①","konj1"],["動詞變位②","konj2"],["Perfekt 現在完成式","pii"],["價格唸法","preis"],["字母表","abc"],["挑任一數字","numtry"],["大數字","bignum"],["數字測驗","numquiz"],["數字的系統","numsys"]];
 function gramKeyOf(t){for(const[s,k]of GKEY_MAP)if(t.includes(s))return k;return t.trim().slice(0,8);}
 function gramKeyOfCard(g){const m=g.html.match(/gtitle">([^<]+)/);return gramKeyOf(m?m[1]:g.html);}
 /* 題目→卡片映射（執行期分類，一題可命中多卡） */
@@ -2720,6 +2720,7 @@ function gramCardsOfQ(q){
   if(/價格/.test(s))ks.add('preis');
   if(/Wortbildung/.test(s))ks.add('gclue');
   if(/所有格/.test(s))ks.add('poss');
+  if(/schon vs erst/.test(s))ks.add('advw');
   if(/母音變化|字尾/.test(s))ks.add('konj1');
   const m=s.match(/^([a-zäöüß]+)：\s*(ich|du|er|es|sie|wir|ihr|Sie)\s*→/);
   if(m)ks.add(KONJ2_VERBS.has(m[1])?'konj2':'konj1');
@@ -3208,6 +3209,17 @@ const GRAM=[
   </div></details>
   <div class="note"><b>⚠️ 最容易錯：Dativ 複數名詞別忘了加 -n</b>——冠詞變成 den 大家會記得，但名詞本身也要加 -n 常常漏掉（❌ zwischen den Bank<u>en</u>✓／❌ neben den Häuser 要寫 neben den Häuser<b>n</b>）。另外別把這張卡跟🧩動詞支配格表的 Dativ 動詞（gefallen/helfen）搞混：這張卡是<b>介係詞</b>決定格，那張卡是<b>動詞</b>決定格，是兩套獨立系統。</div>
 </div>`},
+{l:"L9",html:`
+<div class="card gcard">
+  <div class="gtitle">⏱ schon vs erst：「已經」還是「才」 <span class="lessontag">L9</span></div>
+  <p style="font-size:.88rem;margin:.2em 0 .6em">系統先抓：兩個都在標「時間點<b>相對於預期</b>」，跟時鐘上的絕對早晚無關，跟「比你以為的早還是晚」有關。<b>schon＝比預期早／已經</b>；<b>erst＝比預期晚／才、直到…才</b>。所以同一個「六點」可配 schon（六點就…＝早），同一個「十一點」可配 erst（十一點才…＝晚）。</p>
+  <table>
+    <tr><th>詞</th><th>語感</th><th>例句</th></tr>
+    <tr><td>schon</td><td>比預期早／已經</td><td class="de2">Ich frühstücke <b>schon</b> um sechs Uhr.（六點就吃了＝早）</td></tr>
+    <tr><td>erst</td><td>比預期晚／才</td><td class="de2">Am Sonntag frühstücke ich <b>erst</b> um elf Uhr.（十一點才吃＝晚）</td></tr>
+  </table>
+  <div class="note"><b>⚠️ 最容易錯：</b>別用中文直翻——中文的「才」不一定對到 erst，但「已經」一定是 schon。抓口訣：<b>比預期早→schon／比預期晚→erst</b>。數量與年齡同理：<b>Er ist schon 60.</b>（都 60 了＝多）↔ <b>Er ist erst 6.</b>（才 6 歲＝少）。</div>
+</div>`},
 /* ===ANCHOR:GRAM===（新文法卡 {l:"Ln",html:`<div class="card gcard">…`} 插在這行上方）*/
 ];
 
@@ -3455,12 +3467,12 @@ function buildGram(){
    {l:"L5",sub:"⭐ 否定：___ Uhr（die）",before:"Das ist ",after:" Uhr.",answer:"keine",options:["keine","kein","nicht"],full:"Das ist keine Uhr."},
    {l:"L5",sub:"⭐ 否定：___ Feuerzeug（das）",before:"Das ist ",after:" Feuerzeug.",answer:"kein",options:["kein","keine","nicht"],full:"Das ist kein Feuerzeug."},
    {l:"L5",sub:"⭐ 否定：___ Schlüssel（der）",before:"Das ist ",after:" Schlüssel.",answer:"kein",options:["kein","keine","nicht"],full:"Das ist kein Schlüssel."},
-   {l:"L5",sub:"材料 aus：玻璃瓶",before:"Die Flasche ist aus ",after:".",answer:"Glas",options:["Glas","Holz","Metall","Papier"],full:"Die Flasche ist aus Glas."},
-   {l:"L5",sub:"材料 aus：木桌",before:"Der Tisch ist aus ",after:".",answer:"Holz",options:["Holz","Glas","Plastik","Metall"],full:"Der Tisch ist aus Holz."},
+   {ng:1,l:"L5",sub:"材料 aus：玻璃瓶",before:"Die Flasche ist aus ",after:".",answer:"Glas",options:["Glas","Holz","Metall","Papier"],full:"Die Flasche ist aus Glas."},
+   {ng:1,l:"L5",sub:"材料 aus：木桌",before:"Der Tisch ist aus ",after:".",answer:"Holz",options:["Holz","Glas","Plastik","Metall"],full:"Der Tisch ist aus Holz."},
    {l:"L5",sub:"顏色＋代名詞：die Brille → ?",before:"Die Brille ist rot. ",after:" ist eckig.",answer:"Sie",options:["Sie","Er","Es"],full:"Die Brille ist rot. Sie ist eckig."},
-   {l:"L5",sub:"疑問詞：問顏色",before:"",after:" Farbe hat die Brille?",answer:"Welche",options:["Welche","Was","Wie","Wer"],full:"Welche Farbe hat die Brille?"}
+   {ng:1,l:"L5",sub:"疑問詞：問顏色",before:"",after:" Farbe hat die Brille?",answer:"Welche",options:["Welche","Was","Wie","Wer"],full:"Welche Farbe hat die Brille?"}
   ];
-  GR45.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+  GR45.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full,ng:q.ng}));
   const GR45B=[
    {l:"L5",sub:"⭐ 否定：Schlüssel（der）",before:"Ist das ein Schlüssel? Nein, das ist ",after:" Schlüssel.",answer:"kein",options:["kein","keine","nicht"],full:"Nein, das ist kein Schlüssel."},
    {l:"L5",sub:"⭐ 否定：Kette（die）",before:"Ist das eine Kette? Nein, das ist ",after:" Kette.",answer:"keine",options:["keine","kein","nicht"],full:"Nein, das ist keine Kette."},
@@ -3468,17 +3480,17 @@ function buildGram(){
    {l:"L5",sub:"⭐ 否定：Handy（das）",before:"Ist das ein Handy? Nein, das ist ",after:" Handy.",answer:"kein",options:["kein","keine","nicht"],full:"Nein, das ist kein Handy."},
    {l:"L5",sub:"⭐ 複數否定：Autos",before:"Sind das Autos? Nein, das sind ",after:" Autos.",answer:"keine",options:["keine","kein","nicht"],full:"Nein, das sind keine Autos."},
    {l:"L5",sub:"⭐ 複數否定：Feuerzeuge",before:"Sind das Feuerzeuge? Nein, das sind ",after:" Feuerzeuge.",answer:"keine",options:["keine","kein","nicht"],full:"Nein, das sind keine Feuerzeuge."},
-   {l:"L5",sub:"形狀：die Flasche → ?",before:"Welche Form hat die Flasche? Sie ist ",after:".",answer:"rund",options:["rund","eckig"],full:"Sie ist rund."},
-   {l:"L5",sub:"形狀：der Computer → ?",before:"Welche Form hat der Computer? Er ist ",after:".",answer:"eckig",options:["eckig","rund"],full:"Er ist eckig."},
-   {l:"L5",sub:"疑問詞：問形狀",before:"",after:" Form hat der Computer?",answer:"Welche",options:["Welche","Was","Wie","Wer"],full:"Welche Form hat der Computer?"},
-   {l:"L4",sub:"反義詞：schön ↔ ?",before:"schön ↔ ",after:"",answer:"hässlich",options:["hässlich","altmodisch","klein","schlecht"],full:"schön ↔ hässlich"},
-   {l:"L4",sub:"反義詞：lang ↔ ?",before:"lang ↔ ",after:"",answer:"kurz",options:["kurz","klein","alt","neu"],full:"lang ↔ kurz"},
-   {l:"L4",sub:"反義詞：neu ↔ ?",before:"neu ↔ ",after:"",answer:"alt",options:["alt","jung","kurz","billig"],full:"neu ↔ alt"},
-   {l:"L4",sub:"反義詞：modern ↔ ?",before:"modern ↔ ",after:"",answer:"altmodisch",options:["altmodisch","hässlich","alt","unpraktisch"],full:"modern ↔ altmodisch"},
-   {l:"L4",sub:"反義詞：bequem ↔ ?",before:"bequem ↔ ",after:"",answer:"unbequem",options:["unbequem","unpraktisch","hässlich","schlecht"],full:"bequem ↔ unbequem"},
-   {l:"L4",sub:"反義詞：leicht ↔ ?",before:"leicht ↔ ",after:"",answer:"schwer",options:["schwer","schlecht","groß","kurz"],full:"leicht ↔ schwer"}
+   {ng:1,l:"L5",sub:"形狀：die Flasche → ?",before:"Welche Form hat die Flasche? Sie ist ",after:".",answer:"rund",options:["rund","eckig"],full:"Sie ist rund."},
+   {ng:1,l:"L5",sub:"形狀：der Computer → ?",before:"Welche Form hat der Computer? Er ist ",after:".",answer:"eckig",options:["eckig","rund"],full:"Er ist eckig."},
+   {ng:1,l:"L5",sub:"疑問詞：問形狀",before:"",after:" Form hat der Computer?",answer:"Welche",options:["Welche","Was","Wie","Wer"],full:"Welche Form hat der Computer?"},
+   {ng:1,l:"L4",sub:"反義詞：schön ↔ ?",before:"schön ↔ ",after:"",answer:"hässlich",options:["hässlich","altmodisch","klein","schlecht"],full:"schön ↔ hässlich"},
+   {ng:1,l:"L4",sub:"反義詞：lang ↔ ?",before:"lang ↔ ",after:"",answer:"kurz",options:["kurz","klein","alt","neu"],full:"lang ↔ kurz"},
+   {ng:1,l:"L4",sub:"反義詞：neu ↔ ?",before:"neu ↔ ",after:"",answer:"alt",options:["alt","jung","kurz","billig"],full:"neu ↔ alt"},
+   {ng:1,l:"L4",sub:"反義詞：modern ↔ ?",before:"modern ↔ ",after:"",answer:"altmodisch",options:["altmodisch","hässlich","alt","unpraktisch"],full:"modern ↔ altmodisch"},
+   {ng:1,l:"L4",sub:"反義詞：bequem ↔ ?",before:"bequem ↔ ",after:"",answer:"unbequem",options:["unbequem","unpraktisch","hässlich","schlecht"],full:"bequem ↔ unbequem"},
+   {ng:1,l:"L4",sub:"反義詞：leicht ↔ ?",before:"leicht ↔ ",after:"",answer:"schwer",options:["schwer","schlecht","groß","kurz"],full:"leicht ↔ schwer"}
   ];
-  GR45B.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+  GR45B.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full,ng:q.ng}));
   const GR6=[
    {l:"L6",sub:"⭐ Akkusativ：der Laptop → ?",before:"Ich habe ",after:" Laptop.",answer:"einen",options:["einen","ein","eine"],full:"Ich habe einen Laptop."},
    {l:"L6",sub:"⭐ Akkusativ：der Drucker（否定）",before:"Ich brauche ",after:" Drucker.",answer:"keinen",options:["keinen","kein","keine"],full:"Ich brauche keinen Drucker."},
@@ -3513,13 +3525,13 @@ function buildGram(){
    {l:"L8",sub:"⚠️ 介係詞例外：深夜",before:"Ich arbeite nicht ",after:" Nacht.",answer:"in der",options:["in der","am","um"],full:"Ich arbeite nicht in der Nacht."},
    {l:"L8",sub:"Position 2：leider 佔第1位",before:"Leider ",after:" ich keine Zeit.",answer:"habe",options:["habe","ich habe","hab"],full:"Leider habe ich keine Zeit."},
    {l:"L8",sub:"Position 2：heute Abend 佔第1位",before:"Heute Abend ",after:" ich leider nicht kommen.",answer:"kann",options:["kann","ich kann","kannst"],full:"Heute Abend kann ich leider nicht kommen."},
-   {l:"L8",sub:"Uhrzeit 口語：09:15",before:"Es ist ",after:" neun.",answer:"Viertel nach",options:["Viertel nach","Viertel vor","halb"],full:"Es ist Viertel nach neun."},
-   {l:"L8",sub:"⚠️ Uhrzeit 口語：09:30",before:"Es ist ",after:".",answer:"halb zehn",options:["halb zehn","halb neun","zehn Uhr"],full:"Es ist halb zehn."},
-   {l:"L8",sub:"Uhrzeit 口語：09:45",before:"Es ist ",after:" zehn.",answer:"Viertel vor",options:["Viertel vor","Viertel nach","halb"],full:"Es ist Viertel vor zehn."},
-   {l:"L8",sub:"Uhrzeit 正式：14:30",before:"Es ist ",after:".",answer:"vierzehn Uhr dreißig",options:["vierzehn Uhr dreißig","zwei Uhr dreißig","vierzehn Uhr halb"],full:"Es ist vierzehn Uhr dreißig."},
-   {l:"L8",sub:"Vorschlag machen",before:"",after:" können wir morgen Abend ins Theater gehen.",answer:"Vielleicht",options:["Vielleicht","Leider","Warum"],full:"Vielleicht können wir morgen Abend ins Theater gehen."}
+   {ng:1,l:"L8",sub:"Uhrzeit 口語：09:15",before:"Es ist ",after:" neun.",answer:"Viertel nach",options:["Viertel nach","Viertel vor","halb"],full:"Es ist Viertel nach neun."},
+   {ng:1,l:"L8",sub:"⚠️ Uhrzeit 口語：09:30",before:"Es ist ",after:".",answer:"halb zehn",options:["halb zehn","halb neun","zehn Uhr"],full:"Es ist halb zehn."},
+   {ng:1,l:"L8",sub:"Uhrzeit 口語：09:45",before:"Es ist ",after:" zehn.",answer:"Viertel vor",options:["Viertel vor","Viertel nach","halb"],full:"Es ist Viertel vor zehn."},
+   {ng:1,l:"L8",sub:"Uhrzeit 正式：14:30",before:"Es ist ",after:".",answer:"vierzehn Uhr dreißig",options:["vierzehn Uhr dreißig","zwei Uhr dreißig","vierzehn Uhr halb"],full:"Es ist vierzehn Uhr dreißig."},
+   {l:"L8",sub:"Satzklammer：Vorschlag machen（können＋原形踢句尾）",before:"",after:" können wir morgen Abend ins Theater gehen.",answer:"Vielleicht",options:["Vielleicht","Leider","Warum"],full:"Vielleicht können wir morgen Abend ins Theater gehen."}
   ];
-  GR8.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+  GR8.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full,ng:q.ng}));
   const GR9=[
    {l:"L9",sub:"mögen：ich → ?",before:"Ich ",after:" keinen Käse.",answer:"mag",options:["mag","magst","möchte"],full:"Ich mag keinen Käse."},
    {l:"L9",sub:"möchten：ich → ?",before:"Ich ",after:" einen Kaffee, bitte.",answer:"möchte",options:["möchte","mag","möchtest"],full:"Ich möchte einen Kaffee, bitte."},
@@ -3528,8 +3540,8 @@ function buildGram(){
    {l:"L9",sub:"essen：du → ?（e→i，跟er同形）",before:"Was ",after:" du gern zum Frühstück?",answer:"isst",options:["isst","esst","issest"],full:"Was isst du gern zum Frühstück?"},
    {l:"L9",sub:"essen：er → ?",before:"Er ",after:" ein Käsebrötchen.",answer:"isst",options:["isst","esst","essst"],full:"Er isst ein Käsebrötchen."},
    {l:"L9",sub:"essen：wir → ?",before:"Wir ",after:" gern Müsli.",answer:"essen",options:["essen","esst","isst"],full:"Wir essen gern Müsli."},
-   {l:"L9",sub:"⚠️ schon vs erst：已經",before:"Ich frühstücke ",after:" um sechs Uhr.",answer:"schon",options:["schon","erst","noch"],full:"Ich frühstücke schon um sechs Uhr."},
-   {l:"L9",sub:"⚠️ schon vs erst：直到才",before:"Am Sonntag frühstücke ich ",after:" um elf Uhr.",answer:"erst",options:["erst","schon","noch"],full:"Am Sonntag frühstücke ich erst um elf Uhr."},
+   {l:"L9",sub:"schon vs erst：已經",before:"Ich frühstücke ",after:" um sechs Uhr.",answer:"schon",options:["schon","erst","noch"],full:"Ich frühstücke schon um sechs Uhr."},
+   {l:"L9",sub:"schon vs erst：直到才",before:"Am Sonntag frühstücke ich ",after:" um elf Uhr.",answer:"erst",options:["erst","schon","noch"],full:"Am Sonntag frühstücke ich erst um elf Uhr."},
    {l:"L9",sub:"Wortbildung：性別看最後字",before:"Das ist ",after:" Schokoladenkuchen.",answer:"der",options:["der","die","das"],full:"Das ist der Schokoladenkuchen."}
   ];
   GR9.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
@@ -3552,11 +3564,11 @@ const GR11=[
  {l:"L11",sub:"Partizip：schlafen",before:"Ich habe lange ",after:".",answer:"geschlafen",options:["geschlafen","geschlaft","geschläft","schlafen"],full:"Ich habe lange geschlafen."},
  {l:"L11",sub:"Partizip：lachen",before:"Wir haben viel ",after:".",answer:"gelacht",options:["gelacht","gelachen","lacht","gelachte"],full:"Wir haben viel gelacht."},
  {l:"L11",sub:"Partizip 可分離：aufräumen",before:"Ich habe mein Zimmer ",after:".",answer:"aufgeräumt",options:["aufgeräumt","geaufräumt","aufräumgt","aufgeräumte"],full:"Ich habe mein Zimmer aufgeräumt."},
- {l:"L11",sub:"⭐doch：否定問句的肯定回答",before:"Hast du letzten Sonntag keinen Kaffee getrunken? – ",after:", ich trinke am Sonntag immer Kaffee.",answer:"Doch",options:["Doch","Ja","Nein","Doch nicht"],full:"Doch, ich trinke am Sonntag immer Kaffee."},
+ {ng:1,l:"L11",sub:"⭐doch：否定問句的肯定回答",before:"Hast du letzten Sonntag keinen Kaffee getrunken? – ",after:", ich trinke am Sonntag immer Kaffee.",answer:"Doch",options:["Doch","Ja","Nein","Doch nicht"],full:"Doch, ich trinke am Sonntag immer Kaffee."},
  {l:"L11",sub:"時間介係詞：從…到…",before:"Ich habe ",after:" 9 bis 13 Uhr gearbeitet.",answer:"von",options:["von","ab","seit","im"],full:"Ich habe von 9 bis 13 Uhr gearbeitet."},
  {l:"L11",sub:"時間介係詞：ab",before:"",after:" 9 Uhr arbeite ich.",answer:"Ab",options:["Ab","Von","Seit","Im"],full:"Ab 9 Uhr arbeite ich."},
 ];
-GR11.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+GR11.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full,ng:q.ng}));
 const GR12=[
  {l:"L12",sub:"⭐ haben 或 sein：fliegen",before:"Er ",after:" nach München geflogen.",answer:"ist",options:["ist","hat","war","sind"],full:"Er ist nach München geflogen."},
  {l:"L12",sub:"⭐ haben 或 sein：feiern",before:"Wir ",after:" letzte Woche gefeiert.",answer:"haben",options:["haben","sind","ist","hat"],full:"Wir haben letzte Woche gefeiert."},
@@ -3668,6 +3680,28 @@ const GR_IRR9=[
  {l:"L14",sub:"aussehen：er → ?（可分離）",before:"Er ",after:" heute müde aus.",answer:"sieht",options:["sieht","sehe","siehst","seht"],full:"Er sieht heute müde aus."},
 ];
 GR_IRR9.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+const GRPOSSX=[
+ {l:"L14",sub:"所有格：sein＋die 名詞",before:"Otto hat eine Wohnung. ",after:" Wohnung ist groß.",answer:"Seine",options:["Seine","Sein","Ihre","Ihr"],full:"Otto hat eine Wohnung. Seine Wohnung ist groß."},
+ {l:"L14",sub:"所有格：ihr＋複數",before:"Vanilla hat zwei Kinder. ",after:" Kinder sind nett.",answer:"Ihre",options:["Ihre","Ihr","Seine","Sein"],full:"Vanilla hat zwei Kinder. Ihre Kinder sind nett."},
+ {l:"L14",sub:"所有格：ihr＋der 名詞·受格",before:"Vanilla hat einen Garten. Ich mag ",after:" Garten.",answer:"ihren",options:["ihren","ihr","seinen","sein"],full:"Vanilla hat einen Garten. Ich mag ihren Garten."},
+];
+GRPOSSX.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full,ng:q.ng}));
+const GRPREISX=[
+ {l:"L4",sub:"價格：199 €",before:"Der Schrank kostet ",after:" Euro.",answer:"hundertneunundneunzig",options:["hundertneunundneunzig","neunundneunzighundert","einhundertneunzig","hundertneunzehn"],full:"Der Schrank kostet hundertneunundneunzig Euro."},
+ {l:"L4",sub:"價格：2,50 €",before:"Der Kaffee kostet ",after:".",answer:"zwei Euro fünfzig",options:["zwei Euro fünfzig","fünfzig Euro zwei","zwei fünfzig","zwei Euro fünf"],full:"Der Kaffee kostet zwei Euro fünfzig."},
+ {l:"L4",sub:"價格：1000",before:"Das Sofa kostet ",after:" Euro.",answer:"tausend",options:["tausend","hundert","zehntausend","zehnhundert"],full:"Das Sofa kostet tausend Euro."},
+];
+GRPREISX.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full,ng:q.ng}));
+const GRGCLUEX=[
+ {l:"L9",sub:"Wortbildung：-ung 結尾的字",before:"Das ist ",after:" Wohnung.",answer:"die",options:["die","der","das"],full:"Das ist die Wohnung."},
+ {l:"L9",sub:"Wortbildung：-chen 結尾（女孩仍中性）",before:"Das ist ",after:" Mädchen.",answer:"das",options:["das","die","der"],full:"Das ist das Mädchen."},
+];
+GRGCLUEX.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full,ng:q.ng}));
+const GRSCHON=[
+ {l:"L9",sub:"schon vs erst：時間還早",before:"Es ist ",after:" acht Uhr, wir haben noch viel Zeit.",answer:"erst",options:["erst","schon"],full:"Es ist erst acht Uhr, wir haben noch viel Zeit."},
+ {l:"L9",sub:"schon vs erst：已完成",before:"Ich habe ",after:" gegessen, danke.",answer:"schon",options:["schon","erst"],full:"Ich habe schon gegessen, danke."},
+];
+GRSCHON.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full,ng:q.ng}));
   /* ===ANCHOR:GRAM_QUIZ===（新課文法填空題插在這行上方：宣告 const GRn=[{l,sub,before,after,answer,options,full},…]; 後接一行 GRn.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full})); ）*/
   return Q;
 }
@@ -3831,7 +3865,7 @@ function errKeyOf(mode,q){const s=q.sub||'';const i=s.indexOf('：');return i>0?
 function recordError(mode,q){
   if(mode==='mean'||mode==='gender'){if(q.id!==undefined){weak[q.id]=1;saveWeak();if(mastered[q.id]){delete mastered[q.id];saveMastered();delete seen[q.id];saveSeen();}}return;}
   if(mode==='listen'||mode==='satzbau'){if(q.de){weakSent[q.de]=1;saveWeakSent();}return;}
-  const k=errKeyOf(mode,q);if(k){errors[k]=(errors[k]||0)+1;saveErrors();renderErrPanel();}
+  const k=q.ng?'📚 詞彙/表達':errKeyOf(mode,q);if(k){errors[k]=(errors[k]||0)+1;saveErrors();renderErrPanel();}
 }
 function renderErrPanel(){
   const el=document.getElementById('errPanel');if(!el)return;
@@ -4028,7 +4062,7 @@ function renderSwList(id){
 
 /* 🏁 總複習：全課別混抽固定 30 題，「對比」題權重 ×2，結束出各文法點答對率 */
 let meilenQueue=[],meilenStats={},meilenDone=0,meilenTotal=0;const MEILEN_N=30;
-function statKeyOf(m,q){if(m==='mean')return '字義';if(m==='gender')return '性別 der/die/das';if(m==='listen')return '👂 聽力';if(m==='satzbau')return '🧱 語序';return errKeyOf(m,q)||m;}
+function statKeyOf(m,q){if(m==='mean')return '字義';if(m==='gender')return '性別 der/die/das';if(m==='listen')return '👂 聽力';if(m==='satzbau')return '🧱 語序';return q.ng?'📚 詞彙/表達':(errKeyOf(m,q)||m);}
 /* 2026-07 改版：總複習跟著課別範圍走（全選＝舊的全課行為），字義/性別預設排除已畢業字（「含已掌握」chip 生效）；「只考不熟」不影響總複習 */
 /* N11.5：單元挑戰（modulRun）版總複習走加難固定配方——聽力8＋語序8＋文法7＋複數4＋字義2＋性別1，
    聽＋排占過半、與一般 🏁 做出難度區隔；某維度題池不足時由其餘題池隨機補位，門檻 85% 不變 */
