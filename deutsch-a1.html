@@ -182,8 +182,8 @@
 <body>
 <div class="wrap">
   <header style="position:relative">
-    <div class="eyebrow">Menschen · A1 · Lektion 1–15</div>
-    <h1>Deutsch A1 — L1–L15</h1>
+    <div class="eyebrow">Menschen · A1 · Lektion 1–16</div>
+    <h1>Deutsch A1 — L1–L16</h1>
     <details class="helpbox" id="outline" style="margin-top:10px;text-align:left"><summary>📚 每課大綱（點開看）</summary><div class="panel-intro" style="margin:8px 0 2px;line-height:1.9">
       L1 打招呼·自我介紹（heißen/kommen aus/wohnen in）·sein·W 問句·拼讀·數字 0–100<br>
       L2 個人資料·職業·規則動詞變位全表·ihr（你們）<br>
@@ -200,6 +200,7 @@
       L13 問路·地方介係詞＋Dativ登場（in/an/auf/neben/hinter/vor/zwischen/unter/über）·helfen<br>
       L14 住屋·租屋·所有格 sein/ihr 全格位·Genitiv 專有名詞初登場<br>
       L15 街區評價·Dativ動詞家族(gehören/danken/fehlen)·人稱代名詞Nom/Akk/Dativ全表<br>
+      L16 旅館客訴·Termine 改期·時間介係詞in/nach/vor/für·序數日期<br>
       <!-- ===ANCHOR:OUTLINE===（新課大綱一行插在這行上方，格式照上）-->
     </div></details>
   </header>
@@ -221,6 +222,7 @@
     <button class="lchip" data-lesson="L13" data-on="false">L13</button>
     <button class="lchip" data-lesson="L14" data-on="false">L14</button>
     <button class="lchip" data-lesson="L15" data-on="false">L15</button>
+    <button class="lchip" data-lesson="L16" data-on="false">L16</button>
     <!-- ===ANCHOR:LESSON_CHIPS===（A1.2 新課按鈕插在這行上方、span#bookA11 之外）-->
     <button class="lchip" data-lesson="ALL" data-on="false">全選 · 模組複習</button>
     <span style="flex-basis:100%;font-size:.72rem;color:var(--mut)">單點換課 · 長按半秒加選複數課 · 📕 收合/展開整冊</span>
@@ -482,7 +484,7 @@
 const SPK_SVG='<svg viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>';
 
 /* ===== 範圍（課別·可多選）===== */
-const DEFAULT_LESSON="L15"; /* ===ANCHOR:DEFAULT_LESSON===（新課上線時改成最新課號；chip 的 data-on 由 syncLessonChips 執行期同步，新 chip 一律 data-on="false"）*/
+const DEFAULT_LESSON="L16"; /* ===ANCHOR:DEFAULT_LESSON===（新課上線時改成最新課號；chip 的 data-on 由 syncLessonChips 執行期同步，新 chip 一律 data-on="false"）*/
 let curLessons=new Set([DEFAULT_LESSON]);
 /* L123 是 L1/L2/L3 的合併篩選鈕，資料本身仍各自標 L1/L2/L3，故用此函式統一判斷範圍是否命中 */
 function inLessonScope(l){
@@ -1358,8 +1360,72 @@ const ADD15B=[
 {de:"alle",zh:"全部的、所有人／所有東西（複數；比較 alles＝不可數的「全部」）",g:null,cat:"常用",lesson:"L15",ex:["Alle sind heute gekommen.","今天大家都來了。"]},
 {de:"wenig",zh:"少（↔ viel）",g:null,cat:"常用",lesson:"L15",ex:["Ich habe wenig Zeit.","我沒什麼時間。"]},
 ];
+const ADD16=[
+{de:"Dusche",zh:"淋浴（間）",g:"die",cat:"旅館",lesson:"L16",ex:["Die Dusche funktioniert nicht.","淋浴壞了。"]},
+{de:"Fernseher",zh:"電視機",g:"der",cat:"旅館",lesson:"L16",ex:["Der Fernseher ist kaputt.","電視壞了。"]},
+{de:"Föhn",zh:"吹風機",g:"der",cat:"旅館",lesson:"L16",ex:["Der Föhn ist im Bad.","吹風機在浴室。"]},
+{de:"Gast",zh:"客人",g:"der",cat:"旅館",lesson:"L16",ex:["Der Gast ruft die Rezeption an.","客人打給櫃台。"]},
+{de:"Heizung",zh:"暖氣",g:"die",cat:"旅館",lesson:"L16",ex:["Die Heizung ist kalt.","暖氣是冷的。"]},
+{de:"Klimaanlage",zh:"空調",g:"die",cat:"旅館",lesson:"L16",ex:["Die Klimaanlage macht Lärm.","空調很吵。"]},
+{de:"Verbindung",zh:"連線、連接",g:"die",cat:"旅館",lesson:"L16",ex:["Die Verbindung ist schlecht.","連線很差。"]},
+{de:"Internetverbindung",zh:"網路連線",g:"die",cat:"旅館",lesson:"L16",ex:["Die Internetverbindung funktioniert nicht.","網路連不上。"]},
+{de:"Wecker",zh:"鬧鐘",g:"der",cat:"旅館",lesson:"L16",ex:["Der Wecker klingelt um sechs.","鬧鐘六點響。"]},
+{de:"Bademantel",zh:"浴袍",g:"der",cat:"旅館",lesson:"L16",ex:["Der Bademantel hängt im Bad.","浴袍掛在浴室。"]},
+{de:"Angst",zh:"害怕、恐懼（Angst haben＝害怕）",g:"die",cat:"常用",lesson:"L16",ex:["Ich habe Angst vor Prüfungen.","我怕考試。"]},
+{de:"Kurs",zh:"課程（Tanz-/Spanischkurs）",g:"der",cat:"邀約",lesson:"L16",ex:["Der Kurs beginnt um acht.","課八點開始。"]},
+{de:"Leben",zh:"生活、生命",g:"das",cat:"常用",lesson:"L16",ex:["Das Leben in Hamburg ist teuer.","漢堡的生活很貴。"]},
+{de:"Sitzung",zh:"會議",g:"die",cat:"邀約",lesson:"L16",ex:["Ich habe um zehn eine Sitzung.","我十點有個會。"]},
+{de:"Stunde",zh:"小時（die halbe Stunde＝半小時）",g:"die",cat:"時間",lesson:"L16",ex:["In einer Stunde beginnt der Kurs.","一小時後開課。"]},
+{de:"Feiertag",zh:"國定假日",g:"der",cat:"節慶",lesson:"L16",ex:["Der Feiertag ist im Mai.","這個假日在五月。"]},
+{de:"Geburtstag",zh:"生日",g:"der",cat:"節慶",lesson:"L16",ex:["Wann hast du Geburtstag?","你生日什麼時候？"]},
+{de:"Karfreitag",zh:"耶穌受難日（單一節日，無複數）",g:"der",cat:"節慶",lesson:"L16",ex:["Karfreitag ist ein Feiertag in Deutschland.","耶穌受難日在德國是國定假日。"]},
+{de:"Ferien",zh:"假期（只有複數形，無單數）",g:"plu",cat:"節慶",lesson:"L16",ex:["Wann beginnen die Ferien?","假期什麼時候開始？"]},
+{de:"Pfingsten",zh:"聖靈降臨節（用法：zu/an Pfingsten，通常不加冠詞；⚠️ 性別建議問老師求證）",g:null,cat:"節慶",lesson:"L16",ex:["Was machst du an Pfingsten?","你聖靈降臨節要做什麼？"]},
+{de:"Himmelfahrt",zh:"耶穌升天節（用法：an Himmelfahrt，常不加冠詞；⚠️ die/Christi Himmelfahrt 建議問老師求證）",g:null,cat:"節慶",lesson:"L16",ex:["An Himmelfahrt haben wir frei.","耶穌升天節我們放假。"]},
+{de:"bringen",zh:"帶來、拿來",g:null,cat:"動詞",lesson:"L16",ex:["Ich bringe dir ein Handtuch.","我拿條毛巾給你。"]},
+{de:"funktionieren",zh:"運作、能用",g:null,cat:"動詞",lesson:"L16",ex:["Der Aufzug funktioniert nicht.","電梯壞了。"]},
+{de:"kümmern",zh:"照料、處理（sich kümmern um＋Akk）",g:null,cat:"動詞",lesson:"L16",ex:["Ich kümmere mich sofort darum.","我馬上處理。"]},
+{de:"reparieren",zh:"修理",g:null,cat:"動詞",lesson:"L16",ex:["Der Techniker repariert die Heizung.","技師修暖氣。"]},
+{de:"schicken",zh:"派、寄",g:null,cat:"動詞",lesson:"L16",ex:["Können Sie einen Techniker schicken?","能派技師來嗎？"]},
+{de:"verschieben",zh:"延期",g:null,cat:"動詞",lesson:"L16",ex:["Können wir den Termin verschieben?","能改期嗎？"]},
+{de:"passen",zh:"合適（passt dir/Ihnen＋Dativ）",g:null,cat:"動詞",lesson:"L16",ex:["Passt dir der Termin?","這時間你方便嗎？"]},
+{de:"ausmachen",zh:"關掉／約定（可分離）",g:null,cat:"動詞",lesson:"L16",ex:["Ich mache das Licht aus.","我把燈關掉。"]},
+{de:"kennenlernen",zh:"認識（可分離）",g:null,cat:"動詞",lesson:"L16",ex:["Ich möchte ihn gern kennenlernen.","我想認識他。"]},
+{de:"mitnehmen",zh:"帶走、隨身帶（可分離；母音變：du nimmst, er nimmt）",g:null,cat:"動詞",lesson:"L16",ex:["Ich nehme mein Handy immer mit.","我總是隨身帶手機。"],ex2:["Nimmst du deinen Föhn mit?","你會帶你的吹風機嗎？"]},
+{de:"tun",zh:"做",g:null,cat:"動詞",lesson:"L16",ex:["Was kann ich für Sie tun?","我能為您做什麼？"]},
+{de:"warten",zh:"等（字幹加 e：du wartest, er wartet）",g:null,cat:"動詞",lesson:"L16",ex:["Ich warte auf den Techniker.","我在等技師。"]},
+{de:"vereinbaren",zh:"約定",g:null,cat:"動詞",lesson:"L16",ex:["Wir vereinbaren einen Termin.","我們約個時間。"]},
+{de:"absagen",zh:"取消（可分離）",g:null,cat:"動詞",lesson:"L16",ex:["Ich muss den Termin absagen.","我得取消約會。"]},
+{de:"rufen",zh:"呼叫",g:null,cat:"動詞",lesson:"L16",ex:["Rufen Sie bitte Hilfe!","請叫人來幫忙！"]},
+{de:"kaputt",zh:"壞了的",g:null,cat:"形容詞",lesson:"L16",ex:["Der Fernseher ist kaputt.","電視壞了。"]},
+{de:"sofort",zh:"立刻",g:null,cat:"副詞",lesson:"L16",ex:["Ich komme sofort.","我馬上來。"]},
+{de:"pünktlich",zh:"準時的",g:null,cat:"形容詞",lesson:"L16",ex:["Der Techniker ist pünktlich.","技師很準時。"]},
+{de:"dumm",zh:"笨的（Wie dumm!＝真糟）",g:null,cat:"形容詞",lesson:"L16",ex:["Wie dumm! Der Aufzug steckt fest.","真糟！電梯卡住了。"]},
+{de:"kalt",zh:"冷的",g:null,cat:"形容詞",lesson:"L16",ex:["Das Wasser ist kalt.","水是冷的。"]},
+{de:"lustig",zh:"有趣的",g:null,cat:"形容詞",lesson:"L16",ex:["Der Kurs ist sehr lustig.","這課很有趣。"]},
+{de:"seltsam",zh:"奇怪的",g:null,cat:"形容詞",lesson:"L16",ex:["Das ist seltsam.","這很奇怪。"]},
+{de:"sicher",zh:"確定的、安全的",g:null,cat:"形容詞",lesson:"L16",ex:["Bist du sicher?","你確定嗎？"]},
+{de:"Techniker",zh:"技師、維修員",g:"der",cat:"旅館",lesson:"L16",ex:["Der Techniker kommt heute Nachmittag.","技師今天下午來。"]},
+{de:"Zimmermädchen",zh:"客房服務員",g:"das",cat:"旅館",lesson:"L16",ex:["Das Zimmermädchen bringt Handtücher.","房務員送毛巾來。"]},
+{de:"Rezeption",zh:"櫃台、接待處",g:"die",cat:"旅館",lesson:"L16",ex:["Fragen Sie an der Rezeption.","請到櫃台問。"]},
+{de:"Tagung",zh:"研討會、大會",g:"die",cat:"工作相關",lesson:"L16",ex:["Ich bin auf einer Tagung in Berlin.","我在柏林參加研討會。"]},
+{de:"Geschäftsreise",zh:"出差",g:"die",cat:"工作相關",lesson:"L16",ex:["Ich bin auf Geschäftsreise.","我在出差。"]},
+{de:"Tanzkurs",zh:"舞蹈課",g:"der",cat:"邀約",lesson:"L16",ex:["Vor dem Tanzkurs essen wir zusammen.","舞蹈課前我們一起吃飯。"]},
+{de:"genervt",zh:"心煩的、被惹惱的",g:null,cat:"形容詞",lesson:"L16",ex:["Die Gäste sind genervt.","客人們很煩躁。"]},
+{de:"schade",zh:"可惜（感嘆詞）",g:null,cat:"形容詞",lesson:"L16",ex:["Schade, dass du keine Zeit hast.","可惜你沒空。"]},
+{de:"Navi",zh:"衛星導航",g:"das",cat:"旅館",lesson:"L16",ex:["Mein Navi funktioniert nicht.","我的導航壞了。"]},
+{de:"schaffen",zh:"辦到、趕上",g:null,cat:"動詞",lesson:"L16",ex:["Ich schaffe es nicht pünktlich.","我來不及準時。"]},
+{de:"feststecken",zh:"卡住（可分離；口語 Perfekt 常用 stecken bleiben：Ich bin … stecken geblieben）",g:null,cat:"動詞",lesson:"L16",ex:["Der Aufzug steckt fest.","電梯卡住了。"]},
+{de:"Bescheid",zh:"通知、回覆（Bescheid sagen＝告知一聲）",g:"der",cat:"常用",lesson:"L16",ex:["Sagen Sie mir bitte Bescheid.","請跟我說一聲。"]},
+];
+const ADD16B=[
+{de:"Bescheid sagen",zh:"告知一聲、通知（見單字卡 Bescheid）",g:null,cat:"禮貌用語",lesson:"L16",ex:["Sagen Sie mir bitte Bescheid.","請跟我說一聲。"]},
+{de:"Hilfe rufen",zh:"呼救、叫人幫忙",g:null,cat:"禮貌用語",lesson:"L16",ex:["Rufen Sie bitte Hilfe!","請叫人來幫忙！"]},
+{de:"Sehr geehrte",zh:"尊敬的…（正式書信開頭：Sehr geehrte Frau …／Sehr geehrter Herr …，對比 L10 Entschuldigen Sie 的正式語域）",g:null,cat:"書信用語",lesson:"L16",ex:["Sehr geehrte Frau Wegele,","尊敬的 Wegele 女士，"]},
+{de:"Mit freundlichen Grüßen",zh:"謹上、順祝商祺（正式信件結尾，對比 L8 的 Liebe/Herzliche Grüße 非正式）",g:null,cat:"書信用語",lesson:"L16",ex:["Mit freundlichen Grüßen, Gina Wallner","謹上，Gina Wallner"]},
+];
 /* ===ANCHOR:VOCAB_ARRAYS===（新課單字陣列 const ADDn=[...] 宣告在這行上方，並把陣列名加進下面 VOCAB 合併行）*/
-const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B];
+const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B];
 VOCAB.forEach((v,i)=>v.id="v"+i);
 
 
@@ -1506,6 +1572,12 @@ const NOUN_PL={
   "Einrichtung":"Einrichtungen","Fragebogen":"Fragebögen","Urlaubsort":"Urlaubsorte",
   "Ecke":"Ecken","Heimatort":"Heimatorte","Beratung":"Beratungen","Eröffnung":"Eröffnungen",
   "Spaziergang":"Spaziergänge","Tourist":"Touristen",
+  "Dusche":"Duschen","Fernseher":"Fernseher","Föhn":"Föhne","Gast":"Gäste","Heizung":"Heizungen",
+  "Klimaanlage":"Klimaanlagen","Verbindung":"Verbindungen","Internetverbindung":"Internetverbindungen",
+  "Wecker":"Wecker","Bademantel":"Bademäntel","Angst":"Ängste","Kurs":"Kurse","Sitzung":"Sitzungen","Stunde":"Stunden",
+  "Feiertag":"Feiertage","Geburtstag":"Geburtstage",
+  "Techniker":"Techniker","Zimmermädchen":"Zimmermädchen","Rezeption":"Rezeptionen","Tagung":"Tagungen",
+  "Geschäftsreise":"Geschäftsreisen","Tanzkurs":"Tanzkurse","Navi":"Navis",
   /* ===ANCHOR:NOUN_PL===（新名詞複數 "單數":"複數", 插在這行上方）*/
 };
 const NOUN_PL_NOTE={
@@ -1620,6 +1692,13 @@ const NOUN_PL_NOTE={
   "Spaziergang":"複數 die Spaziergänge：a→ä 變音 → Forvo。",
   "Student":"弱變化陽性名詞（單數 Akk/Dativ/Genitiv 都加 -en：den/dem/des Studenten），跟一般名詞規則不同。",
   "Tourist":"弱變化陽性名詞，同 Student（den/dem/des Touristen）。",
+  "Fernseher":"-er 結尾：單複數同形（der Fernseher → die Fernseher）。",
+  "Gast":"複數 die Gäste：a→ä 變音 → Forvo。",
+  "Wecker":"-er 結尾：單複數同形（der Wecker → die Wecker）。",
+  "Bademantel":"複數 die Bademäntel：a→ä 變音 → Forvo。",
+  "Angst":"複數 die Ängste：a→ä 變音 → Forvo。",
+  "Techniker":"-er 結尾：單複數同形（der Techniker → die Techniker）。",
+  "Zimmermädchen":"-chen 結尾：單複數同形（das Zimmermädchen → die Zimmermädchen）。",
   /* ===ANCHOR:NOUN_PL_NOTE===（變音／同形／不規則等複數警語插在這行上方）*/
 };
 const NOUN_PLEX={
@@ -1962,6 +2041,29 @@ const NOUN_PLEX={
   "Hauptgericht":["Das Restaurant hat drei Hauptgerichte.","這間餐廳有三道主菜。"],
   "Nachtisch":["Das Restaurant hat zwei Nachtische.","這間餐廳有兩種甜點。"],
   "Beilage":["Ich wähle zwei Beilagen.","我選兩種配菜。"],
+  "Dusche":["Die Duschen im Hotel sind sauber.","旅館的淋浴間很乾淨。"],
+  "Fernseher":["Die Fernseher sind alle kaputt.","這些電視全壞了。"],
+  "Föhn":["Die Föhne sind im Schrank.","吹風機在櫃子裡。"],
+  "Gast":["Die Gäste warten an der Rezeption.","客人們在櫃台等。"],
+  "Heizung":["Die Heizungen funktionieren nicht.","暖氣都不能用。"],
+  "Klimaanlage":["Die Klimaanlagen machen viel Lärm.","空調都很吵。"],
+  "Verbindung":["Die Verbindungen sind heute schlecht.","今天連線都很差。"],
+  "Internetverbindung":["Die Internetverbindungen im Hotel sind langsam.","旅館的網路都很慢。"],
+  "Wecker":["Die Wecker klingeln um sechs.","鬧鐘六點都響。"],
+  "Bademantel":["Die Bademäntel hängen im Bad.","浴袍掛在浴室。"],
+  "Angst":["Viele Menschen haben Ängste.","很多人有各種恐懼。"],
+  "Kurs":["Die Kurse beginnen im September.","課程九月開始。"],
+  "Sitzung":["Die Sitzungen dauern zu lange.","會議都太久了。"],
+  "Stunde":["Die Stunden vergehen schnell.","時間過得很快。"],
+  "Feiertag":["Die Feiertage sind im Mai.","假日在五月。"],
+  "Geburtstag":["Unsere Geburtstage sind im selben Monat.","我們的生日同一個月。"],
+  "Techniker":["Die Techniker reparieren die Heizungen.","技師們在修暖氣。"],
+  "Zimmermädchen":["Die Zimmermädchen bringen die Handtücher.","房務員們送毛巾來。"],
+  "Rezeption":["Große Hotels haben mehrere Rezeptionen.","大旅館有好幾個櫃台。"],
+  "Tagung":["Die Tagungen finden in Berlin statt.","研討會在柏林舉行。"],
+  "Geschäftsreise":["Meine Geschäftsreisen sind meistens kurz.","我的出差多半很短。"],
+  "Tanzkurs":["Die Tanzkurse beginnen im Herbst.","舞蹈課秋天開始。"],
+  "Navi":["Die Navis im Hotel funktionieren nicht alle.","旅館裡的導航不是全部都能用。"],
   /* ===ANCHOR:NOUN_PLEX===（複數例句 "單數":["德文","中文"], 插在這行上方）*/
 };
 const VERB_META={
@@ -2072,6 +2174,23 @@ const VERB_META={
   fehlen:{t:"reg"},
   umziehen:{t:"irr",f:["ziehe … um","ziehst … um","zieht … um","ziehen … um","zieht … um","ziehen … um"]},
   korrigieren:{t:"reg"},
+  bringen:{t:"reg"},
+  funktionieren:{t:"reg"},
+  kümmern:{t:"reg"},
+  reparieren:{t:"reg"},
+  schicken:{t:"reg"},
+  verschieben:{t:"reg"},
+  passen:{t:"sib",du:"passt",er:"passt"},
+  ausmachen:{t:"irr",f:["mache … aus","machst … aus","macht … aus","machen … aus","macht … aus","machen … aus"]},
+  kennenlernen:{t:"irr",f:["lerne … kennen","lernst … kennen","lernt … kennen","lernen … kennen","lernt … kennen","lernen … kennen"]},
+  mitnehmen:{t:"irr",f:["nehme … mit","nimmst … mit","nimmt … mit","nehmen … mit","nehmt … mit","nehmen … mit"]},
+  tun:{t:"reg"},
+  warten:{t:"stemt",du:"wartest",er:"wartet"},
+  vereinbaren:{t:"reg"},
+  absagen:{t:"irr",f:["sage … ab","sagst … ab","sagt … ab","sagen … ab","sagt … ab","sagen … ab"]},
+  rufen:{t:"reg"},
+  schaffen:{t:"reg"},
+  feststecken:{t:"irr",f:["stecke … fest","steckst … fest","steckt … fest","stecken … fest","steckt … fest","stecken … fest"]},
   /* ===ANCHOR:VERB_META===（新動詞變位 動詞:{t:"reg"|"stemt"|"vowel"|"irr",...}, 插在這行上方）*/
 };
 VOCAB.forEach(v=>{
@@ -2479,6 +2598,47 @@ const SENTENCES=[
   {de:"Was brauchst du in deinem Stadtteil? – Einen Park. Ich gehe oft spazieren.",zh:"你的街區需要什麼？──一個公園。我常去散步。",lesson:"L15"},
   {de:"Haben Sie einen Lieblingspark oder einen Lieblingsplatz?",zh:"您有喜歡的公園或地方嗎？",lesson:"L15"},
   {de:"Es ist in Giesing immer etwas los.",zh:"Giesing總是很熱鬧（有事情發生）。",lesson:"L15"},
+  {de:"Entschuldigung, können Sie mir helfen?",zh:"不好意思，您能幫我嗎？（求助開場·Sie）",lesson:"L16"},
+  {de:"Wir haben ein Problem: Die Heizung funktioniert nicht.",zh:"我們有個問題：暖氣不能用（Wir haben ein Problem: …；可換 der Aufzug／der Fernseher）",lesson:"L16"},
+  {de:"Der Fernseher ist kaputt.",zh:"電視壞了（X ist kaputt；可換 die Dusche／der Föhn）",lesson:"L16"},
+  {de:"Können Sie einen Techniker schicken?",zh:"您能派個技師來嗎？（Können Sie + Akk + Inf?）",lesson:"L16"},
+  {de:"Was kann ich für Sie tun?",zh:"我能為您做什麼？（服務方回應）",lesson:"L16"},
+  {de:"Ich kümmere mich sofort darum.",zh:"我馬上處理（sich kümmern um → darum）",lesson:"L16"},
+  {de:"Der Techniker kommt heute Nachmittag.",zh:"技師今天下午來（可換 morgen／in einer Stunde）",lesson:"L16"},
+  {de:"Haben Sie am Freitag Zeit?",zh:"您週五有空嗎？（Haben Sie am + 日子 Zeit?）",lesson:"L16"},
+  {de:"Passt dir der Termin?",zh:"這時間你方便嗎？（passen + Dativ）",lesson:"L16"},
+  {de:"Ich muss den Termin leider absagen.",zh:"我得取消這個約（müssen + … + absagen 句尾）",lesson:"L16"},
+  {de:"Können wir den Termin verschieben?",zh:"我們能改期嗎？（verschieben）",lesson:"L16"},
+  {de:"Tut mir leid, da kann ich nicht.",zh:"抱歉，那時間我不行（婉拒）",lesson:"L16"},
+  {de:"Am Montag habe ich Zeit.",zh:"週一我有空（Am + 星期）",lesson:"L16"},
+  {de:"In einer Stunde beginnt der Kurs.",zh:"一小時後開課（in + Dativ：時間點）",lesson:"L16"},
+  {de:"Vor dem Kurs gehe ich schwimmen.",zh:"上課前我去游泳（vor + Dativ）",lesson:"L16"},
+  {de:"Nach dem Kurs gehe ich nach Hause.",zh:"下課後我回家（nach + Dativ）",lesson:"L16"},
+  {de:"Ich fahre für einen Monat nach Australien.",zh:"我去澳洲一個月（für + Akkusativ：時長）",lesson:"L16"},
+  {de:"Der Kurs dauert von März bis April.",zh:"課從三月上到四月（von … bis）",lesson:"L16"},
+  {de:"Tut mir leid, meine Uhr ist kaputt.",zh:"抱歉，我的錶壞了（遲到藉口）",lesson:"L16"},
+  {de:"Entschuldigung, ich habe deine Straße nicht gefunden.",zh:"抱歉，我沒找到你那條街（Perfekt 藉口）",lesson:"L16"},
+  {de:"Wann hast du Geburtstag?",zh:"你生日什麼時候？（回答用 Am + 序數）",lesson:"L16"},
+  {de:"Wie lange dauert der Deutschkurs?",zh:"德文課上多久？（Wie lange dauert …?）",lesson:"L16"},
+  {de:"Von Montag bis Freitag bin ich in Berlin.",zh:"我週一到週五在柏林（von…bis 描述期間·Pläne beschreiben）",lesson:"L16"},
+  {de:"Ab Montag bin ich im Urlaub.",zh:"我從週一起休假（ab + 時間點）",lesson:"L16"},
+  {de:"Vor dem Spanischkurs habe ich Zeit.",zh:"西班牙文課前我有空（vor + Dativ）",lesson:"L16"},
+  {de:"In zwei Wochen bin ich aus dem Urlaub zurück.",zh:"兩週後我休假回來（in + Dativ；zurück sein）",lesson:"L16"},
+  {de:"Ich möchte den Termin verschieben.",zh:"我想改期（möchte + … + Inf 句尾）",lesson:"L16"},
+  {de:"Passt es dir am Wochenende?",zh:"週末你方便嗎？（passen + Dativ；am Wochenende）",lesson:"L16"},
+  {de:"Wollen wir ins Kino gehen? Hast du Lust?",zh:"我們去看電影好嗎？你有興趣嗎？（提議＋Lust haben）",lesson:"L16"},
+  {de:"Am Freitag habe ich Zeit.",zh:"週五我有空（Am + 星期 + habe ich Zeit）",lesson:"L16"},
+  {de:"Können Sie die Klimaanlage ausmachen? Es ist zu kalt hier.",zh:"能把空調關掉嗎？這裡太冷了（ausmachen；Es ist zu + 形）",lesson:"L16"},
+  {de:"Der Techniker kommt in einer halben Stunde.",zh:"技師半小時後到（in einer halben Stunde）",lesson:"L16"},
+  {de:"Sagen Sie ihm bitte Bescheid.",zh:"請轉告他一聲（jm. Bescheid sagen）",lesson:"L16"},
+  {de:"Es gibt keine Handtücher.",zh:"沒有毛巾（Es gibt kein/e…＝客訴句型）",lesson:"L16"},
+  {de:"Mein Navi funktioniert nicht.",zh:"我的導航壞了（遲到藉口）",lesson:"L16"},
+  {de:"Ich bin im Aufzug stecken geblieben.",zh:"我卡在電梯裡（stecken bleiben + sein，Perfekt）",lesson:"L16"},
+  {de:"Das macht doch nichts.",zh:"沒關係啦（接受道歉的回應）",lesson:"L16"},
+  {de:"Super, vielen Dank! Sehr nett.",zh:"太好了，非常感謝！你人真好（道謝）",lesson:"L16"},
+  {de:"Sehr geehrte Frau Wegele,",zh:"尊敬的 Wegele 女士，（正式信件開頭·對女性）",lesson:"L16"},
+  {de:"Sehr geehrter Herr Müller,",zh:"尊敬的 Müller 先生，（正式信件開頭·對男性）",lesson:"L16"},
+  {de:"Mit freundlichen Grüßen",zh:"謹上、順祝商祺（正式信件結尾，對比 L8 的 Liebe/Herzliche Grüße 非正式）",lesson:"L16"},
   /* ===ANCHOR:SENTENCES===（新例句／Redemittel {de,zh,lesson} 插在這行上方）*/
 ];
 
@@ -2576,6 +2736,11 @@ const TEXTS=[
    de:"Ich heiße Mailin und wohne seit zwei Jahren in Giesing. Giesing ist ganz normal, und das finde ich gut so. Hier wohnen Studenten und Arbeiter, Deutsche und Ausländer zusammen, und genau das gefällt mir. Es gibt viele kleine Geschäfte und eine Werkstatt an der Ecke. Der Kindergarten ist gleich um die Ecke, und mein Friseur ist auch in der Nähe. Am Wochenende gehe ich oft auf den Markt oder mache einen Spaziergang im Park. Was fehlt in Giesing? Vielleicht ein Kino. Aber hier ist immer etwas los — und genau das gefällt mir an meinem Stadtteil.",
    zh:"我叫 Mailin，已經在 Giesing 住兩年了。Giesing 很普通，我覺得這樣就好。這裡住著大學生和工人、德國人和外國人，大家住在一起——我很喜歡這一點。這裡有很多小商店，轉角還有一間工作坊。幼兒園就在轉角附近，我的髮廊也在附近。週末我常去市場，或是去公園散步。Giesing 缺少什麼呢？也許是一間電影院。但這裡總是很熱鬧——我就是喜歡我的街區這一點。",
    qs:[{q:"Mailin 覺得 Giesing 怎麼樣？",options:["很普通，但她喜歡","很無聊","太吵","太貴"],a:0},{q:"根據短文，Giesing 缺少什麼？",options:["電影院","市場","公園","幼兒園"],a:0},{q:"「und genau das gefällt mir」中 gefällt 為什麼接 mir？",options:["gefallen 是 Dativ 動詞，喜歡的人用 Dativ","拼錯了","mir 是所有格","固定用法沒有原因"],a:0}]},
+  {id:"t-l16-1",lesson:"L16",genre:"E-Mail（正式）",title:"Ein Problem im Hotel",src:"AI 生成 · 未經母語者校對",
+   map:"<b>本課重點</b>：① 時間介係詞 in／nach／vor（+Dativ）、für（+Akk）、von…bis——查「🧩時間介係詞總表」；② 序數日期 am ersten/dritten/fünfzehnten…（1.=erste／3.=dritte／7.=siebte／8.=achte 不規則）——查「🧩日期與序數」；③ 旅館客訴＋求助 Redemittel（Was kann ich für Sie tun?／Ich kümmere mich sofort darum）；④ Termine 改期／取消（verschieben／absagen／Passt es Ihnen?）；⑤ mitnehmen 不規則變位（nimmst/nimmt）；⑥ 正式書信開頭／結尾（Sehr geehrte…／Mit freundlichen Grüßen，對比 L8 的 Liebe/Herzliche Grüße 非正式）。<br><b>建議走法</b>：讀完本文 → 文法「🧩時間介係詞總表」＋「🧩日期與序數」→ 單字卡（旅館／Termine類）→ 例句刷 Redemittel → mitnehmen 變位題 → 測驗 → 🎓。",
+   de:"Sehr geehrte Frau Wegele, leider habe ich ein Problem: Ich stecke im Aufzug fest und bin sehr genervt. In einer halben Stunde kommt der Techniker, aber ich schaffe es nicht pünktlich zur Sitzung. Können wir den Termin verschieben? Von Montag bis Mittwoch bin ich auf Geschäftsreise, aber ab dem dritten Mai habe ich wieder Zeit. Passt es Ihnen an diesem Tag um zehn Uhr? Sagen Sie mir bitte Bescheid. Mit freundlichen Grüßen, Gina Wallner",
+   zh:"尊敬的 Wegele 女士，很遺憾我遇到一個問題：我卡在電梯裡，非常心煩。技師半小時後會到，但我沒辦法準時參加會議。我們能改期嗎？我週一到週三在出差，但從五月三日起我就有空了。您那天十點方便嗎？請跟我說一聲。謹上，Gina Wallner",
+   qs:[{q:"為什麼寫信人趕不上會議？",options:["電梯卡住了", "睡過頭", "忘記時間", "天氣不好"],a:0},{q:"「Von Montag bis Mittwoch」在描述什麼？",options:["她在放假", "她在出差", "她在生病", "她在上課"],a:1},{q:"「ab dem dritten Mai」的 dritten 是什麼形式？",options:["基數詞", "序數詞（第三，不規則）", "形容詞比較級", "動詞變位"],a:1}]},
   /* ===ANCHOR:TEXTS_ARRAYS===（新課導讀 {id,lesson,genre,title,src,map,de,zh,qs} 插在這行上方；de 只准用該課及之前的單字＋功能詞，寫完必跑 ROADMAP N12 的白名單驗證腳本）*/
 ];
 
@@ -2693,7 +2858,7 @@ function logAnswer(){
 function weekCount(){const cut=Date.now()-7*864e5;let n=0;Object.entries(qlog).forEach(([k,v])=>{const ts=new Date(k+'T00:00:00').getTime();if(isFinite(ts)&&ts>=cut)n+=(+v||0);});return n;}
 function updateDash(){const el=document.getElementById('dash');if(el)el.textContent=`已畢業 ${Object.keys(mastered).length} / ${VOCAB.length} 字 · 本週答題 ${weekCount()} 題`;}
 /* 文法卡穩定 key：由標題衍生（改標題會孤兒化標記，與例句 de-key 同一取捨） */
-const GKEY_MAP=[["人稱代名詞","pron"],["陰陽性線索","gclue"],["複數線索","pclue"],["所有格","poss"],["schon vs erst","advw"],["時間介係詞","zeit"],["地方介係詞","lokal"],["冠詞變格","art"],["句框","satz"],["動詞支配格","rekt"],["動詞變位①","konj1"],["動詞變位②","konj2"],["Perfekt 現在完成式","pii"],["價格唸法","preis"],["字母表","abc"],["挑任一數字","numtry"],["大數字","bignum"],["數字測驗","numquiz"],["數字的系統","numsys"]];
+const GKEY_MAP=[["人稱代名詞","pron"],["陰陽性線索","gclue"],["複數線索","pclue"],["所有格","poss"],["schon vs erst","advw"],["時間介係詞","zeit"],["序數","datum"],["地方介係詞","lokal"],["冠詞變格","art"],["句框","satz"],["動詞支配格","rekt"],["動詞變位①","konj1"],["動詞變位②","konj2"],["Perfekt 現在完成式","pii"],["價格唸法","preis"],["字母表","abc"],["挑任一數字","numtry"],["大數字","bignum"],["數字測驗","numquiz"],["數字的系統","numsys"]];
 function gramKeyOf(t){for(const[s,k]of GKEY_MAP)if(t.includes(s))return k;return t.trim().slice(0,8);}
 function gramKeyOfCard(g){const m=g.html.match(/gtitle">([^<]+)/);return gramKeyOf(m?m[1]:g.html);}
 /* 題目→卡片映射（執行期分類，一題可命中多卡） */
@@ -2716,6 +2881,7 @@ function gramCardsOfQ(q){
   if(/Satzklammer|可分離動詞|Position 2|語序|現在式 vs Perfekt/.test(s))ks.add('satz');
   if(/Partizip|Perfekt|haben 或 sein|用 sein/.test(s))ks.add('pii');
   if(/介係詞/.test(s)&&!/地方/.test(s))ks.add('zeit');
+  if(/序數/.test(s))ks.add('datum');
   if(/地方介係詞/.test(s))ks.add('lokal');
   if(/價格/.test(s))ks.add('preis');
   if(/Wortbildung/.test(s))ks.add('gclue');
@@ -2947,10 +3113,10 @@ const GRAM=[
   </table>
   <div class="note"><b>⚠️ auch so bei: finden</b>——<b>finden</b>（覺得…）跟 <b>mögen</b> 一樣是吃 Akkusativ 受詞的動詞：Sein Haus finde ich schön. Aber <b>seinen</b> Garten mag ich nicht so.（房子用主格，但「他的花園」是受詞、要用受格 seinen）</div>
 </div>`},
-{ls:["L8","L11","L12"],html:`
+{ls:["L8","L11","L12","L16"],html:`
 <div class="card gcard">
-  <div class="gtitle">🧩 時間介係詞總表：am / um / von…bis / ab / im / seit <span class="lessontag">L8</span><span class="lessontag">L11</span><span class="lessontag">L12</span></div>
-  <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：時間介係詞每個都回答不同問題——「哪一天/哪個時段」用 am、「幾點」用 um、「一段範圍」用 von…bis、「從此以後、沒說結束」用 ab、「哪個月/哪個季節」用 im、「從過去某時間點持續到現在」用 seit。抓住「各自回答什麼問題」，就不會混用。</p>
+  <div class="gtitle">🧩 時間介係詞總表：am / um / von…bis / ab / im / seit / in / nach / vor / für <span class="lessontag">L8</span><span class="lessontag">L11</span><span class="lessontag">L12</span><span class="lessontag">L16</span></div>
+  <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：時間介係詞每個都回答不同問題——「哪一天/哪個時段」用 am、「幾點」用 um、「一段範圍」用 von…bis、「從此以後、沒說結束」用 ab、「哪個月/哪個季節」用 im、「從過去某時間點持續到現在」用 seit、「還有多久／未來某時間點」用 in、「之後」用 nach、「之前」用 vor、「持續多久（時長）」用 für。抓住「各自回答什麼問題」，就不會混用。</p>
   <table>
     <tr><th>介係詞</th><th>回答什麼問題</th><th>接什麼</th><th>例句</th></tr>
     <tr><td><b>am</b></td><td>哪一天／哪個時段？</td><td>星期／時段</td><td class="de2">am Dienstag · am Abend</td></tr>
@@ -2959,8 +3125,12 @@ const GRAM=[
     <tr><td><b>ab</b></td><td>從幾點開始？（沒說結束）</td><td>起始時刻</td><td class="de2">ab 9 Uhr arbeite ich</td></tr>
     <tr><td><b>im</b></td><td>哪個月／哪個季節？</td><td>月份／季節</td><td class="de2">im Oktober · im Herbst</td></tr>
     <tr><td><b>seit</b></td><td>從過去某時間點持續到現在？</td><td>時間點或年份</td><td class="de2">seit 1810 · seit drei Monaten</td></tr>
+    <tr><td><b>in</b>＋Dativ</td><td>還有多久／未來哪個時間點？</td><td>時間段（未來）</td><td class="de2">in einer Stunde · in zwei Wochen</td></tr>
+    <tr><td><b>nach</b>＋Dativ</td><td>…之後？</td><td>事件／時間點</td><td class="de2">nach dem Kurs · nach einem Monat</td></tr>
+    <tr><td><b>vor</b>＋Dativ</td><td>…之前？</td><td>事件／時間點</td><td class="de2">vor dem Kurs</td></tr>
+    <tr><td><b>für</b>＋<u>Akkusativ</u></td><td>持續多久？（時長）</td><td>一段時長</td><td class="de2">für einen Monat</td></tr>
   </table>
-  <div class="note"><b>⚠️ 兩個最容易錯</b><br>① 「在晚上」不能說 am Nacht，要說 <b>in der Nacht</b>——其他時段（Morgen/Vormittag/Mittag/Nachmittag/Abend）都用 am，只有 Nacht 例外。<br>② <b>von…bis 是「範圍」，ab 是「只有起點」</b>：von 9 bis 13 Uhr habe ich gearbeitet（做完了，有結尾）／Ab 9 Uhr arbeite ich（還沒說什麼時候結束）。別把兩個混著用同一句。</div>
+  <div class="note"><b>⚠️ 三個最容易錯</b><br>① 「在晚上」不能說 am Nacht，要說 <b>in der Nacht</b>——其他時段（Morgen/Vormittag/Mittag/Nachmittag/Abend）都用 am，只有 Nacht 例外。<br>② <b>von…bis 是「範圍」，ab 是「只有起點」</b>：von 9 bis 13 Uhr habe ich gearbeitet（做完了，有結尾）／Ab 9 Uhr arbeite ich（還沒說什麼時候結束）。別把兩個混著用同一句。<br>③ <b>in／nach／vor 吃 Dativ，唯獨 für 吃 Akkusativ</b>：für einen Monat（Akk：einen）↔ nach einem Monat（Dativ：einem）——同一個 Monat，冠詞形式不同，這是本課最容易搞混的一組對比。</div>
 </div>`},
 {ls:["L4","L5","L6","L13","L14"],html:`
 <div class="card gcard">
@@ -3220,6 +3390,18 @@ const GRAM=[
   </table>
   <div class="note"><b>⚠️ 最容易錯：</b>別用中文直翻——中文的「才」不一定對到 erst，但「已經」一定是 schon。抓口訣：<b>比預期早→schon／比預期晚→erst</b>。數量與年齡同理：<b>Er ist schon 60.</b>（都 60 了＝多）↔ <b>Er ist erst 6.</b>（才 6 歲＝少）。</div>
 </div>`},
+{l:"L16",html:`
+<div class="card gcard">
+  <div class="gtitle">🧩 日期與序數（Ordinalzahlen + Datum） <span class="lessontag">L16</span></div>
+  <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：序數就是「第幾個」的說法——1.–19. 用數字＋<b>-te</b>，20. 以後用數字＋<b>-ste</b>。抓住這條分界，大部分序數都能自己推。要說「在哪一天」時，用 <b>am</b>＋序數，字尾再加 <b>-en</b>。</p>
+  <table>
+    <tr><th>範圍</th><th>構成規則</th><th>例字</th></tr>
+    <tr><td>1.–19.</td><td>數字 + <b>-te</b></td><td class="de2">vierte, fünfte, sechste, zwölfte</td></tr>
+    <tr><td>20. 起</td><td>數字 + <b>-ste</b></td><td class="de2">zwanzigste, dreißigste</td></tr>
+    <tr><td>日期（am + 序數）</td><td>序數 + <b>-en</b></td><td class="de2">am ersten Mai, am fünfzehnten April</td></tr>
+  </table>
+  <div class="note"><b>⚠️ 四個不規則要背下來</b>：1.=<b>erste</b>、3.=<b>dritte</b>、7.=<b>siebte</b>、8.=<b>achte</b>（不是 einste/dreite/siebente/achtte）。問答：Der Wievielte ist heute? — Der 15. (fünfzehnte) April.／Wann hast du Geburtstag? — Am 3. (dritten) Mai.<br>⚠️ 建議對照課堂筆記求證：序數上限、-ste 起點、老師是否教到 31. 全列——此表按標準德語規則建，若老師版本不同以老師為準。</div>
+</div>`},
 /* ===ANCHOR:GRAM===（新文法卡 {l:"Ln",html:`<div class="card gcard">…`} 插在這行上方）*/
 ];
 
@@ -3307,7 +3489,7 @@ const FUNC_GLOSS={
   leider:"可惜、遺憾地",
   /* ===ANCHOR:FUNC_GLOSS===（新功能詞 "小寫形":"中文" 插在這行上方，記得上一行補逗號）*/
 };
-const PART2_STRONG={gegangen:"gehen",gesprochen:"sprechen",getroffen:"treffen",gegessen:"essen",getrunken:"trinken",geflogen:"fliegen",geschrieben:"schreiben",gewesen:"sein",genommen:"nehmen",verstanden:"verstehen",bekommen:"bekommen",aufgestanden:"aufstehen",gestanden:"stehen",ausgesehen:"aussehen",gefunden:"finden"};
+const PART2_STRONG={gegangen:"gehen",gesprochen:"sprechen",getroffen:"treffen",gegessen:"essen",getrunken:"trinken",geflogen:"fliegen",geschrieben:"schreiben",gewesen:"sein",genommen:"nehmen",verstanden:"verstehen",bekommen:"bekommen",aufgestanden:"aufstehen",gestanden:"stehen",ausgesehen:"aussehen",gefunden:"finden",gebracht:"bringen",verschoben:"verschieben",getan:"tun",mitgenommen:"mitnehmen",gerufen:"rufen"};
 function buildLemma(){
   LEMMA_V={};LEMMA_N={};
   const addV=(form,inf)=>{const k=(form||'').toLowerCase();if(k&&k!=='…'&&!LEMMA_V[k])LEMMA_V[k]=inf;};
@@ -3702,6 +3884,22 @@ const GRSCHON=[
  {l:"L9",sub:"schon vs erst：已完成",before:"Ich habe ",after:" gegessen, danke.",answer:"schon",options:["schon","erst"],full:"Ich habe schon gegessen, danke."},
 ];
 GRSCHON.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full,ng:q.ng}));
+const GR16=[
+ {l:"L16",sub:"時間介係詞：vor+Dativ",before:"",after:" dem Kurs gehe ich schwimmen.",answer:"Vor",options:["Vor","Nach","In"],full:"Vor dem Kurs gehe ich schwimmen."},
+ {l:"L16",sub:"時間介係詞：in+Dativ（陰性）",before:"In ",after:" Stunde beginnt der Kurs.",answer:"einer",options:["einer","eine","einem"],full:"In einer Stunde beginnt der Kurs."},
+ {l:"L16",sub:"時間介係詞·對比：für+Akk",before:"Ich fahre für ",after:" Monat weg.",answer:"einen",options:["einen","einem","eine"],full:"Ich fahre für einen Monat weg."},
+ {l:"L16",sub:"時間介係詞·對比：nach+Dativ",before:"Nach ",after:" Monat komme ich zurück.",answer:"einem",options:["einem","einen","eine"],full:"Nach einem Monat komme ich zurück."},
+ {l:"L16",sub:"序數日期：1. 的不規則序數形",before:"Wann hast du Geburtstag? — Am ",after:" (1.) Mai.",answer:"ersten",options:["ersten","erste","einsten"],full:"Wann hast du Geburtstag? — Am ersten (1.) Mai."},
+ {l:"L16",sub:"序數日期：3. 的不規則序數形",before:"Heute ist der ",after:" (3.) April.",answer:"dritte",options:["dritte","drei","dreite"],full:"Heute ist der dritte (3.) April."},
+ {l:"L16",sub:"序數日期：規則 +ten",before:"Der Kurs beginnt am ",after:" (15.) März.",answer:"fünfzehnten",options:["fünfzehnten","fünfzehnte","fünfte"],full:"Der Kurs beginnt am fünfzehnten (15.) März."},
+ {l:"L16",sub:"序數日期·對比：7.=siebte 非 sieb-en-te",before:"Sie hat am ",after:" (7.) Mai Geburtstag.",answer:"siebten",options:["siebten","siebenten","achten"],full:"Sie hat am siebten (7.) Mai Geburtstag."},
+ {l:"L16",sub:"mitnehmen：du → ?（可分離）",before:"",after:" du deinen Regenschirm mit?",answer:"Nimmst",options:["Nimmst","Nehme","Nimm"],full:"Nimmst du deinen Regenschirm mit?"},
+ {l:"L16",sub:"mitnehmen：er → ?（可分離）",before:"Er ",after:" sein Handy immer mit.",answer:"nimmt",options:["nimmt","nehmt","nimm"],full:"Er nimmt sein Handy immer mit."},
+ {l:"L16",sub:"kennenlernen：du → ?（可分離）",before:"",after:" du ihn schon kennen?",answer:"Lernst",options:["Lernst","Lerne","Lernt"],full:"Lernst du ihn schon kennen?"},
+ {l:"L16",sub:"kennenlernen：er → ?（可分離）",before:"Er ",after:" sie auf der Party kennen.",answer:"lernt",options:["lernt","lerne","lernst"],full:"Er lernt sie auf der Party kennen."},
+ {l:"L16",sub:"kennenlernen：ihr → ?（可分離）",before:"",after:" ihr euch schon kennen?",answer:"Lernt",options:["Lernt","Lernst","Lerne"],full:"Lernt ihr euch schon kennen?"},
+];
+GR16.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
   /* ===ANCHOR:GRAM_QUIZ===（新課文法填空題插在這行上方：宣告 const GRn=[{l,sub,before,after,answer,options,full},…]; 後接一行 GRn.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full})); ）*/
   return Q;
 }
@@ -3834,6 +4032,12 @@ const PLURAL=[
   {l:"L14",sub:"⚠️ 複數：Leuchtturm（變音+e）",before:"An der Küste gibt es zwei ",after:" (Leuchtturm).",answer:"Leuchttürme",options:["Leuchttürme","Leuchtturme","Leuchttürmen","Leuchtturms"],full:"An der Küste gibt es zwei Leuchttürme."},
   {l:"L14",sub:"⚠️ 複數：Stock（異形字，不是變音！）",before:"Das Haus hat sechs ",after:" (Stock).",answer:"Stockwerke",options:["Stockwerke","Stöcke","Stocke","Stocks"],full:"Das Haus hat sechs Stockwerke."},
   {l:"L14",sub:"⚠️ 複數：Nachbar（弱變化 n-Deklination，+n）",before:"Wir haben zwei nette ",after:" (Nachbar).",answer:"Nachbarn",options:["Nachbarn","Nachbare","Nachbars","Nachbaren"],full:"Wir haben zwei nette Nachbarn."},
+  {l:"L16",sub:"⚠️ 複數：Gast（變音+e）",before:"An der Rezeption stehen zwei ",after:" (Gast).",answer:"Gäste",options:["Gäste","Gaste","Gästen","Gasts"],full:"An der Rezeption stehen zwei Gäste."},
+  {l:"L16",sub:"⚠️ 複數：Bademantel（變音）",before:"Im Schrank hängen zwei ",after:" (Bademantel).",answer:"Bademäntel",options:["Bademäntel","Bademantel","Bademänteln","Bademantels"],full:"Im Schrank hängen zwei Bademäntel."},
+  {l:"L16",sub:"⚠️ 複數：Angst（變音+e）",before:"Viele Menschen haben verschiedene ",after:" (Angst).",answer:"Ängste",options:["Ängste","Angste","Ängsten","Angstes"],full:"Viele Menschen haben verschiedene Ängste."},
+  {l:"L16",sub:"複數：Wecker（不變！）",before:"Im Geschäft gibt es drei ",after:" (Wecker).",answer:"Wecker",options:["Wecker","Weckere","Weckern","Weckers"],full:"Im Geschäft gibt es drei Wecker."},
+  {l:"L16",sub:"複數：Rezeption（+en）",before:"Große Hotels haben zwei ",after:" (Rezeption).",answer:"Rezeptionen",options:["Rezeptionen","Rezeptione","Rezeptions","Rezeptionsen"],full:"Große Hotels haben zwei Rezeptionen."},
+  {l:"L16",sub:"複數：Techniker（不變！）",before:"Heute kommen zwei ",after:" (Techniker).",answer:"Techniker",options:["Techniker","Technikere","Technikern","Technikers"],full:"Heute kommen zwei Techniker."},
   /* ===ANCHOR:PLURAL_QUIZ===（新複數題 {l,sub,before,after,answer,options,full} 插在這行上方；注意此題庫課別欄位是 l: 不是 lesson:）*/
 ];
 
