@@ -1424,8 +1424,23 @@ const ADD16B=[
 {de:"Sehr geehrte",zh:"尊敬的…（正式書信開頭：Sehr geehrte Frau …／Sehr geehrter Herr …，對比 L10 Entschuldigen Sie 的正式語域）",g:null,cat:"書信用語",lesson:"L16",ex:["Sehr geehrte Frau Wegele,","尊敬的 Wegele 女士，"]},
 {de:"Mit freundlichen Grüßen",zh:"謹上、順祝商祺（正式信件結尾，對比 L8 的 Liebe/Herzliche Grüße 非正式）",g:null,cat:"書信用語",lesson:"L16",ex:["Mit freundlichen Grüßen, Gina Wallner","謹上，Gina Wallner"]},
 ];
+const ADD15S=[
+{de:"Bus",zh:"公車、巴士",g:"der",cat:"交通",lesson:"L15",ex:["Der Bus kommt gleich.","公車馬上來。"]},
+{de:"Einkaufszentrum",zh:"購物中心",g:"das",cat:"城市",lesson:"L15",ex:["In der Stadt gibt es ein großes Einkaufszentrum.","城裡有一間大購物中心。"]},
+{de:"Nachbarhaus",zh:"鄰居的房子",g:"das",cat:"城市",lesson:"L15",ex:["Das Nachbarhaus ist alt.","鄰居的房子很舊。"]},
+{de:"Lieblingsviertel",zh:"最愛的街區（複數罕用）",g:"das",cat:"城市",lesson:"L15",ex:["Ottensen ist mein Lieblingsviertel.","歐滕森是我最愛的街區。"]},
+{de:"Verkehr",zh:"交通（流量，不可數）",g:"der",cat:"城市",lesson:"L15",ex:["Es gibt zu viel Verkehr.","交通太繁忙了。"]},
+{de:"Klima",zh:"氣候（複數罕用）",g:"das",cat:"常用",lesson:"L15",ex:["Das Klima ist zu kalt.","這裡的氣候太冷了。"]},
+{de:"stören",zh:"打擾、使困擾（接 Akkusativ：Was stört dich?）",g:null,cat:"動詞",lesson:"L15",ex:["Der Lärm stört mich.","噪音困擾我。"],ex2:["Was stört dich in deinem Viertel?","你的街區裡有什麼讓你困擾？"]},
+{de:"hinkommen",zh:"到達那裡、過去（可分離：Wie komme ich da hin?；現在式規則變位）",g:null,cat:"動詞",lesson:"L15",ex:["Wie komme ich da hin?","我要怎麼過去那裡？"],ex2:["Wir kommen mit dem Bus dahin.","我們搭公車過去那裡。"]},
+{de:"dort",zh:"那裡（指較遠處，對 hier）",g:null,cat:"常用",lesson:"L15",ex:["Dort ist die Bushaltestelle.","那裡是公車站。"]},
+{de:"ganz",zh:"完全地、整個（ganz normal＝很普通）",g:null,cat:"常用",lesson:"L15",ex:["Das Viertel ist ganz normal.","這街區很普通。"]},
+{de:"eigentlich",zh:"其實、本來（表實情、轉折）",g:null,cat:"常用",lesson:"L15",ex:["Eigentlich mag ich mein Viertel.","其實我喜歡我的街區。"]},
+{de:"nämlich",zh:"也就是、因為（置句中，不放句首）",g:null,cat:"常用",lesson:"L15",ex:["Ich bleibe hier; hier ist nämlich alles in der Nähe.","我留在這；因為這裡什麼都在附近。"]},
+{de:"weil",zh:"因為（從屬連接詞，動詞放句尾）",g:null,cat:"常用",lesson:"L15",ex:["Ich mag mein Viertel, weil es ruhig ist.","我喜歡我的街區，因為它很安靜。"]},
+];
 /* ===ANCHOR:VOCAB_ARRAYS===（新課單字陣列 const ADDn=[...] 宣告在這行上方，並把陣列名加進下面 VOCAB 合併行）*/
-const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B];
+const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S];
 VOCAB.forEach((v,i)=>v.id="v"+i);
 
 
@@ -1578,6 +1593,7 @@ const NOUN_PL={
   "Feiertag":"Feiertage","Geburtstag":"Geburtstage",
   "Techniker":"Techniker","Zimmermädchen":"Zimmermädchen","Rezeption":"Rezeptionen","Tagung":"Tagungen",
   "Geschäftsreise":"Geschäftsreisen","Tanzkurs":"Tanzkurse","Navi":"Navis",
+  "Bus":"Busse","Einkaufszentrum":"Einkaufszentren","Nachbarhaus":"Nachbarhäuser",
   /* ===ANCHOR:NOUN_PL===（新名詞複數 "單數":"複數", 插在這行上方）*/
 };
 const NOUN_PL_NOTE={
@@ -1699,6 +1715,8 @@ const NOUN_PL_NOTE={
   "Angst":"複數 die Ängste：a→ä 變音 → Forvo。",
   "Techniker":"-er 結尾：單複數同形（der Techniker → die Techniker）。",
   "Zimmermädchen":"-chen 結尾：單複數同形（das Zimmermädchen → die Zimmermädchen）。",
+  "Einkaufszentrum":"複數 die Einkaufszentren：-um→-en 不規則（同 Museum），建議跟老師求證。",
+  "Nachbarhaus":"複數 die Nachbarhäuser：a→ä 變音（同 Haus），機器 TTS 常唸錯 → Forvo 聽真人。",
   /* ===ANCHOR:NOUN_PL_NOTE===（變音／同形／不規則等複數警語插在這行上方）*/
 };
 const NOUN_PLEX={
@@ -2064,6 +2082,9 @@ const NOUN_PLEX={
   "Geschäftsreise":["Meine Geschäftsreisen sind meistens kurz.","我的出差多半很短。"],
   "Tanzkurs":["Die Tanzkurse beginnen im Herbst.","舞蹈課秋天開始。"],
   "Navi":["Die Navis im Hotel funktionieren nicht alle.","旅館裡的導航不是全部都能用。"],
+  "Bus":["Die Busse sind am Morgen oft voll.","早上公車常常很擠。"],
+  "Einkaufszentrum":["In Hamburg gibt es viele Einkaufszentren.","漢堡有很多購物中心。"],
+  "Nachbarhaus":["Die Nachbarhäuser sind alle sehr alt.","那些鄰房都很舊。"],
   /* ===ANCHOR:NOUN_PLEX===（複數例句 "單數":["德文","中文"], 插在這行上方）*/
 };
 const VERB_META={
@@ -2191,6 +2212,8 @@ const VERB_META={
   rufen:{t:"reg"},
   schaffen:{t:"reg"},
   feststecken:{t:"irr",f:["stecke … fest","steckst … fest","steckt … fest","stecken … fest","steckt … fest","stecken … fest"]},
+  stören:{t:"reg"},
+  hinkommen:{t:"reg"},
   /* ===ANCHOR:VERB_META===（新動詞變位 動詞:{t:"reg"|"stemt"|"vowel"|"irr",...}, 插在這行上方）*/
 };
 VOCAB.forEach(v=>{
@@ -2639,6 +2662,28 @@ const SENTENCES=[
   {de:"Sehr geehrte Frau Wegele,",zh:"尊敬的 Wegele 女士，（正式信件開頭·對女性）",lesson:"L16"},
   {de:"Sehr geehrter Herr Müller,",zh:"尊敬的 Müller 先生，（正式信件開頭·對男性）",lesson:"L16"},
   {de:"Mit freundlichen Grüßen",zh:"謹上、順祝商祺（正式信件結尾，對比 L8 的 Liebe/Herzliche Grüße 非正式）",lesson:"L16"},
+  {de:"Mir gefällt mein Viertel.",zh:"我喜歡我的街區（Mir gefällt + 單數主語；主語＝讓我喜歡的東西）",lesson:"L15"},
+  {de:"Mir gefällt das Café am Markt.",zh:"我喜歡市場旁的咖啡館（可換 der Park／die Bibliothek）",lesson:"L15"},
+  {de:"Mir gefallen die Märkte.",zh:"我喜歡這些市集（複數主語→gefallen，不是 gefällt）",lesson:"L15"},
+  {de:"Mir gefallen die Menschen hier.",zh:"我喜歡這裡的人（複數→gefallen）",lesson:"L15"},
+  {de:"Mir gefällt das Essen nicht.",zh:"我不喜歡這裡的食物（否定 nicht 放句尾）",lesson:"L15"},
+  {de:"Was fehlt dir hier?",zh:"你這裡缺什麼？（Was fehlt + Dativ：dir）",lesson:"L15"},
+  {de:"Mir fehlt ein Park.",zh:"我這裡少了個公園（Mir fehlt + 單數）",lesson:"L15"},
+  {de:"Mir fehlen mehr Restaurants.",zh:"我這裡少了更多餐廳（複數→fehlen）",lesson:"L15"},
+  {de:"Was stört dich hier?",zh:"這裡有什麼讓你困擾？（stören + Akk：dich）",lesson:"L15"},
+  {de:"Es stört mich, dass es kein Meer gibt.",zh:"讓我困擾的是這裡沒有海（Es stört mich, dass…）",lesson:"L15"},
+  {de:"Es gibt zu viel Verkehr.",zh:"交通太繁忙了（zu viel + 不可數）",lesson:"L15"},
+  {de:"Es gibt zu viele Kinder.",zh:"小孩太多了（zu viele + 可數複數）",lesson:"L15"},
+  {de:"Es gibt zu wenige Busse.",zh:"公車太少了（zu wenige + 可數複數；口語常誤說 zu wenig Busse，標準是 wenige）",lesson:"L15"},
+  {de:"Das Klima ist zu kalt.",zh:"氣候太冷了（X ist zu + 形容詞）",lesson:"L15"},
+  {de:"Ich wohne jetzt mit meiner Freundin zusammen.",zh:"我現在跟（女性）朋友一起住（mit + Dativ；zusammenwohnen）",lesson:"L14"},
+  {de:"Meine Wohnung ist 60 Quadratmeter groß und kostet 800 Euro im Monat.",zh:"我的公寓 60 平方米、月租 800 歐（ist X groß und kostet Y）",lesson:"L14"},
+  {de:"Die Wohnung hat eine Küche, ein Bad und ein Schlafzimmer.",zh:"這公寓有廚房、浴室和臥室（hat + Akk 列舉；可換房間）",lesson:"L14"},
+  {de:"Toll ist: Die Küche ist sehr groß.",zh:"好處是：廚房很大（Toll ist: … 描述優點的框）",lesson:"L14"},
+  {de:"Vor der Wohnung ist ein Supermarkt.",zh:"公寓前面有間超市（vor + Dativ；可換 hinter／neben）",lesson:"L14"},
+  {de:"Sie ist nur fünf Minuten Fußweg von meiner Arbeit entfernt.",zh:"離我上班的地方只有五分鐘路程（… von + Dativ entfernt）",lesson:"L14"},
+  {de:"Die Küche hat eine Spülmaschine.",zh:"廚房有洗碗機（可換 einen Kühlschrank／einen Herd）",lesson:"L14"},
+  {de:"Möchtest du meine Wohnung sehen?",zh:"你想看我的公寓嗎？（Möchtest du + 原形?）",lesson:"L14"},
   /* ===ANCHOR:SENTENCES===（新例句／Redemittel {de,zh,lesson} 插在這行上方）*/
 ];
 
@@ -2912,7 +2957,7 @@ function posOf(v){
 }
 /* 副詞·片語桶的子分類（僅影響卡面小標籤，不動資料、不加 chip）。新字若屬介/連/疑/代，記得加進對應 Set */
 const POS_SUB_PREP=new Set(["ab","für","im","am","ins","um","seit","unter","zwischen","ohne","von","bis","mit","nach","aus","bei","in","an","auf","vor","neben","hinter"]);
-const POS_SUB_CONJ=new Set(["aber","oder","denn","und","sondern"]);
+const POS_SUB_CONJ=new Set(["aber","oder","denn","und","sondern","weil"]);
 const POS_SUB_QW=new Set(["warum","wann","wo","wer","was","wie","woher","wohin"]);
 const POS_SUB_PRON=new Set(["man","etwas","nichts","alles","alle","jemand","niemand","selbst"]);
 function subPosOf(v){
@@ -3178,9 +3223,9 @@ const GRAM=[
   </div></details>
   <div class="note"><b>⚠️ 全表唯一會變的是「陽性受格」；Dativ 是「陽性和中性一起變」</b>：der/das→<span style="color:#b45309">dem</span>、die→<span style="color:#b45309">der</span>、複數→<span style="color:#b45309">den</span>。das／die／複數 在 Nom 和 Akk 完全同形，別自己亂加字尾。<b>Dativ 複數名詞本身也要加字尾 -n</b>（本身已是 -n/-s 結尾則不加）：die Frauen→den <span style="color:#b45309">Frauen</span>（本來就是n結尾，不變）、der Kalender→den <span style="color:#b45309">Kalendern</span>（加n）、die Autos→den <span style="color:#b45309">Autos</span>（s結尾不加）。這張表會隨進度長大，⬜ 是還沒學的格子。</div>
 </div>`},
-{ls:["L6","L7","L8","L10","L11","L12"],html:`
+{ls:["L6","L7","L8","L10","L11","L12","L15"],html:`
 <div class="card gcard">
-  <div class="gtitle">🧩 句框 Satzklammer ＋ 動詞位置 <span class="lessontag">L6</span><span class="lessontag">L7</span><span class="lessontag">L8</span><span class="lessontag">L10</span><span class="lessontag">L11</span><span class="lessontag">L12</span></div>
+  <div class="gtitle">🧩 句框 Satzklammer ＋ 動詞位置 <span class="lessontag">L6</span><span class="lessontag">L7</span><span class="lessontag">L8</span><span class="lessontag">L10</span><span class="lessontag">L11</span><span class="lessontag">L12</span><span class="lessontag">L15</span></div>
   <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯（兩條地基）：① <b>變位動詞的位置由句型決定</b>——陳述句第2位、Ja/Nein 問句第1位、W 問句第2位。② 當一句話有<b>兩個動詞</b>時，第一個（變位／情態）照上面規則站定，第二個（原形）一律踢到<b>句尾</b>——這兩個動詞像夾子夾出一個「框」。之後的完成式、可分離動詞都是同一個框，不是新規則。</p>
   <details data-rule="satz-typen"><summary>① 句型定位：陳述句第2位／Ja-Nein 第1位／W 問句第2位／命令句第1位</summary><div class="dbody">
   <table>
@@ -3230,8 +3275,17 @@ const GRAM=[
   </table>
   <p style="font-size:.86rem;margin:.3em 0 .1em">結構完全比照 möchten/können：haben（少數用 sein）是「變位動詞」站第2位，Partizip II 是「原形」站句尾。Partizip II 怎麼變 → 見「🧩 Perfekt：Partizip II 怎麼形成」卡。</p>
   </div></details>
-  <p style="font-size:.86rem;margin:.3em 0">已學會塞進框的：<b>möchten</b>／<b>können</b>＋原形（L6/L7）、<b>可分離動詞</b>（L10）、<b>Perfekt</b> haben/sein＋P.II（L10–L12）。<br>⬜ 之後塞進同一框：müssen／wollen／dürfen、未來式——A1.2／A2 解鎖。</p>
-  <div class="note"><b>⚠️ 兩個最容易錯</b><br>① 換 Leider／Heute 到位置一後，主詞要退到動詞後面：<b>Leider habe ich</b>…（❌ Leider ich habe…）。<br>② <b>nicht 貼在句尾原形動詞前面</b>：Ich kann heute <span style="color:#b45309">nicht</span> kommen. 原形動詞是框的右牆，nicht 站牆內側。（否定名詞才用 kein，見冠詞表；否定動作／形容詞用 nicht。）</div>
+  <details data-rule="satz-weil"><summary>⑥ Nebensatz mit weil：主句 + , weil + … + 動詞（句尾）</summary><div class="dbody">
+  <table>
+    <tr><th>類型</th><th>例句</th></tr>
+    <tr><td>weil 從句（動詞踢句尾）</td><td class="de2">Ich bleibe hier, weil es ruhig <b>ist</b>.</td></tr>
+    <tr><td>對比：denn（並列，V2 不變）</td><td class="de2">Ich bleibe hier, denn es <b>ist</b> ruhig.</td></tr>
+    <tr><td>weil 從句放句首（Vorfeld）</td><td class="de2"><b>Weil</b> es ruhig ist, bleibe ich hier.</td></tr>
+  </table>
+  <p style="font-size:.86rem;margin:.3em 0 .1em">系統邏輯：weil 引導的是<b>從句</b>（Nebensatz），從句裡的變位動詞被踢到<b>從句句尾</b>，不再站第2位——跟「兩個動詞夾框」是同一條「動詞被踢到底」的邏輯，只是這次整個從句都被框住。對照 <b>denn</b>（並列連接詞，動詞留在原地、正常 V2）。weil 從句也能整個放到句子最前面：<b>Weil</b> es ruhig ist, <b>bleibe</b> ich hier.（此時主句動詞退到第2位，主詞 ich 退到動詞後面）。</p>
+  </div></details>
+  <p style="font-size:.86rem;margin:.3em 0">已學會塞進框的：<b>möchten</b>／<b>können</b>＋原形（L6/L7）、<b>可分離動詞</b>（L10）、<b>Perfekt</b> haben/sein＋P.II（L10–L12）、<b>weil 從句</b>動詞後置（L15）。<br>⬜ 之後塞進同一框：müssen／wollen／dürfen、未來式——A1.2／A2 解鎖。</p>
+  <div class="note"><b>⚠️ 三個最容易錯</b><br>① 換 Leider／Heute 到位置一後，主詞要退到動詞後面：<b>Leider habe ich</b>…（❌ Leider ich habe…）。<br>② <b>nicht 貼在句尾原形動詞前面</b>：Ich kann heute <span style="color:#b45309">nicht</span> kommen. 原形動詞是框的右牆，nicht 站牆內側。（否定名詞才用 kein，見冠詞表；否定動作／形容詞用 nicht。）<br>③ <b>weil 後面動詞一定到句尾</b>：❌ weil es ist ruhig → ✓ weil es ruhig ist。</div>
 </div>`},
 {ls:["L6","L7","L8","L9","L10","L12","L13","L15"],html:`
 <div class="card gcard">
@@ -3487,6 +3541,7 @@ const FUNC_GLOSS={
   sein:"是（動詞原形，變位 bin/bist/ist/sind/seid）／他的（所有格）",haben:"有／擁有（動詞原形，變位 habe/hast/hat/habt）",
   können:"能、會（情態動詞）",möchten:"想要（情態動詞，möchte 的原形）",
   leider:"可惜、遺憾地",
+  weil:"因為（從屬連接詞，動詞放句尾）",
   /* ===ANCHOR:FUNC_GLOSS===（新功能詞 "小寫形":"中文" 插在這行上方，記得上一行補逗號）*/
 };
 const PART2_STRONG={gegangen:"gehen",gesprochen:"sprechen",getroffen:"treffen",gegessen:"essen",getrunken:"trinken",geflogen:"fliegen",geschrieben:"schreiben",gewesen:"sein",genommen:"nehmen",verstanden:"verstehen",bekommen:"bekommen",aufgestanden:"aufstehen",gestanden:"stehen",ausgesehen:"aussehen",gefunden:"finden",gebracht:"bringen",verschoben:"verschieben",getan:"tun",mitgenommen:"mitnehmen",gerufen:"rufen"};
@@ -3900,6 +3955,13 @@ const GR16=[
  {l:"L16",sub:"kennenlernen：ihr → ?（可分離）",before:"",after:" ihr euch schon kennen?",answer:"Lernt",options:["Lernt","Lernst","Lerne"],full:"Lernt ihr euch schon kennen?"},
 ];
 GR16.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+const GR15WEIL=[
+ {l:"L15",sub:"weil：語序（動詞後置）",before:"Ich bleibe in Ottensen, weil ",after:".",answer:"es hier ruhig ist",options:["es hier ruhig ist","ist es hier ruhig","es ist hier ruhig"],full:"Ich bleibe in Ottensen, weil es hier ruhig ist."},
+ {l:"L15",sub:"weil：語序（es gibt→gibt 句尾）",before:"Warum magst du dein Viertel? — Weil ",after:".",answer:"es viele Cafés gibt",options:["es viele Cafés gibt","es gibt viele Cafés","gibt es viele Cafés"],full:"Warum magst du dein Viertel? — Weil es viele Cafés gibt."},
+ {l:"L15",sub:"weil vs denn·語序對比：從句動詞後置",before:"Ich fahre mit dem Rad, ",after:" es zu viel Verkehr gibt.",answer:"weil",options:["weil","denn"],full:"Ich fahre mit dem Rad, weil es zu viel Verkehr gibt."},
+ {l:"L15",sub:"weil vs denn·語序對比：從句可置句首",before:"",after:" es zu wenige Busse gibt, gehe ich zu Fuß.",answer:"Weil",options:["Weil","Denn"],full:"Weil es zu wenige Busse gibt, gehe ich zu Fuß."},
+];
+GR15WEIL.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
   /* ===ANCHOR:GRAM_QUIZ===（新課文法填空題插在這行上方：宣告 const GRn=[{l,sub,before,after,answer,options,full},…]; 後接一行 GRn.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full})); ）*/
   return Q;
 }
