@@ -388,8 +388,11 @@
       <li>中文預設模糊：先聽 🔊、自己想意思，再點中文確認。</li>
       <li><b>🔄 中→德</b>＝反向產出：只給中文，<b>先開口說出德文</b>再點揭曉＋自動唸——口說第一步。</li>
       <li>每句右側可標 <b style="color:#b45309">🔖 不熟</b>，跨課累積成弱點例句堆。</li>
+      <li><b>▶️ 連播</b>＝依序唸完目前範圍的德文（通勤被動輸入）；<b>🗣 跟讀</b>＝唸一遍→停 3 秒讓你跟著唸→再唸一遍。再點一次停止。</li>
+      <li>⚠️ iOS 鎖屏會中斷朗讀，連播/跟讀時請保持螢幕開啟。</li>
     </ul></details>
-    <div style="margin-bottom:10px"><button class="chip" id="sentWeakFilter" data-on="false">🔖 只看不熟</button> <button class="chip" id="sentReverse" data-on="false">🔄 中→德</button></div>
+    <div style="margin-bottom:10px"><button class="chip" id="sentWeakFilter" data-on="false">🔖 只看不熟</button> <button class="chip" id="sentReverse" data-on="false">🔄 中→德</button> <button class="chip" id="sentPlay" data-on="false">▶️ 連播</button> <button class="chip" id="sentShadow" data-on="false">🗣 跟讀</button></div>
+    <div id="seqMsg" style="font-size:.78rem;color:var(--mut);margin-bottom:8px"></div>
     <div class="grid" id="sentList"></div>
     <div style="margin-top:12px"><button class="btn" id="revealAll">顯示 / 隱藏全部中文</button></div>
   </section>
@@ -2794,6 +2797,7 @@ const tabs=[...document.querySelectorAll('.tab')];
 tabs.forEach(t=>t.onclick=()=>{
   tabs.forEach(x=>x.setAttribute('aria-selected',x===t));
   ['texts','pron','vocab','num','gram','sent','quiz'].forEach(id=>{document.getElementById(id).hidden=(id!==t.dataset.tab);});
+  if(typeof stopSeq==='function')stopSeq();
   if('speechSynthesis' in window)window.speechSynthesis.cancel();
 });
 
@@ -3484,6 +3488,7 @@ const sentList=document.getElementById('sentList');
 let allShown=false;
 let sentRev=false; /* M1：🔄 中→德 反向產出模式 */
 function renderSentences(){
+  if(typeof stopSeq==='function')stopSeq();
   sentList.innerHTML='';
   SENTENCES.filter(s=>sentWeakOnly?weakSent[s.de]:lessonMatch(s)).forEach(({de,zh,lesson})=>{
     const row=document.createElement('div');row.className='sent';
@@ -3500,6 +3505,69 @@ function renderSentences(){
 document.getElementById('sentWeakFilter').onclick=(e)=>{sentWeakOnly=!sentWeakOnly;e.target.dataset.on=sentWeakOnly;renderSentences();};
 document.getElementById('sentReverse').onclick=(e)=>{sentRev=!sentRev;e.target.dataset.on=sentRev;allShown=false;renderSentences();};
 document.getElementById('revealAll').onclick=()=>{allShown=!allShown;renderSentences();};
+
+/* ---------- N7-2 ▶️ 連播 ＋ N8 🗣 跟讀（例句分頁，共用一套排程；純 TTS，無錄音）----------
+   範圍＝當下篩選結果（課別範圍／🔖 只看不熟都吃）。連播：句距 1.5 秒。
+   跟讀：唸一遍 → 停 3 秒（給你跟著唸）→ 再唸一遍 → 下一句。 */
+let seqMode=null,seqTimer=null,seqIdx=0,seqList=[];
+function seqRows(){return [...sentList.querySelectorAll(".sent")];}
+function seqSay(text,cb){
+  if(!("speechSynthesis" in window)){cb&&cb();return;}
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="de-DE";if(deVoice)u.voice=deVoice;u.rate=0.92;
+  u.onend=()=>{cb&&cb();};u.onerror=()=>{cb&&cb();};
+  window.speechSynthesis.speak(u);
+}
+function seqHL(row){
+  seqRows().forEach(r=>{r.style.background="";});
+  if(row){row.style.background="#fff7ed";if(row.scrollIntoView)row.scrollIntoView({block:"center"});}
+}
+function stopSeq(done){
+  if(!seqMode)return;
+  seqMode=null;
+  if(seqTimer){clearTimeout(seqTimer);seqTimer=null;}
+  if("speechSynthesis" in window)window.speechSynthesis.cancel();
+  seqHL(null);syncSeqBtns();
+  const msg=document.getElementById("seqMsg");
+  if(msg)msg.textContent=done?"✅ 這一輪播完了。":"";
+}
+function seqStep(){
+  if(!seqMode)return;
+  if(seqIdx>=seqList.length){stopSeq(true);return;}
+  const it=seqList[seqIdx];
+  seqHL(it.row);
+  const mode=seqMode;
+  seqSay(it.de,()=>{
+    if(seqMode!==mode)return;
+    if(mode==="shadow"){
+      seqTimer=setTimeout(()=>{
+        if(seqMode!==mode)return;
+        seqSay(it.de,()=>{if(seqMode!==mode)return;seqTimer=setTimeout(()=>{seqIdx++;seqStep();},600);});
+      },3000);
+    }else{
+      seqTimer=setTimeout(()=>{seqIdx++;seqStep();},1500);
+    }
+  });
+}
+function startSeq(mode){
+  stopSeq();
+  const list=SENTENCES.filter(s=>sentWeakOnly?weakSent[s.de]:lessonMatch(s)),rows=seqRows();
+  const msg=document.getElementById("seqMsg");
+  if(!list.length){if(msg)msg.textContent="這個範圍沒有例句可播——換課別或取消「只看不熟」。";return;}
+  seqList=list.map((s,i)=>({de:s.de,row:rows[i]||null}));
+  seqIdx=0;seqMode=mode;syncSeqBtns();
+  if(msg)msg.textContent=(mode==="shadow"?"🗣 跟讀中":"▶️ 連播中")+"（共 "+list.length+" 句）· 再點一次可停止 · iOS 鎖屏會中斷朗讀，請保持螢幕開啟";
+  seqStep();
+}
+function syncSeqBtns(){
+  const p=document.getElementById("sentPlay"),s=document.getElementById("sentShadow");
+  if(p){p.dataset.on=(seqMode==="play");p.textContent=(seqMode==="play")?"⏹ 停止":"▶️ 連播";}
+  if(s){s.dataset.on=(seqMode==="shadow");s.textContent=(seqMode==="shadow")?"⏹ 停止":"🗣 跟讀";}
+}
+document.getElementById("sentPlay").onclick=()=>{seqMode==="play"?stopSeq():startSeq("play");};
+document.getElementById("sentShadow").onclick=()=>{seqMode==="shadow"?stopSeq():startSeq("shadow");};
+
 
 /* ---------- 📖 課程導覽渲染（N12）：重點地圖＋可點查字的短文＋模糊中文＋自足理解題 ---------- */
 const textsList=document.getElementById('textsList');
@@ -4130,7 +4198,9 @@ function satzbauPool(wk,all){
 function errKeyOf(mode,q){const s=q.sub||'';const i=s.indexOf('：');return i>0?s.slice(0,i):s;}
 function recordError(mode,q){
   if(mode==='mean'||mode==='gender'){if(q.id!==undefined){weak[q.id]=1;saveWeak();if(mastered[q.id]){delete mastered[q.id];saveMastered();delete seen[q.id];saveSeen();}}return;}
-  if(mode==='listen'||mode==='satzbau'){if(q.de){weakSent[q.de]=1;saveWeakSent();}return;}
+  if(mode==='listen'||mode==='satzbau'){
+    if(q.syn){const k=errKeyOf(mode,q);if(k){errors[k]=(errors[k]||0)+1;saveErrors();renderErrPanel();}return;}   /* N7 生成題 */
+    if(q.de){weakSent[q.de]=1;saveWeakSent();}return;}
   const k=q.ng?'📚 詞彙/表達':errKeyOf(mode,q);if(k){errors[k]=(errors[k]||0)+1;saveErrors();renderErrPanel();}
 }
 function renderErrPanel(){
@@ -4328,7 +4398,7 @@ function renderSwList(id){
 
 /* 🏁 總複習：全課別混抽固定 30 題，「對比」題權重 ×2，結束出各文法點答對率 */
 let meilenQueue=[],meilenStats={},meilenDone=0,meilenTotal=0;const MEILEN_N=30;
-function statKeyOf(m,q){if(m==='mean')return '字義';if(m==='gender')return '性別 der/die/das';if(m==='listen')return '👂 聽力';if(m==='satzbau')return '🧱 語序';return q.ng?'📚 詞彙/表達':(errKeyOf(m,q)||m);}
+function statKeyOf(m,q){if(m==='mean')return '字義';if(m==='gender')return '性別 der/die/das';if(m==='listen')return (q&&q.syn)?errKeyOf(m,q):'👂 聽力';if(m==='satzbau')return '🧱 語序';return q.ng?'📚 詞彙/表達':(errKeyOf(m,q)||m);}
 /* 2026-07 改版：總複習跟著課別範圍走（全選＝舊的全課行為），字義/性別預設排除已畢業字（「含已掌握」chip 生效）；「只考不熟」不影響總複習 */
 /* N11.5：單元挑戰（modulRun）版總複習走加難固定配方——聽力8＋語序8＋文法7＋複數4＋字義2＋性別1，
    聽＋排占過半、與一般 🏁 做出難度區隔；某維度題池不足時由其餘題池隨機補位，門檻 85% 不變 */
@@ -4340,6 +4410,7 @@ function buildMeilen(){
   PLURAL.filter(q=>inLessonScope(q.l)).forEach(q=>pm.plural.push({m:'plural',q}));
   gramBank.filter(lessonMatch).forEach(q=>{pm.gram.push({m:'gram',q});if((q.sub||'').includes('對比'))pm.gram.push({m:'gram',q});});
   listenPool(false,false).forEach(s=>pm.listen.push({m:'listen',q:s}));
+  numListenPool(pm.listen.length).forEach(s=>pm.listen.push({m:'listen',q:s}));   /* N7：數字/價格/時間聽寫 */
   satzbauPool(false,false).forEach(s=>pm.satzbau.push({m:'satzbau',q:s}));
   Object.values(pm).forEach(a=>a.sort(()=>Math.random()-.5));
   let pool;
@@ -4441,7 +4512,7 @@ function poolFor(mode){
     if(qWeak){const ws=weakNounSet();return PLURAL.filter(it=>{const m=(it.before+it.after).match(/\(([^)]+)\)/);return m&&ws.has(m[1]);});}
     return PLURAL.filter(it=>inLessonScope(it.l));
   }
-  if(mode==='listen')return listenPool(qWeak,false);
+  if(mode==='listen')return qWeak?listenPool(true,false):(function(){const lp=listenPool(false,false);return lp.concat(numListenPool(lp.length));})();
   if(mode==='satzbau')return satzbauPool(qWeak,false);
   if(mode==='mean')return qWeak?VOCAB.filter(v=>v.cat!=='數字'&&weak[v.id]):VOCAB.filter(v=>v.cat!=='數字'&&lessonMatch(v)&&(qInclM||!mastered[v.id]||isDecayDue(v.id)));
   if(mode==='gender')return qWeak?VOCAB.filter(v=>v.g&&v.g!=='plu'&&weak[v.id]):VOCAB.filter(v=>v.g&&v.g!=='plu'&&lessonMatch(v)&&(qInclM||!mastered[v.id]||isDecayDue(v.id)));
@@ -4552,7 +4623,7 @@ function newQ(){
     qSpeak=qCur.g+' '+qCur.de;
     ['der','die','das'].forEach(g=>addOpt(GLABEL[g],g===qCur.g));
   }else if(m==='listen'){
-    renderListen(pre);
+    (qCur&&qCur.syn)?renderNumListen(pre):renderListen(pre);
   }else if(m==='satzbau'){
     renderSatzbau(pre);
   }else if(m==='typed'){
@@ -4727,6 +4798,86 @@ function numBreak(n){
   if(n%10===0)return `整十，字尾 <b>-zig</b>${n===30?"（30 例外：drei<b>ß</b>ig）":""}。`;
   const u=n%10,t=Math.floor(n/10)*10;
   return `組成：<b>${NUM_UC[u]}</b>(${u}) + <b>und</b> + <b>${NUM_TENS[t]}</b>(${t})　→ 個位唸在前！`;
+}
+/* ---------- N7：數字／價格／時間聽寫（👂 子題型；題目程式化生成，不手寫題庫）----------
+   解鎖依「目前選課範圍的最大課號」：數字 L1、價格 L4、時間 L8（課本教過才出）。
+   選項一律阿拉伯數字 → 不可能靠讀德文作弊；干擾項＝顛倒版／近音版／halb 陷阱。 */
+function maxLessonNo(){
+  let mx=0;
+  curLessons.forEach(l=>{const n=(l==="L123")?3:parseInt(String(l).replace(/\D/g,""),10);if(isFinite(n)&&n>mx)mx=n;});
+  return mx;
+}
+const NUM_NEAR={13:30,30:13,14:40,40:14,15:50,50:15,16:60,60:16,17:70,70:17,18:80,80:18,19:90,90:19};
+function numRev(n){if(n<10||n>99)return null;const r=(n%10)*10+Math.floor(n/10);return r===n?null:r;}
+function euroText(c){return Math.floor(c/100)+","+String(c%100).padStart(2,"0")+" €";}
+function euroWord(c){                       /* 價格唸法卡（L4）：滿 1 歐→X Euro Y（分不加 Cent）；不足→Y Cent */
+  const e=Math.floor(c/100),r=c%100;
+  if(e===0)return numWord(r)+" Cent";
+  return (e===1?"ein":numWord(e))+" Euro"+(r?" "+numWord(r):"");
+}
+function timeWord(h,m,off){                 /* off=官方式（neun Uhr fünfzehn）／否則口語式（Viertel nach neun） */
+  const hUhr=(n)=>n===1?"ein":numWord(n);   /* 「ein Uhr」不加 -s */
+  const hSolo=(n)=>n===1?"eins":numWord(n); /* 單獨當數字時是 eins（Viertel nach eins／halb eins） */
+  if(off)return hUhr(h)+" Uhr"+(m?" "+numWord(m):"");
+  const nx=(h%12)+1;
+  if(m===0)return hUhr(h)+" Uhr";
+  if(m===15)return "Viertel nach "+hSolo(h);
+  if(m===30)return "halb "+hSolo(nx);
+  return "Viertel vor "+hSolo(nx);
+}
+function genNumQ(fixed){
+  const n=(fixed===undefined)?(Math.random()*101|0):fixed;
+  const opts=[String(n)],add=(x)=>{if(x>=0&&x<=100&&opts.length<4&&opts.indexOf(String(x))<0)opts.push(String(x));};
+  const rv=numRev(n);if(rv!==null)add(rv);                       /* 顛倒版 47↔74 */
+  if(NUM_NEAR[n]!==undefined)add(NUM_NEAR[n]);                   /* 近音版 13↔30 */
+  add(n+1);add(n-1);
+  let g=0;while(opts.length<4&&g++<300)add(Math.random()*101|0);
+  return {syn:1,kind:"num",sub:"🔢 數字聽寫：聽數字，選對應的阿拉伯數字",say:numWord(n),answer:String(n),options:opts};
+}
+function genPriceQ(){
+  let c=(Math.random()<.3)?(10+(Math.random()*89|0)):(100+(Math.random()*1900|0));
+  if(c>=100&&c%100>0&&c%100<10)c+=10;                            /* 避開 1–9 分：X Euro zwei 唸法不自然 */
+  const e=Math.floor(c/100),r=c%100;
+  const opts=[euroText(c)],add=(x)=>{const t=euroText(x);if(x>=1&&x<=9999&&opts.length<4&&opts.indexOf(t)<0)opts.push(t);};
+  add(e*100+((r%10)*10+Math.floor(r/10)));                       /* 分位對調 9,95→9,59 */
+  add(r||c*10);                                                  /* Euro/Cent 混淆 9,95→0,95 */
+  add(c+100);add(c-100);                                         /* ±1 歐 */
+  let g=0;while(opts.length<4&&g++<300)add(5+(Math.random()*1995|0));
+  return {syn:1,kind:"price",sub:"💶 價格聽寫：聽價格，選對應的金額",say:euroWord(c),answer:euroText(c),options:opts};
+}
+function genTimeQ(){
+  const off=Math.random()<.5;
+  const mins=off?[0,5,10,15,20,25,30,35,40,45,50,55]:[0,15,30,45];
+  const m=mins[Math.random()*mins.length|0];
+  const h=off?(Math.random()*24|0):(1+(Math.random()*12|0));
+  const norm=(H)=>off?((H+24)%24):((H+11)%12+1);
+  const fmt=(H,M)=>off?(String(H).padStart(2,"0")+":"+String(M).padStart(2,"0")):(H+":"+String(M).padStart(2,"0"));
+  const ans=fmt(h,m),opts=[ans],add=(H,M)=>{const t=fmt(norm(H),M);if(opts.length<4&&opts.indexOf(t)<0)opts.push(t);};
+  if(!off&&m===30)add(h+1,30);                                   /* halb 陷阱：halb vier=3:30，干擾項 4:30 */
+  if(!off&&m===15)add(h-1,45);                                   /* nach/vor 對調 */
+  if(!off&&m===45)add(h+1,15);
+  add(h+1,m);add(h,m===0?30:0);add(h-1,m);
+  let g=0;while(opts.length<4&&g++<300)add(off?(Math.random()*24|0):(1+(Math.random()*12|0)),mins[Math.random()*mins.length|0]);
+  return {syn:1,kind:"time",sub:"🕐 時間聽寫：聽時間，選對應的時刻",say:timeWord(h,m,off),answer:ans,options:opts};
+}
+function numListenPool(base){
+  /* 題數跟著例句聽力池等比放大（約 25%，下限 12）——固定十來題混進三百多句會抽不到 */
+  const mx=maxLessonNo(),out=[],kinds=[];
+  if(mx>=1)kinds.push(genNumQ);
+  if(mx>=4)kinds.push(genPriceQ);
+  if(mx>=8)kinds.push(genTimeQ);
+  if(!kinds.length)return out;
+  const total=Math.max(12,Math.round((base||0)*0.25));
+  for(let i=0;i<total;i++)out.push(kinds[i%kinds.length]());
+  return out;
+}
+function renderNumListen(pre){
+  const q=qCur;
+  qsub.textContent=pre+q.sub;
+  qprompt.innerHTML='<span style="color:var(--mut);font-size:1rem">🔊 只有聲音（按 🔊 可重聽）→ </span><span class="blank">____</span>';
+  qSpeak=q.say;
+  [...q.options].sort(()=>Math.random()-.5).forEach(o=>addOpt(o,o===q.answer));
+  speak(q.say);
 }
 const numRange=document.getElementById('numRange'),numDigit=document.getElementById('numDigit'),numWordEl=document.getElementById('numWordEl'),numBreakEl=document.getElementById('numBreakEl');
 function showNum(n){numDigit.textContent=n;numWordEl.textContent=numWord(n);numBreakEl.innerHTML=numBreak(n);}
