@@ -182,8 +182,8 @@
 <body>
 <div class="wrap">
   <header style="position:relative">
-    <div class="eyebrow">Menschen · A1 · Lektion 1–16</div>
-    <h1>Deutsch A1 — L1–L16</h1>
+    <div class="eyebrow">Menschen · A1 · Lektion 1–17</div>
+    <h1>Deutsch A1 — L1–L17</h1>
     <details class="helpbox" id="outline" style="margin-top:10px;text-align:left"><summary>📚 每課大綱（點開看）</summary><div class="panel-intro" style="margin:8px 0 2px;line-height:1.9">
       L1 打招呼·自我介紹（heißen/kommen aus/wohnen in）·sein·W 問句·拼讀·數字 0–100<br>
       L2 個人資料·職業·規則動詞變位全表·ihr（你們）<br>
@@ -201,6 +201,7 @@
       L14 住屋·租屋·所有格 sein/ihr 全格位·Genitiv 專有名詞初登場<br>
       L15 街區評價·Dativ動詞家族(gehören/danken/fehlen)·人稱代名詞Nom/Akk/Dativ全表<br>
       L16 旅館客訴·Termine 改期·時間介係詞in/nach/vor/für·序數日期<br>
+      L17 願望與計畫·wollen完整變位·werden登場·mit/ohne對比<br>
       <!-- ===ANCHOR:OUTLINE===（新課大綱一行插在這行上方，格式照上）-->
     </div></details>
   </header>
@@ -223,6 +224,7 @@
     <button class="lchip" data-lesson="L14" data-on="false">L14</button>
     <button class="lchip" data-lesson="L15" data-on="false">L15</button>
     <button class="lchip" data-lesson="L16" data-on="false">L16</button>
+    <button class="lchip" data-lesson="L17" data-on="false">L17</button>
     <!-- ===ANCHOR:LESSON_CHIPS===（A1.2 新課按鈕插在這行上方、span#bookA11 之外）-->
     <button class="lchip" data-lesson="ALL" data-on="false">全選 · 模組複習</button>
     <span style="flex-basis:100%;font-size:.72rem;color:var(--mut)">單點換課 · 長按半秒加選複數課 · 📕 收合/展開整冊</span>
@@ -487,7 +489,7 @@
 const SPK_SVG='<svg viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>';
 
 /* ===== 範圍（課別·可多選）===== */
-const DEFAULT_LESSON="L16"; /* ===ANCHOR:DEFAULT_LESSON===（新課上線時改成最新課號；chip 的 data-on 由 syncLessonChips 執行期同步，新 chip 一律 data-on="false"）*/
+const DEFAULT_LESSON="L17"; /* ===ANCHOR:DEFAULT_LESSON===（新課上線時改成最新課號；chip 的 data-on 由 syncLessonChips 執行期同步，新 chip 一律 data-on="false"）*/
 let curLessons=new Set([DEFAULT_LESSON]);
 /* L123 是 L1/L2/L3 的合併篩選鈕，資料本身仍各自標 L1/L2/L3，故用此函式統一判斷範圍是否命中 */
 function inLessonScope(l){
@@ -1111,7 +1113,7 @@ const ADD123X=[
  {de:"Beruf",zh:"職業",g:"der",cat:"工作相關",lesson:"L123"},
  {de:"Job",zh:"打工／工作",g:"der",cat:"工作相關",lesson:"L123"},
  {de:"Stelle",zh:"職位",g:"die",cat:"工作相關",lesson:"L123"},
- {de:"Ausbildung",zh:"職業培訓",g:"die",cat:"工作相關",lesson:"L123"},
+ {de:"Ausbildung",zh:"職業培訓",g:"die",cat:"工作相關",lesson:"L123",ex:["Ich mache eine Ausbildung als Verkäuferin.","我在受訓當售貨員。"]},
  {de:"Praktikum",zh:"實習",g:"das",cat:"工作相關",lesson:"L123"},
  {de:"Krankenhaus",zh:"醫院",g:"das",cat:"工作相關",lesson:"L123"},
  {de:"Arbeitgeber",zh:"雇主",g:"der",cat:"工作相關",lesson:"L123"},
@@ -1300,7 +1302,7 @@ const ADDFIXL8=[
  ex:["Leider habe ich keine Zeit.","可惜我沒空。"]},
 {de:"ins",zh:"去…（方向，in+das 縮合，回答 Wohin?）",g:null,cat:"常用",lesson:"L8",
  ex:["Gehen wir ins Kino?","我們要去看電影嗎？"]},
-{de:"wollen",zh:"想要（提議句型 Wollen wir…?＝要不要一起…？；完整變位 A1.2 才學）",g:null,cat:"常用",lesson:"L8",
+{de:"wollen",zh:"想要（比 möchten 語氣更強烈、指已下定決心的計畫；提議句型 Wollen wir…?＝要不要一起…？；完整變位已補）",g:null,cat:"常用",lesson:"L8",
  ex:["Wollen wir ins Kino gehen?","我們要不要去看電影？"]},
 {de:"Viertel",zh:"一刻鐘、四分之一（das Viertel；Viertel vor/nach ＋整點＝差一刻/過一刻）",g:"das",cat:"常用",lesson:"L8",
  ex:["Es ist Viertel vor zehn.","現在是九點四十五分（差一刻十點）。"]},
@@ -1442,8 +1444,64 @@ const ADD15S=[
 {de:"nämlich",zh:"也就是、因為（置句中，不放句首）",g:null,cat:"常用",lesson:"L15",ex:["Ich bleibe hier; hier ist nämlich alles in der Nähe.","我留在這；因為這裡什麼都在附近。"]},
 {de:"weil",zh:"因為（從屬連接詞，動詞放句尾）",g:null,cat:"常用",lesson:"L15",ex:["Ich mag mein Viertel, weil es ruhig ist.","我喜歡我的街區，因為它很安靜。"]},
 ];
+const ADD17=[
+{de:"Studienplatz",zh:"大學入學名額",g:"der",cat:"工作相關",lesson:"L17",ex:["Ich möchte bald einen Studienplatz bekommen.","我想不久後拿到大學入學名額。"]},
+{de:"Aufnahmeprüfung",zh:"入學考試",g:"die",cat:"工作相關",lesson:"L17",ex:["Ich mache morgen die Aufnahmeprüfung.","我明天要參加入學考試。"]},
+{de:"Führerschein",zh:"駕照",g:"der",cat:"常用",lesson:"L17",ex:["Ich will unbedingt den Führerschein machen.","我一定要考駕照。"]},
+{de:"Bildlexikon",zh:"圖解字典（課堂用語，複數形建議問老師求證）",g:"das",cat:"課堂用語",lesson:"L17",ex:["Hilfe finden Sie im Bildlexikon.","您可以在圖解字典裡找到說明。"]},
+{de:"Schokoladenmuseum",zh:"巧克力博物館",g:"das",cat:"地點",lesson:"L17",ex:["Wir wollen ins Schokoladenmuseum gehen.","我們想去巧克力博物館。"]},
+{de:"Instrument",zh:"樂器",g:"das",cat:"興趣",lesson:"L17",ex:["Ich möchte ein Instrument lernen.","我想學一種樂器。"]},
+{de:"Gitarre",zh:"吉他",g:"die",cat:"興趣",lesson:"L17",ex:["Barbara will unbedingt Gitarre lernen.","Barbara 一定要學吉他。"]},
+{de:"Kurskollege",zh:"（男）同班同學",g:"der",cat:"常用",lesson:"L17",ex:["Mein Kurskollege kommt aus Spanien.","我的（男）同學來自西班牙。"]},
+{de:"Kurskollegin",zh:"（女）同班同學",g:"die",cat:"常用",lesson:"L17",ex:["Meine Kurskollegin hilft mir oft.","我的（女）同學常常幫我。"]},
+{de:"Lehrer",zh:"（男）老師",g:"der",cat:"職業",lesson:"L17",ex:["Ich will Lehrer werden.","我想當老師。"]},
+{de:"Schauspieler",zh:"（男）演員",g:"der",cat:"職業",lesson:"L17",ex:["Er möchte Schauspieler werden.","他想當演員。"]},
+{de:"Schauspielerin",zh:"（女）演員",g:"die",cat:"職業",lesson:"L17",ex:["Ich will auf keinen Fall Schauspielerin werden.","我絕對不想當女演員。"]},
+{de:"Liedermacher",zh:"（男）創作歌手",g:"der",cat:"職業",lesson:"L17",ex:["Fabian will Liedermacher werden.","Fabian 想當創作歌手。"]},
+{de:"Muttersprache",zh:"母語",g:"die",cat:"語言",lesson:"L17",ex:["Meine Muttersprache ist Chinesisch.","我的母語是中文。"]},
+{de:"Profi",zh:"職業好手、專業選手",g:"der",cat:"職業",lesson:"L17",ex:["Ich will schnell Profi werden.","我想快點成為職業選手。"]},
+{de:"Krise",zh:"危機",g:"die",cat:"常用",lesson:"L17",ex:["Ist das eine Krise oder eine Chance?","這是危機還是機會？"]},
+{de:"Hausfrau",zh:"家庭主婦",g:"die",cat:"職業",lesson:"L17",ex:["Susanne ist Hausfrau.","Susanne 是家庭主婦。"]},
+{de:"Mechatroniker",zh:"（男）機電整合技師",g:"der",cat:"職業",lesson:"L17",ex:["Georg ist Mechatroniker von Beruf.","Georg 的職業是機電整合技師。"]},
+{de:"Verkäuferin",zh:"（女）售貨員",g:"die",cat:"職業",lesson:"L17",ex:["Marianne hat als Verkäuferin gearbeitet.","Marianne 曾經當過售貨員。"]},
+{de:"Traumberuf",zh:"夢想職業",g:"der",cat:"工作相關",lesson:"L17",ex:["Was ist dein Traumberuf?","你的夢想職業是什麼？"]},
+{de:"Schauspielschule",zh:"戲劇學校",g:"die",cat:"工作相關",lesson:"L17",ex:["Sie meldet sich bei einer Schauspielschule an.","她要去戲劇學校報名。"]},
+{de:"Berufswunsch",zh:"職業志願",g:"der",cat:"工作相關",lesson:"L17",ex:["Was ist dein Berufswunsch?","你的職業志願是什麼？"]},
+{de:"Uni",zh:"大學（口語縮寫，非 Universität）",g:"die",cat:"工作相關",lesson:"L17",ex:["Sie hat einen Studienplatz an der Uni in Basel bekommen.","她在巴塞爾大學拿到了入學名額。"]},
+{de:"Musiker",zh:"（男）音樂家",g:"der",cat:"職業",lesson:"L17",ex:["Ich gehe noch zur Schule, aber ich will unbedingt Musiker werden.","我還在上學，但我一定要當音樂家。"]},
+{de:"Antwort",zh:"答案、回答",g:"die",cat:"常用",lesson:"L17",ex:["Auf viele Fragen habe ich noch keine Antwort.","很多問題我還沒有答案。"]},
+{de:"Glück",zh:"幸運、幸福（無複數）",g:"das",cat:"常用",lesson:"L17",ex:["Das bringt mir heute Glück.","這給我帶來今天的好運。"]},
+{de:"Cello",zh:"大提琴（複數形建議問老師求證）",g:"das",cat:"興趣",lesson:"L17",ex:["Erna kann super Cello spielen.","Erna 大提琴拉得超好。"]},
+{de:"Chance",zh:"機會",g:"die",cat:"常用",lesson:"L17",ex:["Mit einer Ausbildung hat man bessere Chancen.","有職業培訓的話機會比較好。"]},
+{de:"Prüfung",zh:"考試",g:"die",cat:"工作相關",lesson:"L17",ex:["Er hat endlich die Prüfung geschafft.","他終於通過了考試。"]},
+{de:"Star",zh:"明星",g:"der",cat:"常用",lesson:"L17",ex:["Cherry zeigt uns ihre „Starbrille\".","Cherry 給我們看她的「明星墨鏡」。"]},
+{de:"werden",zh:"變成、將要（注意 ich werde 有 -e 字尾，跟情態動詞「ich=er 無字尾」規則不同，見文法「動詞變位②」）",g:null,cat:"動詞",lesson:"L17",ex:["Ich will Popstar werden.","我想成為流行歌星。"],ex2:["Was willst du werden?","你想成為什麼？"]},
+{de:"abschließen",zh:"完成、結束（學業/合約等）— 可分離，Perfekt hat abgeschlossen",g:null,cat:"動詞",lesson:"L17",ex:["Hast du eine Berufsausbildung abgeschlossen?","你完成職業培訓了嗎？"],ex2:["Sie hat ihre Ausbildung letztes Jahr abgeschlossen.","她去年完成了職業培訓。"]},
+{de:"anmelden",zh:"報名、登記 — 反身 sich anmelden，可分離，Perfekt hat sich angemeldet（完整反身規則 A2 才學）",g:null,cat:"動詞",lesson:"L17",ex:["Ich melde mich bei einer Schauspielschule an.","我要去戲劇學校報名。"],ex2:["Meldest du dich bald an einer Schule oder Universität an?","你快要去某間學校或大學報名了嗎？"]},
+{de:"komponieren",zh:"作曲",g:null,cat:"動詞",lesson:"L17",ex:["Ich schreibe meine Lieder selbst und komponiere sie auch.","我自己寫歌詞也自己作曲。"]},
+{de:"übersetzen",zh:"翻譯",g:null,cat:"動詞",lesson:"L17",ex:["Sie möchte Bücher übersetzen.","她想翻譯書。"]},
+{de:"segeln",zh:"航海、駕帆船 — Perfekt 用 sein（ist gesegelt，移動動詞）",g:null,cat:"動詞",lesson:"L17",ex:["Ich möchte einmal um die Welt segeln.","我想有一天環遊世界航海。"]},
+{de:"steigen",zh:"攀爬、上升 — Perfekt 用 sein（ist gestiegen，移動動詞）",g:null,cat:"動詞",lesson:"L17",ex:["Ich möchte auf einen Berg steigen.","我想爬上一座山。"]},
+{de:"unbedingt",zh:"一定、無論如何",g:null,cat:"常用",lesson:"L17",ex:["Ich will unbedingt ein Buch schreiben.","我一定要寫一本書。"]},
+{de:"auf jeden Fall",zh:"無論如何都會",g:null,cat:"常用",lesson:"L17",ex:["Ich will auf jeden Fall nächstes Jahr nach Zürich fahren.","我明年無論如何都要去蘇黎世。"]},
+{de:"auf keinen Fall",zh:"絕對不會",g:null,cat:"常用",lesson:"L17",ex:["Ich will auf keinen Fall Schauspielerin werden.","我絕對不想當女演員。"]},
+];
+const ADD17B=[
+{de:"Ausland",zh:"國外（無複數）",g:"das",cat:"常用",lesson:"L17",ex:["Ich will nie im Ausland leben.","我永遠不想住在國外。"]},
+{de:"Fremdsprache",zh:"外語",g:"die",cat:"語言",lesson:"L17",ex:["Welche Fremdsprache lernst du?","你在學哪一種外語？"]},
+{de:"Politiker",zh:"（男）政治人物",g:"der",cat:"職業",lesson:"L17",ex:["Ich möchte vielleicht Politiker werden.","我也許想當政治人物。"]},
+{de:"Europa",zh:"歐洲（專有名詞，無複數）",g:"das",cat:"地點",lesson:"L17",ex:["Ich will durch Europa reisen.","我想遊遍歐洲。"]},
+{de:"Kreditkarte",zh:"信用卡",g:"die",cat:"常用",lesson:"L17",ex:["Ich zahle mit meiner Kreditkarte.","我用信用卡付款。"]},
+{de:"Lied",zh:"歌曲",g:"das",cat:"興趣",lesson:"L17",ex:["Ich schreibe meine Lieder selbst.","我自己寫歌詞。"]},
+{de:"Motorrad",zh:"摩托車",g:"das",cat:"交通",lesson:"L17",ex:["Ich möchte ein Motorrad fahren.","我想騎一台摩托車。"]},
+{de:"Welt",zh:"世界（無複數）",g:"die",cat:"常用",lesson:"L17",ex:["Ich möchte einmal um die Welt segeln.","我想有一天環遊世界航海。"]},
+{de:"Wunsch",zh:"願望",g:"der",cat:"常用",lesson:"L17",ex:["Ich habe nur einen Wunsch: Ich will ins Ausland gehen.","我只有一個願望：我想出國。"]},
+{de:"verdienen",zh:"賺（錢）",g:null,cat:"動詞",lesson:"L17",ex:["Ich will viel Geld verdienen.","我想賺很多錢。"]},
+{de:"laufen",zh:"跑；瑞士/奧地利：走路（母音變：du läufst/er läuft，Perfekt ist gelaufen）",g:null,cat:"動詞",lesson:"L17",ex:["Er läuft jeden Morgen im Park.","他每天早上在公園跑步。"],ex2:["Läufst du gern?","你喜歡跑步嗎？"]},
+{de:"putzen",zh:"打掃、擦拭",g:null,cat:"動詞",lesson:"L17",ex:["Ich putze am Samstag die Wohnung.","我星期六打掃住處。"]},
+];
 /* ===ANCHOR:VOCAB_ARRAYS===（新課單字陣列 const ADDn=[...] 宣告在這行上方，並把陣列名加進下面 VOCAB 合併行）*/
-const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S];
+const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B];
 VOCAB.forEach((v,i)=>v.id="v"+i);
 
 
@@ -1597,6 +1655,17 @@ const NOUN_PL={
   "Techniker":"Techniker","Zimmermädchen":"Zimmermädchen","Rezeption":"Rezeptionen","Tagung":"Tagungen",
   "Geschäftsreise":"Geschäftsreisen","Tanzkurs":"Tanzkurse","Navi":"Navis",
   "Bus":"Busse","Einkaufszentrum":"Einkaufszentren","Nachbarhaus":"Nachbarhäuser",
+  "Studienplatz":"Studienplätze","Aufnahmeprüfung":"Aufnahmeprüfungen","Führerschein":"Führerscheine",
+  "Schokoladenmuseum":"Schokoladenmuseen","Instrument":"Instrumente","Gitarre":"Gitarren",
+  "Kurskollege":"Kurskollegen","Kurskollegin":"Kurskolleginnen","Lehrer":"Lehrer",
+  "Schauspieler":"Schauspieler","Schauspielerin":"Schauspielerinnen","Liedermacher":"Liedermacher",
+  "Muttersprache":"Muttersprachen","Profi":"Profis","Krise":"Krisen",
+  "Hausfrau":"Hausfrauen","Mechatroniker":"Mechatroniker","Verkäuferin":"Verkäuferinnen",
+  "Traumberuf":"Traumberufe","Schauspielschule":"Schauspielschulen","Berufswunsch":"Berufswünsche",
+  "Uni":"Unis","Musiker":"Musiker","Antwort":"Antworten",
+  "Chance":"Chancen","Prüfung":"Prüfungen","Star":"Stars",
+  "Fremdsprache":"Fremdsprachen","Politiker":"Politiker","Kreditkarte":"Kreditkarten",
+  "Lied":"Lieder","Motorrad":"Motorräder","Wunsch":"Wünsche",
   /* ===ANCHOR:NOUN_PL===（新名詞複數 "單數":"複數", 插在這行上方）*/
 };
 const NOUN_PL_NOTE={
@@ -1720,6 +1789,8 @@ const NOUN_PL_NOTE={
   "Zimmermädchen":"-chen 結尾：單複數同形（das Zimmermädchen → die Zimmermädchen）。",
   "Einkaufszentrum":"複數 die Einkaufszentren：-um→-en 不規則（同 Museum），建議跟老師求證。",
   "Nachbarhaus":"複數 die Nachbarhäuser：a→ä 變音（同 Haus），機器 TTS 常唸錯 → Forvo 聽真人。",
+  "Bildlexikon":"複數形不確定（Bildlexika 或 Bildlexikons？）：建議問老師求證，先勿死記。",
+  "Cello":"複數形不確定（Cellos 或 Celli？）：建議問老師求證，先勿死記。",
   /* ===ANCHOR:NOUN_PL_NOTE===（變音／同形／不規則等複數警語插在這行上方）*/
 };
 const NOUN_PLEX={
@@ -2088,6 +2159,39 @@ const NOUN_PLEX={
   "Bus":["Die Busse sind am Morgen oft voll.","早上公車常常很擠。"],
   "Einkaufszentrum":["In Hamburg gibt es viele Einkaufszentren.","漢堡有很多購物中心。"],
   "Nachbarhaus":["Die Nachbarhäuser sind alle sehr alt.","那些鄰房都很舊。"],
+  "Studienplatz":["In diesem Jahr gibt es viele freie Studienplätze.","今年有很多空的入學名額。"],
+  "Aufnahmeprüfung":["Er hat schon zwei Aufnahmeprüfungen gemacht.","他已經考過兩次入學考試了。"],
+  "Führerschein":["Für Motorrad und Auto braucht man zwei verschiedene Führerscheine.","摩托車和汽車需要兩種不同的駕照。"],
+  "Schokoladenmuseum":["In Hamburg gibt es gleich zwei Schokoladenmuseen.","漢堡就有兩間巧克力博物館。"],
+  "Instrument":["Er kann drei Instrumente spielen.","他會演奏三種樂器。"],
+  "Gitarre":["Im Laden stehen viele Gitarren.","店裡擺著很多把吉他。"],
+  "Kurskollege":["Wir haben zehn Kurskollegen.","我們有十位同班同學。"],
+  "Kurskollegin":["Die Kurskolleginnen üben zusammen Deutsch.","這些女同學一起練習德文。"],
+  "Lehrer":["An dieser Schule arbeiten viele Lehrer.","這所學校有很多老師。"],
+  "Schauspieler":["Im Film spielen viele bekannte Schauspieler mit.","這部電影裡有很多知名演員演出。"],
+  "Schauspielerin":["Die Schauspielerinnen üben jeden Tag.","這些女演員每天都在練習。"],
+  "Liedermacher":["Auf dem Festival treten drei Liedermacher auf.","音樂節上有三位創作歌手演出。"],
+  "Muttersprache":["Sie sprechen zwei Muttersprachen.","他們有兩種母語。"],
+  "Profi":["Im Verein spielen viele Profis.","這個俱樂部裡有很多職業選手。"],
+  "Krise":["Wir haben schon viele Krisen gemeistert.","我們已經克服過很多次危機。"],
+  "Hausfrau":["Viele Hausfrauen arbeiten auch nebenbei.","很多家庭主婦也兼職工作。"],
+  "Mechatroniker":["In der Firma arbeiten fünf Mechatroniker.","這家公司有五位機電整合技師。"],
+  "Verkäuferin":["Im Geschäft arbeiten drei Verkäuferinnen.","這家店有三位女售貨員。"],
+  "Traumberuf":["Wir haben ganz unterschiedliche Traumberufe.","我們的夢想職業完全不同。"],
+  "Schauspielschule":["In Hamburg gibt es mehrere Schauspielschulen.","漢堡有好幾間戲劇學校。"],
+  "Berufswunsch":["Ihre Berufswünsche ändern sich oft.","他們的職業志願常常改變。"],
+  "Uni":["In dieser Stadt gibt es zwei Unis.","這座城市有兩所大學。"],
+  "Musiker":["Auf dem Festival spielen viele Musiker.","音樂節上有很多音樂家演出。"],
+  "Antwort":["Ich habe noch drei Antworten offen.","我還有三個答案沒填。"],
+  "Chance":["Er hat schon zwei Chancen bekommen.","他已經得到過兩次機會了。"],
+  "Prüfung":["Die Klasse hat alle Prüfungen geschafft.","全班都通過了所有考試。"],
+  "Star":["Viele Stars kommen zu dem Festival.","很多明星會來這個音樂節。"],
+  "Fremdsprache":["Ich will viele Fremdsprachen sprechen.","我想說很多種外語。"],
+  "Politiker":["Viele Politiker waren bei der Sitzung.","很多政治人物出席了這場會議。"],
+  "Kreditkarte":["Er hat zwei Kreditkarten.","他有兩張信用卡。"],
+  "Lied":["Sie kennt viele Lieder auswendig.","她會背很多首歌。"],
+  "Motorrad":["Auf dem Parkplatz stehen drei Motorräder.","停車場停著三台摩托車。"],
+  "Wunsch":["Was sind eure Wünsche?","你們的願望是什麼？"],
   /* ===ANCHOR:NOUN_PLEX===（複數例句 "單數":["德文","中文"], 插在這行上方）*/
 };
 const VERB_META={
@@ -2217,6 +2321,17 @@ const VERB_META={
   feststecken:{t:"irr",f:["stecke … fest","steckst … fest","steckt … fest","stecken … fest","steckt … fest","stecken … fest"]},
   stören:{t:"reg"},
   hinkommen:{t:"reg"},
+  wollen:{t:"irr",f:["will","willst","will","wollen","wollt","wollen"]},
+  werden:{t:"irr",f:["werde","wirst","wird","werden","werdet","werden"]},
+  abschließen:{t:"irr",f:["schließe … ab","schließt … ab","schließt … ab","schließen … ab","schließt … ab","schließen … ab"]},
+  anmelden:{t:"irr",f:["melde … an","meldest … an","meldet … an","melden … an","meldet … an","melden … an"]},
+  komponieren:{t:"reg"},
+  übersetzen:{t:"sib",du:"übersetzt",er:"übersetzt"},
+  segeln:{t:"reg"},
+  steigen:{t:"reg"},
+  verdienen:{t:"reg"},
+  laufen:{t:"vowel",du:"läufst",er:"läuft"},
+  putzen:{t:"sib",du:"putzt",er:"putzt"},
   /* ===ANCHOR:VERB_META===（新動詞變位 動詞:{t:"reg"|"stemt"|"vowel"|"irr",...}, 插在這行上方）*/
 };
 VOCAB.forEach(v=>{
@@ -2687,6 +2802,65 @@ const SENTENCES=[
   {de:"Sie ist nur fünf Minuten Fußweg von meiner Arbeit entfernt.",zh:"離我上班的地方只有五分鐘路程（… von + Dativ entfernt）",lesson:"L14"},
   {de:"Die Küche hat eine Spülmaschine.",zh:"廚房有洗碗機（可換 einen Kühlschrank／einen Herd）",lesson:"L14"},
   {de:"Möchtest du meine Wohnung sehen?",zh:"你想看我的公寓嗎？（Möchtest du + 原形?）",lesson:"L14"},
+  {de:"Willst du den Führerschein machen?",zh:"你想考駕照嗎？",lesson:"L17"},
+  {de:"Ja, den will ich unbedingt machen.",zh:"對，我一定要考。",lesson:"L17"},
+  {de:"Nein, den will ich auf keinen Fall machen.",zh:"不，我絕對不考。",lesson:"L17"},
+  {de:"Den habe ich schon gemacht.",zh:"我已經考過了。",lesson:"L17"},
+  {de:"Hast du eine Berufsausbildung abgeschlossen?",zh:"你完成職業培訓了嗎？",lesson:"L17"},
+  {de:"Ja, letztes Jahr.",zh:"對，去年。",lesson:"L17"},
+  {de:"Nein, noch nicht.",zh:"不，還沒。",lesson:"L17"},
+  {de:"Ich will Lehrer werden.",zh:"我想當老師。",lesson:"L17"},
+  {de:"Wir wollen ins Schokoladenmuseum gehen. Kommt ihr mit?",zh:"我們要去巧克力博物館。你們要一起來嗎？",lesson:"L17"},
+  {de:"Könnt ihr uns helfen? Die Aufgabe ist zu schwierig.",zh:"你們能幫我們嗎？這作業太難了。",lesson:"L17"},
+  {de:"Ich singe nur auf Deutsch.",zh:"我只用德文唱歌。",lesson:"L17"},
+  {de:"Für mich sind Singen und Tanzen besonders wichtig.",zh:"對我來說，唱歌和跳舞特別重要。",lesson:"L17"},
+  {de:"Ich will schnell Profi werden.",zh:"我想快點成為職業選手。",lesson:"L17"},
+  {de:"Ich habe nur einen Wunsch: Ich will ins Ausland gehen.",zh:"我只有一個願望：我想出國。",lesson:"L17"},
+  {de:"Jetzt kann ich endlich studieren!",zh:"現在我終於能唸大學了！",lesson:"L17"},
+  {de:"Ich möchte bald einen Studienplatz bekommen.",zh:"我想不久後拿到大學入學名額。",lesson:"L17"},
+  {de:"Ich will unbedingt ein Buch schreiben.",zh:"我一定要寫一本書。",lesson:"L17"},
+  {de:"Ich möchte irgendwann Chef werden.",zh:"我想有一天當老闆。",lesson:"L17"},
+  {de:"Ich will auf keinen Fall Schauspielerin werden.",zh:"我絕對不想當女演員。",lesson:"L17"},
+  {de:"Ich möchte vielleicht Politiker werden.",zh:"我也許想當政治人物。",lesson:"L17"},
+  {de:"Ich will viel Geld verdienen.",zh:"我想賺很多錢。",lesson:"L17"},
+  {de:"Ich möchte bald heiraten.",zh:"我想不久後結婚。",lesson:"L17"},
+  {de:"Ich will eine große Familie haben.",zh:"我想要有一個大家庭。",lesson:"L17"},
+  {de:"Ich möchte auf einen Berg steigen.",zh:"我想爬上一座山。",lesson:"L17"},
+  {de:"Ich will durch Europa reisen.",zh:"我想遊遍歐洲。",lesson:"L17"},
+  {de:"Ich möchte einmal um die Welt segeln.",zh:"我想有一天環遊世界航海。",lesson:"L17"},
+  {de:"Ich will nie im Ausland leben.",zh:"我永遠不想住在國外。",lesson:"L17"},
+  {de:"Ich möchte ein Motorrad fahren.",zh:"我想騎一台摩托車。",lesson:"L17"},
+  {de:"Ich will unbedingt den Führerschein machen.",zh:"我一定要考駕照。",lesson:"L17"},
+  {de:"Ich möchte ein Instrument lernen.",zh:"我想學一種樂器。",lesson:"L17"},
+  {de:"Ich will viele Fremdsprachen sprechen.",zh:"我想說很多種外語。",lesson:"L17"},
+  {de:"Fabian geht nur mit dem Führerschein.",zh:"Fabian 只帶著駕照去。",lesson:"L17"},
+  {de:"Cherry geht ohne den Führerschein.",zh:"Cherry 沒帶駕照去。",lesson:"L17"},
+  {de:"Erna kann super Cello spielen. Ich kann leider kein Instrument spielen.",zh:"Erna 大提琴拉得超好。我可惜不會任何樂器。",lesson:"L17"},
+  {de:"Clara und Gerti wollen das auf keinen Fall.",zh:"Clara 和 Gerti 絕對不想這樣。",lesson:"L17"},
+  {de:"Viele Kinder können nicht schwimmen. Das ist nicht gut.",zh:"很多小孩不會游泳，這樣不好。",lesson:"L17"},
+  {de:"Kann ich dein Fahrrad nehmen? Mein Fahrrad ist kaputt.",zh:"我可以借用你的腳踏車嗎？我的腳踏車壞了。",lesson:"L17"},
+  {de:"Aha, Sie wollen unbedingt die Aufnahmeprüfung machen! Verstehe!",zh:"喔，您一定要參加入學考試！了解！",lesson:"L17"},
+  {de:"Barbara will unbedingt Gitarre lernen.",zh:"Barbara 一定要學吉他。",lesson:"L17"},
+  {de:"Ich will auf jeden Fall nächstes Jahr nach Zürich fahren.",zh:"我明年無論如何都要去蘇黎世。",lesson:"L17"},
+  {de:"Die Kinder wollen jeden Abend fernsehen. Aber Mama sagt Nein.",zh:"孩子們每晚都想看電視，但媽媽說不行。",lesson:"L17"},
+  {de:"Sabine will keinen Kaffee. Sie trinkt nur Tee.",zh:"Sabine 不想要咖啡，她只喝茶。",lesson:"L17"},
+  {de:"Wollen Sie mal meinen Hund sehen? Er ist total süß.",zh:"您想看看我的狗嗎？牠超可愛的。",lesson:"L17"},
+  {de:"Wie? Du willst deinen Geburtstag nicht feiern? Das gibt es doch nicht!",zh:"什麼？你不想慶生？怎麼會這樣！",lesson:"L17"},
+  {de:"Tut mir leid, du kannst nicht mit dem Computer arbeiten. Er ist kaputt.",zh:"很抱歉，你不能用這台電腦，它壞了。",lesson:"L17"},
+  {de:"Ich kann super kochen. Kommst du zum Abendessen?",zh:"我很會做菜。你要來吃晚餐嗎？",lesson:"L17"},
+  {de:"Heute Abend will ich essen gehen. Willst du mitkommen?",zh:"我今晚想出去吃飯。你要一起來嗎？",lesson:"L17"},
+  {de:"Paul will nach dem Kurs unbedingt in die Bibliothek gehen.",zh:"Paul 下課後一定要去圖書館。",lesson:"L17"},
+  {de:"Was wollt ihr am Wochenende machen?",zh:"你們週末想做什麼？",lesson:"L17"},
+  {de:"Uli, kann ich mal mit deinem Handy telefonieren?",zh:"Uli，我可以借用你的手機打個電話嗎？",lesson:"L17"},
+  {de:"Oh, ihr könnt aber wirklich gut singen.",zh:"喔，你們真的很會唱歌。",lesson:"L17"},
+  {de:"Meldest du dich bald an einer Schule oder Universität an?",zh:"你快要去某間學校或大學報名了嗎？",lesson:"L17"},
+  {de:"Hast du heute Morgen die Zeitung gelesen?",zh:"你今天早上看報紙了嗎？",lesson:"L17"},
+  {de:"Hast du gestern Anzeigen gelesen?",zh:"你昨天看廣告了嗎？",lesson:"L17"},
+  {de:"Hast du in diesem Jahr einen Studienplatz bekommen?",zh:"你今年拿到大學入學名額了嗎？",lesson:"L17"},
+  {de:"Kannst du Gitarre spielen?",zh:"你會彈吉他嗎？",lesson:"L17"},
+  {de:"Hast du schon einmal eine Aufnahmeprüfung geschafft?",zh:"你曾經通過入學考試嗎？",lesson:"L17"},
+  {de:"Hast du am Wochenende getanzt?",zh:"你週末跳舞了嗎？",lesson:"L17"},
+  {de:"Hast du schon einmal vor vielen Leuten gesungen?",zh:"你曾經在很多人面前唱過歌嗎？",lesson:"L17"},
   /* ===ANCHOR:SENTENCES===（新例句／Redemittel {de,zh,lesson} 插在這行上方）*/
 ];
 
@@ -2704,6 +2878,7 @@ const RULES=[
   {l:"L10",key:"trennbare Verben 重音",lead:"重音固定落在分離出去的字首，不在動詞幹",exs:["abfahren","ankommen","einkaufen","fernsehen","mitbringen"]},
   {l:"L12",key:"vokalisches r",lead:"字尾/非重音節的 r 常弱化成類似「a」的音，不捲舌",exs:["Silvester","Besucher","Erlebnis","Restaurant"]},
   {l:"L13",key:"au",lead:"唸「au」（阿烏，類似英文 ow）——跟已學的 ei（唸ai）、eu/äu（唸oy）是同一組雙元音家族",exs:["Auto","auch","Frau","genau"]},
+  {l:"L17",key:"外來語 Wortakzent",lead:"國際詞重音因字而異，無統一規則，逐字記；常見落在字尾前一音節（-tion, -ieren, -isch）",exs:["Politiker","studieren","international"]},
   /* ===ANCHOR:RULES===（新發音規則 {l,key,lead,exs} 插在這行上方）*/
 ];
 
@@ -2789,6 +2964,11 @@ const TEXTS=[
    de:"Sehr geehrte Frau Wegele, leider habe ich ein Problem: Ich stecke im Aufzug fest und bin sehr genervt. In einer halben Stunde kommt der Techniker, aber ich schaffe es nicht pünktlich zur Sitzung. Können wir den Termin verschieben? Von Montag bis Mittwoch bin ich auf Geschäftsreise, aber ab dem dritten Mai habe ich wieder Zeit. Passt es Ihnen an diesem Tag um zehn Uhr? Sagen Sie mir bitte Bescheid. Mit freundlichen Grüßen, Gina Wallner",
    zh:"尊敬的 Wegele 女士，很遺憾我遇到一個問題：我卡在電梯裡，非常心煩。技師半小時後會到，但我沒辦法準時參加會議。我們能改期嗎？我週一到週三在出差，但從五月三日起我就有空了。您那天十點方便嗎？請跟我說一聲。謹上，Gina Wallner",
    qs:[{q:"為什麼寫信人趕不上會議？",options:["電梯卡住了", "睡過頭", "忘記時間", "天氣不好"],a:0},{q:"「Von Montag bis Mittwoch」在描述什麼？",options:["她在放假", "她在出差", "她在生病", "她在上課"],a:1},{q:"「ab dem dritten Mai」的 dritten 是什麼形式？",options:["基數詞", "序數詞（第三，不規則）", "形容詞比較級", "動詞變位"],a:1}]},
+  {id:"t-l17-1",lesson:"L17",genre:"雜誌報導",title:"Drei wollen Popstars werden",src:"AI 生成 · 未經母語者校對",
+   map:"<b>本課重點</b>：① wollen 完整變位（補 L8 遺留格）② werden 新登場，獨立於情態動詞表 ③ mit(Dativ)/ohne(Akkusativ) 格對比 ④ Possessivartikel wir/ihr 補格。<br><b>建議走法</b>：讀完本文 → 文法「動詞變位②」看 wollen/werden＋「所有格」看 wir/ihr → 單字卡職業/願望類 → 例句刷 Redemittel → 測驗（wollen變位＋mit/ohne對比題）→ 🎓。",
+   de:"Sehr viele Leute wollen Popstar werden. Nicht alle schaffen das. Cherry ist 19 Jahre alt und macht gerade eine Ausbildung als Verkäuferin. „Ich will unbedingt Schauspielerin werden\", sagt sie. „Das ist mir sehr wichtig.\" Fabian ist schon 24 und Liedermacher. Er komponiert seine Lieder selbst, aber er möchte auch als Profi bekannt werden. „Musik ist mein Leben\", sagt er. Lisa ist 21 und Studentin an der Uni. „Ich will unbedingt meinen Traumberuf schaffen\", sagt sie.",
+   zh:"非常多人想成為流行歌星，不是每個人都能做到。Cherry 19歲，目前正在受訓當售貨員。「我一定要成為女演員，」她說。「這對我來說非常重要。」Fabian 已經24歲，是位創作歌手。他自己寫歌詞也自己作曲，但他也想以職業好手的身分成名。「音樂是我的生命，」他說。Lisa 21歲，是大學生。「我一定要達成我的夢想職業，」她說。",
+   qs:[{q:"Cherry 目前正在做什麼？",options:["當演員","職業培訓當售貨員","唸大學","當老師"],a:1},{q:"誰會自己作曲？",options:["Cherry","Fabian","Lisa","文中沒說"],a:1},{q:"Lisa 現在的身份是？",options:["Schauspielerin","Verkäuferin","大學生","Liedermacher"],a:2}]},
   /* ===ANCHOR:TEXTS_ARRAYS===（新課導讀 {id,lesson,genre,title,src,map,de,zh,qs} 插在這行上方；de 只准用該課及之前的單字＋功能詞，寫完必跑 ROADMAP N12 的白名單驗證腳本）*/
 ];
 
@@ -3139,7 +3319,7 @@ const GRAM=[
 </div>`},
 {ls:["L1","L3","L14"],html:`
 <div class="card gcard">
-  <div class="gtitle">★ 所有格 Possessivartikel：跟著「被擁有的東西」變 <span class="lessontag">L1</span><span class="lessontag L3">L3</span><span class="lessontag">L14</span></div>
+  <div class="gtitle">★ 所有格 Possessivartikel：跟著「被擁有的東西」變 <span class="lessontag">L1</span><span class="lessontag L3">L3</span><span class="lessontag">L14</span><span class="lessontag">L17</span></div>
   <p style="font-size:.88rem;margin:.2em 0 .6em">系統先抓：字尾跟著<b>後面名詞的性別</b>走，不是跟著「你我他」。規則跟 ein/kein 一模一樣——der/das 名詞光禿禿，die 名詞和複數 <b>+e</b>。</p>
   <table>
     <tr><th>人稱</th><th>der / das 名詞</th><th>die 名詞 / 複數（+e）</th></tr>
@@ -3159,8 +3339,13 @@ const GRAM=[
     <tr><td>Akk（sein 他的）</td><td class="de2"><span class="infl">seinen</span> Balkon</td><td class="de2">sein Haus</td><td class="de2">seine Garage</td><td class="de2">seine Kinder</td></tr>
     <tr><td>Nom（ihr 她的）</td><td class="de2">ihr Balkon</td><td class="de2">ihr Haus</td><td class="de2">ihre Garage</td><td class="de2">ihre Kinder</td></tr>
     <tr><td>Akk（ihr 她的）</td><td class="de2"><span class="infl">ihren</span> Balkon</td><td class="de2">ihr Haus</td><td class="de2">ihre Garage</td><td class="de2">ihre Kinder</td></tr>
+    <tr><td>Nom（unser 我們的）</td><td class="de2">unser Bruder</td><td class="de2">unser Auto</td><td class="de2">unsere Schwester</td><td class="de2">unsere Kinder</td></tr>
+    <tr><td>Akk（unser 我們的）</td><td class="de2"><span class="infl">unseren</span> Bruder</td><td class="de2">unser Auto</td><td class="de2">unsere Schwester</td><td class="de2">unsere Kinder</td></tr>
+    <tr><td>Nom（euer 你們的）</td><td class="de2">euer Bruder</td><td class="de2">euer Auto</td><td class="de2">eure Schwester</td><td class="de2">eure Kinder</td></tr>
+    <tr><td>Akk（euer 你們的）</td><td class="de2"><span class="infl">euren</span> Bruder</td><td class="de2">euer Auto</td><td class="de2">eure Schwester</td><td class="de2">eure Kinder</td></tr>
   </table>
   <div class="note"><b>⚠️ auch so bei: finden</b>——<b>finden</b>（覺得…）跟 <b>mögen</b> 一樣是吃 Akkusativ 受詞的動詞：Sein Haus finde ich schön. Aber <b>seinen</b> Garten mag ich nicht so.（房子用主格，但「他的花園」是受詞、要用受格 seinen）</div>
+  <div class="note"><b>⚠️ L17：unser／euer 同一套規則</b>——der-字 Akk 才變（unseren／euren），中性 das-字光禿禿（unser Auto／euer Auto 不變），die-字和複數 +e（unsere／eure）。<b>euer 加字尾會掉中間的 e</b>：euer→euren／eure（不是 eueren/euere）。</div>
 </div>`},
 {ls:["L8","L11","L12","L16"],html:`
 <div class="card gcard">
@@ -3298,7 +3483,7 @@ const GRAM=[
   <details data-rule="rekt-akk"><summary>① Akkusativ 動詞群：你目前學的動詞 90% 都在這格</summary><div class="dbody">
   <table>
     <tr><th>動詞（受詞用 Akk）</th><th>例句</th></tr>
-    <tr><td class="de2">haben, brauchen, suchen, kaufen, nehmen, bestellen, essen, trinken, finden, sehen, lesen, kennen, möchten, anrufen, abholen…</td><td class="de2">Ich brauche <b>einen</b> Termin.<br>Ich rufe <b>den</b> Chef an.</td></tr>
+    <tr><td class="de2">haben, brauchen, suchen, kaufen, nehmen, bestellen, essen, trinken, finden, sehen, lesen, kennen, möchten, anrufen, abholen, abschließen…</td><td class="de2">Ich brauche <b>einen</b> Termin.<br>Ich rufe <b>den</b> Chef an.</td></tr>
   </table>
   <p style="font-size:.9rem;margin:.3em 0 .1em">Ich bestelle <b>einen</b> Salat und ein Wasser.（我點一份沙拉和一杯水）</p>
   <p style="font-size:.9rem;margin:.1em 0">Ich finde <b>den</b> Film super.（我覺得這部電影很棒）</p>
@@ -3351,8 +3536,8 @@ const GRAM=[
 </div>`},
 {ls:["L1","L2","L6","L7","L9"],html:`
 <div class="card gcard">
-  <div class="gtitle">🧩 動詞變位②：特殊變位 sein · haben · 情態動詞 <span class="lessontag">L1</span><span class="lessontag">L2</span><span class="lessontag">L6</span><span class="lessontag">L7</span><span class="lessontag">L9</span></div>
-  <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：這些不照字幹規則，<b>整組背</b>。兩群：高頻助動詞 sein／haben，和情態動詞 können／mögen／möchten。情態動詞共同標記＝<b>ich 和 er/sie/es 都不加字尾</b>（kann／mag／möchte）。</p>
+  <div class="gtitle">🧩 動詞變位②：特殊變位 sein · haben · 情態動詞 · werden <span class="lessontag">L1</span><span class="lessontag">L2</span><span class="lessontag">L6</span><span class="lessontag">L7</span><span class="lessontag">L9</span><span class="lessontag">L17</span></div>
+  <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：這些不照字幹規則，<b>整組背</b>。三群：高頻助動詞 sein／haben，情態動詞 können／mögen／möchten／wollen（共同標記＝<b>ich 和 er/sie/es 都不加字尾</b>：kann／mag／möchte／will），以及 werden（常跟情態動詞放一起教，但變位規則不同，見③）。</p>
   <p style="font-size:.86rem;font-weight:700;margin:.4em 0 .2em">① sein／haben（最高頻，背到反射）</p>
   <table>
     <tr><th>人稱</th><th>sein (是)</th><th>haben (有)</th></tr>
@@ -3363,18 +3548,29 @@ const GRAM=[
     <tr><td>ihr</td><td class="de2"><span class="infl">seid</span></td><td class="de2">habt</td></tr>
     <tr><td>Sie/sie</td><td class="de2">sind</td><td class="de2">haben</td></tr>
   </table>
-  <p style="font-size:.86rem;font-weight:700;margin:.5em 0 .2em">② 情態動詞 können／mögen／möchten</p>
+  <p style="font-size:.86rem;font-weight:700;margin:.5em 0 .2em">② 情態動詞 können／mögen／möchten／wollen</p>
   <table>
-    <tr><th>人稱</th><th>können（能/會）</th><th>mögen（喜歡）</th><th>möchten（想要）</th></tr>
-    <tr><td>ich</td><td class="de2"><b>kann</b></td><td class="de2"><b>mag</b></td><td class="de2"><b>möchte</b></td></tr>
-    <tr><td>du</td><td class="de2">kannst</td><td class="de2">magst</td><td class="de2">möchtest</td></tr>
-    <tr><td>er/sie/es</td><td class="de2"><b>kann</b></td><td class="de2"><b>mag</b></td><td class="de2"><b>möchte</b></td></tr>
-    <tr><td>wir</td><td class="de2">können</td><td class="de2">mögen</td><td class="de2">möchten</td></tr>
-    <tr><td>ihr</td><td class="de2">könnt</td><td class="de2">mögt</td><td class="de2">möchtet</td></tr>
-    <tr><td>Sie/sie</td><td class="de2">können</td><td class="de2">mögen</td><td class="de2">möchten</td></tr>
+    <tr><th>人稱</th><th>können（能/會）</th><th>mögen（喜歡）</th><th>möchten（想要）</th><th>wollen（要，語氣更強）</th></tr>
+    <tr><td>ich</td><td class="de2"><b>kann</b></td><td class="de2"><b>mag</b></td><td class="de2"><b>möchte</b></td><td class="de2"><b>will</b></td></tr>
+    <tr><td>du</td><td class="de2">kannst</td><td class="de2">magst</td><td class="de2">möchtest</td><td class="de2">willst</td></tr>
+    <tr><td>er/sie/es</td><td class="de2"><b>kann</b></td><td class="de2"><b>mag</b></td><td class="de2"><b>möchte</b></td><td class="de2"><b>will</b></td></tr>
+    <tr><td>wir</td><td class="de2">können</td><td class="de2">mögen</td><td class="de2">möchten</td><td class="de2">wollen</td></tr>
+    <tr><td>ihr</td><td class="de2">könnt</td><td class="de2">mögt</td><td class="de2">möchtet</td><td class="de2">wollt</td></tr>
+    <tr><td>Sie/sie</td><td class="de2">können</td><td class="de2">mögen</td><td class="de2">möchten</td><td class="de2">wollen</td></tr>
   </table>
-  <div class="note"><b>⚠️ 兩個重點</b><br>① <b>ihr seid</b> 不是 seit（seit＝自從，是介係詞）。<br>② 情態動詞 <b>ich＝er</b>（都不加字尾）：kann／mag／möchte。意思別混：<b>können</b>＝能力/請求；<b>mögen</b>＝長期喜好（Ich mag keinen Käse）；<b>möchten</b>＝當下具體想要（Ich möchte einen Kaffee，點餐用）。</div>
+  <div class="note"><b>⚠️ 兩個重點</b><br>① <b>ihr seid</b> 不是 seit（seit＝自從，是介係詞）。<br>② 情態動詞 <b>ich＝er</b>（都不加字尾）：kann／mag／möchte／will。意思別混：<b>können</b>＝能力/請求；<b>mögen</b>＝長期喜好（Ich mag keinen Käse）；<b>möchten</b>＝當下具體想要（Ich möchte einen Kaffee，點餐用）；<b>wollen</b>＝已下定決心的計畫、語氣比 möchten 更強烈（Ich will Popstar werden.）；提議句型 <b>Wollen wir…?</b>＝要不要一起…？</div>
   <div class="note">情態動詞＋原形動詞會把句子夾成「框」→ 見「🧩 句框 Satzklammer ＋ 動詞位置」卡。</div>
+  <p style="font-size:.86rem;font-weight:700;margin:.5em 0 .2em">③ werden（新登場，<u>不是</u>情態動詞——ich 也加字尾）</p>
+  <table>
+    <tr><th>人稱</th><th>werden（變成、將要）</th></tr>
+    <tr><td>ich</td><td class="de2">werd<span class="infl">e</span></td></tr>
+    <tr><td>du</td><td class="de2"><b>wirst</b></td></tr>
+    <tr><td>er/sie/es</td><td class="de2"><b>wird</b></td></tr>
+    <tr><td>wir</td><td class="de2">werden</td></tr>
+    <tr><td>ihr</td><td class="de2">werdet</td></tr>
+    <tr><td>Sie/sie</td><td class="de2">werden</td></tr>
+  </table>
+  <div class="note"><b>⚠️ werden 不是情態動詞</b>：② 的四個字 ich 和 er/sie/es 都<u>不</u>加字尾（kann/mag/möchte/will），但 <b>werden 的 ich 有 -e</b>（werde），文法上不符合那條規則，所以獨立列在這裡。老師的 Grammatik 講義可能把它跟情態動詞放在同一頁教（實務上常一起用：Was willst du werden?），但變位規則要分開記。du／er 的 wirst／wird 母音也變了，這兩格最容易錯。</div>
 </div>`},
 {ls:["L10","L11","L12"],html:`
 <div class="card gcard">
@@ -3612,7 +3808,7 @@ const FUNC_GLOSS={
   weil:"因為（從屬連接詞，動詞放句尾）",
   /* ===ANCHOR:FUNC_GLOSS===（新功能詞 "小寫形":"中文" 插在這行上方，記得上一行補逗號）*/
 };
-const PART2_STRONG={gegangen:"gehen",gesprochen:"sprechen",getroffen:"treffen",gegessen:"essen",getrunken:"trinken",geflogen:"fliegen",geschrieben:"schreiben",gewesen:"sein",genommen:"nehmen",verstanden:"verstehen",bekommen:"bekommen",aufgestanden:"aufstehen",gestanden:"stehen",ausgesehen:"aussehen",gefunden:"finden",gebracht:"bringen",verschoben:"verschieben",getan:"tun",mitgenommen:"mitnehmen",gerufen:"rufen"};
+const PART2_STRONG={gegangen:"gehen",gesprochen:"sprechen",getroffen:"treffen",gegessen:"essen",getrunken:"trinken",geflogen:"fliegen",geschrieben:"schreiben",gewesen:"sein",genommen:"nehmen",verstanden:"verstehen",bekommen:"bekommen",aufgestanden:"aufstehen",gestanden:"stehen",ausgesehen:"aussehen",gefunden:"finden",gebracht:"bringen",verschoben:"verschieben",getan:"tun",mitgenommen:"mitnehmen",gerufen:"rufen",gestiegen:"steigen",abgeschlossen:"abschließen"};
 function buildLemma(){
   LEMMA_V={};LEMMA_N={};
   const addV=(form,inf)=>{const k=(form||'').toLowerCase();if(k&&k!=='…'&&!LEMMA_V[k])LEMMA_V[k]=inf;};
@@ -4030,6 +4226,33 @@ const GR15WEIL=[
  {l:"L15",sub:"weil vs denn·語序對比：從句可置句首",before:"",after:" es zu wenige Busse gibt, gehe ich zu Fuß.",answer:"Weil",options:["Weil","Denn"],full:"Weil es zu wenige Busse gibt, gehe ich zu Fuß."},
 ];
 GR15WEIL.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+const GR17=[
+ {l:"L17",sub:"wollen：ich → ?",before:"Ich ",after:" unbedingt ein Buch schreiben.",answer:"will",options:["will","willst","wollen"],full:"Ich will unbedingt ein Buch schreiben."},
+ {l:"L17",sub:"wollen：du → ?",before:"Was ",after:" du werden?",answer:"willst",options:["willst","will","wollt"],full:"Was willst du werden?"},
+ {l:"L17",sub:"wollen：er → ?",before:"Fabian ",after:" Liedermacher werden.",answer:"will",options:["will","willst","wollen"],full:"Fabian will Liedermacher werden."},
+ {l:"L17",sub:"wollen：wir → ?",before:"Wir ",after:" unbedingt die Führerscheinprüfung schaffen.",answer:"wollen",options:["wollen","will","wollt"],full:"Wir wollen unbedingt die Führerscheinprüfung schaffen."},
+ {l:"L17",sub:"wollen：ihr → ?",before:"Was ",after:" ihr am Wochenende machen?",answer:"wollt",options:["wollt","will","wollen"],full:"Was wollt ihr am Wochenende machen?"},
+ {l:"L17",sub:"wollen：Sie → ?",before:"",after:" Sie mal meinen Hund sehen?",answer:"Wollen",options:["Wollen","Will","Wollt"],full:"Wollen Sie mal meinen Hund sehen?"},
+ {l:"L17",sub:"werden：ich → ?",before:"Ich ",after:" Popstar.",answer:"werde",options:["werde","wirst","wird"],full:"Ich werde Popstar."},
+ {l:"L17",sub:"werden：du → ?",before:"",after:" du auch Musikerin?",answer:"Wirst",options:["Wirst","Wird","Werdet"],full:"Wirst du auch Musikerin?"},
+ {l:"L17",sub:"werden：er → ?",before:"Er ",after:" bestimmt ein großer Star.",answer:"wird",options:["wird","wirst","werden"],full:"Er wird bestimmt ein großer Star."},
+ {l:"L17",sub:"werden：wir → ?",before:"Wir ",after:" nächstes Jahr fertig mit der Ausbildung.",answer:"werden",options:["werden","wird","werdet"],full:"Wir werden nächstes Jahr fertig mit der Ausbildung."},
+ {l:"L17",sub:"werden：ihr → ?",before:"",after:" ihr auch Popstars?",answer:"Werdet",options:["Werdet","Werden","Wirst"],full:"Werdet ihr auch Popstars?"},
+ {l:"L17",sub:"werden：Sie → ?",before:"",after:" Sie auch Lehrerin?",answer:"Werden",options:["Werden","Wird","Werdet"],full:"Werden Sie auch Lehrerin?"},
+ {l:"L17",sub:"所有格：unser＋der 名詞（主格）",before:"Wir haben einen Bruder. ",after:" Bruder wohnt in Bremen.",answer:"Unser",options:["Unser","Unsere","Unseren","Euer"],full:"Wir haben einen Bruder. Unser Bruder wohnt in Bremen."},
+ {l:"L17",sub:"⭐ 對比：所有格 unser Nom vs Akk（der-字）",before:"Das ist unser Bruder. Ich mag ",after:" Bruder.",answer:"unseren",options:["unseren","unser","euren","euer"],full:"Das ist unser Bruder. Ich mag unseren Bruder."},
+ {l:"L17",sub:"所有格：euer＋das 名詞（中性光禿禿）",before:"Ihr habt ein Auto. ",after:" Auto ist neu.",answer:"Euer",options:["Euer","Eure","Unser","Unsere"],full:"Ihr habt ein Auto. Euer Auto ist neu."},
+ {l:"L17",sub:"所有格：euer＋die 名詞",before:"Ihr habt eine Schwester. ",after:" Schwester wohnt in Köln.",answer:"Eure",options:["Eure","Euer","Unsere","Unser"],full:"Ihr habt eine Schwester. Eure Schwester wohnt in Köln."},
+ {l:"L17",sub:"⭐ 對比：mit(Dativ) vs ohne(Akkusativ)－der-字①",before:"Fabian geht nur ",after:" Führerschein.",answer:"mit dem",options:["mit dem","ohne den","mit den","ohne dem"],full:"Fabian geht nur mit dem Führerschein."},
+ {l:"L17",sub:"⭐ 對比：mit(Dativ) vs ohne(Akkusativ)－der-字②",before:"Cherry geht ",after:" Führerschein.",answer:"ohne den",options:["ohne den","mit dem","ohne dem","mit den"],full:"Cherry geht ohne den Führerschein."},
+ {l:"L17",sub:"mit(Dativ) vs ohne(Akkusativ)－das-字（中性 Akk 不變）",before:"Er kommt nie ",after:" Handy in den Kurs.",answer:"ohne das",options:["ohne das","mit dem","ohne dem","mit das"],full:"Er kommt nie ohne das Handy in den Kurs."},
+];
+GR17.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+const GR17B=[
+ {l:"L17",sub:"laufen：du → ?",before:"",after:" du gern?",answer:"Läufst",options:["Läufst","Läuft","Lauft"],full:"Läufst du gern?"},
+ {l:"L17",sub:"laufen：er → ?",before:"Er ",after:" jeden Morgen im Park.",answer:"läuft",options:["läuft","läufst","laufen"],full:"Er läuft jeden Morgen im Park."},
+];
+GR17B.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
   /* ===ANCHOR:GRAM_QUIZ===（新課文法填空題插在這行上方：宣告 const GRn=[{l,sub,before,after,answer,options,full},…]; 後接一行 GRn.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full})); ）*/
   return Q;
 }
