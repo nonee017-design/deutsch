@@ -306,7 +306,8 @@
   <section id="num" hidden>
     <details class="helpbox"><summary>❓ 這一頁怎麼用</summary><ul class="panel-intro">
       <li>前半：0–100 數字系統＋小測（算錢前先穩住）。</li>
-      <li>最後兩張卡：100–1.000.000 大數字與價格唸法。</li>
+      <li>後段：100–1.000.000 大數字、價格唸法，最後是日期與序數（Ordinalzahlen）。</li>
+      <li>每張卡右上可標 <b style="color:#b45309">🔖 不熟</b>，測驗開「只考不熟」會抽對應題目。</li>
       <li>「個位在前」的規則一路延伸到百萬。</li>
     </ul></details>
     <div class="card gcard">
@@ -371,6 +372,17 @@
         <tr><td>0,89 €</td><td class="de2">neunundachtzig Cent</td><td><button class="spk" data-say="neunundachtzig Cent"></button></td></tr>
       </table>
     </div>
+  <div class="card gcard">
+    <div class="gtitle">🧩 日期與序數（Ordinalzahlen + Datum） <span class="lessontag">L16</span></div>
+    <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：序數就是「第幾個」的說法——1.–19. 用數字＋<b>-te</b>，20. 以後用數字＋<b>-ste</b>。抓住這條分界，大部分序數都能自己推。要說「在哪一天」時，用 <b>am</b>＋序數，字尾再加 <b>-en</b>。</p>
+    <table>
+      <tr><th>範圍</th><th>構成規則</th><th>例字</th></tr>
+      <tr><td>1.–19.</td><td>數字 + <b>-te</b></td><td class="de2">vierte, fünfte, sechste, zwölfte</td></tr>
+      <tr><td>20. 起</td><td>數字 + <b>-ste</b></td><td class="de2">zwanzigste, dreißigste</td></tr>
+      <tr><td>日期（am + 序數）</td><td>序數 + <b>-en</b></td><td class="de2">am ersten Mai, am fünfzehnten April</td></tr>
+    </table>
+    <div class="note"><b>⚠️ 四個不規則要背下來</b>：1.=<b>erste</b>、3.=<b>dritte</b>、7.=<b>siebte</b>、8.=<b>achte</b>（不是 einste/dreite/siebente/achtte）。問答：Der Wievielte ist heute? — Der 15. (fünfzehnte) April.／Wann hast du Geburtstag? — Am 3. (dritten) Mai.<br>⚠️ 建議對照課堂筆記求證：序數上限、-ste 起點、老師是否教到 31. 全列——此表按標準德語規則建，若老師版本不同以老師為準。</div>
+  </div>
   </section>
 
   <!-- ============ GRAMMAR ============ -->
@@ -3087,7 +3099,7 @@ function logAnswer(){
 function weekCount(){const cut=Date.now()-7*864e5;let n=0;Object.entries(qlog).forEach(([k,v])=>{const ts=new Date(k+'T00:00:00').getTime();if(isFinite(ts)&&ts>=cut)n+=(+v||0);});return n;}
 function updateDash(){const el=document.getElementById('dash');if(el)el.textContent=`已畢業 ${Object.keys(mastered).length} / ${VOCAB.length} 字 · 本週答題 ${weekCount()} 題`;}
 /* 文法卡穩定 key：由標題衍生（改標題會孤兒化標記，與例句 de-key 同一取捨） */
-const GKEY_MAP=[["人稱代名詞","pron"],["陰陽性線索","gclue"],["複數線索","pclue"],["所有格","poss"],["schon vs erst","advw"],["時間介係詞","zeit"],["序數","datum"],["地方介係詞","lokal"],["冠詞變格","art"],["句框","satz"],["動詞支配格","rekt"],["動詞變位①","konj1"],["動詞變位②","konj2"],["Perfekt 現在完成式","pii"],["價格唸法","preis"],["字母表","abc"],["挑任一數字","numtry"],["大數字","bignum"],["數字測驗","numquiz"],["數字的系統","numsys"]];
+const GKEY_MAP=[["人稱代名詞","pron"],["陰陽性線索","gclue"],["複數線索","pclue"],["所有格","poss"],["schon vs erst","advw"],["時間介係詞","zeit"],["序數","datum"],["地方介係詞","lokal"],["冠詞變格","art"],["句框","satz"],["動詞支配格","rekt"],["動詞變位①","konj1"],["動詞變位②","konj2"],["不規則動詞總表","irrv"],["Perfekt 現在完成式","pii"],["價格唸法","preis"],["字母表","abc"],["挑任一數字","numtry"],["大數字","bignum"],["數字測驗","numquiz"],["數字的系統","numsys"]];
 function gramKeyOf(t){for(const[s,k]of GKEY_MAP)if(t.includes(s))return k;return t.trim().slice(0,8);}
 function gramKeyOfCard(g){const m=g.html.match(/gtitle">([^<]+)/);return gramKeyOf(m?m[1]:g.html);}
 /* 題目→卡片映射（執行期分類，一題可命中多卡） */
@@ -3644,30 +3656,86 @@ const GRAM=[
   </table>
   <div class="note"><b>⚠️ 最容易錯：</b>別用中文直翻——中文的「才」不一定對到 erst，但「已經」一定是 schon。抓口訣：<b>比預期早→schon／比預期晚→erst</b>。數量與年齡同理：<b>Er ist schon 60.</b>（都 60 了＝多）↔ <b>Er ist erst 6.</b>（才 6 歲＝少）。</div>
 </div>`},
-{l:"L16",html:`
+{ls:["L1","L2","L3","L6","L7","L9","L10","L11","L12","L13","L14","L15","L16","L17"],html:`
 <div class="card gcard">
-  <div class="gtitle">🧩 日期與序數（Ordinalzahlen + Datum） <span class="lessontag">L16</span></div>
-  <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：序數就是「第幾個」的說法——1.–19. 用數字＋<b>-te</b>，20. 以後用數字＋<b>-ste</b>。抓住這條分界，大部分序數都能自己推。要說「在哪一天」時，用 <b>am</b>＋序數，字尾再加 <b>-en</b>。</p>
-  <table>
-    <tr><th>範圍</th><th>構成規則</th><th>例字</th></tr>
-    <tr><td>1.–19.</td><td>數字 + <b>-te</b></td><td class="de2">vierte, fünfte, sechste, zwölfte</td></tr>
-    <tr><td>20. 起</td><td>數字 + <b>-ste</b></td><td class="de2">zwanzigste, dreißigste</td></tr>
-    <tr><td>日期（am + 序數）</td><td>序數 + <b>-en</b></td><td class="de2">am ersten Mai, am fünfzehnten April</td></tr>
-  </table>
-  <div class="note"><b>⚠️ 四個不規則要背下來</b>：1.=<b>erste</b>、3.=<b>dritte</b>、7.=<b>siebte</b>、8.=<b>achte</b>（不是 einste/dreite/siebente/achtte）。問答：Der Wievielte ist heute? — Der 15. (fünfzehnte) April.／Wann hast du Geburtstag? — Am 3. (dritten) Mai.<br>⚠️ 建議對照課堂筆記求證：序數上限、-ste 起點、老師是否教到 31. 全列——此表按標準德語規則建，若老師版本不同以老師為準。</div>
+  <div class="gtitle">🧩 不規則動詞總表（現在式 du／er ＋ Partizip II） <span class="lessontag">總表</span></div>
+  <p style="font-size:.88rem;margin:.2em 0 .6em">這張是<b>查詢索引</b>，不是新規則——規則本身看「動詞變位①／②」與「Perfekt」三張卡。系統先抓一件事：德文動詞的不規則有<b>兩個互不連動的位置</b>——現在式的 du／er，和完成式的 Partizip II。gehen 現在式完全規則（gehst／geht），完成式卻是 gegangen；haben 反過來兩邊都特殊。<b>背的時候要分成兩欄各自記，不要當成同一件事。</b></p>
+  <div id="irrTblBox"></div>
 </div>`},
 /* ===ANCHOR:GRAM===（新文法卡 {l:"Ln",html:`<div class="card gcard">…`} 插在這行上方）*/
 ];
 
+/* 🔖 標不熟：抽成共用函式，讓 #num 分頁的卡也掛得上（2026-07-28）。
+   原本只掛在 #gramBody，導致數字分頁 5 張卡（價格唸法 7 題、序數 4 題等）
+   的 weakGram key 永遠設不起來 → 測驗「只考不熟」過濾不到那些題。 */
+function attachGramWeak(gt){
+  const k=gramKeyOf(gt.textContent);
+  const wb=document.createElement('button');wb.className='gramweak'+(weakGram[k]?' marked':'');wb.textContent='🔖';wb.title='標不熟';
+  wb.onclick=(e)=>{e.stopPropagation();if(weakGram[k])delete weakGram[k];else weakGram[k]=1;saveWeakGram();wb.classList.toggle('marked',!!weakGram[k]);};
+  gt.appendChild(wb);return wb;
+}
+function initNumCards(){
+  document.querySelectorAll('#num .gcard>.gtitle').forEach(gt=>{if(!gt.querySelector('.gramweak'))attachGramWeak(gt);});
+  document.querySelectorAll('#num .de2').forEach(td=>{if(td.dataset.spk)return;td.dataset.spk='1';const t=td.textContent.trim();td.style.cursor='pointer';td.title='點一下唸';td.onclick=()=>speak(t);});
+}
+/* 🧩 不規則動詞總表：執行期由 VERB_META ＋ PART2_STRONG ＋ Partizip 題庫生成。
+   刻意不手寫清單——每週新增動詞會自動入表，且不可能與測驗資料脫節。 */
+function irrRegForms(inf){
+  const st=inf.replace(/e?n$/,'');
+  if(/[td]$/.test(st)||/[^aeiouäöülrmnh][mn]$/.test(st))return [st+'est',st+'et'];
+  if(/[sßxz]$/.test(st))return [st+'t',st+'t'];
+  return [st+'st',st+'t'];
+}
+function irrPartMap(){
+  const m={};
+  Object.entries(PART2_STRONG).forEach(([p,inf])=>{if(!m[inf])m[inf]=p;});
+  try{gramBank.forEach(q=>{const g=/^Partizip：([^（]+)/.exec(q.sub||'');
+    /* 只收 -en 結尾的強變化；弱變化 ge…t 是規則形，列進「不規則總表」會誤導 */
+    if(g){const inf=g[1].trim(),a=String(q.answer||'').toLowerCase();if(!m[inf]&&/en$/.test(a))m[inf]=a;}});}catch(e){}
+  return m;
+}
+function irrVerbRows(){
+  const p2=irrPartMap(),seen={},rows=[];
+  Object.entries(VERB_META).forEach(([v,mt])=>{
+    let du,er;
+    if(mt.du){du=mt.du;er=mt.er;}else if(mt.f){du=String(mt.f[1]);er=String(mt.f[2]);}else return;
+    let pre='',base=v;
+    const sp=/ … (\S+)$/.exec(du);
+    if(sp){pre=sp[1];du=du.split(' …')[0];er=er.split(' …')[0];if(v.indexOf(pre)===0)base=v.slice(pre.length);}
+    const rf=irrRegForms(base),odd=(du!==rf[0]||er!==rf[1]);
+    const pp=p2[v]||((pre&&p2[base])?pre+p2[base]:'');
+    if(!odd&&!pp)return;
+    seen[v]=1;rows.push({v:v,du:pre?du+' … '+pre:du,er:pre?er+' … '+pre:er,p2:pp,odd:odd});
+  });
+  Object.keys(p2).forEach(v=>{
+    if(seen[v])return;
+    const mt=VERB_META[v];
+    if(mt&&mt.du)rows.push({v:v,du:mt.du,er:mt.er,p2:p2[v],odd:false});
+    else if(mt&&mt.t==='reg'){const rf=irrRegForms(v);rows.push({v:v,du:rf[0],er:rf[1],p2:p2[v],odd:false});}
+    else rows.push({v:v,du:'',er:'',p2:p2[v],odd:false});
+  });
+  rows.sort((a,b)=>a.v.localeCompare(b.v,'de'));
+  return rows;
+}
+function renderIrrTable(){
+  const box=document.getElementById('irrTblBox');if(!box)return;
+  const rows=irrVerbRows(),dash='<span style="color:#9ca3af">—</span>';
+  const gy=' style="color:#6b7280"';
+  const nOdd=rows.filter(r=>r.odd).length,nP2=rows.filter(r=>r.p2).length,nOnly=rows.filter(r=>!r.odd&&r.p2).length;
+  box.innerHTML='<table><tr><th>原形</th><th>du</th><th>er/sie/es</th><th>Partizip II</th></tr>'
+   +rows.map(r=>'<tr><td class="de2">'+r.v+'</td><td class="de2"'+(r.odd?'':gy)+'>'+(r.du||dash)+'</td><td class="de2"'+(r.odd?'':gy)+'>'+(r.er||dash)+'</td><td class="de2">'+(r.p2||dash)+'</td></tr>').join('')
+   +'</table>'
+   +'<div class="note">本表<b>由工具的動詞資料自動生成</b>（目前 '+rows.length+' 字），每週新增動詞會自己長進來，不需手動維護。<br>'
+   +'<b>深色</b>＝現在式 du／er 就變形（'+nOdd+' 字）；<span'+gy+'>灰色</span>＝現在式其實規則，<b>只有完成式是強變化</b>（'+nOnly+' 字，最容易漏的一群）。<br>'
+   +'Partizip II 已登記 '+nP2+'／'+rows.length+' 字。<b>「—」＝工具還沒收那個字的完成式，不代表它沒有</b>——遇到留白建議問老師或查字典再補，別自己猜。</div>';
+}
 const gramBody=document.getElementById('gramBody');
 function renderGrammar(){
   gramBody.innerHTML=GRAM.filter(g=>{if(gramWeakOnly)return weakGram[gramKeyOfCard(g)];const ls=g.ls||[g.l];return ls.some(inLessonScope);}).map(g=>g.html).join('');
+  renderIrrTable();
   gramBody.querySelectorAll('.gcard').forEach(card=>{
     const gt=card.querySelector('.gtitle');if(!gt)return;
-    const k=gramKeyOf(gt.textContent);
-    const wb=document.createElement('button');wb.className='gramweak'+(weakGram[k]?' marked':'');wb.textContent='🔖';wb.title='標不熟';
-    wb.onclick=(e)=>{e.stopPropagation();if(weakGram[k])delete weakGram[k];else weakGram[k]=1;saveWeakGram();wb.classList.toggle('marked',!!weakGram[k]);};
-    gt.appendChild(wb);
+    attachGramWeak(gt);
     const body=document.createElement('div');body.className='gbody';body.hidden=!gramAllOpen;
     while(gt.nextSibling)body.appendChild(gt.nextSibling);
     card.appendChild(body);
@@ -5149,6 +5217,7 @@ function applyLesson(){
   renderCats();
   buildDeck();
   renderGrammar();
+  initNumCards();
   renderSentences();
   renderTexts();
   bags={};qScore=0;qTotal=0;qscore.textContent='分數 0 / 0';if(qmode==='meilen')buildMeilen();if(qmode==='grad')buildGrad();newQ();
