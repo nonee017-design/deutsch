@@ -182,8 +182,8 @@
 <body>
 <div class="wrap">
   <header style="position:relative">
-    <div class="eyebrow">Menschen · A1 · Lektion 1–17</div>
-    <h1>Deutsch A1 — L1–L17</h1>
+    <div class="eyebrow">Menschen · A1 · Lektion 1–18</div>
+    <h1>Deutsch A1 — L1–L18</h1>
     <details class="helpbox" id="outline" style="margin-top:10px;text-align:left"><summary>📚 每課大綱（點開看）</summary><div class="panel-intro" style="margin:8px 0 2px;line-height:1.9">
       L1 打招呼·自我介紹（heißen/kommen aus/wohnen in）·sein·W 問句·拼讀·數字 0–100<br>
       L2 個人資料·職業·規則動詞變位全表·ihr（你們）<br>
@@ -202,6 +202,7 @@
       L15 街區評價·Dativ動詞家族(gehören/danken/fehlen)·人稱代名詞Nom/Akk/Dativ全表<br>
       L16 旅館客訴·Termine 改期·時間介係詞in/nach/vor/für·序數日期<br>
       L17 願望與計畫·wollen完整變位·werden登場·mit/ohne對比<br>
+L18 生病看醫生·Imperativ(Sie)命令句·sollen間接建議·seit+時長·疼痛表達tut/tun weh<br>
       <!-- ===ANCHOR:OUTLINE===（新課大綱一行插在這行上方，格式照上）-->
     </div></details>
   </header>
@@ -225,6 +226,7 @@
     <button class="lchip" data-lesson="L15" data-on="false">L15</button>
     <button class="lchip" data-lesson="L16" data-on="false">L16</button>
     <button class="lchip" data-lesson="L17" data-on="false">L17</button>
+    <button class="lchip" data-lesson="L18" data-on="false">L18</button>
     <!-- ===ANCHOR:LESSON_CHIPS===（A1.2 新課按鈕插在這行上方、span#bookA11 之外）-->
     <button class="lchip" data-lesson="ALL" data-on="false">全選 · 模組複習</button>
     <span style="flex-basis:100%;font-size:.72rem;color:var(--mut)">單點換課 · 長按半秒加選複數課 · 📕 收合/展開整冊</span>
@@ -501,7 +503,7 @@
 const SPK_SVG='<svg viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>';
 
 /* ===== 範圍（課別·可多選）===== */
-const DEFAULT_LESSON="L17"; /* ===ANCHOR:DEFAULT_LESSON===（新課上線時改成最新課號；chip 的 data-on 由 syncLessonChips 執行期同步，新 chip 一律 data-on="false"）*/
+const DEFAULT_LESSON="L18"; /* ===ANCHOR:DEFAULT_LESSON===（新課上線時改成最新課號；chip 的 data-on 由 syncLessonChips 執行期同步，新 chip 一律 data-on="false"）*/
 let curLessons=new Set([DEFAULT_LESSON]);
 /* L123 是 L1/L2/L3 的合併篩選鈕，資料本身仍各自標 L1/L2/L3，故用此函式統一判斷範圍是否命中 */
 function inLessonScope(l){
@@ -1512,8 +1514,57 @@ const ADD17B=[
 {de:"laufen",zh:"跑；瑞士/奧地利：走路（母音變：du läufst/er läuft，Perfekt ist gelaufen）",g:null,cat:"動詞",lesson:"L17",ex:["Er läuft jeden Morgen im Park.","他每天早上在公園跑步。"],ex2:["Läufst du gern?","你喜歡跑步嗎？"]},
 {de:"putzen",zh:"打掃、擦拭",g:null,cat:"動詞",lesson:"L17",ex:["Ich putze am Samstag die Wohnung.","我星期六打掃住處。"]},
 ];
+const ADD18=[
+{de:"Apotheke",zh:"藥局",g:"die",cat:"醫療",lesson:"L18",ex:["Ich hole die Medikamente in der Apotheke ab.","我去藥局拿藥。"]},
+{de:"Doktor",zh:"醫生（口語敬稱，稱呼用 Herr/Frau Doktor）",g:"der",cat:"醫療",lesson:"L18",ex:["Guten Morgen, Herr Doktor Peters!","彼得斯醫師早安！"]},
+{de:"Arzt",zh:"醫生（正式用詞；女醫生 die Ärztin）",g:"der",cat:"醫療",lesson:"L18",ex:["Ich denke, Ihr Mann soll zum Arzt gehen.","我覺得您先生應該去看醫生。"]},
+{de:"Praxis",zh:"診所（複數不規則 Praxen）",g:"die",cat:"醫療",lesson:"L18",ex:["Seine Praxis liegt in der Schillerstraße.","他的診所在席勒街。"]},
+{de:"Medikament",zh:"藥物（處方藥、成藥統稱）",g:"das",cat:"藥品",lesson:"L18",ex:["Medikamente bekommen Sie in der Apotheke.","藥要在藥局拿。"]},
+{de:"Pflaster",zh:"OK繃、藥用貼布",g:"das",cat:"藥品",lesson:"L18",ex:["Oh, dein Bein! Hier hast du ein Pflaster.","唉呀你的腿！這裡有 OK繃。"]},
+{de:"Salbe",zh:"藥膏（塗抹用）",g:"die",cat:"藥品",lesson:"L18",ex:["Die Salbe ist wirklich gut bei Schmerzen in den Armen und Beinen.","這藥膏對手腳痠痛真的很有效。"]},
+{de:"Tablette",zh:"藥片、藥丸",g:"die",cat:"藥品",lesson:"L18",ex:["Nimm eine Tablette gegen die Schmerzen.","吃一顆止痛藥。"]},
+{de:"Medizin",zh:"醫學／藥（統稱，不可數）",g:"die",cat:"藥品",lesson:"L18",ex:["Ich glaube nicht an Naturmedizin, ich nehme lieber Medizin vom Arzt.","我不信自然醫學，我寧可吃醫生開的藥。"]},
+{de:"Naturmedizin",zh:"自然醫學（不可數）",g:"die",cat:"藥品",lesson:"L18",ex:["Was ist Naturmedizin? Zum Beispiel Heilkräuter.","什麼是自然醫學？例如藥草。"]},
+{de:"Kraut",zh:"藥草（複數 Kräuter 更常用）",g:"das",cat:"藥品",lesson:"L18",ex:["Wir versuchen es zuerst mit Kräutern aus dem Garten.","我們先試試花園裡的藥草。"]},
+{de:"Salbei",zh:"鼠尾草（藥草，不可數）",g:"der",cat:"藥品",lesson:"L18",ex:["Salbei hilft sehr gut gegen Halsschmerzen.","鼠尾草對喉嚨痛很有效。"]},
+{de:"Baldrian",zh:"纈草（安神藥草，不可數）",g:"der",cat:"藥品",lesson:"L18",ex:["Baldrian hilft bei Kopf- oder Bauchschmerzen.","纈草對頭痛或肚子痛有幫助。"]},
+{de:"Schmerz",zh:"疼痛（日常多用複數 Schmerzen）",g:"der",cat:"健康",lesson:"L18",ex:["Ich habe seit drei Wochen Kopfschmerzen.","我頭痛三個禮拜了。"]},
+{de:"Fieber",zh:"發燒（不可數）",g:"das",cat:"健康",lesson:"L18",ex:["Du bist ganz heiß. Ich glaube, du hast Fieber.","你身體很燙，我覺得你發燒了。"]},
+{de:"Husten",zh:"咳嗽（症狀名詞，不可數）",g:"der",cat:"健康",lesson:"L18",ex:["Ich habe seit zwei Tagen Husten.","我咳兩天了。"]},
+{de:"Schnupfen",zh:"鼻塞流鼻水（不可數；≠ Erkältung 感冒）",g:"der",cat:"健康",lesson:"L18",ex:["Hatschi! Entschuldigen Sie, aber ich habe Schnupfen.","哈啾！抱歉，我在流鼻水。"]},
+{de:"Heuschnupfen",zh:"花粉熱（不可數）",g:"der",cat:"健康",lesson:"L18",ex:["Ich glaube, ich habe Heuschnupfen.","我想我有花粉熱。"]},
+{de:"Allergie",zh:"過敏（gegen + 過敏原）",g:"die",cat:"健康",lesson:"L18",ex:["Ich glaube, ich habe eine Allergie.","我想我過敏了。"]},
+{de:"Migräne",zh:"偏頭痛（比 Kopfschmerzen 嚴重）",g:"die",cat:"健康",lesson:"L18",ex:["Seit gestern habe ich eine Migräne.","我從昨天開始偏頭痛。"]},
+{de:"Kopf",zh:"頭",g:"der",cat:"身體",lesson:"L18",ex:["Mein Kopf tut weh.","我頭痛。"]},
+{de:"Auge",zh:"眼睛（複數 Augen 更常用）",g:"das",cat:"身體",lesson:"L18",ex:["Meine Augen tun weh, ich sehe schlecht.","我眼睛痛，看不清楚。"]},
+{de:"Nase",zh:"鼻子",g:"die",cat:"身體",lesson:"L18",ex:["Meine Nase läuft, ich habe Schnupfen.","我流鼻水，在鼻塞。"]},
+{de:"Mund",zh:"嘴巴",g:"der",cat:"身體",lesson:"L18",ex:["Mach den Mund auf, bitte.","請張開嘴。"]},
+{de:"Zahn",zh:"牙齒",g:"der",cat:"身體",lesson:"L18",ex:["Mein Zahn tut sehr weh.","我牙齒很痛。"]},
+{de:"Ohr",zh:"耳朵",g:"das",cat:"身體",lesson:"L18",ex:["Ich habe seit heute Ohrenschmerzen.","我從今天開始耳朵痛。"]},
+{de:"Hals",zh:"脖子／喉嚨（Halsschmerzen＝喉嚨痛）",g:"der",cat:"身體",lesson:"L18",ex:["Ich habe Halsschmerzen.","我喉嚨痛。"]},
+{de:"Brust",zh:"胸部、胸腔",g:"die",cat:"身體",lesson:"L18",ex:["Ich habe Schmerzen in der Brust.","我胸口痛。"]},
+{de:"Rücken",zh:"背（複數同形）",g:"der",cat:"身體",lesson:"L18",ex:["Ich habe Rückenschmerzen.","我背痛。"]},
+{de:"Bauch",zh:"肚子、腹部",g:"der",cat:"身體",lesson:"L18",ex:["Ich habe seit heute Morgen Bauchschmerzen.","我從今天早上開始肚子痛。"]},
+{de:"Arm",zh:"手臂",g:"der",cat:"身體",lesson:"L18",ex:["Ich habe Schmerzen im Arm.","我手臂痛。"]},
+{de:"Hand",zh:"手（手掌部分；≠ Arm 手臂）",g:"die",cat:"身體",lesson:"L18",ex:["Ich habe mir in die Hand geschnitten.","我割到手了。"]},
+{de:"Finger",zh:"手指（複數同形）",g:"der",cat:"身體",lesson:"L18",ex:["Der Finger tut mir weh.","我手指痛。"]},
+{de:"Bein",zh:"腿（整條腿；≠ Fuß 腳）",g:"das",cat:"身體",lesson:"L18",ex:["Mein Bein tut weh.","我腿痛。"]},
+{de:"Knie",zh:"膝蓋（複數同形）",g:"das",cat:"身體",lesson:"L18",ex:["Mein Knie tut weh.","我膝蓋痛。"]},
+{de:"Fuß",zh:"腳（腳掌部分；≠ Bein 腿）",g:"der",cat:"身體",lesson:"L18",ex:["Mein Fuß tut seit gestern weh.","我腳從昨天開始痛。"]},
+{de:"Tipp",zh:"建議、小訣竅（複數 Tipps）",g:"der",cat:"日常",lesson:"L18",ex:["Wer hat einen Tipp für mich?","誰有建議給我？"]},
+{de:"Lebensmittel",zh:"食物、食品（常用複數，單複同形）",g:"das",cat:"飲食",lesson:"L18",ex:["Unser Körper braucht viele verschiedene Lebensmittel.","我們的身體需要各種不同的食物。"]},
+{de:"Nonne",zh:"修女",g:"die",cat:"人物",lesson:"L18",ex:["Man sieht eine Nonne im Garten.","可以看到一位修女在花園裡。"]},
+{de:"sollen",zh:"應該（轉述他人建議／間接引語；ich soll, du sollst, er soll）",g:null,cat:"動詞",lesson:"L18",ex:["Du sollst diesen Tee trinken.","你應該喝這個茶。"],ex2:["Ich soll jeden Tag Obst essen.","我應該每天吃水果。"]},
+{de:"husten",zh:"咳嗽（字幹以 t 結尾：du hustest, er hustet）",g:null,cat:"動詞",lesson:"L18",ex:["Das Kind hustet die ganze Nacht.","這孩子咳了整晚。"]},
+{de:"weh tun",zh:"（某處）疼（主詞是身體部位：Mein Kopf tut weh／Meine Beine tun weh）",g:null,cat:"動詞",lesson:"L18",ex:["Mein Kopf tut weh.","我頭痛。"],ex2:["Meine Beine tun weh.","我兩條腿都痛。"]},
+{de:"bleiben",zh:"留下、待著（Perfekt 用 sein：ist geblieben）",g:null,cat:"動詞",lesson:"L18",ex:["Ich bleibe heute zu Hause.","我今天待在家。"],ex2:["Er ist im Bett geblieben.","他一直躺在床上。"]},
+{de:"gesund",zh:"健康的（反義 krank）",g:null,cat:"形容詞",lesson:"L18",ex:["Wie gesund lebst du?","你的生活有多健康？"]},
+{de:"krank",zh:"生病的（反義 gesund）",g:null,cat:"形容詞",lesson:"L18",ex:["Ich bin krank.","我生病了。"]},
+{de:"hoch",zh:"高的（程度或高度；反義 niedrig）",g:null,cat:"形容詞",lesson:"L18",ex:["Das Fieber ist sehr hoch.","燒得很高。"]},
+{de:"gegen",zh:"針對、治…用（＋Akkusativ；另有「對著／大約」義）",g:null,cat:"介係詞",lesson:"L18",ex:["Was hilft gegen Kopfschmerzen?","什麼對頭痛有效？"]},
+];
 /* ===ANCHOR:VOCAB_ARRAYS===（新課單字陣列 const ADDn=[...] 宣告在這行上方，並把陣列名加進下面 VOCAB 合併行）*/
-const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B];
+const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B,...ADD18];
 VOCAB.forEach((v,i)=>v.id="v"+i);
 
 
@@ -1678,6 +1729,37 @@ const NOUN_PL={
   "Chance":"Chancen","Prüfung":"Prüfungen","Star":"Stars",
   "Fremdsprache":"Fremdsprachen","Politiker":"Politiker","Kreditkarte":"Kreditkarten",
   "Lied":"Lieder","Motorrad":"Motorräder","Wunsch":"Wünsche",
+  "Apotheke":"Apotheken",
+  "Doktor":"Doktoren",
+  "Arzt":"Ärzte",
+  "Praxis":"Praxen",
+  "Medikament":"Medikamente",
+  "Pflaster":"Pflaster",
+  "Salbe":"Salben",
+  "Tablette":"Tabletten",
+  "Kraut":"Kräuter",
+  "Schmerz":"Schmerzen",
+  "Allergie":"Allergien",
+  "Migräne":"Migränen",
+  "Kopf":"Köpfe",
+  "Auge":"Augen",
+  "Nase":"Nasen",
+  "Mund":"Münder",
+  "Zahn":"Zähne",
+  "Ohr":"Ohren",
+  "Hals":"Hälse",
+  "Brust":"Brüste",
+  "Rücken":"Rücken",
+  "Bauch":"Bäuche",
+  "Arm":"Arme",
+  "Hand":"Hände",
+  "Finger":"Finger",
+  "Bein":"Beine",
+  "Knie":"Knie",
+  "Fuß":"Füße",
+  "Tipp":"Tipps",
+  "Lebensmittel":"Lebensmittel",
+  "Nonne":"Nonnen",
   /* ===ANCHOR:NOUN_PL===（新名詞複數 "單數":"複數", 插在這行上方）*/
 };
 const NOUN_PL_NOTE={
@@ -1803,6 +1885,23 @@ const NOUN_PL_NOTE={
   "Nachbarhaus":"複數 die Nachbarhäuser：a→ä 變音（同 Haus），機器 TTS 常唸錯 → Forvo 聽真人。",
   "Bildlexikon":"複數形不確定（Bildlexika 或 Bildlexikons？）：建議問老師求證，先勿死記。",
   "Cello":"複數形不確定（Cellos 或 Celli？）：建議問老師求證，先勿死記。",
+  "Doktor":"複數 die Doktoren：重音移到 -to-，不是規則 +e → Forvo。",
+  "Arzt":"複數 die Ärzte：a→ä 變音 → Forvo。",
+  "Praxis":"複數 die Praxen：-is 換成 -en，不規則 → Forvo。",
+  "Kraut":"複數 die Kräuter：au→äu 變音＋-er → Forvo。",
+  "Schmerz":"複數 die Schmerzen：日常幾乎只用複數（Ich habe Schmerzen），單數 der Schmerz 偏書面。",
+  "Kopf":"複數 die Köpfe：o→ö 變音 → Forvo。",
+  "Mund":"複數 die Münder：u→ü 變音＋-er → Forvo。",
+  "Zahn":"複數 die Zähne：a→ä 變音 → Forvo。",
+  "Hals":"複數 die Hälse：a→ä 變音 → Forvo。",
+  "Brust":"複數 die Brüste：u→ü 變音 → Forvo。",
+  "Rücken":"複數 die Rücken：單複同形，只有冠詞會變（der → die）。",
+  "Bauch":"複數 die Bäuche：au→äu 變音 → Forvo。",
+  "Hand":"複數 die Hände：a→ä 變音 → Forvo。",
+  "Finger":"複數 die Finger：單複同形，只有冠詞會變（der → die）。",
+  "Knie":"複數 die Knie：單複同形，只有冠詞會變（das → die）。",
+  "Fuß":"複數 die Füße：u→ü 變音 → Forvo。",
+  "Lebensmittel":"複數 die Lebensmittel：單複同形；日常幾乎只用複數。",
   /* ===ANCHOR:NOUN_PL_NOTE===（變音／同形／不規則等複數警語插在這行上方）*/
 };
 const NOUN_PLEX={
@@ -2204,6 +2303,35 @@ const NOUN_PLEX={
   "Lied":["Sie kennt viele Lieder auswendig.","她會背很多首歌。"],
   "Motorrad":["Auf dem Parkplatz stehen drei Motorräder.","停車場停著三台摩托車。"],
   "Wunsch":["Was sind eure Wünsche?","你們的願望是什麼？"],
+  "Apotheke":["In der Stadt gibt es drei Apotheken.","城裡有三家藥局。"],
+  "Doktor":["Wir haben hier zwei gute Doktoren.","我們這裡有兩位好醫生。"],
+  "Arzt":["Die Ärzte in dieser Praxis sind sehr nett.","這家診所的醫生們都很親切。"],
+  "Praxis":["Es gibt zwei Praxen in der Schillerstraße.","席勒街上有兩家診所。"],
+  "Medikament":["Ich habe viele Medikamente zu Hause.","我家裡有很多藥。"],
+  "Pflaster":["In der Tasche sind noch Pflaster.","包包裡還有 OK繃。"],
+  "Salbe":["Im Schrank stehen verschiedene Salben.","櫃子裡放著各種藥膏。"],
+  "Tablette":["Die Tabletten gibt es nur zu 100 Stück.","這藥片只有一百顆裝。"],
+  "Kraut":["Wir sammeln Kräuter aus dem Garten.","我們從花園採藥草。"],
+  "Schmerz":["Sie hat starke Schmerzen in den Armen.","她手臂很痛。"],
+  "Allergie":["Er hat mehrere Allergien.","他有多種過敏。"],
+  "Kopf":["Nach dem Fest tun allen die Köpfe weh.","慶典之後大家都頭痛。"],
+  "Auge":["Meine Augen tun weh.","我兩隻眼睛都痛。"],
+  "Mund":["Die Kinder machen die Münder auf.","孩子們把嘴巴張開。"],
+  "Zahn":["Ich muss meine Zähne besser putzen.","我得把牙齒刷乾淨一點。"],
+  "Ohr":["Ich habe Schmerzen in beiden Ohren.","我兩隻耳朵都痛。"],
+  "Hals":["Im Winter tun vielen Leuten die Hälse weh.","冬天很多人喉嚨痛。"],
+  "Brust":["Der Arzt hört bei beiden Patienten die Brüste ab.","醫生聽了兩位病人的胸腔。"],
+  "Rücken":["Nach der Arbeit tun uns die Rücken weh.","下班後我們都背痛。"],
+  "Bauch":["Nach dem Essen tun den Kindern die Bäuche weh.","吃完飯孩子們都肚子痛。"],
+  "Arm":["Sie hat Schmerzen in den Armen und Beinen.","她手腳都痛。"],
+  "Hand":["Wasch dir bitte die Hände!","請去洗手！"],
+  "Finger":["Alle zehn Finger tun mir weh.","我十根手指都痛。"],
+  "Bein":["Meine Beine tun weh.","我兩條腿都痛。"],
+  "Knie":["Meine Knie tun nach dem Sport weh.","運動後我兩邊膝蓋都痛。"],
+  "Fuß":["Meine Füße tun nach dem Laufen weh.","跑完步我兩隻腳都痛。"],
+  "Tipp":["Danke für die vielen Tipps!","謝謝這麼多建議！"],
+  "Lebensmittel":["Unser Körper braucht viele Lebensmittel.","我們的身體需要很多食物。"],
+  "Nonne":["Im Kloster leben viele Nonnen.","修道院裡住著很多修女。"],
   /* ===ANCHOR:NOUN_PLEX===（複數例句 "單數":["德文","中文"], 插在這行上方）*/
 };
 const VERB_META={
@@ -2344,6 +2472,9 @@ const VERB_META={
   verdienen:{t:"reg"},
   laufen:{t:"vowel",du:"läufst",er:"läuft"},
   putzen:{t:"sib",du:"putzt",er:"putzt"},
+  sollen:{t:"irr",f:["soll","sollst","soll","sollen","sollt","sollen"]},
+  husten:{t:"stemt",du:"hustest",er:"hustet"},
+  bleiben:{t:"reg"},
   /* ===ANCHOR:VERB_META===（新動詞變位 動詞:{t:"reg"|"stemt"|"vowel"|"irr",...}, 插在這行上方）*/
 };
 VOCAB.forEach(v=>{
@@ -2873,6 +3004,36 @@ const SENTENCES=[
   {de:"Hast du schon einmal eine Aufnahmeprüfung geschafft?",zh:"你曾經通過入學考試嗎？",lesson:"L17"},
   {de:"Hast du am Wochenende getanzt?",zh:"你週末跳舞了嗎？",lesson:"L17"},
   {de:"Hast du schon einmal vor vielen Leuten gesungen?",zh:"你曾經在很多人面前唱過歌嗎？",lesson:"L17"},
+  {de:"Mein Kopf tut weh.",zh:"我頭痛（Körperteil+tut weh；可換 Bein/Bauch，複數用 tun）",lesson:"L18"},
+  {de:"Ich habe Halsschmerzen.",zh:"我喉嚨痛（haben+Schmerzen；可換 Bauch-/Rücken-/Kopfschmerzen）",lesson:"L18"},
+  {de:"Haben Sie etwas für mich?",zh:"您有什麼（藥）給我嗎？（求助句型）",lesson:"L18"},
+  {de:"Wer kann mir helfen?",zh:"誰能幫我？（求助）",lesson:"L18"},
+  {de:"Wer hat einen Tipp für mich?",zh:"誰有建議給我？（求助）",lesson:"L18"},
+  {de:"Trinken Sie viel!",zh:"請多喝水！（Imperativ 建議，可換 Tee/Wasser）",lesson:"L18"},
+  {de:"Geben Sie ihm doch diesen Tee!",zh:"就給他這杯茶吧！（Imperativ+doch 加強語氣）",lesson:"L18"},
+  {de:"Dann soll er Sport machen.",zh:"那他應該做運動（間接建議，sollen）",lesson:"L18"},
+  {de:"Was machst du gegen Kopfschmerzen?",zh:"你頭痛時都怎麼處理？（可換各種 Schmerzen）",lesson:"L18"},
+  {de:"Was hilft gegen Halsschmerzen?",zh:"什麼對喉嚨痛有效？",lesson:"L18"},
+  {de:"Ich nehme eine Tablette.",zh:"我吃一顆藥（可換 trinke/gehe/bleibe）",lesson:"L18"},
+  {de:"Das hilft.",zh:"這有效",lesson:"L18"},
+  {de:"Ich habe seit drei Wochen Kopfschmerzen. Was soll ich tun?",zh:"我頭痛三週了，我該怎麼辦？（seit+時長）",lesson:"L18"},
+  {de:"Was hat der Doktor gesagt?",zh:"醫生說了什麼？",lesson:"L18"},
+  {de:"Ich kann heute leider nicht kommen. Ich muss absagen.",zh:"我今天不能來了，我得取消（電話請假句型）",lesson:"L18"},
+  {de:"Haben Sie Husten?",zh:"您有咳嗽嗎？",lesson:"L18"},
+  {de:"Gehen Sie in die Apotheke und kaufen Sie Medikamente!",zh:"去藥局買藥！（Imperativ 雙動詞）",lesson:"L18"},
+  {de:"Wie oft machst du Sport?",zh:"你多常運動？（Umfrage 頻率問句，可換其他習慣）",lesson:"L18"},
+  {de:"Wie oft gehst du in die Sauna?",zh:"你多常去三溫暖？",lesson:"L18"},
+  {de:"Um wie viel Uhr gehst du schlafen?",zh:"你幾點睡覺？",lesson:"L18"},
+  {de:"Ich kann seit drei Monaten nicht mehr richtig schlafen.",zh:"我三個月沒睡好了（seit+時長，論壇求助）",lesson:"L18"},
+  {de:"Ich war schon beim Arzt, aber er hat nichts gefunden.",zh:"我看過醫生了，但他什麼都沒查出來",lesson:"L18"},
+  {de:"Trinken Sie viel Tee oder Wasser! Nehmen Sie auch Vitamin C.",zh:"多喝茶或水！也補充維他命C！",lesson:"L18"},
+  {de:"Ich denke, Ihr Mann soll zum Arzt gehen.",zh:"我覺得您先生應該去看醫生（sollen 建議）",lesson:"L18"},
+  {de:"Wie geht's?",zh:"你好嗎？（日常寒暄，開場）",lesson:"L18"},
+  {de:"Es geht so.",zh:"還好啦（回應寒暄）",lesson:"L18"},
+  {de:"Das ist eine gute Idee.",zh:"這是個好主意",lesson:"L18"},
+  {de:"Machen Sie doch Sport!",zh:"去運動吧！（Ratschlag，doch 強調）",lesson:"L18"},
+  {de:"Essen Sie, was Sie wollen.",zh:"想吃什麼就吃什麼",lesson:"L18"},
+  {de:"Fragen Sie immer Ihren Körper: Habe ich gerade Hunger?",zh:"隨時問自己的身體：我現在餓了嗎？",lesson:"L18"},
   /* ===ANCHOR:SENTENCES===（新例句／Redemittel {de,zh,lesson} 插在這行上方）*/
 ];
 
@@ -2981,6 +3142,11 @@ const TEXTS=[
    de:"Sehr viele Leute wollen Popstar werden. Nicht alle schaffen das. Cherry ist 19 Jahre alt und macht gerade eine Ausbildung als Verkäuferin. „Ich will unbedingt Schauspielerin werden\", sagt sie. „Das ist mir sehr wichtig.\" Fabian ist schon 24 und Liedermacher. Er komponiert seine Lieder selbst, aber er möchte auch als Profi bekannt werden. „Musik ist mein Leben\", sagt er. Lisa ist 21 und Studentin an der Uni. „Ich will unbedingt meinen Traumberuf schaffen\", sagt sie.",
    zh:"非常多人想成為流行歌星，不是每個人都能做到。Cherry 19歲，目前正在受訓當售貨員。「我一定要成為女演員，」她說。「這對我來說非常重要。」Fabian 已經24歲，是位創作歌手。他自己寫歌詞也自己作曲，但他也想以職業好手的身分成名。「音樂是我的生命，」他說。Lisa 21歲，是大學生。「我一定要達成我的夢想職業，」她說。",
    qs:[{q:"Cherry 目前正在做什麼？",options:["當演員","職業培訓當售貨員","唸大學","當老師"],a:1},{q:"誰會自己作曲？",options:["Cherry","Fabian","Lisa","文中沒說"],a:1},{q:"Lisa 現在的身份是？",options:["Schauspielerin","Verkäuferin","大學生","Liedermacher"],a:2}]},
+  {id:"t-l18-1",lesson:"L18",genre:"正式客訴 E-Mail",title:"Eine Salbe, die nicht hilft",src:"AI 生成 · 未經母語者校對",
+   map:"<b>本課重點</b>：① 疼痛表達兩條路（haben+Schmerzen ↔ Körperteil+tut/tun weh）② 直接引語 ↔ sollen 間接引語 ③ seit ＋ 時長（症狀從何時開始）④ Imperativ(Sie) 動詞第1位。<br><b>建議走法</b>：先讀本文找出「tut weh」與「seit」各出現在哪 → 文法「🧩 疼痛表達 ＋ 直接／間接引語」＋「🧩 時間介係詞總表」看 seit 新列 → 單字卡身體/藥品類 → 例句刷症狀與建議 Redemittel → 測驗（sollen 變位＋tut/tun 單複數＋Imperativ 語序）→ 🎓。<br><b>體裁提示</b>：這是正式書信，開頭 Sehr geehrte…／結尾 Mit freundlichen Grüßen，跟私人信 Liebe…／Viele Grüße 要分清楚。",
+   de:"Sehr geehrte Frau Meier, vor drei Wochen habe ich in Ihrer Apotheke eine Salbe gegen Rückenschmerzen gekauft. Ihre Kollegin hat gesagt: „Nehmen Sie diese Salbe zweimal am Tag, dann tut der Rücken nicht mehr weh.“ Und so sieht es wirklich aus: Ich nehme die Salbe seit drei Wochen, aber mein Rücken tut immer noch weh. Ich war dreimal in Ihrer Apotheke. Am Montag war niemand da, am Dienstag habe ich zwanzig Minuten gewartet. Für die Salbe habe ich 24 Euro bezahlt. Ich möchte mein Geld zurück. Schreiben Sie mir bitte bis Freitag! Dann komme ich am Samstag wieder. Mit freundlichen Grüßen, Katrin Berger",
+   zh:"敬啟者 Meier 女士：三週前我在您的藥局買了一條治背痛的藥膏。您的同事說：「這條藥膏一天塗兩次，背就不會再痛了。」而實際情況是這樣的：這條藥膏我已經用了三週，但我的背還是痛。我去過您的藥局三次。星期一沒有人在，星期二我等了二十分鐘。這條藥膏我付了 24 歐元。我想要退錢。請在星期五之前回覆我！否則星期六我會再去一次。敬祝安好，Katrin Berger",
+   qs:[{q:"Katrin 買那條藥膏是為了治什麼？",options:["背痛","喉嚨痛","牙痛","發燒"],a:0},{q:"用了三週之後結果如何？",options:["背不痛了","背還是痛","變成頭痛","文中沒說"],a:1},{q:"文中「mein Rücken tut weh」用 tut 而不是 tun，原因是？",options:["Rücken 在這裡是單數主詞","tut 比較禮貌","因為有 mein","寫錯了"],a:0}]},
   /* ===ANCHOR:TEXTS_ARRAYS===（新課導讀 {id,lesson,genre,title,src,map,de,zh,qs} 插在這行上方；de 只准用該課及之前的單字＋功能詞，寫完必跑 ROADMAP N12 的白名單驗證腳本）*/
 ];
 
@@ -3099,7 +3265,7 @@ function logAnswer(){
 function weekCount(){const cut=Date.now()-7*864e5;let n=0;Object.entries(qlog).forEach(([k,v])=>{const ts=new Date(k+'T00:00:00').getTime();if(isFinite(ts)&&ts>=cut)n+=(+v||0);});return n;}
 function updateDash(){const el=document.getElementById('dash');if(el)el.textContent=`已畢業 ${Object.keys(mastered).length} / ${VOCAB.length} 字 · 本週答題 ${weekCount()} 題`;}
 /* 文法卡穩定 key：由標題衍生（改標題會孤兒化標記，與例句 de-key 同一取捨） */
-const GKEY_MAP=[["人稱代名詞","pron"],["陰陽性線索","gclue"],["複數線索","pclue"],["所有格","poss"],["schon vs erst","advw"],["時間介係詞","zeit"],["序數","datum"],["地方介係詞","lokal"],["冠詞變格","art"],["句框","satz"],["動詞支配格","rekt"],["動詞變位①","konj1"],["動詞變位②","konj2"],["不規則動詞總表","irrv"],["Perfekt 現在完成式","pii"],["價格唸法","preis"],["字母表","abc"],["挑任一數字","numtry"],["大數字","bignum"],["數字測驗","numquiz"],["數字的系統","numsys"]];
+const GKEY_MAP=[["疼痛表達","pain"],["人稱代名詞","pron"],["陰陽性線索","gclue"],["複數線索","pclue"],["所有格","poss"],["schon vs erst","advw"],["時間介係詞","zeit"],["序數","datum"],["地方介係詞","lokal"],["冠詞變格","art"],["句框","satz"],["動詞支配格","rekt"],["動詞變位①","konj1"],["動詞變位②","konj2"],["不規則動詞總表","irrv"],["Perfekt 現在完成式","pii"],["價格唸法","preis"],["字母表","abc"],["挑任一數字","numtry"],["大數字","bignum"],["數字測驗","numquiz"],["數字的系統","numsys"]];
 function gramKeyOf(t){for(const[s,k]of GKEY_MAP)if(t.includes(s))return k;return t.trim().slice(0,8);}
 function gramKeyOfCard(g){const m=g.html.match(/gtitle">([^<]+)/);return gramKeyOf(m?m[1]:g.html);}
 /* 題目→卡片映射（執行期分類，一題可命中多卡） */
@@ -3128,6 +3294,8 @@ function gramCardsOfQ(q){
   if(/Wortbildung/.test(s))ks.add('gclue');
   if(/所有格/.test(s))ks.add('poss');
   if(/schon vs erst/.test(s))ks.add('advw');
+  if(/疼痛表達|引語|Imperativ/.test(s))ks.add('pain');
+  if(/Imperativ/.test(s))ks.add('satz');
   if(/母音變化|字尾/.test(s))ks.add('konj1');
   const m=s.match(/^([a-zäöüß]+)：\s*(ich|du|er|es|sie|wir|ihr|Sie)\s*→/);
   if(m)ks.add(KONJ2_VERBS.has(m[1])?'konj2':'konj1');
@@ -3152,7 +3320,7 @@ function posOf(v){
   return"副詞·片語";
 }
 /* 副詞·片語桶的子分類（僅影響卡面小標籤，不動資料、不加 chip）。新字若屬介/連/疑/代，記得加進對應 Set */
-const POS_SUB_PREP=new Set(["ab","für","im","am","ins","um","seit","unter","zwischen","ohne","von","bis","mit","nach","aus","bei","in","an","auf","vor","neben","hinter"]);
+const POS_SUB_PREP=new Set(["ab","für","im","am","ins","um","seit","unter","zwischen","ohne","von","bis","mit","nach","aus","bei","in","an","auf","vor","neben","hinter","gegen"]);
 const POS_SUB_CONJ=new Set(["aber","oder","denn","und","sondern","weil"]);
 const POS_SUB_QW=new Set(["warum","wann","wo","wer","was","wie","woher","wohin"]);
 const POS_SUB_PRON=new Set(["man","etwas","nichts","alles","alle","jemand","niemand","selbst"]);
@@ -3359,9 +3527,9 @@ const GRAM=[
   <div class="note"><b>⚠️ auch so bei: finden</b>——<b>finden</b>（覺得…）跟 <b>mögen</b> 一樣是吃 Akkusativ 受詞的動詞：Sein Haus finde ich schön. Aber <b>seinen</b> Garten mag ich nicht so.（房子用主格，但「他的花園」是受詞、要用受格 seinen）</div>
   <div class="note"><b>⚠️ L17：unser／euer 同一套規則</b>——der-字 Akk 才變（unseren／euren），中性 das-字光禿禿（unser Auto／euer Auto 不變），die-字和複數 +e（unsere／eure）。<b>euer 加字尾會掉中間的 e</b>：euer→euren／eure（不是 eueren/euere）。</div>
 </div>`},
-{ls:["L8","L11","L12","L16"],html:`
+{ls:["L8","L11","L12","L16","L18"],html:`
 <div class="card gcard">
-  <div class="gtitle">🧩 時間介係詞總表：am / um / von…bis / ab / im / seit / in / nach / vor / für <span class="lessontag">L8</span><span class="lessontag">L11</span><span class="lessontag">L12</span><span class="lessontag">L16</span></div>
+  <div class="gtitle">🧩 時間介係詞總表：am / um / von…bis / ab / im / seit / in / nach / vor / für <span class="lessontag">L8</span><span class="lessontag">L11</span><span class="lessontag">L12</span><span class="lessontag">L16</span><span class="lessontag">L18</span></div>
   <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：時間介係詞每個都回答不同問題——「哪一天/哪個時段」用 am、「幾點」用 um、「一段範圍」用 von…bis、「從此以後、沒說結束」用 ab、「哪個月/哪個季節」用 im、「從過去某時間點持續到現在」用 seit、「還有多久／未來某時間點」用 in、「之後」用 nach、「之前」用 vor、「持續多久（時長）」用 für。抓住「各自回答什麼問題」，就不會混用。</p>
   <table>
     <tr><th>介係詞</th><th>回答什麼問題</th><th>接什麼</th><th>例句</th></tr>
@@ -3370,13 +3538,13 @@ const GRAM=[
     <tr><td><b>von…bis</b></td><td>從幾點到幾點？（有頭有尾）</td><td>時間範圍</td><td class="de2">von 9 bis 13 Uhr</td></tr>
     <tr><td><b>ab</b></td><td>從幾點開始？（沒說結束）</td><td>起始時刻</td><td class="de2">ab 9 Uhr arbeite ich</td></tr>
     <tr><td><b>im</b></td><td>哪個月／哪個季節？</td><td>月份／季節</td><td class="de2">im Oktober · im Herbst</td></tr>
-    <tr><td><b>seit</b></td><td>從過去某時間點持續到現在？</td><td>時間點或年份</td><td class="de2">seit 1810 · seit drei Monaten</td></tr>
+    <tr><td><b>seit</b>＋Dativ</td><td>從過去某時間點持續到現在？／已經持續多久了？</td><td>時間點、年份或<b>一段時長</b></td><td class="de2">seit 1810 · seit drei Wochen · seit drei Monaten</td></tr>
     <tr><td><b>in</b>＋Dativ</td><td>還有多久／未來哪個時間點？</td><td>時間段（未來）</td><td class="de2">in einer Stunde · in zwei Wochen</td></tr>
     <tr><td><b>nach</b>＋Dativ</td><td>…之後？</td><td>事件／時間點</td><td class="de2">nach dem Kurs · nach einem Monat</td></tr>
     <tr><td><b>vor</b>＋Dativ</td><td>…之前？</td><td>事件／時間點</td><td class="de2">vor dem Kurs</td></tr>
     <tr><td><b>für</b>＋<u>Akkusativ</u></td><td>持續多久？（時長）</td><td>一段時長</td><td class="de2">für einen Monat</td></tr>
   </table>
-  <div class="note"><b>⚠️ 三個最容易錯</b><br>① 「在晚上」不能說 am Nacht，要說 <b>in der Nacht</b>——其他時段（Morgen/Vormittag/Mittag/Nachmittag/Abend）都用 am，只有 Nacht 例外。<br>② <b>von…bis 是「範圍」，ab 是「只有起點」</b>：von 9 bis 13 Uhr habe ich gearbeitet（做完了，有結尾）／Ab 9 Uhr arbeite ich（還沒說什麼時候結束）。別把兩個混著用同一句。<br>③ <b>in／nach／vor 吃 Dativ，唯獨 für 吃 Akkusativ</b>：für einen Monat（Akk：einen）↔ nach einem Monat（Dativ：einem）——同一個 Monat，冠詞形式不同，這是本課最容易搞混的一組對比。</div>
+  <div class="note"><b>⚠️ 三個最容易錯</b><br>① 「在晚上」不能說 am Nacht，要說 <b>in der Nacht</b>——其他時段（Morgen/Vormittag/Mittag/Nachmittag/Abend）都用 am，只有 Nacht 例外。<br>② <b>von…bis 是「範圍」，ab 是「只有起點」</b>：von 9 bis 13 Uhr habe ich gearbeitet（做完了，有結尾）／Ab 9 Uhr arbeite ich（還沒說什麼時候結束）。別把兩個混著用同一句。<br>③ <b>seit 和 für 都在講「多久」，但方向相反</b>：<b>seit</b> drei Wochen＝從三週前一直到現在（還在持續，動詞用現在式：Ich habe <u>seit</u> drei Wochen Kopfschmerzen）／<b>für</b> drei Wochen＝預計持續三週（多半指未來或整段安排）。描述症狀從什麼時候開始，一律用 seit。另外 <b>seit 吃 Dativ</b>：seit drei <u>Monaten</u>（不是 Monate）。<br>④ <b>in／nach／vor 吃 Dativ，唯獨 für 吃 Akkusativ</b>：für einen Monat（Akk：einen）↔ nach einem Monat（Dativ：einem）——同一個 Monat，冠詞形式不同，這是本課最容易搞混的一組對比。</div>
 </div>`},
 {ls:["L4","L5","L6","L13","L14"],html:`
 <div class="card gcard">
@@ -3424,9 +3592,9 @@ const GRAM=[
   </div></details>
   <div class="note"><b>⚠️ 全表唯一會變的是「陽性受格」；Dativ 是「陽性和中性一起變」</b>：der/das→<span style="color:#b45309">dem</span>、die→<span style="color:#b45309">der</span>、複數→<span style="color:#b45309">den</span>。das／die／複數 在 Nom 和 Akk 完全同形，別自己亂加字尾。<b>Dativ 複數名詞本身也要加字尾 -n</b>（本身已是 -n/-s 結尾則不加）：die Frauen→den <span style="color:#b45309">Frauen</span>（本來就是n結尾，不變）、der Kalender→den <span style="color:#b45309">Kalendern</span>（加n）、die Autos→den <span style="color:#b45309">Autos</span>（s結尾不加）。這張表會隨進度長大，⬜ 是還沒學的格子。</div>
 </div>`},
-{ls:["L6","L7","L8","L10","L11","L12","L15"],html:`
+{ls:["L6","L7","L8","L10","L11","L12","L15","L18"],html:`
 <div class="card gcard">
-  <div class="gtitle">🧩 句框 Satzklammer ＋ 動詞位置 <span class="lessontag">L6</span><span class="lessontag">L7</span><span class="lessontag">L8</span><span class="lessontag">L10</span><span class="lessontag">L11</span><span class="lessontag">L12</span><span class="lessontag">L15</span></div>
+  <div class="gtitle">🧩 句框 Satzklammer ＋ 動詞位置 <span class="lessontag">L6</span><span class="lessontag">L7</span><span class="lessontag">L8</span><span class="lessontag">L10</span><span class="lessontag">L11</span><span class="lessontag">L12</span><span class="lessontag">L15</span><span class="lessontag">L18</span></div>
   <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯（兩條地基）：① <b>變位動詞的位置由句型決定</b>——陳述句第2位、Ja/Nein 問句第1位、W 問句第2位。② 當一句話有<b>兩個動詞</b>時，第一個（變位／情態）照上面規則站定，第二個（原形）一律踢到<b>句尾</b>——這兩個動詞像夾子夾出一個「框」。之後的完成式、可分離動詞都是同一個框，不是新規則。</p>
   <details data-rule="satz-typen"><summary>① 句型定位：陳述句第2位／Ja-Nein 第1位／W 問句第2位／命令句第1位</summary><div class="dbody">
   <table>
@@ -3437,6 +3605,17 @@ const GRAM=[
     <tr><td>命令句</td><td class="de2">變位動詞</td><td>—</td><td class="de2"><b>Nimm</b> den Salat! · <b>Kommen</b> Sie bitte!</td></tr>
   </table>
   <p style="font-size:.86rem;margin:.3em 0 .1em">W- 疑問詞（Wann／Wo／Was／Wer／Wie／Warum／Woher…）你前面幾課就一直在用。抓法：<b>Ja/Nein 問句＝動詞衝到最前面；W 問句＝疑問詞卡第1位、動詞退回第2位</b>。</p>
+  </div></details>
+  <details data-rule="satz-imperativ"><summary>①-2 Imperativ(Sie) 命令句／建議句：動詞第1位，Sie 不省略</summary><div class="dbody">
+  <table>
+    <tr><th>句型</th><th>位置1（框左）</th><th>中間</th><th>句尾（框右）</th></tr>
+    <tr><td>單純命令／建議</td><td class="de2"><b>Trinken</b> Sie</td><td>viel Tee</td><td class="de2">!</td></tr>
+    <tr><td>＋doch（軟化成「就…吧」）</td><td class="de2"><b>Geben</b> Sie</td><td>ihm <b>doch</b> diesen Tee</td><td class="de2">!</td></tr>
+    <tr><td>可分離動詞</td><td class="de2"><b>Machen</b> Sie</td><td>den Mund</td><td class="de2"><b>auf</b>!</td></tr>
+    <tr><td>兩個命令並列</td><td class="de2"><b>Gehen</b> Sie</td><td>in die Apotheke und <b>kaufen</b> Sie</td><td class="de2">Medikamente!</td></tr>
+  </table>
+  <p style="font-size:.86rem;margin:.3em 0 .1em">形式怎麼來：拿 <b>Sie</b> 的現在式（Sie trinken）→ 把動詞搬到第1位（Trinken Sie）→ 完成。<b>Sie 一定要留著</b>，這是 Sie-形 Imperativ 和 du-形（Trink!）最大的差別。語調也是判斷點：疑問句尾音上揚 ↗（Trinken Sie viel Tee?），建議句尾音下降 ↘（Trinken Sie viel Tee!）——同樣的字，靠語調分辨是問還是勸。</p>
+  <p style="font-size:.86rem;margin:.3em 0 .1em">要把別人的命令<b>轉述</b>成自己的話（Imperativ → sollen）→ 見「🧩 疼痛表達 ＋ 直接／間接引語」卡。</p>
   </div></details>
   <details data-rule="satz-vorfeld"><summary>② 位置一 Vorfeld：只能站「一個」成分，放什麼都行</summary><div class="dbody">
   <table>
@@ -3485,7 +3664,7 @@ const GRAM=[
   </table>
   <p style="font-size:.86rem;margin:.3em 0 .1em">系統邏輯：weil 引導的是<b>從句</b>（Nebensatz），從句裡的變位動詞被踢到<b>從句句尾</b>，不再站第2位——跟「兩個動詞夾框」是同一條「動詞被踢到底」的邏輯，只是這次整個從句都被框住。對照 <b>denn</b>（並列連接詞，動詞留在原地、正常 V2）。weil 從句也能整個放到句子最前面：<b>Weil</b> es ruhig ist, <b>bleibe</b> ich hier.（此時主句動詞退到第2位，主詞 ich 退到動詞後面）。</p>
   </div></details>
-  <p style="font-size:.86rem;margin:.3em 0">已學會塞進框的：<b>möchten</b>／<b>können</b>＋原形（L6/L7）、<b>可分離動詞</b>（L10）、<b>Perfekt</b> haben/sein＋P.II（L10–L12）、<b>weil 從句</b>動詞後置（L15）。<br>⬜ 之後塞進同一框：müssen／wollen／dürfen、未來式——A1.2／A2 解鎖。</p>
+  <p style="font-size:.86rem;margin:.3em 0">已學會塞進框的：<b>möchten</b>／<b>können</b>＋原形（L6/L7）、<b>可分離動詞</b>（L10）、<b>Perfekt</b> haben/sein＋P.II（L10–L12）、<b>weil 從句</b>動詞後置（L15）、<b>wollen</b>（L17）、<b>sollen</b>＋原形（L18）、<b>Imperativ(Sie)</b> 動詞衝第1位（L18）。<br>⬜ 之後塞進同一框：dürfen、未來式——A2 解鎖。</p>
   <div class="note"><b>⚠️ 三個最容易錯</b><br>① 換 Leider／Heute 到位置一後，主詞要退到動詞後面：<b>Leider habe ich</b>…（❌ Leider ich habe…）。<br>② <b>nicht 貼在句尾原形動詞前面</b>：Ich kann heute <span style="color:#b45309">nicht</span> kommen. 原形動詞是框的右牆，nicht 站牆內側。（否定名詞才用 kein，見冠詞表；否定動作／形容詞用 nicht。）<br>③ <b>weil 後面動詞一定到句尾</b>：❌ weil es ist ruhig → ✓ weil es ruhig ist。</div>
 </div>`},
 {ls:["L6","L7","L8","L9","L10","L12","L13","L15","L17"],html:`
@@ -3546,10 +3725,10 @@ const GRAM=[
   </table>
   <div class="note"><b>⚠️ 三個最容易錯</b><br>① 母音變化<b>只在 du / er-sie-es</b>，別套到 ich／wir／ihr（❌ ich spriche → ✓ ich spreche）。<br>② arbeiten 的 e 只加在 du/er/ihr，不是每個人稱都加。<br>③ essen：du 和 er 都是 <b>isst</b>（字幹本來就 -ss，變完母音長一樣）。</div>
 </div>`},
-{ls:["L1","L2","L6","L7","L9","L17"],html:`
+{ls:["L1","L2","L6","L7","L9","L17","L18"],html:`
 <div class="card gcard">
-  <div class="gtitle">🧩 動詞變位②：特殊變位 sein · haben · 情態動詞 · werden <span class="lessontag">L1</span><span class="lessontag">L2</span><span class="lessontag">L6</span><span class="lessontag">L7</span><span class="lessontag">L9</span><span class="lessontag">L17</span></div>
-  <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：這些不照字幹規則，<b>整組背</b>。三群：高頻助動詞 sein／haben，情態動詞 können／mögen／möchten／wollen（共同標記＝<b>ich 和 er/sie/es 都不加字尾</b>：kann／mag／möchte／will），以及 werden（常跟情態動詞放一起教，但變位規則不同，見③）。</p>
+  <div class="gtitle">🧩 動詞變位②：特殊變位 sein · haben · 情態動詞 · werden <span class="lessontag">L1</span><span class="lessontag">L2</span><span class="lessontag">L6</span><span class="lessontag">L7</span><span class="lessontag">L9</span><span class="lessontag">L17</span><span class="lessontag">L18</span></div>
+  <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：這些不照字幹規則，<b>整組背</b>。三群：高頻助動詞 sein／haben，情態動詞 können／mögen／möchten／wollen／sollen（共同標記＝<b>ich 和 er/sie/es 都不加字尾</b>：kann／mag／möchte／will／soll），以及 werden（常跟情態動詞放一起教，但變位規則不同，見③）。</p>
   <p style="font-size:.86rem;font-weight:700;margin:.4em 0 .2em">① sein／haben（最高頻，背到反射）</p>
   <table>
     <tr><th>人稱</th><th>sein (是)</th><th>haben (有)</th></tr>
@@ -3560,17 +3739,17 @@ const GRAM=[
     <tr><td>ihr</td><td class="de2"><span class="infl">seid</span></td><td class="de2">habt</td></tr>
     <tr><td>Sie/sie</td><td class="de2">sind</td><td class="de2">haben</td></tr>
   </table>
-  <p style="font-size:.86rem;font-weight:700;margin:.5em 0 .2em">② 情態動詞 können／mögen／möchten／wollen</p>
+  <p style="font-size:.86rem;font-weight:700;margin:.5em 0 .2em">② 情態動詞 können／mögen／möchten／wollen／sollen</p>
   <table>
-    <tr><th>人稱</th><th>können（能/會）</th><th>mögen（喜歡）</th><th>möchten（想要）</th><th>wollen（要，語氣更強）</th></tr>
-    <tr><td>ich</td><td class="de2"><b>kann</b></td><td class="de2"><b>mag</b></td><td class="de2"><b>möchte</b></td><td class="de2"><b>will</b></td></tr>
-    <tr><td>du</td><td class="de2">kannst</td><td class="de2">magst</td><td class="de2">möchtest</td><td class="de2">willst</td></tr>
-    <tr><td>er/sie/es</td><td class="de2"><b>kann</b></td><td class="de2"><b>mag</b></td><td class="de2"><b>möchte</b></td><td class="de2"><b>will</b></td></tr>
-    <tr><td>wir</td><td class="de2">können</td><td class="de2">mögen</td><td class="de2">möchten</td><td class="de2">wollen</td></tr>
-    <tr><td>ihr</td><td class="de2">könnt</td><td class="de2">mögt</td><td class="de2">möchtet</td><td class="de2">wollt</td></tr>
-    <tr><td>Sie/sie</td><td class="de2">können</td><td class="de2">mögen</td><td class="de2">möchten</td><td class="de2">wollen</td></tr>
+    <tr><th>人稱</th><th>können（能/會）</th><th>mögen（喜歡）</th><th>möchten（想要）</th><th>wollen（要，語氣更強）</th><th>sollen（應該·轉述建議）</th></tr>
+    <tr><td>ich</td><td class="de2"><b>kann</b></td><td class="de2"><b>mag</b></td><td class="de2"><b>möchte</b></td><td class="de2"><b>will</b></td><td class="de2"><b>soll</b></td></tr>
+    <tr><td>du</td><td class="de2">kannst</td><td class="de2">magst</td><td class="de2">möchtest</td><td class="de2">willst</td><td class="de2">sollst</td></tr>
+    <tr><td>er/sie/es</td><td class="de2"><b>kann</b></td><td class="de2"><b>mag</b></td><td class="de2"><b>möchte</b></td><td class="de2"><b>will</b></td><td class="de2"><b>soll</b></td></tr>
+    <tr><td>wir</td><td class="de2">können</td><td class="de2">mögen</td><td class="de2">möchten</td><td class="de2">wollen</td><td class="de2">sollen</td></tr>
+    <tr><td>ihr</td><td class="de2">könnt</td><td class="de2">mögt</td><td class="de2">möchtet</td><td class="de2">wollt</td><td class="de2">sollt</td></tr>
+    <tr><td>Sie/sie</td><td class="de2">können</td><td class="de2">mögen</td><td class="de2">möchten</td><td class="de2">wollen</td><td class="de2">sollen</td></tr>
   </table>
-  <div class="note"><b>⚠️ 兩個重點</b><br>① <b>ihr seid</b> 不是 seit（seit＝自從，是介係詞）。<br>② 情態動詞 <b>ich＝er</b>（都不加字尾）：kann／mag／möchte／will。意思別混：<b>können</b>＝能力/請求；<b>mögen</b>＝長期喜好（Ich mag keinen Käse）；<b>möchten</b>＝當下具體想要（Ich möchte einen Kaffee，點餐用）；<b>wollen</b>＝已下定決心的計畫、語氣比 möchten 更強烈（Ich will Popstar werden.）；提議句型 <b>Wollen wir…?</b>＝要不要一起…？</div>
+  <div class="note"><b>⚠️ 兩個重點</b><br>① <b>ihr seid</b> 不是 seit（seit＝自從，是介係詞）。<br>② 情態動詞 <b>ich＝er</b>（都不加字尾）：kann／mag／möchte／will。意思別混：<b>können</b>＝能力/請求；<b>mögen</b>＝長期喜好（Ich mag keinen Käse）；<b>möchten</b>＝當下具體想要（Ich möchte einen Kaffee，點餐用）；<b>wollen</b>＝已下定決心的計畫、語氣比 möchten 更強烈（Ich will Popstar werden.）；<b>sollen</b>＝<u>別人</u>認為你應該（轉述醫生、老師、規定的建議：Der Arzt sagt, ich soll viel trinken）——注意它不是「我自己想」，那是 wollen/möchten；問句 <b>Was soll ich tun?</b>＝我該怎麼辦？；提議句型 <b>Wollen wir…?</b>＝要不要一起…？</div>
   <div class="note">情態動詞＋原形動詞會把句子夾成「框」→ 見「🧩 句框 Satzklammer ＋ 動詞位置」卡。</div>
   <p style="font-size:.86rem;font-weight:700;margin:.5em 0 .2em">③ werden（新登場，<u>不是</u>情態動詞——ich 也加字尾）</p>
   <table>
@@ -3661,6 +3840,28 @@ const GRAM=[
   <div class="gtitle">🧩 不規則動詞總表（現在式 du／er ＋ Partizip II） <span class="lessontag">總表</span></div>
   <p style="font-size:.88rem;margin:.2em 0 .6em">這張是<b>查詢索引</b>，不是新規則——規則本身看「動詞變位①／②」與「Perfekt」三張卡。系統先抓一件事：德文動詞的不規則有<b>兩個互不連動的位置</b>——現在式的 du／er，和完成式的 Partizip II。gehen 現在式完全規則（gehst／geht），完成式卻是 gegangen；haben 反過來兩邊都特殊。<b>背的時候要分成兩欄各自記，不要當成同一件事。</b></p>
   <div id="irrTblBox"></div>
+</div>`},
+{ls:["L18"],html:`
+<div class="card gcard">
+  <div class="gtitle">🧩 疼痛表達 ＋ 直接／間接引語（Imperativ ↔ sollen） <span class="lessontag">L18</span></div>
+  <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯（兩件事，各有一條主軸）：① <b>說哪裡痛有兩條路</b>——一條把「人」當主詞（<b>ich habe</b> …schmerzen），一條把「身體部位」當主詞（<b>mein Kopf tut weh</b>）。選了哪條路，動詞就跟著誰變位，這是唯一的判斷點。② <b>轉述別人的建議也有兩條路</b>——直接引號照搬對方的命令句（Imperativ），或用 <b>sollen</b> 把它包成自己的話。前者有引號有驚嘆號，後者沒有。</p>
+  <p style="font-size:.86rem;font-weight:700;margin:.5em 0 .2em">① 兩種疼痛表達（同一個意思，主詞不同）</p>
+  <table>
+    <tr><th>路線</th><th>主詞是誰</th><th>動詞跟誰變</th><th>例句</th></tr>
+    <tr><td><b>haben</b> ＋ …schmerzen</td><td>人（ich/du/er…）</td><td class="de2">跟人變：habe / hast / hat</td><td class="de2">Ich <b>habe</b> Rückenschmerzen. · Er <b>hat</b> Kopfschmerzen.</td></tr>
+    <tr><td>Körperteil ＋ <b>tut/tun weh</b></td><td>身體部位</td><td class="de2">跟部位單複數變：tut / tun</td><td class="de2">Mein Kopf <b>tut</b> weh. · Meine Beine <b>tun</b> weh.</td></tr>
+    <tr><td>加上「誰的痛」（Dativ）</td><td>部位仍是主詞</td><td class="de2">tut/tun 不變，人變 Dativ</td><td class="de2">Der Finger <b>tut mir</b> weh. · Die Füße <b>tun ihm</b> weh.</td></tr>
+  </table>
+  <p style="font-size:.86rem;margin:.3em 0 .1em">複合字捷徑：<b>Körperteil ＋ -schmerzen</b> 直接黏起來就是症狀名詞——Kopf→Kopfschmerzen、Hals→Halsschmerzen、Rücken→Rückenschmerzen、Bauch→Bauchschmerzen、Ohr→<b>Ohren</b>schmerzen（這個用複數形黏）。</p>
+  <p style="font-size:.86rem;font-weight:700;margin:.5em 0 .2em">② 直接引語 ↔ 間接引語（sollen）</p>
+  <table>
+    <tr><th>形式</th><th>標記</th><th>例句</th></tr>
+    <tr><td>直接引語（Imperativ）</td><td>引號＋驚嘆號，動詞在<b>第1位</b></td><td class="de2">Schwester Angelika: „<b>Geben</b> Sie ihm diesen Tee!“</td></tr>
+    <tr><td>間接引語（sollen）</td><td>無引號，<b>sollen</b> 第2位、原形丟句尾</td><td class="de2">Schwester Angelika sagt, ich <b>soll</b> ihm den Tee <b>geben</b>.</td></tr>
+    <tr><td>轉述給第三人</td><td>人稱與所有格都要跟著換</td><td class="de2">Der Arzt sagt, mein Mann <b>soll</b> zu Hause <b>bleiben</b>.</td></tr>
+  </table>
+  <p style="font-size:.86rem;margin:.3em 0 .1em">轉換三步：① 拿掉引號與驚嘆號 ② 把被命令的人改成主詞（Sie → ich／er／mein Mann…）③ 補 <b>sollen</b> 到第2位、原動詞變原形丟句尾。反向轉換就是倒著做。</p>
+  <div class="note"><b>⚠️ 三個最容易錯</b><br>① <b>tut 還是 tun，看的是身體部位、不是你自己</b>：Meine Beine <b>tun</b> weh（兩條腿＝複數）／Mein Bein <b>tut</b> weh（一條腿＝單數）。中文「我腿痛」沒有單複數，這格最容易漏。<br>② <b>兩條路不能混著用</b>：❌ Ich habe mein Kopf tut weh. ✓ Ich habe Kopfschmerzen. ／ ✓ Mein Kopf tut weh. 選一條走完。<br>③ <b>間接引語的 sollen 要跟新主詞變位</b>：Er sagt, ich <b>soll</b>…（不是 sollst）；Er sagt, du <b>sollst</b>…。人稱一換，sollen 就得換，這比記引號更容易錯。</div>
 </div>`},
 /* ===ANCHOR:GRAM===（新文法卡 {l:"Ln",html:`<div class="card gcard">…`} 插在這行上方）*/
 ];
@@ -3858,7 +4059,7 @@ const FUNC_GLOSS={
   in:"在…裡／到…去",an:"在…旁／在…上（貼著）",auf:"在…上",aus:"來自／從…出來",bei:"在…那裡／在…附近",
   mit:"和…一起／用（工具）",von:"從／…的",zu:"到／向",nach:"往（地名）／…之後",fuer:"為了",für:"為了／給",
   um:"在…點鐘／繞",am:"an+dem 縮合（星期、日期用）",im:"in+dem 縮合（月份、季節用）",vom:"von+dem 縮合",beim:"bei+dem 縮合",ins:"in+das 縮合",zum:"zu+dem 縮合",zur:"zu+der 縮合",
-  seit:"自從",ab:"從…起",bis:"直到",ueber:"在…上方／關於",über:"在…上方／關於",unter:"在…下面",vor:"在…前面／…之前",hinter:"在…後面",neben:"在…旁邊",zwischen:"在…之間",durch:"穿過",gegen:"對著／大約",ohne:"沒有（不帶）",
+  seit:"自從",ab:"從…起",bis:"直到",ueber:"在…上方／關於",über:"在…上方／關於",unter:"在…下面",vor:"在…前面／…之前",hinter:"在…後面",neben:"在…旁邊",zwischen:"在…之間",durch:"穿過",gegen:"對著／大約／針對（治…用）",ohne:"沒有（不帶）",
   /* 連接詞、副詞、語氣詞 */
   und:"和",oder:"或者",aber:"但是",denn:"因為",dann:"然後",also:"所以／那麼",auch:"也",noch:"還／再",nur:"只",
   schon:"已經",sehr:"很",nicht:"不",ja:"是／對",nein:"不是",so:"這麼／如此",etwas:"一點／某物",alles:"全部",viel:"多",wenig:"少",
@@ -4321,6 +4522,31 @@ const GR17B=[
  {l:"L17",sub:"laufen：er → ?",before:"Er ",after:" jeden Morgen im Park.",answer:"läuft",options:["läuft","läufst","laufen"],full:"Er läuft jeden Morgen im Park."},
 ];
 GR17B.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+const GR18=[
+ {l:"L18",sub:"⭐ sollen：ich → ?",before:"Der Arzt sagt, ich ",after:" viel Wasser trinken.",answer:"soll",options:["soll","sollst","sollen"],full:"Der Arzt sagt, ich soll viel Wasser trinken."},
+ {l:"L18",sub:"⭐ sollen：du → ?",before:"Du ",after:" heute zu Hause bleiben.",answer:"sollst",options:["sollst","soll","sollt"],full:"Du sollst heute zu Hause bleiben."},
+ {l:"L18",sub:"⭐ sollen：er → ?",before:"Ich denke, Ihr Mann ",after:" zum Arzt gehen.",answer:"soll",options:["soll","sollst","sollt"],full:"Ich denke, Ihr Mann soll zum Arzt gehen."},
+ {l:"L18",sub:"⭐ sollen：ihr → ?",before:"Kinder, ihr ",after:" jetzt schlafen!",answer:"sollt",options:["sollt","sollst","soll"],full:"Kinder, ihr sollt jetzt schlafen!"},
+ {l:"L18",sub:"husten：du → ?",before:"Warum ",after:" du so viel?",answer:"hustest",options:["hustest","hustst","hustet"],full:"Warum hustest du so viel?"},
+ {l:"L18",sub:"husten：er → ?",before:"Das Kind ",after:" die ganze Nacht.",answer:"hustet",options:["hustet","hustt","hustest"],full:"Das Kind hustet die ganze Nacht."},
+ {l:"L18",sub:"bleiben：du → ?",before:"Wie lange ",after:" du im Bett?",answer:"bleibst",options:["bleibst","bleibt","bleiben"],full:"Wie lange bleibst du im Bett?"},
+ {l:"L18",sub:"疼痛表達：tut 或 tun（單數部位）",before:"Mein Kopf ",after:" weh.",answer:"tut",options:["tut","tun","tue"],full:"Mein Kopf tut weh."},
+ {l:"L18",sub:"疼痛表達：tut 或 tun（複數部位）",before:"Meine Beine ",after:" weh.",answer:"tun",options:["tun","tut","tust"],full:"Meine Beine tun weh."},
+ {l:"L18",sub:"疼痛表達：tut 或 tun（複數部位·Füße）",before:"Nach dem Laufen ",after:" meine Füße weh.",answer:"tun",options:["tun","tut","tue"],full:"Nach dem Laufen tun meine Füße weh."},
+ {l:"L18",sub:"疼痛表達：兩條路二選一（haben+Schmerzen）",before:"Ich ",after:" Halsschmerzen.",answer:"habe",options:["habe","tut","tun"],full:"Ich habe Halsschmerzen."},
+ {l:"L18",sub:"疼痛表達：誰的痛（Dativ 人稱）",before:"Der Finger tut ",after:" weh.",answer:"mir",options:["mir","mich","ich"],full:"Der Finger tut mir weh."},
+ {l:"L18",sub:"Imperativ(Sie)：語序·動詞第1位",before:"",after:" Sie viel Tee!",answer:"Trinken",options:["Trinken","Sie trinken","Trinkst"],full:"Trinken Sie viel Tee!"},
+ {l:"L18",sub:"Imperativ(Sie)：語序·可分離動詞字首丟句尾",before:"Machen Sie den Mund ",after:", bitte!",answer:"auf",options:["auf","aus","an"],full:"Machen Sie den Mund auf, bitte!"},
+ {l:"L18",sub:"Imperativ(Sie)：加強語氣小品詞的位置",before:"Geben Sie ihm ",after:" diesen Tee!",answer:"doch",options:["doch","denn","dann"],full:"Geben Sie ihm doch diesen Tee!"},
+ {l:"L18",sub:"直接→間接引語：sollen 轉述（ich）",before:"Der Arzt sagt: „Bleiben Sie im Bett!“ → Der Arzt sagt, ich ",after:" im Bett bleiben.",answer:"soll",options:["soll","sollst","bleibe"],full:"Der Arzt sagt, ich soll im Bett bleiben."},
+ {l:"L18",sub:"直接→間接引語：sollen 轉述（第三人稱）",before:"„Machen Sie Sport!“ → Dann ",after:" er Sport machen.",answer:"soll",options:["soll","sollen","sollt"],full:"Dann soll er Sport machen."},
+ {l:"L18",sub:"間接→直接引語：還原成 Imperativ",before:"Sie sagt, ich soll viel trinken. → ",after:" Sie viel!",answer:"Trinken",options:["Trinken","Trinkst","Sollen"],full:"Trinken Sie viel!"},
+ {l:"L18",sub:"時間介係詞：症狀已經持續多久（過去到現在）",before:"Ich habe ",after:" drei Wochen Kopfschmerzen.",answer:"seit",options:["seit","für","in"],full:"Ich habe seit drei Wochen Kopfschmerzen."},
+ {l:"L18",sub:"時間介係詞：seit 吃 Dativ",before:"Ich kann seit drei ",after:" nicht richtig schlafen.",answer:"Monaten",options:["Monaten","Monate","Monat"],full:"Ich kann seit drei Monaten nicht richtig schlafen."},
+ {l:"L18",sub:"時間介係詞：seit 或 für（過去到現在 vs 未來時長）",before:"Ich bin ",after:" zwei Tagen krank.",answer:"seit",options:["seit","für","ab"],full:"Ich bin seit zwei Tagen krank."},
+ {l:"L18",sub:"介係詞：gegen ＋ Akkusativ",before:"Was hilft gegen ",after:" Kopfschmerzen?",answer:"die",options:["die","der","den"],full:"Was hilft gegen die Kopfschmerzen?"},
+];
+GR18.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
   /* ===ANCHOR:GRAM_QUIZ===（新課文法填空題插在這行上方：宣告 const GRn=[{l,sub,before,after,answer,options,full},…]; 後接一行 GRn.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full})); ）*/
   return Q;
 }
@@ -4459,6 +4685,22 @@ const PLURAL=[
   {l:"L16",sub:"複數：Wecker（不變！）",before:"Im Geschäft gibt es drei ",after:" (Wecker).",answer:"Wecker",options:["Wecker","Weckere","Weckern","Weckers"],full:"Im Geschäft gibt es drei Wecker."},
   {l:"L16",sub:"複數：Rezeption（+en）",before:"Große Hotels haben zwei ",after:" (Rezeption).",answer:"Rezeptionen",options:["Rezeptionen","Rezeptione","Rezeptions","Rezeptionsen"],full:"Große Hotels haben zwei Rezeptionen."},
   {l:"L16",sub:"複數：Techniker（不變！）",before:"Heute kommen zwei ",after:" (Techniker).",answer:"Techniker",options:["Techniker","Technikere","Technikern","Technikers"],full:"Heute kommen zwei Techniker."},
+  {l:"L18",sub:"複數：Arzt（變音 a→ä）",before:"Die ",after:" in dieser Praxis sind sehr nett. (Arzt)",answer:"Ärzte",options:["Ärzte","Arzte","Ärzten","Arzten"],full:"Die Ärzte in dieser Praxis sind sehr nett."},
+  {l:"L18",sub:"複數：Kopf（變音 o→ö）",before:"Nach dem Fest tun allen die ",after:" weh. (Kopf)",answer:"Köpfe",options:["Köpfe","Kopfe","Köpfer","Kopfen"],full:"Nach dem Fest tun allen die Köpfe weh."},
+  {l:"L18",sub:"複數：Hand（變音 a→ä）",before:"Wasch dir bitte die ",after:"! (Hand)",answer:"Hände",options:["Hände","Hande","Händen","Hands"],full:"Wasch dir bitte die Hände!"},
+  {l:"L18",sub:"複數：Fuß（變音 u→ü）",before:"Meine ",after:" tun nach dem Laufen weh. (Fuß)",answer:"Füße",options:["Füße","Fuße","Füßen","Fußen"],full:"Meine Füße tun nach dem Laufen weh."},
+  {l:"L18",sub:"複數：Zahn（變音 a→ä）",before:"Ich muss meine ",after:" besser putzen. (Zahn)",answer:"Zähne",options:["Zähne","Zahne","Zähnen","Zahnen"],full:"Ich muss meine Zähne besser putzen."},
+  {l:"L18",sub:"複數：Bauch（變音 au→äu）",before:"Nach dem Essen tun den Kindern die ",after:" weh. (Bauch)",answer:"Bäuche",options:["Bäuche","Bauche","Bäucher","Bauchen"],full:"Nach dem Essen tun den Kindern die Bäuche weh."},
+  {l:"L18",sub:"複數：Kraut（變音＋-er）",before:"Wir sammeln ",after:" aus dem Garten. (Kraut)",answer:"Kräuter",options:["Kräuter","Kraute","Kräute","Krauter"],full:"Wir sammeln Kräuter aus dem Garten."},
+  {l:"L18",sub:"複數：Praxis（不規則 -is → -en）",before:"Es gibt zwei ",after:" in der Schillerstraße. (Praxis)",answer:"Praxen",options:["Praxen","Praxise","Praxisse","Praxien"],full:"Es gibt zwei Praxen in der Schillerstraße."},
+  {l:"L18",sub:"複數：Finger（單複同形）",before:"Alle zehn ",after:" tun mir weh. (Finger)",answer:"Finger",options:["Finger","Fingere","Fingern","Fingers"],full:"Alle zehn Finger tun mir weh."},
+  {l:"L18",sub:"複數：Knie（單複同形）",before:"Meine ",after:" tun nach dem Sport weh. (Knie)",answer:"Knie",options:["Knie","Knien","Kniee","Knies"],full:"Meine Knie tun nach dem Sport weh."},
+  {l:"L18",sub:"複數：Rücken（單複同形）",before:"Nach der Arbeit tun uns die ",after:" weh. (Rücken)",answer:"Rücken",options:["Rücken","Rückene","Rückens","Rücker"],full:"Nach der Arbeit tun uns die Rücken weh."},
+  {l:"L18",sub:"複數：Ohr（+en）",before:"Ich habe Schmerzen in beiden ",after:". (Ohr)",answer:"Ohren",options:["Ohren","Ohre","Öhre","Ohrer"],full:"Ich habe Schmerzen in beiden Ohren."},
+  {l:"L18",sub:"複數：Auge（+n）",before:"Meine ",after:" tun weh. (Auge)",answer:"Augen",options:["Augen","Auge","Äugen","Auges"],full:"Meine Augen tun weh."},
+  {l:"L18",sub:"複數：Tablette（+n）",before:"Nimm zwei ",after:" gegen die Schmerzen. (Tablette)",answer:"Tabletten",options:["Tabletten","Tablette","Tablettes","Tabletter"],full:"Nimm zwei Tabletten gegen die Schmerzen."},
+  {l:"L18",sub:"複數：Apotheke（+n）",before:"In der Stadt gibt es drei ",after:". (Apotheke)",answer:"Apotheken",options:["Apotheken","Apotheke","Apothekes","Apotheker"],full:"In der Stadt gibt es drei Apotheken."},
+  {l:"L18",sub:"複數：Doktor（重音移位 -en）",before:"Wir haben hier zwei gute ",after:". (Doktor)",answer:"Doktoren",options:["Doktoren","Doktore","Doktors","Döktore"],full:"Wir haben hier zwei gute Doktoren."},
   /* ===ANCHOR:PLURAL_QUIZ===（新複數題 {l,sub,before,after,answer,options,full} 插在這行上方；注意此題庫課別欄位是 l: 不是 lesson:）*/
 ];
 
@@ -4510,6 +4752,7 @@ const MODULE_DEF=[
   {id:"M3",name:"Modul 3（L7–9）",lessons:["L7","L8","L9"]},
   {id:"M4",name:"Modul 4（L10–12）",lessons:["L10","L11","L12"]},
   {id:"M5",name:"Modul 5（L13–15）",lessons:["L13","L14","L15"]},
+  {id:"M6",name:"Modul 6（L16–18）",lessons:["L16","L17","L18"]},
   /* ===ANCHOR:MODULE_DEF===（新單元湊滿 3 課時在這行上方登記 {id,name,lessons}）*/
 ];
 const MODUL_TOPICS={
@@ -4518,6 +4761,7 @@ const MODUL_TOPICS={
   M3:{title:"我的一週",task:"寫 3–5 句你的一週安排：星期幾做什麼、幾點、和誰。至少一句用 können、一句用 am＋星期或 um＋時間。注意動詞永遠在第二位。",req:["am + 星期","um + 時間","können","treffen","Hobby"],rm:["Am Montag gehe ich …","Um 19 Uhr treffe ich …","Ich kann gut …"]},
   M4:{title:"我的上個週末（Perfekt）",task:"用現在完成式寫 3–5 句上個週末做了什麼。至少一句用 sein 當助動詞（gefahren/gegangen）、一句用可分離動詞（eingekauft/aufgeräumt）。注意句框：haben/sein 第二位、Partizip 句尾。",req:["haben/sein + Partizip","zuerst / dann / danach","einkaufen","fahren"],rm:["Am Samstag habe ich … gemacht.","Dann bin ich nach … gefahren."]},
   M5:{title:"我的新家與新街區",task:"寫 4–6 句描述你（可假想）搬到一個新住處：① 房子/公寓的樣子，用所有格 sein/ihr 或 Genitiv；② 怎麼找到那裡，用地方介係詞或 helfen；③ 對新街區的評價，用 gefallen/gehören/fehlen 等 Dativ 動詞。至少一句要用到完整 Dativ 人稱代名詞（mir/dir/ihm…）。",req:["所有格 sein/ihr","地方介係詞","Dativ 動詞（gefallen/gehören/fehlen/danken）","umziehen"],rm:["Ich bin nach … umgezogen.","Die Wohnung ist neben/an/in der Nähe von …","Was mir an … gefällt, ist …"]},
+ M6:{title:"我的一封訊息：飯店插曲、我的計畫、還有最近的身體",task:"寫 4–6 句：①提一件你在飯店或某個約會中遇到、需要改期或客訴的狀況，用時間介係詞（in/nach/vor/für）；②說一件你未來想做或絕對不想做的計畫，用 wollen 完整變位；③說你最近的身體狀況以及別人給你的建議，用 sollen 或 tut/tun weh。三部分至少各一句。",req:["時間介係詞(in/nach/vor/für)","wollen完整變位","tut/tun weh 或 haben+Schmerzen","sollen"],rm:["Ich möchte den Termin verschieben, vor/nach/in …","Ich will unbedingt …, aber ich will auf keinen Fall …","Ich habe seit … Schmerzen. Der Arzt sagt, ich soll …"]},
   /* ===ANCHOR:MODUL_TOPICS===（新單元寫作題插在這行上方，key 對齊 MODULE_DEF 的 id）*/
 };
 /* 單元整合閱讀（🏆 第②關）：一篇串起單元三課單字、動詞人稱 ≥4 種的文章；生成規則見 ROADMAP「導讀生成管線 v2」，白名單以單元最後一課為截止。4 題以第一次作答計分，答對 ≥3 過關 */
@@ -4557,6 +4801,13 @@ const MODUL_TEXTS={
       {q:"誰幫 Nina 找到公寓？",options:["Sofie","一位鄰居","咖啡廳老闆","文中沒說"],a:1},
       {q:"轉角的咖啡廳屬於誰？",options:["Nina","一戶親切的人家","Sofie","市政府"],a:1},
       {q:"「Er hat mir geholfen」的 mir 為什麼用 Dativ？",options:["helfen 是 Dativ 動詞，受詞用 Dativ","拼錯了","mir 是所有格","固定用法沒有原因"],a:0}]},
+ M6:{title:"Nina schreibt aus Wien",
+  de:"Liebe Marta, wie geht es dir? Vor zwei Wochen bin ich mit Jonas nach Wien gefahren. Im Hotel war das Zimmer nicht ruhig und die Dusche hat nicht funktioniert. Wir haben an der Rezeption gesprochen und nach einer Stunde haben wir ein anderes Zimmer bekommen. Jetzt habe ich neue Pläne: Ich will unbedingt Deutsch lernen und dann in Hamburg arbeiten. Aber ich will auf keinen Fall wieder im Büro sitzen. Leider bin ich seit einer Woche krank. Mein Hals tut weh und meine Augen tun auch weh. Der Arzt sagt, ich soll viel Tee trinken und zu Hause bleiben. Was machst du gegen Halsschmerzen? Hast du einen Tipp für mich? Schreib mir bald! Viele Grüße, Nina",
+  zh:"親愛的 Marta，你好嗎？兩週前我和 Jonas 去了維也納。飯店房間不安靜，而且淋浴壞了。我們去接待櫃檯講了，一小時後我們拿到另一間房。現在我有新計畫：我一定要學好德文，然後在漢堡工作。但我絕對不要再坐辦公室。可惜我生病一個禮拜了。我喉嚨痛，眼睛也痛。醫生說我應該多喝茶、待在家裡。你喉嚨痛的時候都怎麼處理？有什麼建議給我嗎？快寫信給我！祝好，Nina",
+  qs:[{q:"Nina 兩週前去了哪裡？",options:["Hamburg","Wien","慕尼黑","文中沒說"],a:1},
+      {q:"飯店房間出了什麼問題？",options:["太小","不安靜而且淋浴壞了","沒有窗戶","太貴"],a:1},
+      {q:"Nina 絕對不想做什麼？",options:["學德文","去漢堡","再坐辦公室","去看醫生"],a:2},
+      {q:"「Der Arzt sagt, ich soll viel Tee trinken」為什麼用 soll，而不是「Trinken Sie viel Tee!」？",options:["這是轉述醫生的建議（間接引語），不是直接對人下命令","soll 比較有禮貌","因為主詞是 ich 就一定要用 soll","兩種寫法完全沒差"],a:0}]},
  /* ===ANCHOR:MODUL_TEXTS===（新單元整合閱讀插在這行上方，key 對齊 MODULE_DEF 的 id；先跑白名單驗證再入庫）*/
 };
 let modulRun=null; /* 進行中的單元挑戰 id；手動換課別/題型＝放棄本輪判定 */
