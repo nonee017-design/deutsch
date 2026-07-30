@@ -5182,6 +5182,146 @@ function newQ(){
 }
 /* N11.5：聽力挖空的功能詞停用清單（冠詞/代名詞/常見介係詞/sein·haben 變位/連接詞等） */
 const CLOZE_STOP=new Set(['der','die','das','den','dem','des','ein','eine','einen','einem','einer','kein','keine','keinen','und','oder','aber','auch','aus','bei','mit','von','bis','für','das','ist','bin','bist','sind','seid','war','hat','habe','hast','habt','ich','sie','wir','ihr','ihm','ihn','uns','euch','man','wie','was','wer','wann','warum','nicht','noch','nur','schon','mal','doch','denn','dann','hier','da','ja','nein','sehr','zum','zur','im','am','um','an','in','auf','nach','vor','über','unter','es']);
+/* ═══ N20 聽打挖空（2026-07-30）═════════════════════════════════════════════
+   👂 的「填缺字」子題型由選項制改打字制。挖空單位＝名詞組（冠詞/所有格＋名詞）
+   或動詞組（主詞＋變位動詞；可分離字首在句尾則一併挖），一句只挖一組、兩型輪替。
+   偵測一律接工具裡既有的旗標，不靠模型自由心證（ROADMAP §8.10）：
+     · 動詞變位形 → LEMMA_V（buildLemma 建的全變位索引，含可分離與不規則）
+     · 名詞       → 德文名詞大寫（排除句首）＋長度門檻
+     · 冠詞/所有格/主詞代名詞/情態動詞 → 下列固定 Set
+     · 可分離字首收尾 → 沿用既有 SEP_PREFIX
+   判定沿用 N5 規則：大小寫寬容（名詞未大寫判對＋橘字提醒）、變音嚴格。
+   只在純 👂 出現——不進 🎓（畢業考配方與門檻不動，N5 定案）、
+   不進 🏁（🏁 ≥85% 是 🏆 第①關門檻，不得因新題型變難）。 */
+const CZ_DET=new Set(['der','die','das','den','dem','des','ein','eine','einen','einem','einer','eines','kein','keine','keinen','keinem','keiner','mein','meine','meinen','meinem','meiner','dein','deine','deinen','deinem','deiner','sein','seine','seinen','seinem','seiner','ihr','ihre','ihren','ihrem','ihrer','unser','unsere','unseren','unserem','unserer','euer','eure','euren','eurem','eurer','dieser','diese','dieses','diesen','diesem']);
+const CZ_SUBJ=new Set(['ich','du','er','sie','es','wir','ihr','man']);
+const CZ_MODAL=new Set(['kann','kannst','könnt','können','muss','musst','müsst','müssen','will','willst','wollt','wollen','darf','darfst','dürft','dürfen','soll','sollst','sollt','sollen','möchte','möchtest','möchtet','möchten','mag','magst','mögt','mögen']);
+/* 可分離字首「整字」清單（SEP_PREFIX 是前綴比對，只適用於句尾偵測整體評分，
+   拿來判斷「這個 token 是不是被拆下來的字首」會誤中 mitkommen/vorstellen 等完整動詞） */
+const CZ_SEP=/^(ab|an|auf|aus|ein|fern|mit|nach|vor|weg|zu|zurück|um|los|her|hin|wieder)$/i;
+let czTurn=0,czLast=null; /* 名詞組／動詞組輪替計數；czLast＝最近一次挖空結果（測試用） */
+function czEsc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+/* 逐字元 diff：取共同前綴＋共同後綴，中間差異標紅（長度不足補 ▯） */
+function czDiff(raw,ans){
+  const a=[...String(raw)],b=[...String(ans)];
+  let p=0;while(p<a.length&&p<b.length&&a[p]===b[p])p++;
+  let q=0;while(q<a.length-p&&q<b.length-p&&a[a.length-1-q]===b[b.length-1-q])q++;
+  const mid=a.slice(p,a.length-q).join('');
+  const bad=mid?'<span style="background:#fecaca;color:#7f1d1d;font-weight:700">'+czEsc(mid)+'</span>'
+               :(a.length<b.length?'<span style="background:#fecaca;color:#7f1d1d">▯</span>':'');
+  return czEsc(a.slice(0,p).join(''))+bad+czEsc(a.slice(a.length-q).join(''));
+}
+/* 找出可挖的名詞組與動詞組。回傳 {nouns:[[[from,to]],…], verbs:[[[from,to],…],…]}
+   （每組是「連續區段」的陣列——可分離動詞會有兩段：動詞本體＋句尾字首） */
+function czGroups(ws){
+  if(!LEMMA_V)buildLemma(); /* 動詞變位索引是延遲建立的，不能假設已存在（否則動詞組靜默失效） */
+  const cl=t=>String(t).replace(/[.,!?"„“”…:;()]/g,''),lc=i=>cl(ws[i]).toLowerCase();
+  const isNoun=i=>{const c=cl(ws[i]);return i>0&&/^[A-ZÄÖÜ]/.test(c)&&c.length>=3;};
+  const isVerb=i=>{const c=lc(i);return CZ_MODAL.has(c)||!!(LEMMA_V&&LEMMA_V[c]);};
+  const nouns=[],verbs=[];
+  for(let i=0;i<ws.length;i++){
+    if(CZ_DET.has(lc(i))){ /* 冠詞/所有格 → 往後最多兩格找名詞（容納一個形容詞） */
+      for(let j=i+1;j<=Math.min(i+2,ws.length-1);j++){if(isNoun(j)){nouns.push([[i,j]]);break;}}
+    }
+    /* 動詞組三型（德文 V2 語序：主詞不一定在動詞前，主詞也不一定是代名詞）
+       ① 主詞代名詞＋動詞     Ich möchte …
+       ② 動詞＋主詞代名詞（倒裝） … kommst du?／Am Montag gehe ich …
+       ③ 名詞主詞＋動詞        Der Tisch ist … → 只挖「Tisch ist」，冠詞留著顯示 */
+    const pair=(a,b)=>{
+      const g=[[a,b]],li=ws.length-1,last=cl(ws[li]);
+      /* 可分離字首收尾：必須是「獨立成字的字首」（整字比對，非前綴比對——
+         前綴比對會把 mitkommen 這種完整動詞誤判成字首），且不得跨句末標點 */
+      let crossed=false;for(let k=b+1;k<li;k++)if(/[.!?]/.test(ws[k]))crossed=true;
+      if(li>b&&!crossed&&CZ_SEP.test(last))g.push([li,li]);
+      return g;
+    };
+    if(i+1<ws.length){
+      /* ① 主詞代名詞＋動詞（Ich möchte） */
+      if(CZ_SUBJ.has(lc(i))&&isVerb(i+1))verbs.push(pair(i,i+1));
+      /* ② 倒裝：動詞＋主詞代名詞（Kannst du／… will ich） */
+      else if(isVerb(i)&&CZ_SUBJ.has(lc(i+1)))verbs.push(pair(i,i+1));
+      /* ③ 名詞主詞＋動詞。德文 V2：名詞唯有位於句首（或句首冠詞/形容詞之後）
+         才是主詞；否則是被前置的受詞或時間狀語（Welches Produkt möchten Sie＝受詞）。
+         寧可漏收也不錯收——漏收會自動退回其他型或單字挖空。 */
+      else if(isNoun(i)&&isVerb(i+1)&&(i===0||(i<=2&&CZ_DET.has(lc(0)))))verbs.push(pair(i,i+1));
+    }
+  }
+  return {nouns,verbs};
+}
+/* 打字挖空渲染。成功接手回 true；找不到任何可挖目標回 false（呼叫端退回選項制） */
+function czRenderTyped(pre,s,ws,cand){
+  const G=czGroups(ws);
+  let grp=null,kind='';
+  const order=(czTurn%2===0)?['nouns','verbs']:['verbs','nouns'];
+  for(const k of order){if(G[k].length){grp=G[k][Math.random()*G[k].length|0];kind=(k==='nouns')?'名詞組（冠詞＋名詞）':'動詞組（主詞＋動詞）';break;}}
+  if(!grp){ /* 兩型皆無 → 退回單一實詞，仍走打字 */
+    if(!cand||!cand.length)return false;
+    const p=cand[Math.random()*cand.length|0];grp=[[p.i,p.i]];kind='關鍵字';
+  }
+  czTurn++;
+  czLast={kind:kind,grp:grp,de:s.de}; /* 外露供 smoke 斷言與測試檢查 */
+  qSpeak=s.de;
+  qsub.textContent=pre+'👂 聽整句（🔊 可重聽），把挖掉的'+kind+'打回來';
+  const slots=[];
+  let html='<div style="font-size:.82rem;color:var(--mut);font-weight:400;margin-bottom:8px">大小寫算你對（會提醒）· ä/ö/ü/ß 必須打對</div>';
+  const inG=i=>grp.findIndex(r=>i>=r[0]&&i<=r[1]);
+  for(let i=0;i<ws.length;i++){
+    const gi=inG(i);
+    if(gi<0){html+=czEsc(ws[i])+' ';continue;}
+    if(i!==grp[gi][0])continue;
+    let raw='';for(let k=grp[gi][0];k<=grp[gi][1];k++)raw+=(k>grp[gi][0]?' ':'')+ws[k];
+    const ans=raw.replace(/[.,!?;:]+$/,''),tail=raw.slice(ans.length);
+    slots.push(ans);
+    html+='<input class="czin" data-si="'+(slots.length-1)+'" type="text" lang="de" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="…" '
+       +'style="font-size:1rem;padding:6px 8px;border:2px solid #cbd5e1;border-radius:8px;width:130px;text-align:center;margin:0 3px">'+czEsc(tail)+' ';
+  }
+  qprompt.innerHTML=html;
+  const go=document.createElement('button');go.className='btn';go.textContent='⏎ 送出';
+  const note=document.createElement('div');note.style.cssText='width:100%;font-size:.85rem;margin-top:8px;text-align:left';
+  let done=false;
+  function finish(){
+    if(done)return;
+    const els=[...qprompt.querySelectorAll('.czin')];
+    if(!els.length||els.every(e=>!e.value.trim()))return;
+    done=true;els.forEach(e=>e.disabled=true);go.disabled=true;
+    qTotal++;logAnswer();
+    let ok=true,caseHint=false,umlHint=false,rows='';
+    els.forEach(e=>{
+      const raw=e.value.trim().replace(/\s+/g,' '),ans=slots[+e.dataset.si]||'';
+      const exact=raw===ans,caseOnly=!exact&&raw.toLowerCase()===ans.toLowerCase();
+      if(exact||caseOnly){
+        e.style.borderColor='#15803d';e.style.color='#15803d';
+        if(caseOnly&&/^[A-ZÄÖÜ]/.test(ans)&&raw[0]!==ans[0])caseHint=true;
+      }else{
+        ok=false;e.style.borderColor='#b91c1c';e.style.color='#b91c1c';
+        if(/[äöüßÄÖÜ]/.test(ans)&&foldDe(raw)===foldDe(ans))umlHint=true;
+        rows+='<div style="margin-top:4px">你打的：'+czDiff(raw,ans)+' → <span style="color:#15803d;font-weight:600">'+czEsc(ans)+'</span></div>';
+      }
+    });
+    let h='';
+    if(ok){qScore++;}
+    else{
+      recordError('listen',s);
+      if(qmode!=='meilen'&&qmode!=='grad')requeue('listen',s);
+    }
+    if(qmode==='meilen'){meilenRecord('listen',s,ok);meilenDone++;}
+    if(qmode==='grad'){gradRecord('listen',ok);gradDone++;}
+    if(caseHint)h+='<div style="color:#b45309;font-weight:600">⚠️ 算你對，但德文名詞字首要大寫。</div>';
+    if(!ok){
+      h+=rows;
+      if(umlHint)h+='<div style="color:#b45309;margin-top:4px">只差變音——ä/ö/ü/ß 必須打對。iPhone 德文鍵盤長按 a / o / u / s 可打出。</div>';
+    }
+    h+='<div style="color:var(--mut);margin-top:6px">完整句：'+czEsc(s.de)+'　'+czEsc(s.zh||'')+'</div>';
+    note.innerHTML=h;
+    qscore.textContent=`分數 ${qScore} / ${qTotal}`;qnext.hidden=false;speak(s.de);
+  }
+  go.onclick=finish;
+  qprompt.querySelectorAll('.czin').forEach(e=>e.addEventListener('keydown',ev=>{if(ev.key==='Enter'){ev.preventDefault();finish();}}));
+  const wrap=document.createElement('div');wrap.style.cssText='display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap';
+  wrap.appendChild(go);wrap.appendChild(note);qopts.appendChild(wrap);
+  const f=qprompt.querySelector('.czin');if(f)setTimeout(()=>f.focus(),50);
+  return true;
+}
 /* 👂 聽力題：TTS 唸整句，兩種問法隨機——選中文意思／填缺字 */
 function renderListen(pre){
   const s=qCur,ws=SENT_WORDS(s),clean=t=>t.replace(/[.,!?"„"]/g,'');
@@ -5196,6 +5336,8 @@ function renderListen(pre){
     qSpeak=s.de;
     const dp=SENTENCES.filter(x=>x.de!==s.de&&x.zh!==s.zh);
     sample(dp,3,null).map(x=>x.zh).concat(s.zh).sort(()=>Math.random()-.5).forEach(z=>addOpt(z,z===s.zh));
+  }else if(qmode==='listen'&&czRenderTyped(pre,s,ws,cand)){
+    /* N20：純 👂 模式的挖空題改打字；🎓 畢業考與 🏁 總復習維持原選項制 */
   }else{
     const pick=cand[Math.random()*cand.length|0],ans=clean(pick.w);
     qsub.textContent=pre+'👂 聽整句，填回缺掉的字';
