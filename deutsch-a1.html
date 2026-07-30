@@ -171,6 +171,11 @@
   .swdate{font-size:.72rem;color:var(--mut);font-weight:700}
   #tour{position:fixed;inset:0;background:rgba(30,25,18,.55);z-index:99;display:flex;align-items:center;justify-content:center;padding:20px}
   #tour[hidden]{display:none}
+  /* N21 狀態鈕：樣式必須寫在這裡而非內聯——內聯 display 會蓋掉 hidden 屬性
+     （UA 樣式 [hidden]{display:none} 優先權最低），2026-07-30 實例：畢業考結算頁
+     殘留上一輪的標記列且按不動。同 #tour 樣板，勿改回內聯。 */
+  #qmark{margin:10px 0 0;display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center}
+  #qmark[hidden]{display:none}
   .tourcard{background:#fff;border-radius:18px;max-width:420px;width:100%;padding:22px 20px;box-shadow:0 12px 40px rgba(0,0,0,.25)}
   .tourcard h3{margin:0 0 10px;font-size:1.05rem}
   .tourcard p{font-size:.9rem;line-height:1.65;margin:0;color:#444}
@@ -458,7 +463,7 @@ L18 生病看醫生·Imperativ(Sie)命令句·sollen間接建議·seit+時長·�
       <div style="margin:-4px 0 14px"><button class="spk" id="qspeak" aria-label="唸"></button></div>
       <div class="opts" id="qopts"></div>
       <div class="score" id="qscore">分數 0 / 0</div>
-      <div id="qmark" hidden style="margin:10px 0 0;display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center">
+      <div id="qmark" hidden>
         <span id="qmarkLbl" style="font-size:.85rem;color:var(--mut)"></span>
         <button class="btn" id="qmarkWeak" style="font-size:.85rem;padding:6px 12px">🔖 不熟</button>
         <button class="btn" id="qmarkKnow" style="font-size:.85rem;padding:6px 12px">✓ 我會了</button>
