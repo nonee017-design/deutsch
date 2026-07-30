@@ -4738,6 +4738,7 @@ function recordError(mode,q){
   if(mode==='mean'||mode==='gender'){if(q.id!==undefined){weak[q.id]=1;saveWeak();if(mastered[q.id]){delete mastered[q.id];saveMastered();delete seen[q.id];saveSeen();}}return;}
   if(mode==='listen'||mode==='satzbau'){
     if(q.syn){const k=errKeyOf(mode,q);if(k){errors[k]=(errors[k]||0)+1;saveErrors();renderErrPanel();}return;}   /* N7 生成題 */
+    if(q.wl){errors['👂 單字聽辨']=(errors['👂 單字聽辨']||0)+1;saveErrors();renderErrPanel();return;}   /* N22：不動 mastered/weak，要標不熟走 N21 狀態鈕 */
     if(q.de){weakSent[q.de]=1;saveWeakSent();}return;}
   const k=q.ng?'📚 詞彙/表達':errKeyOf(mode,q);if(k){errors[k]=(errors[k]||0)+1;saveErrors();renderErrPanel();}
 }
@@ -5059,7 +5060,10 @@ function poolFor(mode){
     if(qWeak){const ws=weakNounSet();return PLURAL.filter(it=>{const m=(it.before+it.after).match(/\(([^)]+)\)/);return m&&ws.has(m[1]);});}
     return PLURAL.filter(it=>inLessonScope(it.l));
   }
-  if(mode==='listen')return qWeak?listenPool(true,false):(function(){const lp=listenPool(false,false);return lp.concat(numListenPool(lp.length));})();
+  if(mode==='listen')return qWeak?listenPool(true,false).concat(qmode==='listen'?wordListenPool(0,true):[])
+    :(function(){const lp=listenPool(false,false);
+      /* N22：單字聽辨義只在純 👂 進池——🎓 配方門檻不動、🏁 是 🏆 第①關門檻 */
+      return lp.concat(numListenPool(lp.length),qmode==='listen'?wordListenPool(lp.length):[]);})();
   if(mode==='satzbau')return satzbauPool(qWeak,false);
   if(mode==='mean')return qWeak?VOCAB.filter(v=>v.cat!=='數字'&&weak[v.id]):VOCAB.filter(v=>v.cat!=='數字'&&lessonMatch(v)&&(qInclM||!mastered[v.id]||isDecayDue(v.id)));
   if(mode==='gender')return qWeak?VOCAB.filter(v=>v.g&&v.g!=='plu'&&weak[v.id]):VOCAB.filter(v=>v.g&&v.g!=='plu'&&lessonMatch(v)&&(qInclM||!mastered[v.id]||isDecayDue(v.id)));
@@ -5082,7 +5086,8 @@ function requeue(mode,item){const b=bags[mode]||(bags[mode]=[]);b.splice(Math.mi
 document.querySelectorAll('[data-qmode]').forEach(b=>b.onclick=()=>{
   modulRun=null; /* 手動換題型＝放棄進行中的單元第①關判定 */
   document.querySelectorAll('[data-qmode]').forEach(x=>x.dataset.on=(x===b));
-  qmode=b.dataset.qmode;qScore=0;qTotal=0;qscore.textContent='分數 0 / 0';
+  qmode=b.dataset.qmode;delete bags.listen; /* N22：👂 專屬題型不得隨舊題袋滲進 🏁/🎓 */
+  qScore=0;qTotal=0;qscore.textContent='分數 0 / 0';
   if(qmode==='meilen')buildMeilen();
   if(qmode==='grad')buildGrad();
   newQ();
@@ -5152,6 +5157,7 @@ qnext.onclick=()=>{saveLastQ();newQ();};
 function qWordOf(){
   if(qmode==='grad')return null;
   if((qCurMode==='mean'||qCurMode==='gender')&&qCur&&qCur.id!==undefined)return qCur;
+  if(qCurMode==='listen'&&qCur&&qCur.wl&&qCur.v&&qCur.v.id!==undefined)return qCur.v;   /* N22 單字聽辨義 */
   let src=null;
   if(qCurMode==='plural'&&qCur)src=qCur;
   else if(qCurMode==='typed'&&qCur&&qCur.tm==='plural')src=qCur.src;
@@ -5209,7 +5215,7 @@ function newQ(){
     qSpeak=qCur.g+' '+qCur.de;
     ['der','die','das'].forEach(g=>addOpt(GLABEL[g],g===qCur.g));
   }else if(m==='listen'){
-    (qCur&&qCur.syn)?renderNumListen(pre):renderListen(pre);
+    (qCur&&qCur.syn)?renderNumListen(pre):(qCur&&qCur.wl)?renderWordListen(pre):renderListen(pre);
   }else if(m==='satzbau'){
     renderSatzbau(pre);
   }else if(m==='typed'){
@@ -5226,6 +5232,83 @@ function newQ(){
 }
 /* N11.5：聽力挖空的功能詞停用清單（冠詞/代名詞/常見介係詞/sein·haben 變位/連接詞等） */
 const CLOZE_STOP=new Set(['der','die','das','den','dem','des','ein','eine','einen','einem','einer','kein','keine','keinen','und','oder','aber','auch','aus','bei','mit','von','bis','für','das','ist','bin','bist','sind','seid','war','hat','habe','hast','habt','ich','sie','wir','ihr','ihm','ihn','uns','euch','man','wie','was','wer','wann','warum','nicht','noch','nur','schon','mal','doch','denn','dann','hier','da','ja','nein','sehr','zum','zur','im','am','um','an','in','auf','nach','vor','über','unter','es']);
+/* ═══ N22 單字聽辨義（2026-07-30）═══════════════════════════════════════════
+   缺口：poolFor('mean') 的條件含 !mastered[v.id]，已標「我會了」的字會被排除在
+   字義題外。使用者的視覺熟悉度把這些字送出題庫，但聽覺熟悉度從未建立——
+   「看到認得出來、聽到不一定認得」正是這批字。本題型專打這個破口。
+   設計要點：干擾項用「音近詞」（Schlüssel/Schüssel 型），隨機干擾項會讓題目
+   退化成「聽出第一個音就能過」。取音近 2 個＋隨機 1 個，全音近太挫折。
+   答錯不動 mastered/weak——mastered 的語意是「看得懂」，聽錯就取消畢業會讓
+   單字卡冒出一堆其實讀得懂的字。要標不熟走 N21 的測驗頁狀態鈕（手動）。
+   只在純 👂 出現，理由同 N20（🎓 門檻不動、🏁 是 🏆 第①關門檻）。 */
+/* 發音正規化：把德文正字法的同音異寫收斂成同一字串，再算編輯距離。
+   1/2/3 是佔位符（sch/ch/z），不能用大寫字母——最後一步會濾掉非 a-z0-9。 */
+function phKey(w){
+  let s=String(w||'').toLowerCase();
+  s=s.replace(/ä/g,'e').replace(/ö/g,'o').replace(/ü/g,'u').replace(/ß/g,'s');
+  s=s.replace(/tsch/g,'1').replace(/sch/g,'1').replace(/chs/g,'ks').replace(/ch/g,'2');
+  s=s.replace(/ph/g,'f').replace(/v/g,'f').replace(/w/g,'v');
+  s=s.replace(/tz/g,'3').replace(/z/g,'3').replace(/ck/g,'k').replace(/qu/g,'kv');
+  s=s.replace(/ie/g,'i').replace(/([aeou])h/g,'$1');
+  s=s.replace(/(.)\1+/g,'$1');
+  s=s.replace(/er$/,'a'); /* 字尾 -er 唸近 [ɐ]，與 -a 難分 */
+  return s.replace(/[^a-z0-9]/g,'');
+}
+function phDist(a,b){
+  const m=a.length,n=b.length;if(!m)return n;if(!n)return m;
+  let prev=Array.from({length:n+1},(_,j)=>j),cur=new Array(n+1);
+  for(let i=1;i<=m;i++){
+    cur[0]=i;
+    for(let j=1;j<=n;j++)cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));
+    [prev,cur]=[cur,prev];
+  }
+  return prev[n];
+}
+/* 題池。優先出已標「我會了」的字（它們正是被字義題排除的高風險群），
+   題數比照 N7 數字題的既有慣例＝例句聽力池的 25%、下限 12。 */
+/* 選項標籤：zhCore 之後再砍掉「；」「—」之後的文法說明尾巴。
+   只給本題型用——既有字義題沿用 zhCore（改它＝動既有行為，鐵律 2）。 */
+function zhOpt(z){
+  let c=zhCore(z||'');
+  c=c.split(/[；;]/)[0];
+  c=c.split(/\s[—–-]\s/)[0];
+  return c.trim()||zhCore(z||'');
+}
+function wordListenPool(base,weakOnly){
+  const ok=v=>v&&v.zh&&v.cat!=='數字'&&v.id!==undefined
+    &&/^[A-Za-zÄÖÜäöüß][A-Za-zÄÖÜäöüß-]{2,}$/.test(v.de)
+    /* 清理後仍把自己的德文字印在選項上者（如 oder→「句尾 …, oder? …」）排除，否則等於送分 */
+    &&zhOpt(v.zh).toLowerCase().indexOf(v.de.toLowerCase())<0;
+  const mk=v=>({wl:1,v:v,zh:v.zh});
+  if(weakOnly)return VOCAB.filter(v=>ok(v)&&weak[v.id]).map(mk);
+  const scope=VOCAB.filter(v=>ok(v)&&lessonMatch(v));
+  if(!scope.length)return [];
+  const sh=a=>a.slice().sort(()=>Math.random()-.5);
+  const prio=sh(scope.filter(v=>mastered[v.id])),rest=sh(scope.filter(v=>!mastered[v.id]));
+  return prio.concat(rest).slice(0,Math.max(12,Math.round((base||0)*0.25))).map(mk);
+}
+function renderWordListen(pre){
+  const v=qCur.v;
+  qsub.textContent=pre+'👂 只聽發音，選出意思（🔊 可重聽）';
+  qprompt.innerHTML='<span style="font-size:1.7rem">🔊</span>　<span class="blank"'
+    +(v.g?' style="color:var(--'+v.g+')"':'')+'>____</span>';
+  qSpeak=v.de;
+  qCur.answer=(ART[v.g]||'')+v.de; /* 答完由 addOpt 的 .blank 機制自動揭曉拼字 */
+  const ansZh=zhOpt(v.zh),key=phKey(v.de);
+  const cands=VOCAB.filter(x=>x.id!==v.id&&x.zh&&x.cat!=='數字'&&x.de!==v.de
+    &&zhOpt(x.zh)!==ansZh&&lessonMatch(x)
+    /* 干擾項也不得把被問的德文字印出來 */
+    &&zhOpt(x.zh).toLowerCase().indexOf(v.de.toLowerCase())<0);
+  const used=new Set([ansZh]),dis=[];
+  /* 音近 2 個 */
+  cands.map(x=>({x:x,d:phDist(key,phKey(x.de))})).sort((a,b)=>a.d-b.d)
+    .forEach(s=>{const c=zhOpt(s.x.zh);if(dis.length<2&&!used.has(c)){used.add(c);dis.push(c);}});
+  /* 隨機 1 個（全音近太挫折） */
+  cands.slice().sort(()=>Math.random()-.5)
+    .forEach(x=>{const c=zhOpt(x.zh);if(dis.length<3&&!used.has(c)){used.add(c);dis.push(c);}});
+  dis.concat(ansZh).sort(()=>Math.random()-.5).forEach(o=>addOpt(o,o===ansZh));
+  speak(v.de);
+}
 /* ═══ N20 聽打挖空（2026-07-30）═════════════════════════════════════════════
    👂 的「填缺字」子題型由選項制改打字制。挖空單位＝名詞組（冠詞/所有格＋名詞）
    或動詞組（主詞＋變位動詞；可分離字首在句尾則一併挖），一句只挖一組、兩型輪替。
