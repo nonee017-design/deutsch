@@ -458,6 +458,11 @@ L18 生病看醫生·Imperativ(Sie)命令句·sollen間接建議·seit+時長·�
       <div style="margin:-4px 0 14px"><button class="spk" id="qspeak" aria-label="唸"></button></div>
       <div class="opts" id="qopts"></div>
       <div class="score" id="qscore">分數 0 / 0</div>
+      <div id="qmark" hidden style="margin:10px 0 0;display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center">
+        <span id="qmarkLbl" style="font-size:.85rem;color:var(--mut)"></span>
+        <button class="btn" id="qmarkWeak" style="font-size:.85rem;padding:6px 12px">🔖 不熟</button>
+        <button class="btn" id="qmarkKnow" style="font-size:.85rem;padding:6px 12px">✓ 我會了</button>
+      </div>
       <div style="margin-top:14px"><button class="btn" id="qnext" hidden>下一題 →</button></div>
     </div>
     <details class="panelbox" id="errBox">
@@ -5135,8 +5140,47 @@ const qprompt=document.getElementById('qprompt'),qsub=document.getElementById('q
 document.getElementById('qspeak').innerHTML=SPK_SVG;
 document.getElementById('qspeak').onclick=()=>{if(qSpeak)speak(qSpeak);};
 qnext.onclick=()=>{saveLastQ();newQ();};
+/* ═══ N21 測驗頁單字狀態鈕（2026-07-30）══════════════════════════════════
+   答完題後，直接對「本題所測的那個單字」標 🔖 不熟 / ✓ 我會了，不必回單字卡。
+   對象解析一律接既有旗標，不靠猜（ROADMAP §8.10）：
+     · 字義/性別題 → qCur 本身就是 VOCAB 條目
+     · 複數題      → 題目 sub 的「複數：Xxx」字頭反查 VOCAB（實測 106/106 命中）
+     · ⌨️ 打字題    → qCur.src 是原題，tm==='plural' 時同上
+   文法／聽力／語序題沒有單一單字對象 → 不顯示。
+   🎓 畢業考期間不顯示（檢定進行中不得改自身畢業狀態，2026-07-30 使用者拍板）。
+   ⚠️ 與單字卡的差異：此處按「我會了」會一併清掉 🔖，避免畢業字仍留在「只考不熟」池。 */
+function qWordOf(){
+  if(qmode==='grad')return null;
+  if((qCurMode==='mean'||qCurMode==='gender')&&qCur&&qCur.id!==undefined)return qCur;
+  let src=null;
+  if(qCurMode==='plural'&&qCur)src=qCur;
+  else if(qCurMode==='typed'&&qCur&&qCur.tm==='plural')src=qCur.src;
+  if(src&&src.sub){
+    const m=src.sub.match(/複數[:：]\s*([^\s（(]+)/);
+    if(m){const w=VOCAB.find(v=>v.de===m[1]&&v.g);if(w&&w.id!==undefined)return w;}
+  }
+  return null;
+}
+function renderQMark(){
+  const box=document.getElementById('qmark');if(!box)return;
+  const w=qWordOf();
+  if(!w){box.hidden=true;return;}
+  box.hidden=false;
+  document.getElementById('qmarkLbl').textContent=(ART[w.g]||'')+w.de;
+  const bw=document.getElementById('qmarkWeak'),bk=document.getElementById('qmarkKnow');
+  bw.textContent=weak[w.id]?'🔖 已標不熟（點取消）':'🔖 不熟';
+  bk.textContent=mastered[w.id]?'↩ 已會了（點取消）':'✓ 我會了';
+}
+{const _bw=document.getElementById('qmarkWeak'),_bk=document.getElementById('qmarkKnow');
+ if(_bw)_bw.onclick=()=>{const w=qWordOf();if(!w)return;
+   if(weak[w.id])delete weak[w.id];else weak[w.id]=1;saveWeak();renderQMark();};
+ if(_bk)_bk.onclick=()=>{const w=qWordOf();if(!w)return;
+   if(mastered[w.id]){delete mastered[w.id];delete seen[w.id];saveSeen();}
+   else{mastered[w.id]=1;if(weak[w.id]){delete weak[w.id];saveWeak();}seen[w.id]=Date.now();saveSeen();}
+   saveMastered();renderQMark();};}
 function newQ(){
   qnext.hidden=true;qopts.innerHTML='';qprompt.innerHTML='';qSpeak='';
+  {const _qm=document.getElementById('qmark');if(_qm)_qm.hidden=true;}
   if(qmode==='meilen'){
     if(!meilenTotal){qsub.textContent='';qprompt.textContent='此範圍沒有題目，換個範圍';return;}
     if(meilenDone>=meilenTotal||!meilenQueue.length){showMeilenStats();return;}
@@ -5435,7 +5479,7 @@ function renderTyped(pre){
     }
     if(qmode==='meilen'){meilenRecord(w.tm,q,ok);meilenDone++;} /* N14：統計計入原文法點 */
     const bl=qprompt.querySelector('.blank');if(bl){bl.textContent=ans;bl.classList.add('filled');}
-    qscore.textContent=`分數 ${qScore} / ${qTotal}`;qnext.hidden=false;speak(q.full);
+    qscore.textContent=`分數 ${qScore} / ${qTotal}`;qnext.hidden=false;renderQMark();speak(q.full);
   }
   go.onclick=finish;
   inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();finish();}});
@@ -5458,6 +5502,7 @@ function addOpt(label,correct){
     const bl=qprompt.querySelector('.blank');if(bl&&qCur.answer!==undefined){bl.textContent=qCur.answer;bl.classList.add('filled');}
     qscore.textContent=`分數 ${qScore} / ${qTotal}`;
     qnext.hidden=false;
+    renderQMark();
     speak(qSpeak);
   };
   b._correct=correct;qopts.appendChild(b);
