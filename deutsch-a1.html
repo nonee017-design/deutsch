@@ -4795,6 +4795,63 @@ GR18.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answe
    {l:"L10",sub:"⭐ 對比：同義改寫 Präteritum 或 Perfekt",before:"Ich hatte einen Hund. = Ich ",after:" einen Hund gehabt.",answer:"habe",options:["habe","bin","hatte","hat"],full:"Ich habe einen Hund gehabt."},
   ];
   GR10PT.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+  const GR10RW=[
+   {l:"L10",sub:"⭐ 整句改寫：Er fährt am Sonntag in die Schweiz.",before:"",after:"",answer:"Er ist am Sonntag in die Schweiz gefahren.",options:["Er ist am Sonntag in die Schweiz gefahren.","Er hat am Sonntag in die Schweiz gefahren.","Er ist gefahren am Sonntag in die Schweiz.","Er ist am Sonntag in die Schweiz gefahrt."],full:"Er ist am Sonntag in die Schweiz gefahren."},
+   {l:"L10",sub:"⭐ 整句改寫：Ich besuche meine Freundin.",before:"",after:"",answer:"Ich habe meine Freundin besucht.",options:["Ich habe meine Freundin besucht.","Ich bin meine Freundin besucht.","Ich habe besucht meine Freundin.","Ich habe meine Freundin gebesucht."],full:"Ich habe meine Freundin besucht."},
+   {l:"L10",sub:"⭐ 整句改寫：Sie kauft im Supermarkt ein.",before:"",after:"",answer:"Sie hat im Supermarkt eingekauft.",options:["Sie hat im Supermarkt eingekauft.","Sie ist im Supermarkt eingekauft.","Sie hat eingekauft im Supermarkt.","Sie hat im Supermarkt gekauft ein."],full:"Sie hat im Supermarkt eingekauft."},
+   {l:"L10",sub:"⭐ 整句改寫：Ich stehe morgens um 6 Uhr auf.",before:"",after:"",answer:"Ich bin morgens um 6 Uhr aufgestanden.",options:["Ich bin morgens um 6 Uhr aufgestanden.","Ich habe morgens um 6 Uhr aufgestanden.","Ich bin aufgestanden morgens um 6 Uhr.","Ich bin morgens um 6 Uhr geaufstanden."],full:"Ich bin morgens um 6 Uhr aufgestanden."},
+   {l:"L10",sub:"⭐ 整句改寫：Wir sehen ein bisschen fern.",before:"",after:"",answer:"Wir haben ein bisschen ferngesehen.",options:["Wir haben ein bisschen ferngesehen.","Wir sind ein bisschen ferngesehen.","Wir haben ferngesehen ein bisschen.","Wir haben ein bisschen gefernsehen."],full:"Wir haben ein bisschen ferngesehen."},
+   {l:"L10",sub:"⭐ 整句改寫：Der Mann schreibt einen Brief.",before:"",after:"",answer:"Der Mann hat einen Brief geschrieben.",options:["Der Mann hat einen Brief geschrieben.","Der Mann ist einen Brief geschrieben.","Der Mann hat geschrieben einen Brief.","Der Mann hat einen Brief geschreibt."],full:"Der Mann hat einen Brief geschrieben."},
+   {l:"L10",sub:"⭐ 整句改寫：Ich telefoniere mit Paul.",before:"",after:"",answer:"Ich habe mit Paul telefoniert.",options:["Ich habe mit Paul telefoniert.","Ich bin mit Paul telefoniert.","Ich habe telefoniert mit Paul.","Ich habe mit Paul getelefoniert."],full:"Ich habe mit Paul telefoniert."},
+   {l:"L10",sub:"⭐ 整句改寫：Tom räumt die Küche auf.",before:"",after:"",answer:"Tom hat die Küche aufgeräumt.",options:["Tom hat die Küche aufgeräumt.","Tom ist die Küche aufgeräumt.","Tom hat aufgeräumt die Küche.","Tom hat die Küche geaufräumt."],full:"Tom hat die Küche aufgeräumt."},
+  ];
+  GR10RW.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+
+  /* 整句 Perfekt 判斷題自動生成（2026-07-31）。正解＝既有 SENTENCES 的 Perfekt 句，
+     三個干擾項由正解機械推導，各打一個能力點：助動詞／語序／Partizip 形成。
+     零新造德文——干擾項是刻意的錯形，本來就該是錯的；正解逐字取自語料庫（斷言⑱ 把關）。
+     問法是「哪一句正確」而非「把這句改寫」：語料庫沒有現在式原句，硬生現在式＝憑空造德文。
+     真正的改寫題只手寫（GR10RW，來源＝課堂筆記 Präsens/Perfekt 對照表）。 */
+  (function(){
+    const SW={habe:"bin",hast:"bist",hat:"ist",haben:"sind",habt:"seid",
+              bin:"habe",bist:"hast",ist:"hat",sind:"haben",seid:"habt"};
+    const HAB=["habe","hast","hat","haben","habt"];
+    const INSEP=/^(be|ver|er|ent|emp|zer|miss)/;
+    function wrongP2(p2){
+      /* 已帶 ge 的字要先排除：gefeiert 結尾也是 iert，但那是 feiern 的弱變化，
+         套 -ieren 規則會生出 gegefeiert（2026-07-31 逐題檢視抓到）。 */
+      if((INSEP.test(p2)||/iert$/.test(p2))&&!/^ge/.test(p2)) return "ge"+p2;
+      const m=/^([a-zäöü]+)ge([a-zäöü]+)$/.exec(p2);
+      if(m) return m[2]+" "+m[1];              /* 可分離誤拆：aufgeräumt → räumt auf */
+      if(/en$/.test(p2)) return p2.slice(0,-2)+"t";   /* 強變化誤用弱字尾 */
+      if(/^ge/.test(p2)) return p2.slice(2);          /* 弱變化漏 ge */
+      return null;
+    }
+    const P2={}; Object.keys(VERB_META).forEach(v=>{const m=VERB_META[v];
+      if(m.p2&&m.aux) P2[m.p2]=m.aux;});
+    SENTENCES.forEach(s=>{
+      const de=String(s.de||"");
+      if(!/\.$/.test(de)||de.length>72||/[?!–—]/.test(de)) return;
+      const t=de.slice(0,-1).split(/\s+/);
+      const p2=t[t.length-1];
+      if(!P2[p2]) return;
+      if(t.filter(w=>P2[w]).length!==1) return;  /* 兩個 Partizip → 語序干擾項會攪成亂碼 */
+      const ax=t.filter(w=>SW[w]);
+      if(ax.length!==1) return;
+      const aux=ax[0], fam=HAB.indexOf(aux)>=0?"h":"s";
+      if(P2[p2]!==fam) return;
+      const ai=t.indexOf(aux);
+      if(ai<0||ai===t.length-1) return;
+      const wp=wrongP2(p2); if(!wp) return;
+      const opts=[de,
+        t.slice(0,ai).concat([SW[aux]],t.slice(ai+1)).join(" ")+".",
+        t.slice(0,ai+1).concat([p2],t.slice(ai+1,t.length-1)).join(" ")+".",
+        t.slice(0,t.length-1).concat([wp]).join(" ")+"."];
+      if(new Set(opts).size!==4) return;
+      Q.push({lesson:s.lesson,sub:"⭐ 整句判斷：哪一句 Perfekt 正確？",
+        before:"",after:"",answer:de,options:opts,full:de});
+    });
+  })();
   /* ===ANCHOR:GRAM_QUIZ===（新課文法填空題插在這行上方：宣告 const GRn=[{l,sub,before,after,answer,options,full},…]; 後接一行 GRn.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full})); ）*/
   return Q;
 }
