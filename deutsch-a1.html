@@ -11,7 +11,7 @@
   :root{
     --bg:#eceff3; --card:#ffffff; --ink:#1a1d22; --mut:#6b7280; --line:#e2e6ec;
     --der:#2563a6; --die:#c2476b; --das:#2e9e6b; --plu:#8b5cf6;
-    --chrome:#2b2f3a; --ok:#2e9e6b; --no:#c2476b; --r:16px;
+    --chrome:#2b2f3a; --ok:#2e9e6b; --no:#c2476b; --sein:#0d9488; --r:16px;
     --l2:#b45309;
     --disp:"Fraunces", Georgia, serif;
     --ui:"Inter","PingFang TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
@@ -148,6 +148,11 @@
   .vform{cursor:pointer;font-family:var(--disp);font-weight:700;color:var(--der);border-bottom:1px dotted var(--der);white-space:nowrap}
   .vsub{font-size:.76rem;color:var(--mut);font-weight:500;margin-top:4px}
   .virr{margin-top:5px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+  .vbox.pbox{color:var(--ink);font-weight:600}
+  .pa{font-family:var(--disp);font-weight:800}
+  .pa.sein{color:var(--sein)}
+  .pa.hat{color:var(--mut)}
+  .pa.unk{color:var(--mut);font-weight:600;font-style:italic}
   .wtag{font-size:.64rem;font-weight:800;padding:1px 8px;border-radius:999px;background:#b45309;color:#fff}
   .postag{font-size:.64rem;font-weight:700;padding:1px 7px;border-radius:999px;border:1px solid #c7d2fe;color:#4338ca;background:#eef2ff}
   #btnWeak.marked{background:#b45309;color:#fff}
@@ -666,7 +671,7 @@ const ADD4=[
   {de:"Geld",zh:"錢（das Geld，不可數）",g:"das",cat:"數字",lesson:"L4",ex:["Ich habe nicht viel Geld.","我錢不多。"]},
   {de:"wissen",zh:"知道（事實）；不規則 ich weiß/du weißt",g:null,cat:"動詞",lesson:"L4",ex:["Weißt du das?","你知道嗎？"],ex2:["Ich weiß es nicht genau.","我不太確定。"]},
   {de:"denn",zh:"語氣詞：讓問句更自然（無字面意思）；另義「因為」",g:null,cat:"常用",lesson:"L4",ex:["Wie viel kostet denn der Tisch?","這桌子多少錢呢？"]},
-  {de:"oder",zh:"句尾 …, oder? =「對吧？」；一般義「或」",g:null,cat:"常用",lesson:"L4",ex:["Die Couch ist schön, oder?","這沙發很美，對吧？"]},
+  {de:"oder",zh:"一般義「或」；句尾 …, oder? =「對吧？」",g:null,cat:"常用",lesson:"L4",ex:["Die Couch ist schön, oder?","這沙發很美，對吧？"]},
   {de:"aber",zh:"但是；語氣加強「也太…了！」",g:null,cat:"常用",lesson:"L4",ex:["Das ist aber günstig!","這也太便宜了吧！"]},
   {de:"Vielen Dank",zh:"非常感謝（比 Danke 鄭重；vielen 是 ie！）",g:null,cat:"常用",lesson:"L4",ex:["Vielen Dank! – Bitte.","非常感謝！－不客氣。"]},
 ];
@@ -1500,7 +1505,7 @@ const ADD17=[
 {de:"Prüfung",zh:"考試",g:"die",cat:"工作相關",lesson:"L17",ex:["Er hat endlich die Prüfung geschafft.","他終於通過了考試。"]},
 {de:"Star",zh:"明星",g:"der",cat:"常用",lesson:"L17",ex:["Cherry zeigt uns ihre „Starbrille\".","Cherry 給我們看她的「明星墨鏡」。"]},
 {de:"werden",zh:"變成、將要（注意 ich werde 有 -e 字尾，跟情態動詞「ich=er 無字尾」規則不同，見文法「動詞變位②」）",g:null,cat:"動詞",lesson:"L17",ex:["Ich will Popstar werden.","我想成為流行歌星。"],ex2:["Was willst du werden?","你想成為什麼？"]},
-{de:"abschließen",zh:"完成、結束（學業/合約等）— 可分離，Perfekt hat abgeschlossen",g:null,cat:"動詞",lesson:"L17",ex:["Hast du eine Berufsausbildung abgeschlossen?","你完成職業培訓了嗎？"],ex2:["Sie hat ihre Ausbildung letztes Jahr abgeschlossen.","她去年完成了職業培訓。"]},
+{de:"abschließen",zh:"完成、結束（學業/合約等）；可分離，Perfekt hat abgeschlossen",g:null,cat:"動詞",lesson:"L17",ex:["Hast du eine Berufsausbildung abgeschlossen?","你完成職業培訓了嗎？"],ex2:["Sie hat ihre Ausbildung letztes Jahr abgeschlossen.","她去年完成了職業培訓。"]},
 {de:"anmelden",zh:"報名、登記 — 反身 sich anmelden，可分離，Perfekt hat sich angemeldet（完整反身規則 A2 才學）",g:null,cat:"動詞",lesson:"L17",ex:["Ich melde mich bei einer Schauspielschule an.","我要去戲劇學校報名。"],ex2:["Meldest du dich bald an einer Schule oder Universität an?","你快要去某間學校或大學報名了嗎？"]},
 {de:"komponieren",zh:"作曲",g:null,cat:"動詞",lesson:"L17",ex:["Ich schreibe meine Lieder selbst und komponiere sie auch.","我自己寫歌詞也自己作曲。"]},
 {de:"übersetzen",zh:"翻譯",g:null,cat:"動詞",lesson:"L17",ex:["Sie möchte Bücher übersetzen.","她想翻譯書。"]},
@@ -1573,8 +1578,24 @@ const ADD18=[
 {de:"hoch",zh:"高的（程度或高度；反義 niedrig）",g:null,cat:"形容詞",lesson:"L18",ex:["Das Fieber ist sehr hoch.","燒得很高。"]},
 {de:"gegen",zh:"針對、治…用（＋Akkusativ；另有「對著／大約」義）",g:null,cat:"介係詞",lesson:"L18",ex:["Was hilft gegen Kopfschmerzen?","什麼對頭痛有效？"]},
 ];
+const ADDP2V=[
+{de:"verstehen",zh:"理解、聽懂",g:null,cat:"動詞",lesson:"L1",ex:["Wie bitte? Ich habe das nicht verstanden.","你說什麼？我沒聽懂。"]},
+{de:"telefonieren",zh:"打電話",g:null,cat:"動詞",lesson:"L7",ex:["Kann ich mal telefonieren?","我可以借打個電話嗎？"],ex2:["Ich habe gestern lange telefoniert.","我昨天講了很久的電話。"]},
+];
+const ADD10S=[
+{de:"aufmachen",zh:"打開（門、窗）",g:null,cat:"動詞",lesson:"L10",ex:["Du machst die Tür auf.","你把門打開。"],ex2:["Wir haben das Fenster aufgemacht.","我們把窗戶打開了。"]},
+{de:"zumachen",zh:"關上（反義 aufmachen）",g:null,cat:"動詞",lesson:"L10"},
+{de:"mitkommen",zh:"一起來、跟著來",g:null,cat:"動詞",lesson:"L10",ex:["Paul kommt nach Berlin mit.","Paul 一起去柏林。"],ex2:["Kommt Paul nach Berlin mit?","Paul 要一起去柏林嗎？"]},
+{de:"zuhören",zh:"傾聽、專心聽（＋Dativ）",g:null,cat:"動詞",lesson:"L10",ex:["Die Schüler hören im Unterricht gut zu.","學生們上課認真聽。"],ex2:["Hören die Schüler im Unterricht gut zu?","學生們上課有認真聽嗎？"]},
+{de:"zusagen",zh:"答應、允諾（反義 absagen）",g:null,cat:"動詞",lesson:"L10"},
+{de:"abfliegen",zh:"起飛、飛離",g:null,cat:"動詞",lesson:"L10"},
+{de:"ausziehen",zh:"脫下（衣服）；搬出去",g:null,cat:"動詞",lesson:"L10"},
+{de:"einziehen",zh:"搬進去（反義 ausziehen）",g:null,cat:"動詞",lesson:"L10"},
+{de:"mitsingen",zh:"一起唱",g:null,cat:"動詞",lesson:"L10"},
+{de:"vorstellen",zh:"介紹；sich vorstellen 自我介紹",g:null,cat:"動詞",lesson:"L10"},
+];
 /* ===ANCHOR:VOCAB_ARRAYS===（新課單字陣列 const ADDn=[...] 宣告在這行上方，並把陣列名加進下面 VOCAB 合併行）*/
-const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B,...ADD18];
+const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B,...ADD18,...ADDP2V,...ADD10S];
 VOCAB.forEach((v,i)=>v.id="v"+i);
 
 
@@ -2346,84 +2367,84 @@ const NOUN_PLEX={
 };
 const VERB_META={
   kosten:{t:"stemt",du:"kostest",er:"kostet"},
-  finden:{t:"stemt",du:"findest",er:"findet"},
+  finden:{t:"stemt",du:"findest",er:"findet",p2:"gefunden",aux:"h"},
   kaufen:{t:"reg"},
   brauchen:{t:"reg"},
-  machen:{t:"reg"},
-  sagen:{t:"reg"},
-  wissen:{t:"irr",f:["weiß","weißt","weiß","wissen","wisst","wissen"]},
+  machen:{t:"reg",p2:"gemacht",aux:"h"},
+  sagen:{t:"reg",p2:"gesagt",aux:"h"},
+  wissen:{t:"irr",f:["weiß","weißt","weiß","wissen","wisst","wissen"],p2:"gewusst",aux:"h"},
   möchten:{t:"irr",f:["möchte","möchtest","möchte","möchten","möchtet","möchten"]},
   bestellen:{t:"reg"},
   suchen:{t:"reg"},
-  nehmen:{t:"irr",f:["nehme","nimmst","nimmt","nehmen","nehmt","nehmen"]},
-  geben:{t:"irr",f:["gebe","gibst","gibt","geben","gebt","geben"]},
-  schreiben:{t:"reg"},
+  nehmen:{t:"irr",f:["nehme","nimmst","nimmt","nehmen","nehmt","nehmen"],p2:"genommen",aux:"h"},
+  geben:{t:"irr",f:["gebe","gibst","gibt","geben","gebt","geben"],p2:"gegeben",aux:"h"},
+  schreiben:{t:"reg",p2:"geschrieben",aux:"h"},
   verkaufen:{t:"reg"},
-  bekommen:{t:"reg"},
+  bekommen:{t:"reg",p2:"bekommen"},
   mitbringen:{t:"irr",f:["bringe … mit","bringst … mit","bringt … mit","bringen … mit","bringt … mit","bringen … mit"]},
-  kommen:{t:"reg"},
-  wohnen:{t:"reg"},
+  kommen:{t:"reg",p2:"gekommen",aux:"s"},
+  wohnen:{t:"reg",p2:"gewohnt",aux:"h"},
   fragen:{t:"reg"},
-  heißen:{t:"sib",du:"heißt",er:"heißt"},
+  heißen:{t:"sib",du:"heißt",er:"heißt",p2:"geheißen",aux:"h"},
   antworten:{t:"stemt",du:"antwortest",er:"antwortet"},
-  sein:{t:"irr",f:["bin","bist","ist","sind","seid","sind"]},
-  haben:{t:"irr",f:["habe","hast","hat","haben","habt","haben"]},
+  sein:{t:"irr",f:["bin","bist","ist","sind","seid","sind"],p2:"gewesen",aux:"s"},
+  haben:{t:"irr",f:["habe","hast","hat","haben","habt","haben"],p2:"gehabt",aux:"h"},
   buchstabieren:{t:"reg"},
-  arbeiten:{t:"stemt",du:"arbeitest",er:"arbeitet"},
-  leben:{t:"reg"},
+  arbeiten:{t:"stemt",du:"arbeitest",er:"arbeitet",p2:"gearbeitet",aux:"h"},
+  leben:{t:"reg",p2:"gelebt",aux:"h"},
   studieren:{t:"reg"},
   glauben:{t:"reg"},
-  sprechen:{t:"vowel",du:"sprichst",er:"spricht"},
-  lesen:{t:"vowel",du:"liest",er:"liest"},
-  hören:{t:"reg"},
-  sehen:{t:"vowel",du:"siehst",er:"sieht"},
+  sprechen:{t:"vowel",du:"sprichst",er:"spricht",p2:"gesprochen",aux:"h"},
+  lesen:{t:"vowel",du:"liest",er:"liest",p2:"gelesen",aux:"h"},
+  hören:{t:"reg",p2:"gehört",aux:"h"},
+  sehen:{t:"vowel",du:"siehst",er:"sieht",p2:"gesehen",aux:"h"},
   können:{t:"irr",f:["kann","kannst","kann","können","könnt","können"]},
   mögen:{t:"irr",f:["mag","magst","mag","mögen","mögt","mögen"]},
-  essen:{t:"irr",f:["esse","isst","isst","essen","esst","essen"]},
-  fahren:{t:"vowel",du:"fährst",er:"fährt"},
-  treffen:{t:"vowel",du:"triffst",er:"trifft"},
-  tanzen:{t:"sib",du:"tanzt",er:"tanzt"},
+  essen:{t:"irr",f:["esse","isst","isst","essen","esst","essen"],p2:"gegessen",aux:"h"},
+  fahren:{t:"vowel",du:"fährst",er:"fährt",p2:"gefahren",aux:"s"},
+  treffen:{t:"vowel",du:"triffst",er:"trifft",p2:"getroffen",aux:"h"},
+  tanzen:{t:"sib",du:"tanzt",er:"tanzt",p2:"getanzt",aux:"h"},
   backen:{t:"reg"},
-  gehen:{t:"reg"},
-  kochen:{t:"reg"},
+  gehen:{t:"reg",p2:"gegangen",aux:"s"},
+  kochen:{t:"reg",p2:"gekocht",aux:"h"},
   malen:{t:"reg"},
   lieben:{t:"reg"},
-  besuchen:{t:"reg"},
-  fotografieren:{t:"reg"},
-  schwimmen:{t:"reg"},
+  besuchen:{t:"reg",p2:"besucht",aux:"h"},
+  fotografieren:{t:"reg",p2:"fotografiert",aux:"h"},
+  schwimmen:{t:"reg",p2:"geschwommen",aux:"s"},
   singen:{t:"reg"},
-  spielen:{t:"reg"},
+  spielen:{t:"reg",p2:"gespielt",aux:"h"},
   rauchen:{t:"reg"},
   kennen:{t:"reg"},
   schmecken:{t:"reg"},
-  trinken:{t:"reg"},
-  frühstücken:{t:"reg"},
-  joggen:{t:"reg"},
+  trinken:{t:"reg",p2:"getrunken",aux:"h"},
+  frühstücken:{t:"reg",p2:"gefrühstückt",aux:"h"},
+  joggen:{t:"reg",p2:"gejoggt",aux:"s"},
   wandern:{t:"reg"},
   trainieren:{t:"reg"},
-  einladen:{t:"irr",f:["lade … ein","lädst … ein","lädt … ein","laden … ein","ladet … ein","laden … ein"]},
+  einladen:{t:"irr",f:["lade … ein","lädst … ein","lädt … ein","laden … ein","ladet … ein","laden … ein"],p2:"eingeladen",aux:"h"},
   ankommen:{t:"irr",f:["komme … an","kommst … an","kommt … an","kommen … an","kommt … an","kommen … an"]},
   abfahren:{t:"irr",f:["fahre … ab","fährst … ab","fährt … ab","fahren … ab","fahrt … ab","fahren … ab"]},
   abholen:{t:"irr",f:["hole … ab","holst … ab","holt … ab","holen … ab","holt … ab","holen … ab"]},
-  anrufen:{t:"irr",f:["rufe … an","rufst … an","ruft … an","rufen … an","ruft … an","rufen … an"]},
-  aussteigen:{t:"irr",f:["steige … aus","steigst … aus","steigt … aus","steigen … aus","steigt … aus","steigen … aus"]},
-  einsteigen:{t:"irr",f:["steige … ein","steigst … ein","steigt … ein","steigen … ein","steigt … ein","steigen … ein"]},
+  anrufen:{t:"irr",f:["rufe … an","rufst … an","ruft … an","rufen … an","ruft … an","rufen … an"],p2:"angerufen",aux:"h"},
+  aussteigen:{t:"irr",f:["steige … aus","steigst … aus","steigt … aus","steigen … aus","steigt … aus","steigen … aus"],p2:"ausgestiegen",aux:"s"},
+  einsteigen:{t:"irr",f:["steige … ein","steigst … ein","steigt … ein","steigen … ein","steigt … ein","steigen … ein"],p2:"eingestiegen",aux:"s"},
   umsteigen:{t:"irr",f:["steige … um","steigst … um","steigt … um","steigen … um","steigt … um","steigen … um"]},
-  einkaufen:{t:"irr",f:["kaufe … ein","kaufst … ein","kauft … ein","kaufen … ein","kauft … ein","kaufen … ein"]},
+  einkaufen:{t:"irr",f:["kaufe … ein","kaufst … ein","kauft … ein","kaufen … ein","kauft … ein","kaufen … ein"],p2:"eingekauft",aux:"h"},
   fernsehen:{t:"irr",f:["sehe … fern","siehst … fern","sieht … fern","sehen … fern","seht … fern","sehen … fern"]},
-  schlafen:{t:"vowel",du:"schläfst",er:"schläft"},
-  lernen:{t:"reg"},
-  reden:{t:"stemt",du:"redest",er:"redet"},
-  lachen:{t:"reg"},
-  denken:{t:"reg"},
-  meinen:{t:"reg"},
-  aufräumen:{t:"irr",f:["räume … auf","räumst … auf","räumt … auf","räumen … auf","räumt … auf","räumen … auf"]},
+  schlafen:{t:"vowel",du:"schläfst",er:"schläft",p2:"geschlafen",aux:"h"},
+  lernen:{t:"reg",p2:"gelernt",aux:"h"},
+  reden:{t:"stemt",du:"redest",er:"redet",p2:"geredet",aux:"h"},
+  lachen:{t:"reg",p2:"gelacht",aux:"h"},
+  denken:{t:"reg",p2:"gedacht",aux:"h"},
+  meinen:{t:"reg",p2:"gemeint",aux:"h"},
+  aufräumen:{t:"irr",f:["räume … auf","räumst … auf","räumt … auf","räumen … auf","räumt … auf","räumen … auf"],p2:"aufgeräumt",aux:"h"},
   anfangen:{t:"irr",f:["fange … an","fängst … an","fängt … an","fangen … an","fangt … an","fangen … an"]},
   aufhören:{t:"irr",f:["höre … auf","hörst … auf","hört … auf","hören … auf","hört … auf","hören … auf"]},
   feiern:{t:"reg"},
   dauern:{t:"reg"},
-  fliegen:{t:"reg"},
-  gefallen:{t:"vowel",du:"gefällst",er:"gefällt"},
+  fliegen:{t:"reg",p2:"geflogen",aux:"s"},
+  gefallen:{t:"vowel",du:"gefällst",er:"gefällt",p2:"gefallen"},
   abbiegen:{t:"irr",f:["biege … ab","biegst … ab","biegt … ab","biegen … ab","biegt … ab","biegen … ab"]},
   beschreiben:{t:"reg"},
   weiterfahren:{t:"irr",f:["fahre … weiter","fährst … weiter","fährt … weiter","fahren … weiter","fahrt … weiter","fahren … weiter"]},
@@ -2437,62 +2458,106 @@ const VERB_META={
   einzahlen:{t:"irr",f:["zahle … ein","zahlst … ein","zahlt … ein","zahlen … ein","zahlt … ein","zahlen … ein"]},
   heiraten:{t:"stemt",du:"heiratest",er:"heiratet"},
   beten:{t:"stemt",du:"betest",er:"betet"},
-  reisen:{t:"reg"},
+  reisen:{t:"reg",p2:"gereist",aux:"s"},
   melden:{t:"stemt",du:"meldest",er:"meldet"},
   überprüfen:{t:"reg"},
   hochsteigen:{t:"irr",f:["steige … hoch","steigst … hoch","steigt … hoch","steigen … hoch","steigt … hoch","steigen … hoch"]},
   überfallen:{t:"vowel",du:"überfällst",er:"überfällt"},
   ausrauben:{t:"irr",f:["raube … aus","raubst … aus","raubt … aus","rauben … aus","raubt … aus","rauben … aus"]},
-  vermieten:{t:"reg"},
-  bezahlen:{t:"reg"},
-  aussehen:{t:"irr",f:["sehe … aus","siehst … aus","sieht … aus","sehen … aus","seht … aus","sehen … aus"]},
-  stehen:{t:"reg"},
+  vermieten:{t:"reg",p2:"vermietet"},
+  bezahlen:{t:"reg",p2:"bezahlt",aux:"h"},
+  aussehen:{t:"irr",f:["sehe … aus","siehst … aus","sieht … aus","sehen … aus","seht … aus","sehen … aus"],p2:"ausgesehen"},
+  stehen:{t:"reg",p2:"gestanden"},
   gehören:{t:"reg"},
   danken:{t:"reg"},
   fehlen:{t:"reg"},
-  umziehen:{t:"irr",f:["ziehe … um","ziehst … um","zieht … um","ziehen … um","zieht … um","ziehen … um"]},
+  umziehen:{t:"irr",f:["ziehe … um","ziehst … um","zieht … um","ziehen … um","zieht … um","ziehen … um"],p2:"umgezogen",aux:"s"},
   korrigieren:{t:"reg"},
-  bringen:{t:"reg"},
+  bringen:{t:"reg",p2:"gebracht"},
   funktionieren:{t:"reg"},
   kümmern:{t:"reg"},
   reparieren:{t:"reg"},
   schicken:{t:"reg"},
-  verschieben:{t:"reg"},
+  verschieben:{t:"reg",p2:"verschoben"},
   passen:{t:"sib",du:"passt",er:"passt"},
   ausmachen:{t:"irr",f:["mache … aus","machst … aus","macht … aus","machen … aus","macht … aus","machen … aus"]},
   kennenlernen:{t:"irr",f:["lerne … kennen","lernst … kennen","lernt … kennen","lernen … kennen","lernt … kennen","lernen … kennen"]},
-  mitnehmen:{t:"irr",f:["nehme … mit","nimmst … mit","nimmt … mit","nehmen … mit","nehmt … mit","nehmen … mit"]},
-  tun:{t:"reg"},
+  mitnehmen:{t:"irr",f:["nehme … mit","nimmst … mit","nimmt … mit","nehmen … mit","nehmt … mit","nehmen … mit"],p2:"mitgenommen"},
+  tun:{t:"reg",p2:"getan"},
   warten:{t:"stemt",du:"wartest",er:"wartet"},
   vereinbaren:{t:"reg"},
   absagen:{t:"irr",f:["sage … ab","sagst … ab","sagt … ab","sagen … ab","sagt … ab","sagen … ab"]},
-  rufen:{t:"reg"},
+  rufen:{t:"reg",p2:"gerufen"},
   schaffen:{t:"reg"},
   feststecken:{t:"irr",f:["stecke … fest","steckst … fest","steckt … fest","stecken … fest","steckt … fest","stecken … fest"]},
   stören:{t:"reg"},
   hinkommen:{t:"reg"},
   wollen:{t:"irr",f:["will","willst","will","wollen","wollt","wollen"]},
-  werden:{t:"irr",f:["werde","wirst","wird","werden","werdet","werden"]},
-  abschließen:{t:"irr",f:["schließe … ab","schließt … ab","schließt … ab","schließen … ab","schließt … ab","schließen … ab"]},
-  anmelden:{t:"irr",f:["melde … an","meldest … an","meldet … an","melden … an","meldet … an","melden … an"]},
+  werden:{t:"irr",f:["werde","wirst","wird","werden","werdet","werden"],p2:"geworden",aux:"s"},
+  abschließen:{t:"irr",f:["schließe … ab","schließt … ab","schließt … ab","schließen … ab","schließt … ab","schließen … ab"],p2:"abgeschlossen",aux:"h"},
+  anmelden:{t:"irr",f:["melde … an","meldest … an","meldet … an","melden … an","meldet … an","melden … an"],p2:"angemeldet",aux:"h"},
   komponieren:{t:"reg"},
   übersetzen:{t:"sib",du:"übersetzt",er:"übersetzt"},
-  segeln:{t:"reg"},
-  steigen:{t:"reg"},
+  segeln:{t:"reg",p2:"gesegelt",aux:"s"},
+  steigen:{t:"reg",p2:"gestiegen",aux:"s"},
   verdienen:{t:"reg"},
-  laufen:{t:"vowel",du:"läufst",er:"läuft"},
+  laufen:{t:"vowel",du:"läufst",er:"läuft",p2:"gelaufen",aux:"s"},
   putzen:{t:"sib",du:"putzt",er:"putzt"},
   sollen:{t:"irr",f:["soll","sollst","soll","sollen","sollt","sollen"]},
   husten:{t:"stemt",du:"hustest",er:"hustet"},
-  bleiben:{t:"reg"},
+  bleiben:{t:"reg",p2:"geblieben",aux:"s"},
+  aufstehen:{t:"irr",du:"stehst … auf",er:"steht … auf",p2:"aufgestanden",aux:"s"},
+  verstehen:{t:"reg",p2:"verstanden",aux:"h"},
+  telefonieren:{t:"reg",p2:"telefoniert",aux:"h"},
+  aufmachen:{t:"irr",f:["mache … auf","machst … auf","macht … auf","machen … auf","macht … auf","machen … auf"]},
+  zumachen:{t:"irr",f:["mache … zu","machst … zu","macht … zu","machen … zu","macht … zu","machen … zu"]},
+  mitkommen:{t:"irr",f:["komme … mit","kommst … mit","kommt … mit","kommen … mit","kommt … mit","kommen … mit"]},
+  zuhören:{t:"irr",f:["höre … zu","hörst … zu","hört … zu","hören … zu","hört … zu","hören … zu"]},
+  zusagen:{t:"irr",f:["sage … zu","sagst … zu","sagt … zu","sagen … zu","sagt … zu","sagen … zu"]},
+  abfliegen:{t:"irr",f:["fliege … ab","fliegst … ab","fliegt … ab","fliegen … ab","fliegt … ab","fliegen … ab"]},
+  ausziehen:{t:"irr",f:["ziehe … aus","ziehst … aus","zieht … aus","ziehen … aus","zieht … aus","ziehen … aus"]},
+  einziehen:{t:"irr",f:["ziehe … ein","ziehst … ein","zieht … ein","ziehen … ein","zieht … ein","ziehen … ein"]},
+  mitsingen:{t:"irr",f:["singe … mit","singst … mit","singt … mit","singen … mit","singt … mit","singen … mit"]},
+  vorstellen:{t:"irr",f:["stelle … vor","stellst … vor","stellt … vor","stellen … vor","stellt … vor","stellen … vor"]},
   /* ===ANCHOR:VERB_META===（新動詞變位 動詞:{t:"reg"|"stemt"|"vowel"|"irr",...}, 插在這行上方）*/
 };
+/* 可分離動詞 Partizip 組字（2026-07-31）：Partizip = 字首 + 母動詞 Partizip，
+   助動詞繼承母動詞。**可分離的判準不是字首白名單，是 f 陣列裡的「… 前綴」標記**
+   ——那是檔內既有的分離式變位證據。不可分離字首（be-/ver-/er-/über-…）沒有這個
+   標記，會自動被排除（überfallen 存的是 du:"überfällst"，不是 "fällst … über"），
+   所以不會產出 *übergefallen 這種錯字。母動詞沒 p2 就不推（abholen ← holen）。
+   已手動登記者一律不覆寫。推導出來的標 d:1，供驗證與稽核辨識。 */
+Object.keys(VERB_META).forEach(v=>{
+  const m=VERB_META[v];
+  if(!m||m.p2||!m.f) return;
+  const mm=/\s…\s(\S+)$/.exec(String(m.f[0]));
+  if(!mm) return;
+  const pre=mm[1];
+  if(v.indexOf(pre)!==0) return;
+  const b=VERB_META[v.slice(pre.length)];
+  if(!b||!b.p2) return;
+  m.p2=pre+b.p2; if(b.aux) m.aux=b.aux; m.d=1;
+});
 VOCAB.forEach(v=>{
   if(NOUN_PL[v.de]) v.pl=NOUN_PL[v.de];
   if(NOUN_PLEX[v.de]) v.plEx=NOUN_PLEX[v.de];
   if(NOUN_PL_NOTE[v.de]) v.plNote=NOUN_PL_NOTE[v.de];
   if(v.cat==="動詞"&&VERB_META[v.de]) v.vm=VERB_META[v.de];
 });
+/* 卡背 Perfekt 區（p2/aux 欄，2026-07-30 Partizip 里程碑）。
+   留白＝不顯示假資料：p2 未登記整塊不出現；aux 未登記顯示「hat/ist ?」並提示問老師。 */
+function perfektBoxHTML(vm){
+  if(!vm||!vm.p2) return "";
+  const s=vm.aux==="s", h=vm.aux==="h";
+  const aux = s?"ist":(h?"hat":"");
+  const head = aux ? `<span class="pa ${s?'sein':'hat'}">${aux}</span> `
+                   : `<span class="pa unk">hat/ist&#63;</span> `;
+  const say  = (aux?aux+" ":"")+vm.p2;
+  const note = s ? `<div class="vsub">\u26a0\ufe0f \u52a9\u52d5\u8a5e\u7528 sein\uff0c\u4e0d\u662f haben</div>`
+             : (aux?"":`<div class="vsub">\u52a9\u52d5\u8a5e\u672a\u767b\u8a18\u2014\u2014\u5efa\u8b70\u554f\u8001\u5e2b\u6c42\u8b49</div>`);
+  return `<div class="vbox pbox">Perfekt\uff1a${head}`
+       + `<span class="vform" data-say="${say}">${vm.p2}</span>${note}</div>`;
+}
 /* 卡背動詞區的 HTML */
 function verbBackHTML(vm){
   const vf=(p,f)=>`<span class="vform" data-say="${p} ${f}">${p} ${f}</span>`;
@@ -3044,6 +3109,26 @@ const SENTENCES=[
   {de:"Machen Sie doch Sport!",zh:"去運動吧！（Ratschlag，doch 強調）",lesson:"L18"},
   {de:"Essen Sie, was Sie wollen.",zh:"想吃什麼就吃什麼",lesson:"L18"},
   {de:"Fragen Sie immer Ihren Körper: Habe ich gerade Hunger?",zh:"隨時問自己的身體：我現在餓了嗎？",lesson:"L18"},
+  {de:"Er hat Musik gehört.",zh:"他聽了音樂。（骨架；可換 Radio／Podcast）",lesson:"L10"},
+  {de:"Wir haben viel gelacht.",zh:"我們笑了很多。",lesson:"L10"},
+  {de:"Wir haben einen Kaffee getrunken.",zh:"我們喝了一杯咖啡。（可換 Tee／Wasser）",lesson:"L10"},
+  {de:"Ich habe ein Buch gelesen.",zh:"我讀了一本書。",lesson:"L10"},
+  {de:"Ich habe den Arzt angerufen.",zh:"我打電話給醫生了。（可換 meine Mutter）",lesson:"L10"},
+  {de:"Die Mutter hat Brot eingekauft.",zh:"媽媽買了麵包。",lesson:"L10"},
+  {de:"Paula hat das Zimmer aufgeräumt.",zh:"Paula 整理了房間。（可換 die Küche）",lesson:"L10"},
+  {de:"Der Chef hat die Rechnung bezahlt.",zh:"老闆付了帳單。",lesson:"L10"},
+  {de:"Die Familie hat die Oma besucht.",zh:"一家人去探望了奶奶。",lesson:"L10"},
+  {de:"Ich habe mit Paul telefoniert.",zh:"我跟 Paul 通了電話。（可換任何人名）",lesson:"L10"},
+  {de:"Sie ist ins Büro gegangen.",zh:"她去了辦公室。（骨架；可換 nach Hause／in die Schule）",lesson:"L10"},
+  {de:"Er ist am Sonntag in die Schweiz gefahren.",zh:"他星期天去了瑞士。",lesson:"L10"},
+  {de:"Bist du mit dem Bus gekommen?",zh:"你是搭公車來的嗎？（可換 mit dem Zug／zu Fuß）",lesson:"L10"},
+  {de:"Markus ist am Hauptbahnhof in den Zug eingestiegen.",zh:"Markus 在中央車站上了火車。",lesson:"L10"},
+  {de:"Ich bin morgens um 6 Uhr aufgestanden.",zh:"我早上六點起床。（可換任何時間）",lesson:"L10"},
+  {de:"Ich bin in Deutschland gewesen.",zh:"我去過德國。（＝Ich war in Deutschland）",lesson:"L10"},
+  {de:"Hast du früher ein Fahrrad gehabt?",zh:"你以前有腳踏車嗎？（＝Hattest du…）",lesson:"L10"},
+  {de:"Um halb acht habe ich E-Mails geschrieben.",zh:"七點半我寫了 email。（時間在句首，助動詞仍在第二位）",lesson:"L10"},
+  {de:"Von 8 Uhr bis 9 Uhr habe ich Sport gemacht.",zh:"八點到九點我運動。（von…bis 骨架）",lesson:"L10"},
+  {de:"Ich habe um 9 Uhr gefrühstückt.",zh:"我九點吃了早餐。",lesson:"L10"},
   /* ===ANCHOR:SENTENCES===（新例句／Redemittel {de,zh,lesson} 插在這行上方）*/
 ];
 
@@ -3118,7 +3203,7 @@ const TEXTS=[
    zh:"哈囉 Mira！我在火車站。火車停靠第 7 月台——注意，不是 17！我現在要上地鐵了。我不用轉車，地鐵直達機場。我的行李很重：一個行李箱和一個包包。你來接我嗎？我 18 點抵達。S-Bahn 今天停駛，所以我搭計程車或路面電車——車站不遠。我再打給你！你還要去採買嗎？我們今晚需要一些東西。待會見！",
    qs:[{q:"火車停靠第幾月台？",options:["17", "7", "70", "18"],a:1},{q:"為什麼要搭計程車或路面電車？",options:["地鐵停駛", "S-Bahn 今天停駛", "行李太重", "比較便宜"],a:1},{q:"「Ich steige jetzt in die U-Bahn ein」的 ein 是什麼？",options:["不定冠詞", "einsteigen 的可分離前綴、踢到句尾", "數字一", "多打的字"],a:1}]},
   {id:"t-l11-1",lesson:"L11",genre:"E-Mail",title:"Was hast du heute gemacht?",src:"AI 生成 · 未經母語者校對",
-   map:"<b>本課重點</b>：① Perfekt 現在完成式登場：haben＋Partizip II（habe … gelernt/gemacht/aufgeräumt），Partizip 永遠踢到句尾＝句框的完成式版本；② 規則動詞 Partizip＝ge＋字幹＋t（gelernt）、可分離動詞 ge 夾中間（aufgeräumt/eingekauft/ferngesehen）；③ 談論日常與過去的一天。<br><b>建議走法</b>：讀完本文 → 文法「🧩Perfekt」＋「🧩句框」→ 單字卡 → 例句 → 測驗（Perfekt 填空＋語序）→ 🎓。<br>⚠️ 本文的 war（was 的過去式）是 A2 前哨，先當固定說法記。",
+   map:"<b>本課重點</b>：① Perfekt 現在完成式登場：haben＋Partizip II（habe … gelernt/gemacht/aufgeräumt），Partizip 永遠踢到句尾＝句框的完成式版本；② 規則動詞 Partizip＝ge＋字幹＋t（gelernt）、可分離動詞 ge 夾中間（aufgeräumt/eingekauft/ferngesehen）；③ 談論日常與過去的一天。<br><b>建議走法</b>：讀完本文 → 文法「🧩Perfekt」＋「🧩句框」→ 單字卡 → 例句 → 測驗（Perfekt 填空＋語序）→ 🎓。<br>⚠️ 本文的 war 是 sein 的 Präteritum，L10 已正式教，見🧩動詞變位② ④。",
    de:"Liebe Ana, was hast du heute gemacht? Ich habe viel gemacht! Am Morgen habe ich zwei Stunden Deutsch gelernt — die Hausaufgabe war nicht leicht. Dann habe ich die Wohnung aufgeräumt und ich habe eingekauft: ein Geschenk für die Party! Am Nachmittag habe ich gearbeitet. Ich habe mit Timo geredet, wir haben viel gelacht. Er hat gekocht und es hat super geschmeckt. Am Abend habe ich ferngesehen — der Film war langweilig, aber die Pause war interessant! Und du? Hast du auch Deutsch gelernt? Viele Grüße, Shannon",
    zh:"親愛的 Ana，你今天做了什麼？我做了好多事！早上我學了兩小時德文——作業不簡單。然後我整理了住處、也去採買了：買了派對要送的禮物！下午我工作。我跟 Timo 聊天，我們笑了好久。他煮飯，超級好吃。晚上我看了電視——電影很無聊，但中場休息很有趣！你呢？你今天也學德文了嗎？祝好，Shannon",
    qs:[{q:"Shannon 早上做了什麼？",options:["採買", "學了兩小時德文", "看電視", "工作"],a:1},{q:"誰煮飯？",options:["Shannon", "Ana", "Timo", "沒人"],a:2},{q:"「Ich habe eingekauft」的 Partizip 為什麼是 eingekauft？",options:["不規則背起來", "可分離動詞的 ge 夾在前綴和字幹中間", "拼錯", "法文借字"],a:1}]},
@@ -3386,7 +3471,7 @@ function render(){
       html+=`</div>`;
     }
     /* 動詞關鍵形 */
-    if(c.vm)html+=verbBackHTML(c.vm);
+    if(c.vm)html+=verbBackHTML(c.vm)+perfektBoxHTML(c.vm);
     /* 例句（單數）*/
     if(c.ex)html+=`<div class="exline"><div class="exde">${c.ex[0]}</div><button class="spk exspk" aria-label="唸例句"></button><div class="exzh">${c.ex[1]}</div></div>`;
     /* 2026-07-17：例句②——目前只給不規則動詞用，補第二個變位人稱，兩句合計涵蓋 ≥2 個不規則變化形 */
@@ -3735,7 +3820,7 @@ const GRAM=[
   </table>
   <div class="note"><b>⚠️ 三個最容易錯</b><br>① 母音變化<b>只在 du / er-sie-es</b>，別套到 ich／wir／ihr（❌ ich spriche → ✓ ich spreche）。<br>② arbeiten 的 e 只加在 du/er/ihr，不是每個人稱都加。<br>③ essen：du 和 er 都是 <b>isst</b>（字幹本來就 -ss，變完母音長一樣）。</div>
 </div>`},
-{ls:["L1","L2","L6","L7","L9","L17","L18"],html:`
+{ls:["L1","L2","L6","L7","L9","L10","L17","L18"],html:`
 <div class="card gcard">
   <div class="gtitle">🧩 動詞變位②：特殊變位 sein · haben · 情態動詞 · werden <span class="lessontag">L1</span><span class="lessontag">L2</span><span class="lessontag">L6</span><span class="lessontag">L7</span><span class="lessontag">L9</span><span class="lessontag">L17</span><span class="lessontag">L18</span></div>
   <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：這些不照字幹規則，<b>整組背</b>。三群：高頻助動詞 sein／haben，情態動詞 können／mögen／möchten／wollen／sollen（共同標記＝<b>ich 和 er/sie/es 都不加字尾</b>：kann／mag／möchte／will／soll），以及 werden（常跟情態動詞放一起教，但變位規則不同，見③）。</p>
@@ -3772,6 +3857,19 @@ const GRAM=[
     <tr><td>Sie/sie</td><td class="de2">werden</td></tr>
   </table>
   <div class="note"><b>⚠️ werden 不是情態動詞</b>：② 的四個字 ich 和 er/sie/es 都<u>不</u>加字尾（kann/mag/möchte/will），但 <b>werden 的 ich 有 -e</b>（werde），文法上不符合那條規則，所以獨立列在這裡。老師的 Grammatik 講義可能把它跟情態動詞放在同一頁教（實務上常一起用：Was willst du werden?），但變位規則要分開記。du／er 的 wirst／wird 母音也變了，這兩格最容易錯。</div>
+<p style="font-size:.86rem;font-weight:700;margin:.4em 0 .2em">④ Präteritum：只有 sein／haben 兩個字（L10）</p>
+  <p style="font-size:.9rem;margin:.1em 0"><b>系統邏輯</b>：德文講過去，日常口語幾乎全用 <b>Perfekt</b>。但 <b>sein</b> 和 <b>haben</b> 例外——這兩個字習慣用 <b>Präteritum</b>（簡單過去式），因為 <i>ist gewesen／hat gehabt</i> 說起來累贅。</p>
+  <table>
+    <tr><th>人稱</th><th>sein → war</th><th>haben → hatte</th></tr>
+    <tr><td>ich</td><td class="de2"><b>war</b></td><td class="de2"><b>hatte</b></td></tr>
+    <tr><td>du</td><td class="de2">war<span class="infl">st</span></td><td class="de2">hatte<span class="infl">st</span></td></tr>
+    <tr><td>er/sie/es</td><td class="de2"><b>war</b></td><td class="de2"><b>hatte</b></td></tr>
+    <tr><td>wir</td><td class="de2">war<span class="infl">en</span></td><td class="de2">hatte<span class="infl">n</span></td></tr>
+    <tr><td>ihr</td><td class="de2">war<span class="infl">t</span></td><td class="de2">hatte<span class="infl">t</span></td></tr>
+    <tr><td>Sie/sie</td><td class="de2">war<span class="infl">en</span></td><td class="de2">hatte<span class="infl">n</span></td></tr>
+  </table>
+  <p class="warn" style="font-size:.9rem"><b>最容易錯</b>：ich 和 er/sie/es 兩格<u>同形</u>（war／hatte），ihr 是 <b>wart／hattet</b>（不是 warst／hattest）。這跟 ② 情態動詞「ich 和 er 都不加字尾」是同一條共同標記，可以一起記。</p>
+  <div class="note"><b>⛔ 邊界：A1 只收這兩個字</b>。其他動詞的 Präteritum（machte／ging／kam…）是 A2 的內容，<b>A1 階段一律用 Perfekt</b>。所以「我做了」講 <i>Ich habe gemacht</i>，不要自己造 <i>Ich machte</i>。兩者在 sein／haben 上是同義的：<i>Ich war in Deutschland.</i> ＝ <i>Ich bin in Deutschland gewesen.</i>（前者更常用）。</div>
 </div>`},
 {ls:["L10","L11","L12"],html:`
 <div class="card gcard">
@@ -3804,10 +3902,10 @@ const GRAM=[
   </div></details>
   <div class="note"><b>⚠️ 三個最容易錯</b><br>① 可分離動詞的 ge 塞在<b>字首和字幹中間</b>，不是黏在最前面：<span style="color:#b45309">an<b>ge</b>rufen</span>（不是 geanrufen）。<br>② 不可分離動詞（be-/ver-/er- 開頭）跟 -ieren 結尾動詞<b>永遠不加 ge</b>，這兩型是同一條「不加 ge」規則的兩個觸發條件，別搞混。<br>③ <b>sein 是例外，預設用 haben</b>——除非動詞明確是「移動／狀態改變」才換 sein，猜不準先用 haben。</div>
 </div>`},
-{ls:["L8","L13"],html:`
+{ls:["L8","L10","L13"],html:`
 <div class="card gcard">
   <div class="gtitle">🧩 地方介係詞總表：wo? + Dativ <span class="lessontag">L8</span><span class="lessontag">L13</span></div>
-  <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：這 9 個介係詞是「兩用介係詞」（Wechselpräpositionen）——問「Wo?」（靜態位置）時配 <b>Dativ</b>，之後 A1.2 問「Wohin?」（往哪去）時同一批字會配 Akkusativ。這張卡先蓋 Dativ／wo? 這半邊，Akkusativ／wohin? 半邊 ⬜ 之後解鎖。</p>
+  <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：這 9 個介係詞是「兩用介係詞」（Wechselpräpositionen）——問「Wo?」（靜態位置）時配 <b>Dativ</b>，之後 A1.2 問「Wohin?」（往哪去）時同一批字會配 Akkusativ。這張卡先蓋 Dativ／wo? 這半邊；Wohin? 半邊<b>地名那一塊（nach／in）L10 已解鎖，見 ④</b>，兩用介係詞配 Akkusativ 的部分 ⬜ 之後解鎖。</p>
   <details data-rule="lokal-neun"><summary>① 9 個介係詞 + Dativ 冠詞（配合🧩冠詞變格總表一起看）</summary><div class="dbody">
   <table>
     <tr><th>介係詞</th><th>意思</th><th>例句</th></tr>
@@ -3826,13 +3924,13 @@ const GRAM=[
   <p style="font-size:.9rem;margin:.1em 0">只有 <b>in+dem→im</b> 和 <b>an+dem→am</b> 會融合成一個字；an der／in der／neben dem 等其他組合都<b>不融合</b>，照原樣寫兩個字。</p>
   <p style="font-size:.9rem;margin:.1em 0">Ich bin <b>im</b> Zentrum.（= in dem Zentrum）　Das Hotel ist <b>am</b> Dom.（= an dem Dom）</p>
   </div></details>
-  <p style="font-size:.86rem;margin:.3em 0;color:#b45309">👀 提早出現（L8）：<b>ins Kino／ins Café</b>（in+das，方向 Wohin?→Akkusativ）先當固定用法背，完整 Wohin? 規則見上方 ⬜ 之後解鎖。</p>
+  <p style="font-size:.86rem;margin:.3em 0;color:#b45309">👀 提早出現（L8）：<b>ins Kino／ins Café</b>（in+das，方向 Wohin?→Akkusativ）先當固定用法背；地名的 Wohin? 規則見 ④，兩用介係詞的 Akkusativ 規則 ⬜ 之後解鎖。</p>
   <details data-rule="lokal-plural"><summary>③ 複數：名詞字尾加 -n（本身已是 n/s 結尾則不加）</summary><div class="dbody">
   <p style="font-size:.9rem;margin:.1em 0">Dativ 複數除了冠詞變 <b>den</b>，名詞本身也要加 <b>-n</b>：die Frau→die Frauen→<b>den Frauen</b>（本來就 n 結尾，不變）；der Kalender→die Kalender→<b>den Kalendern</b>（加 n）。</p>
   <p style="font-size:.9rem;margin:.1em 0">已經是 -s 結尾的例外不加：das Auto→die Autos→<b>den Autos</b>。</p>
   <p style="font-size:.9rem;margin:.1em 0">Die Kinder spielen zwischen <b>den Häusern</b>.（Haus→Häuser→Häusern，加 n）</p>
   </div></details>
-  <div class="note"><b>⚠️ 最容易錯：Dativ 複數名詞別忘了加 -n</b>——冠詞變成 den 大家會記得，但名詞本身也要加 -n 常常漏掉（❌ zwischen den Bank<u>en</u>✓／❌ neben den Häuser 要寫 neben den Häuser<b>n</b>）。另外別把這張卡跟🧩動詞支配格表的 Dativ 動詞（gefallen/helfen）搞混：這張卡是<b>介係詞</b>決定格，那張卡是<b>動詞</b>決定格，是兩套獨立系統。</div>
+  <<details data-rule="wohin-ort"><summary>④ Wohin? 去地名：預設 nach，有冠詞的國家才用 in ＋ Akkusativ（L10）</summary><div class="dbody">\n  <p style="font-size:.9rem;margin:.1em 0"><b>系統邏輯</b>：絕大多數地名（城市、多數國家）<b>沒有冠詞</b>，一律用 <b>nach</b>。只有少數國家自帶冠詞，這時要用 <b>in ＋ Akkusativ</b>——冠詞跟著性別變 die→<b>die</b>／der→<b>den</b>。</p>\n  <table>\n    <tr><th>情況</th><th>用法</th><th>例句</th></tr>\n    <tr><td>城市</td><td class="de2"><b>nach</b></td><td class="de2">Ich fahre <b>nach</b> Berlin.</td></tr>\n    <tr><td>無冠詞國家</td><td class="de2"><b>nach</b></td><td class="de2">Wir fliegen <b>nach</b> Deutschland.</td></tr>\n    <tr><td>die-國家</td><td class="de2"><b>in die</b></td><td class="de2">Er ist <b>in die</b> Schweiz gefahren.</td></tr>\n    <tr><td>die-國家</td><td class="de2"><b>in die</b></td><td class="de2">Sie reist <b>in die</b> Türkei.</td></tr>\n    <tr><td>der-國家</td><td class="de2"><b>in den</b></td><td class="de2">Er fliegt <b>in den</b> Iran.</td></tr>\n  </table>\n  <p class="warn" style="font-size:.9rem"><b>最容易錯</b>：Wo?（人在哪）配 <b>Dativ</b>＝<b>in der</b> Schweiz；Wohin?（往哪去）配 <b>Akkusativ</b>＝<b>in die</b> Schweiz。同一個國家，兩個形，差在你問的是「在」還是「去」。</p>\n  <p style="font-size:.85rem;color:#6b7280;margin:.1em 0">帶冠詞的國家不多，A1 遇到的主要是 die Schweiz／die Türkei／die USA（複數 in die USA）／der Iran。其餘先當 nach 處理，遇到例外再記。</p>\n  </div></details>\n  div class="note"><b>⚠️ 最容易錯：Dativ 複數名詞別忘了加 -n</b>——冠詞變成 den 大家會記得，但名詞本身也要加 -n 常常漏掉（❌ zwischen den Bank<u>en</u>✓／❌ neben den Häuser 要寫 neben den Häuser<b>n</b>）。另外別把這張卡跟🧩動詞支配格表的 Dativ 動詞（gefallen/helfen）搞混：這張卡是<b>介係詞</b>決定格，那張卡是<b>動詞</b>決定格，是兩套獨立系統。</div>
 </div>`},
 {l:"L9",html:`
 <div class="card gcard">
@@ -4557,6 +4655,75 @@ const GR18=[
  {l:"L18",sub:"介係詞：gegen ＋ Akkusativ",before:"Was hilft gegen ",after:" Kopfschmerzen?",answer:"die",options:["die","der","den"],full:"Was hilft gegen die Kopfschmerzen?"},
 ];
 GR18.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+  /* Perfekt 助動詞題自動生成（2026-07-31 Partizip 里程碑）。
+     題幹零新造德文——全部取自既有 SENTENCES。
+     防守：句中助動詞family 必須與 VERB_META 登記的 aux 相符才出題。
+     這條擋掉狀態被動誤判（"Die Wohnung ist vermietet" 的 vermieten 登記為 haben，
+     family 不符 → 跳過），那正是 2026-07-30 收割時踩過的坑。
+     干擾項＝同一文法點的其他正確形式（另一助動詞的同人稱＋同助動詞其他人稱）。 */
+  (function(){
+    const HAB=["habe","hast","hat","haben","habt"], SEI=["bin","bist","ist","sind","seid"];
+    const PAIR={habe:"bin",hast:"bist",hat:"ist",haben:"sind",habt:"seid",
+                bin:"habe",bist:"hast",ist:"hat",sind:"haben",seid:"habt"};
+    const P2={};
+    Object.keys(VERB_META).forEach(v=>{const m=VERB_META[v];
+      if(m.p2&&m.aux) P2[m.p2]=m.aux;});
+    const AUXRE=/\b(habe|hast|hat|haben|habt|bin|bist|ist|sind|seid)\b/g;
+    const seen={};
+    SENTENCES.forEach(s=>{
+      const de=String(s.de||""); if(de.length>90) return;
+      const hits=de.match(AUXRE); if(!hits||hits.length!==1) return;
+      const aux=hits[0], fam=HAB.indexOf(aux)>=0?"h":"s";
+      const toks=de.split(/\s+/).map(w=>w.replace(/[.,!?;:]+$/,""));
+      const p2w=toks.filter(w=>P2[w]);
+      if(p2w.length!==1) return;
+      if(P2[p2w[0]]!==fam) return;            /* ← 狀態被動守衛 */
+      if(seen[de]) return; seen[de]=1;
+      const idx=de.indexOf(aux);
+      const opts=[aux,PAIR[aux]];
+      (fam==="h"?HAB:SEI).forEach(x=>{if(x!==aux&&opts.length<4)opts.push(x);});
+      Q.push({lesson:s.lesson,sub:"⭐ Perfekt 助動詞：haben 或 sein",
+        before:de.slice(0,idx), after:de.slice(idx+aux.length),
+        answer:aux, options:opts, full:de});
+    });
+  })();
+  const GR10P=[
+   {l:"L10",sub:"⭐ 現在式→Perfekt：besuchen（Ich besuche meine Freundin.）",before:"Ich habe meine Freundin ",after:".",answer:"besucht",options:["besucht","gebesucht","besuchte","besuchen"],full:"Ich habe meine Freundin besucht."},
+   {l:"L10",sub:"⭐ 現在式→Perfekt：telefonieren（Ich telefoniere mit Paul.）",before:"Ich habe mit Paul ",after:".",answer:"telefoniert",options:["telefoniert","getelefoniert","telefonierte","telefonieren"],full:"Ich habe mit Paul telefoniert."},
+   {l:"L10",sub:"⭐ 現在式→Perfekt：spielen（Wir spielen im Park.）",before:"Wir haben im Park ",after:".",answer:"gespielt",options:["gespielt","gespielen","spielte","spielt"],full:"Wir haben im Park gespielt."},
+   {l:"L10",sub:"⭐ 現在式→Perfekt：einkaufen（Sie kauft im Supermarkt ein.）",before:"Sie hat im Supermarkt ",after:".",answer:"eingekauft",options:["eingekauft","eingekaufen","gekauft ein","einkaufte"],full:"Sie hat im Supermarkt eingekauft."},
+   {l:"L10",sub:"⭐ 現在式→Perfekt：aufräumen（Tom räumt die Küche auf.）",before:"Tom hat die Küche ",after:".",answer:"aufgeräumt",options:["aufgeräumt","geaufräumt","geräumt auf","aufräumte"],full:"Tom hat die Küche aufgeräumt."},
+   {l:"L10",sub:"⭐ 現在式→Perfekt：schreiben（Der Mann schreibt einen Brief.）",before:"Der Mann hat einen Brief ",after:".",answer:"geschrieben",options:["geschrieben","geschreibt","schrieb","schreiben"],full:"Der Mann hat einen Brief geschrieben."},
+   {l:"L10",sub:"⭐ 現在式→Perfekt：trinken（Wir trinken eine Limonade.）",before:"Wir haben eine Limonade ",after:".",answer:"getrunken",options:["getrunken","getrinkt","trank","trinken"],full:"Wir haben eine Limonade getrunken."},
+   {l:"L10",sub:"⭐ 現在式→Perfekt：fahren（Er fährt am Sonntag in die Schweiz.）",before:"Er ist am Sonntag in die Schweiz ",after:".",answer:"gefahren",options:["gefahren","gefahrt","fuhr","fahren"],full:"Er ist am Sonntag in die Schweiz gefahren."},
+   {l:"L10",sub:"⭐ 現在式→Perfekt：aufstehen（Ich stehe morgens um 6 Uhr auf.）",before:"Ich bin morgens um 6 Uhr ",after:".",answer:"aufgestanden",options:["aufgestanden","geaufstanden","gestanden auf","aufstand"],full:"Ich bin morgens um 6 Uhr aufgestanden."},
+   {l:"L10",sub:"⭐ 現在式→Perfekt：fernsehen（Wir sehen ein bisschen fern.）",before:"Wir haben ein bisschen ",after:".",answer:"ferngesehen",options:["ferngesehen","gefernsehen","gesehen fern","fernsah"],full:"Wir haben ein bisschen ferngesehen."},
+   {l:"L10",sub:"⭐ Perfekt 語序：句首非主詞時，助動詞仍站第2位",before:"Gestern ",after:" Fußball gespielt.",answer:"habe ich",options:["habe ich","ich habe","bin ich","ich bin"],full:"Gestern habe ich Fußball gespielt."},
+   {l:"L10",sub:"⭐ Perfekt 語序：句首非主詞時，助動詞仍站第2位",before:"Um halb acht ",after:" E-Mails geschrieben.",answer:"habe ich",options:["habe ich","ich habe","bin ich","ich bin"],full:"Um halb acht habe ich E-Mails geschrieben."},
+   {l:"L10",sub:"⭐ Perfekt 語序：句首非主詞時，助動詞仍站第2位",before:"Letztes Jahr ",after:" nach München geflogen.",answer:"ist er",options:["ist er","er ist","hat er","er hat"],full:"Letztes Jahr ist er nach München geflogen."},
+   {l:"L10",sub:"⭐ Perfekt 語序：句首非主詞時，助動詞仍站第2位",before:"Von 8 Uhr bis 9 Uhr ",after:" Sport gemacht.",answer:"habe ich",options:["habe ich","ich habe","bin ich","ich bin"],full:"Von 8 Uhr bis 9 Uhr habe ich Sport gemacht."},
+   {l:"L10",sub:"⭐ Perfekt 語序：句首非主詞時，助動詞仍站第2位",before:"Am Hauptbahnhof ",after:" in den Zug eingestiegen.",answer:"ist Markus",options:["ist Markus","Markus ist","hat Markus","Markus hat"],full:"Am Hauptbahnhof ist Markus in den Zug eingestiegen."},
+  ];
+  GR10P.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+  const GR10W=[
+   {l:"L10",sub:"⭐ Wohin：城市名前用什麼",before:"Ich fahre ",after:" Berlin.",answer:"nach",options:["nach","in","in die","zu"],full:"Ich fahre nach Berlin."},
+   {l:"L10",sub:"⭐ Wohin：無冠詞國家",before:"Wir fliegen ",after:" Deutschland.",answer:"nach",options:["nach","in","in die","in den"],full:"Wir fliegen nach Deutschland."},
+   {l:"L10",sub:"⭐ Wohin：有冠詞國家（die Schweiz）",before:"Er ist am Sonntag ",after:" Schweiz gefahren.",answer:"in die",options:["in die","nach","in der","in den"],full:"Er ist am Sonntag in die Schweiz gefahren."},
+   {l:"L10",sub:"⭐ Wohin：有冠詞國家（die Türkei）",before:"Sie reist ",after:" Türkei.",answer:"in die",options:["in die","nach","in der","in den"],full:"Sie reist in die Türkei."},
+   {l:"L10",sub:"⭐ Wohin：陽性有冠詞國家（der Iran）",before:"Er fliegt ",after:" Iran.",answer:"in den",options:["in den","in die","nach","in dem"],full:"Er fliegt in den Iran."},
+   {l:"L10",sub:"⭐ 對比：Wo? 靜態 vs Wohin? 方向",before:"Ich bin ",after:" der Schweiz.（Wo?）",answer:"in",options:["in","in die","nach","an"],full:"Ich bin in der Schweiz."},
+  ];
+  GR10W.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+  const GR10PT=[
+   {l:"L10",sub:"⭐ Präteritum：sein 的 ich",before:"Gestern ",after:" ich in Berlin.",answer:"war",options:["war","warst","waren","bin"],full:"Gestern war ich in Berlin."},
+   {l:"L10",sub:"⭐ Präteritum：sein 的 du",before:"Wo ",after:" du gestern?",answer:"warst",options:["warst","war","wart","bist"],full:"Wo warst du gestern?"},
+   {l:"L10",sub:"⭐ Präteritum：sein 的 wir",before:"Wir ",after:" letztes Jahr in der Schweiz.",answer:"waren",options:["waren","war","wart","sind"],full:"Wir waren letztes Jahr in der Schweiz."},
+   {l:"L10",sub:"⭐ Präteritum：haben 的 ich",before:"Früher ",after:" ich einen Hund.",answer:"hatte",options:["hatte","hattest","hatten","habe"],full:"Früher hatte ich einen Hund."},
+   {l:"L10",sub:"⭐ Präteritum：haben 的 du",before:"",after:" du früher ein Fahrrad?",answer:"Hattest",options:["Hattest","Hatte","Hattet","Hast"],full:"Hattest du früher ein Fahrrad?"},
+   {l:"L10",sub:"⭐ 對比：同義改寫 Präteritum 或 Perfekt",before:"Ich war in Deutschland. = Ich ",after:" in Deutschland gewesen.",answer:"bin",options:["bin","habe","war","ist"],full:"Ich bin in Deutschland gewesen."},
+   {l:"L10",sub:"⭐ 對比：同義改寫 Präteritum 或 Perfekt",before:"Ich hatte einen Hund. = Ich ",after:" einen Hund gehabt.",answer:"habe",options:["habe","bin","hatte","hat"],full:"Ich habe einen Hund gehabt."},
+  ];
+  GR10PT.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
   /* ===ANCHOR:GRAM_QUIZ===（新課文法填空題插在這行上方：宣告 const GRn=[{l,sub,before,after,answer,options,full},…]; 後接一行 GRn.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full})); ）*/
   return Q;
 }
