@@ -149,6 +149,7 @@
   .vsub{font-size:.76rem;color:var(--mut);font-weight:500;margin-top:4px}
   .virr{margin-top:5px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
   .vbox.pbox{color:var(--ink);font-weight:600}
+  .pexline{margin-top:6px;font-weight:400}
   .pa{font-family:var(--disp);font-weight:800}
   .pa.sein{color:var(--sein)}
   .pa.hat{color:var(--mut)}
@@ -2546,6 +2547,26 @@ VOCAB.forEach(v=>{
 });
 /* 卡背 Perfekt 區（p2/aux 欄，2026-07-30 Partizip 里程碑）。
    留白＝不顯示假資料：p2 未登記整塊不出現；aux 未登記顯示「hat/ist ?」並提示問老師。 */
+let _PEXIDX=null;
+function perfektExample(vm){
+  if(!vm||!vm.p2) return null;
+  if(!_PEXIDX){
+    _PEXIDX={};
+    const HAB=["habe","hast","hat","haben","habt"], SEI=["bin","bist","ist","sind","seid"];
+    SENTENCES.forEach(s=>{
+      const t=String(s.de||"").split(/\s+/)
+        .map(w=>w.replace(/[.,!?;:\u201e\u201c"\u2013-]+$/,"").replace(/^[\u201e\u201c"]+/,""));
+      const a=t.filter(w=>HAB.indexOf(w)>=0||SEI.indexOf(w)>=0);
+      if(a.length!==1) return;                       /* 兩個助動詞＝句子太複雜，不當範例 */
+      const fam=HAB.indexOf(a[0])>=0?"h":"s";
+      t.forEach(w=>{ if(w) (_PEXIDX[w]=_PEXIDX[w]||[]).push({s:s,fam:fam}); });
+    });
+  }
+  const list=(_PEXIDX[vm.p2]||[]).filter(x=>!vm.aux||x.fam===vm.aux);
+  if(!list.length) return null;
+  list.sort((x,y)=>String(x.s.de).length-String(y.s.de).length);   /* 短句優先，好記 */
+  return list[0].s;
+}
 function perfektBoxHTML(vm){
   if(!vm||!vm.p2) return "";
   const s=vm.aux==="s", h=vm.aux==="h";
@@ -2555,8 +2576,12 @@ function perfektBoxHTML(vm){
   const say  = (aux?aux+" ":"")+vm.p2;
   const note = s ? `<div class="vsub">\u26a0\ufe0f \u52a9\u52d5\u8a5e\u7528 sein\uff0c\u4e0d\u662f haben</div>`
              : (aux?"":`<div class="vsub">\u52a9\u52d5\u8a5e\u672a\u767b\u8a18\u2014\u2014\u5efa\u8b70\u554f\u8001\u5e2b\u6c42\u8b49</div>`);
+  const ex=perfektExample(vm);
+  const exl = ex ? `<div class="exline pexline"><div class="exde">${ex.de}</div>`
+                 + `<button class="spk pexspk" aria-label="唁例句"></button>`
+                 + `<div class="exzh">${ex.zh||""}</div></div>` : "";
   return `<div class="vbox pbox">Perfekt\uff1a${head}`
-       + `<span class="vform" data-say="${say}">${vm.p2}</span>${note}</div>`;
+       + `<span class="vform" data-say="${say}">${vm.p2}</span>${note}${exl}</div>`;
 }
 /* 卡背動詞區的 HTML */
 function verbBackHTML(vm){
@@ -3483,6 +3508,9 @@ function render(){
     if(c.pl){
       const ps=flashFace.querySelector('.plspk');if(ps){ps.innerHTML=SPK_SVG;ps.onclick=(e)=>{e.stopPropagation();speak('die '+c.pl);};}
     }
+    {const b=flashFace.querySelector('.pexspk');
+     if(b){b.innerHTML=SPK_SVG;b.onclick=(e)=>{e.stopPropagation();
+       const d=b.parentNode.querySelector('.exde');if(d)speak(d.textContent);};}}
     if(c.ex){const b=flashFace.querySelector('.exspk');if(b){b.innerHTML=SPK_SVG;b.onclick=(e)=>{e.stopPropagation();speak(c.ex[0]);};}}
     if(c.ex2){const b=flashFace.querySelector('.ex2spk');if(b){b.innerHTML=SPK_SVG;b.onclick=(e)=>{e.stopPropagation();speak(c.ex2[0]);};}}
     if(c.plEx){const b=flashFace.querySelector('.plexspk');if(b){b.innerHTML=SPK_SVG;b.onclick=(e)=>{e.stopPropagation();speak(c.plEx[0]);};}}
