@@ -148,7 +148,11 @@
   .vform{cursor:pointer;font-family:var(--disp);font-weight:700;color:var(--der);border-bottom:1px dotted var(--der);white-space:nowrap}
   .vsub{font-size:.76rem;color:var(--mut);font-weight:500;margin-top:4px}
   .virr{margin-top:5px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
-  .vbox.pbox{color:var(--ink);font-weight:600}
+  .vbox.sep{color:var(--ink)}
+  .vbox.sep b{color:var(--chrome)}
+  .flash .vbox.pbox{color:var(--ink);font-weight:600;background:#f1f5f9;border-top:none;border-left:4px solid #475569;border-radius:10px;padding:9px 11px;margin-top:12px}
+  .pmore{margin-left:8px;font-size:.72rem;font-weight:700;padding:2px 9px;border-radius:999px;border:1px solid #cbd5e1;background:#fff;color:#475569;cursor:pointer}
+  .pfold[hidden]{display:none}
   .pexline{margin-top:6px;font-weight:400}
   .pa{font-family:var(--disp);font-weight:800}
   .pa.sein{color:var(--sein)}
@@ -1030,13 +1034,13 @@ const ADD11=[
  {de:"Monat",zh:"月（時間單位）",g:"der",cat:"日常",lesson:"L11",ex:["Ein Monat hat vier Wochen.","一個月有四週。"]},
  {de:"Party",zh:"派對",g:"die",cat:"日常",lesson:"L11",ex:["Wir machen eine Party.","我們要辦派對。"]},
  {de:"Reise",zh:"旅行（Dienstreise 出差／Privatreise 私人旅遊）",g:"die",cat:"日常",lesson:"L11",ex:["Michi ist auf einer Dienstreise.","米奇在出差。"]},
- {de:"schlafen",zh:"睡覺（母音變：du schläfst）",g:null,cat:"動詞",lesson:"L11",ex:["Ich habe lange geschlafen.","我睡了很久。"],ex2:["Schläfst du schon?","你睡了嗎？"]},
+ {de:"schlafen",zh:"睡覺（母音變：du schläfst）",g:null,cat:"動詞",lesson:"L11",ex:["Schläfst du schon?","你睡了嗎？"],pex:["Ich habe lange geschlafen.","我睡了很久。"]},
  {de:"lernen",zh:"學習",g:null,cat:"動詞",lesson:"L11",ex:["Ich lerne jeden Tag Deutsch.","我每天學德文。"]},
- {de:"reden",zh:"聊天、說話",g:null,cat:"動詞",lesson:"L11",ex:["Wir haben lange geredet.","我們聊了很久。"]},
- {de:"lachen",zh:"笑",g:null,cat:"動詞",lesson:"L11",ex:["Wir haben viel gelacht.","我們笑得很開心。"]},
- {de:"denken",zh:"想、認為",g:null,cat:"動詞",lesson:"L11",ex:["Ich habe an dich gedacht.","我一直想著你。"]},
+ {de:"reden",zh:"聊天、說話",g:null,cat:"動詞",lesson:"L11",ex:["Wir reden lange.","我們聊很久。"],pex:["Wir haben lange geredet.","我們聊了很久。"]},
+ {de:"lachen",zh:"笑",g:null,cat:"動詞",lesson:"L11",ex:["Wir lachen viel.","我們常常笑。"],pex:["Wir haben viel gelacht.","我們笑得很開心。"]},
+ {de:"denken",zh:"想、認為",g:null,cat:"動詞",lesson:"L11",ex:["Ich denke an dich.","我想著你。"],pex:["Ich habe an dich gedacht.","我一直想著你。"]},
  {de:"meinen",zh:"認為、意思是",g:null,cat:"動詞",lesson:"L11",ex:["Was meinst du?","你的意思是？"]},
- {de:"aufräumen",zh:"整理、收拾（可分離）",g:null,cat:"動詞",lesson:"L11",ex:["Ich habe mein Zimmer aufgeräumt.","我整理了我的房間。"]},
+ {de:"aufräumen",zh:"整理、收拾（可分離）",g:null,cat:"動詞",lesson:"L11",ex:["Ich räume mein Zimmer auf.","我整理我的房間。"],pex:["Ich habe mein Zimmer aufgeräumt.","我整理了我的房間。"]},
  {de:"täglich",zh:"每天的",g:null,cat:"副詞",lesson:"L11",ex:["Ich arbeite täglich von 9 bis 17 Uhr.","我每天9點到17點工作。"]},
  {de:"ab",zh:"從……起（介係詞）",g:null,cat:"副詞",lesson:"L11",ex:["Ab 9 Uhr arbeite ich.","我從九點開始工作。"]},
  {de:"für",zh:"為了、給（介係詞）",g:null,cat:"副詞",lesson:"L11",ex:["Das Geschenk ist für Anja.","這禮物是給安雅的。"]},
@@ -1074,10 +1078,10 @@ const ADD12=[
  {de:"Person",zh:"人、人物",g:"die",cat:"節慶",lesson:"L12",ex:["Wie viele Personen kommen?","有多少人要來？"]},
  {de:"anfangen",zh:"開始（可分離＋母音變：du fängst an）",g:null,cat:"動詞",lesson:"L12",ex:["Der Karneval fängt im November an.","嘉年華十一月開始。"],ex2:["Wann fängst du mit der Arbeit an?","你什麼時候開始工作？"]},
  {de:"aufhören",zh:"結束、停止（可分離）",g:null,cat:"動詞",lesson:"L12",ex:["Der Karneval hört im Februar auf.","嘉年華二月結束。"]},
- {de:"feiern",zh:"慶祝",g:null,cat:"動詞",lesson:"L12",ex:["Wir haben letzte Woche gefeiert.","我們上週慶祝了。"]},
+ {de:"feiern",zh:"慶祝",g:null,cat:"動詞",lesson:"L12",pex:["Wir haben letzte Woche gefeiert.","我們上週慶祝了。"]},
  {de:"dauern",zh:"持續（時間長度）",g:null,cat:"動詞",lesson:"L12",ex:["Das Oktoberfest dauert zwei Wochen.","啤酒節持續兩週。"]},
- {de:"fliegen",zh:"飛（sein 類動詞）",g:null,cat:"動詞",lesson:"L12",ex:["Er ist nach München geflogen.","他飛去慕尼黑了。"]},
- {de:"gefallen",zh:"合……的意（母音變：du gefällst；接 Dativ：mir/dir gefällt）",g:null,cat:"動詞",lesson:"L12",ex:["Wie hat es dir gefallen?","你覺得怎麼樣（喜歡嗎）？"],ex2:["Gefällt dir die neue Wohnung?","你喜歡這個新公寓嗎？"]},
+ {de:"fliegen",zh:"飛（sein 類動詞）",g:null,cat:"動詞",lesson:"L12",ex:["Er fliegt nach München.","他飛去慕尼黑。"],pex:["Er ist nach München geflogen.","他飛去慕尼黑了。"]},
+ {de:"gefallen",zh:"合……的意（母音變：du gefällst；接 Dativ：mir/dir gefällt）",g:null,cat:"動詞",lesson:"L12",ex:["Gefällt dir die neue Wohnung?","你喜歡這個新公寓嗎？"],pex:["Wie hat es dir gefallen?","你覺得怎麼樣（喜歡嗎）？"]},
  {de:"seit",zh:"自從（介係詞）",g:null,cat:"副詞",lesson:"L12",ex:["Das Oktoberfest gibt es seit 1810.","啤酒節從1810年就有了。"]},
  {de:"gestern",zh:"昨天",g:null,cat:"副詞",lesson:"L12",ex:["Gestern war ich im Kino.","我昨天去看電影。"]},
  {de:"im",zh:"在……（月份/季節用；im = in dem）",g:null,cat:"副詞",lesson:"L12",ex:["Das Oktoberfest ist im September und Oktober.","啤酒節在九月和十月。"]},
@@ -2553,21 +2557,26 @@ function perfektExample(vm){
   if(!_PEXIDX){
     _PEXIDX={};
     const HAB=["habe","hast","hat","haben","habt"], SEI=["bin","bist","ist","sind","seid"];
-    SENTENCES.forEach(s=>{
+    const addPex=(s)=>{
       const t=String(s.de||"").split(/\s+/)
         .map(w=>w.replace(/[.,!?;:\u201e\u201c"\u2013-]+$/,"").replace(/^[\u201e\u201c"]+/,""));
       const a=t.filter(w=>HAB.indexOf(w)>=0||SEI.indexOf(w)>=0);
       if(a.length!==1) return;                       /* 兩個助動詞＝句子太複雜，不當範例 */
       const fam=HAB.indexOf(a[0])>=0?"h":"s";
       t.forEach(w=>{ if(w) (_PEXIDX[w]=_PEXIDX[w]||[]).push({s:s,fam:fam}); });
-    });
+    };
+    SENTENCES.forEach(addPex);
+    /* 2026-07-31：既有 Perfekt 例句本來就散在單字卡上（Verkäuferin/Leute/Arbeiter…），
+       只掃 SENTENCES 會漏掉，白白讓 arbeiten/treffen/wohnen 等字的 Perfekt 框空著。 */
+    try{VOCAB.forEach(v=>{[v.ex,v.ex2,v.pex].forEach(e=>{
+      if(e&&e[0]) addPex({de:e[0],zh:e[1]||""});});});}catch(e){}
   }
   const list=(_PEXIDX[vm.p2]||[]).filter(x=>!vm.aux||x.fam===vm.aux);
   if(!list.length) return null;
   list.sort((x,y)=>String(x.s.de).length-String(y.s.de).length);   /* 短句優先，好記 */
   return list[0].s;
 }
-function perfektBoxHTML(vm){
+function perfektBoxHTML(vm,pex){
   if(!vm||!vm.p2) return "";
   const s=vm.aux==="s", h=vm.aux==="h";
   const aux = s?"ist":(h?"hat":"");
@@ -2576,16 +2585,42 @@ function perfektBoxHTML(vm){
   const say  = (aux?aux+" ":"")+vm.p2;
   const note = s ? `<div class="vsub">\u26a0\ufe0f \u52a9\u52d5\u8a5e\u7528 sein\uff0c\u4e0d\u662f haben</div>`
              : (aux?"":`<div class="vsub">\u52a9\u52d5\u8a5e\u672a\u767b\u8a18\u2014\u2014\u5efa\u8b70\u554f\u8001\u5e2b\u6c42\u8b49</div>`);
-  const ex=perfektExample(vm);
-  const exl = ex ? `<div class="exline pexline"><div class="exde">${ex.de}</div>`
-                 + `<button class="spk pexspk" aria-label="唁例句"></button>`
-                 + `<div class="exzh">${ex.zh||""}</div></div>` : "";
+  /* 2026-07-31：卡片自帶 pex 優先，撈不到才回句庫。助動詞＋Partizip 永遠可見
+     （與名詞性別同級的必背資訊，不折），只折例句以壓卡背長度。 */
+  const ex = (pex&&pex[0]) ? {de:pex[0],zh:pex[1]||""} : perfektExample(vm);
+  const tog = ex ? `<button class="pmore" aria-expanded="false">例句 &#9656;</button>` : "";
+  const exl = ex ? `<div class="pfold" hidden><div class="exline pexline"><div class="exde">${ex.de}</div>`
+                 + `<button class="spk pexspk" aria-label="唸例句"></button>`
+                 + `<div class="exzh">${ex.zh||""}</div></div></div>` : "";
   return `<div class="vbox pbox">Perfekt\uff1a${head}`
-       + `<span class="vform" data-say="${say}">${vm.p2}</span>${note}${exl}</div>`;
+       + `<span class="vform" data-say="${say}">${vm.p2}</span>${tog}${note}${exl}</div>`;
 }
 /* 卡背動詞區的 HTML */
-function verbBackHTML(vm){
+function verbBackHTML(vm,inf){
   const vf=(p,f)=>`<span class="vform" data-say="${p} ${f}">${p} ${f}</span>`;
+  /* 2026-07-31：可分離判定＝f/du 欄帶「… 前綴」標記（檔內既有的分離式變位證據）。
+     t:"irr" 在 VERB_META 是超載欄位——可分離動詞為了寫前綴被迫走 f 陣列，字幹多半
+     完全規則（abholen／einkaufen／anrufen…），一律印「完全不規則」是說謊。字幹真偽
+     用既有的 irrRegForms() 推導比對，與 🧩 不規則動詞總表、smoke ⑦ 同一套判準。 */
+  const raw = vm.f ? String(vm.f[1]) : String(vm.du||"");
+  const sp  = / … (\S+)$/.exec(raw);
+  if(sp && inf){
+    const P=["ich","du","er","wir","ihr","Sie"];
+    const cut=(x)=>String(x||"").split(" …")[0];
+    const pre=sp[1], base=(inf.indexOf(pre)===0?inf.slice(pre.length):inf);
+    const rf=irrRegForms(base), st=base.replace(/e?n$/,"");
+    const du=cut(vm.f?vm.f[1]:vm.du), er=cut(vm.f?vm.f[2]:vm.er);
+    const body = vm.f ? `<div class="virr">${vm.f.map((f,i)=>vf(P[i],f)).join(" · ")}</div>`
+                      : `<div class="virr">${vf("du",vm.du)} · ${vf("er",vm.er)}</div>`;
+    const tail = `<b>${pre}</b> 丟到句尾`;
+    if(du===rf[0]&&er===rf[1])
+      return `<div class="vbox sep"><b>🔗 可分離動詞</b>`
+           + `<div class="vsub">字幹照規則變，前綴 ${tail}</div>${body}</div>`;
+    const o=vm.f?[0,3,4,5].map(i=>cut(vm.f[i])):null;
+    const vowelOnly = o ? (o[0]===st+"e"&&o[1]===st+"en"&&o[2]===rf[1]&&o[3]===st+"en") : true;
+    return `<div class="vbox warn"><b>🔗 可分離＋${vowelOnly?"母音變化":"不規則"}</b>`
+         + `<div class="vsub">${vowelOnly?"只有 du / er 的字幹母音變，前綴 ":"前綴 "}${tail}</div>${body}</div>`;
+  }
   if(vm.t==="reg") return `<div class="vbox reg"><b>規則動詞</b> · 照公式 -e / -st / -t / -en / -t / -en</div>`;
   if(vm.t==="sib") return `<div class="vbox warn">⚠️ 字尾 -ß/-s/-z：du 也只加 -t → ${vf("du",vm.du)}（不是 hei&szlig;st）</div>`;
   if(vm.t==="stemt") return `<div class="vbox warn">⚠️ 字幹 -t：${vf("du",vm.du)} · ${vf("er",vm.er)}<div class="vsub">比規則多塞一個 e</div></div>`;
@@ -3496,11 +3531,13 @@ function render(){
       html+=`</div>`;
     }
     /* 動詞關鍵形 */
-    if(c.vm)html+=verbBackHTML(c.vm)+perfektBoxHTML(c.vm);
+    if(c.vm)html+=verbBackHTML(c.vm,c.de);
     /* 例句（單數）*/
     if(c.ex)html+=`<div class="exline"><div class="exde">${c.ex[0]}</div><button class="spk exspk" aria-label="唸例句"></button><div class="exzh">${c.ex[1]}</div></div>`;
     /* 2026-07-17：例句②——目前只給不規則動詞用，補第二個變位人稱，兩句合計涵蓋 ≥2 個不規則變化形 */
     if(c.ex2)html+=`<div class="exline"><div class="exde">${c.ex2[0]}</div><button class="spk ex2spk" aria-label="唸例句②"></button><div class="exzh">${c.ex2[1]}</div></div>`;
+    /* 2026-07-31：Perfekt 區移到現在式例句之後——原本夾在現在式變位與現在式例句中間，時態交錯 */
+    if(c.vm)html+=perfektBoxHTML(c.vm,c.pex);
     /* 例句（複數）*/
     if(c.plEx)html+=`<div class="exline plex"><div class="exde">${c.plEx[0]}</div><button class="spk plexspk" aria-label="唸複數例句"></button><div class="exzh">${c.plEx[1]}</div></div>`;
     flashFace.innerHTML=html;
@@ -3511,6 +3548,12 @@ function render(){
     {const b=flashFace.querySelector('.pexspk');
      if(b){b.innerHTML=SPK_SVG;b.onclick=(e)=>{e.stopPropagation();
        const d=b.parentNode.querySelector('.exde');if(d)speak(d.textContent);};}}
+    {const b=flashFace.querySelector('.pmore'),f=flashFace.querySelector('.pfold');
+     if(b&&f){b.onclick=(e)=>{e.stopPropagation();
+       const open=f.hasAttribute('hidden');
+       if(open){f.removeAttribute('hidden');}else{f.setAttribute('hidden','');}
+       b.innerHTML='例句 '+(open?'&#9662;':'&#9656;');
+       b.setAttribute('aria-expanded',open?'true':'false');};}}
     if(c.ex){const b=flashFace.querySelector('.exspk');if(b){b.innerHTML=SPK_SVG;b.onclick=(e)=>{e.stopPropagation();speak(c.ex[0]);};}}
     if(c.ex2){const b=flashFace.querySelector('.ex2spk');if(b){b.innerHTML=SPK_SVG;b.onclick=(e)=>{e.stopPropagation();speak(c.ex2[0]);};}}
     if(c.plEx){const b=flashFace.querySelector('.plexspk');if(b){b.innerHTML=SPK_SVG;b.onclick=(e)=>{e.stopPropagation();speak(c.plEx[0]);};}}
