@@ -2576,7 +2576,52 @@ function perfektExample(vm){
   list.sort((x,y)=>String(x.s.de).length-String(y.s.de).length);   /* 短句優先，好記 */
   return list[0].s;
 }
-function perfektBoxHTML(vm,pex){
+/* Partizip II 形成規則（2026-08-01）：卡背只給答案（hat gemacht）不給規則，與現在式區
+   不對稱——現在式會說「規則動詞·照公式」「母音變化只有 du/er 變」，Perfekt 什麼都不說。
+   本函式印「這個字是怎麼拼出來的」，用語對齊 🧩 Perfekt 系統卡的五型。
+   **全部由 inf + p2 兩個既有字串推導，不新增資料欄位、不新造德文。**
+   自我防守：拆出來的段落重組必須逐字等於 p2，不等就退回「特例，要背」——寧可留白也不
+   印假規則（與本區塊「留白＝不顯示假資料」同一條）。sein/essen/tun 就是被這道守衛擋下的。 */
+function partizipRule(vm,inf){
+  if(!vm||!vm.p2||!inf) return null;
+  const p2=vm.p2, stem=inf.replace(/e?n$/,"");
+  const hard="特例，要背";
+  const mk=(k,segs,note)=>segs.join("")===p2
+    ? k+"\uff1a"+segs.join(" + ")+(note?"\uff08"+note+"\uff09":"") : hard;
+  const endOf=(s)=>/en$/.test(s)?"en":(/t$/.test(s)?"t":null);
+  /* 可分離判準＝檔內既有的「… 前綴」標記，與 verbBackHTML 同一套證據，不用字首白名單 */
+  const raw=vm.f?String(vm.f[1]):String(vm.du||"");
+  const sp=/ … (\S+)$/.exec(raw);
+  if(sp){
+    const pre=sp[1];
+    if(p2.indexOf(pre)!==0||p2.substr(pre.length,2)!=="ge") return hard;
+    const rest=p2.slice(pre.length+2), e=endOf(rest); if(!e) return hard;
+    const st=rest.slice(0,rest.length-e.length);
+    const base=inf.indexOf(pre)===0?inf.slice(pre.length):inf, bs=base.replace(/e?n$/,"");
+    return mk("\u2462 可分離",[pre,"ge",st,e],st===bs?"ge 夾中間":"ge 夾中間\uff1b"+bs+"\u2192"+st+" 要背");
+  }
+  if(/ieren$/.test(inf)) return mk("\u2464 -ieren",[stem,"t"],"不加 ge");
+  if(p2===inf) return "\u2463 不可分離\uff1aPartizip \uff1d 原形，不加 ge";
+  if(p2.indexOf("ge")!==0){
+    const e=endOf(p2); if(!e) return hard;
+    let st=p2.slice(0,p2.length-e.length), ee=e;
+    if(e==="t"&&st===stem+"e"){st=stem;ee="et";}
+    return mk("\u2463 不可分離",[st,ee],st===stem?"不加 ge":"不加 ge\uff1b"+stem+"\u2192"+st+" 要背");
+  }
+  const body=p2.slice(2), e0=endOf(body); if(!e0) return hard;
+  let st=body.slice(0,body.length-e0.length), ee=e0;
+  if(st[0]!==stem[0]) return hard;        /* 字幹面目全非（gewesen／gegessen）＝不硬拆 */
+  if(e0==="t"&&st===stem+"e"){st=stem;ee="et";}
+  if(ee!=="en") return st===stem ? mk("\u2460 規則",["ge",st,ee])
+    : mk("\u2461 不規則\u00b7特例",["ge",st,ee],stem+"\u2192"+st+"，字尾 -t，要背");
+  return st===stem ? mk("\u2461 不規則",["ge",st,ee],"字幹不變")
+                   : mk("\u2461 不規則",["ge",st,ee],stem+"\u2192"+st+"，要背");
+}
+function partizipRuleHTML(vm,inf){
+  const r=partizipRule(vm,inf);
+  return r?`<div class="vsub">${r}</div>`:"";
+}
+function perfektBoxHTML(vm,pex,inf){
   if(!vm||!vm.p2) return "";
   const s=vm.aux==="s", h=vm.aux==="h";
   const aux = s?"ist":(h?"hat":"");
@@ -2592,8 +2637,9 @@ function perfektBoxHTML(vm,pex){
   const exl = ex ? `<div class="pfold" hidden><div class="exline pexline"><div class="exde">${ex.de}</div>`
                  + `<button class="spk pexspk" aria-label="唸例句"></button>`
                  + `<div class="exzh">${ex.zh||""}</div></div></div>` : "";
+  const rule = partizipRuleHTML(vm,inf);
   return `<div class="vbox pbox">Perfekt\uff1a${head}`
-       + `<span class="vform" data-say="${say}">${vm.p2}</span>${tog}${note}${exl}</div>`;
+       + `<span class="vform" data-say="${say}">${vm.p2}</span>${tog}${rule}${note}${exl}</div>`;
 }
 /* 卡背動詞區的 HTML */
 function verbBackHTML(vm,inf){
@@ -3537,7 +3583,7 @@ function render(){
     /* 2026-07-17：例句②——目前只給不規則動詞用，補第二個變位人稱，兩句合計涵蓋 ≥2 個不規則變化形 */
     if(c.ex2)html+=`<div class="exline"><div class="exde">${c.ex2[0]}</div><button class="spk ex2spk" aria-label="唸例句②"></button><div class="exzh">${c.ex2[1]}</div></div>`;
     /* 2026-07-31：Perfekt 區移到現在式例句之後——原本夾在現在式變位與現在式例句中間，時態交錯 */
-    if(c.vm)html+=perfektBoxHTML(c.vm,c.pex);
+    if(c.vm)html+=perfektBoxHTML(c.vm,c.pex,c.de);
     /* 例句（複數）*/
     if(c.plEx)html+=`<div class="exline plex"><div class="exde">${c.plEx[0]}</div><button class="spk plexspk" aria-label="唸複數例句"></button><div class="exzh">${c.plEx[1]}</div></div>`;
     flashFace.innerHTML=html;
@@ -3956,6 +4002,7 @@ const GRAM=[
     <tr><td>⑤ -ieren 結尾</td><td class="de2"><b>不加 ge</b>，直接 -t</td><td class="de2">telefonieren → telefoniert · fotografieren → fotografiert · studieren → studiert</td></tr>
   </table>
   <p style="font-size:.86rem;margin:.3em 0 .3em">判斷順序：先看動詞開頭——是 be-/ver-/er-/ent-/ge-/unter- 就④不加 ge；是 an-/aus-/ab-/auf-/ein-/mit-/um-/vor-/fern- 這種可拆字首就③；結尾 -ieren 就⑤不加 ge；剩下的動詞才問「規不規則」，規則套①，不規則（多數要背）套②。</p>
+  <p style="font-size:.86rem;margin:.3em 0 .3em">⚠️ <b>例外的例外（混合型）</b>：<b>wissen→gewusst</b> · <b>denken→gedacht</b> · <b>bringen→gebracht</b>——字幹變音（② 的特徵）但字尾是 <b>-t</b>（① 的特徵），兩型各拿一半，沒有規則可套，只能背。單字卡上標成「② 不規則·特例」。</p>
   <p style="font-size:.86rem;font-weight:700;margin:.4em 0 .1em">五型各一句完整句（整句唸出來記語序）</p>
   <p style="font-size:.9rem;margin:.1em 0">① Ich habe am Samstag <b>gekocht</b>.（我週六煮了飯）</p>
   <p style="font-size:.9rem;margin:.1em 0">② Er hat ein Buch <b>gelesen</b>.（他讀了一本書）</p>
