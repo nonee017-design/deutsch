@@ -4356,7 +4356,7 @@ const textsList=document.getElementById('textsList');
 /* ② 還原查詢（N13）：點字查不到原形時，依序試「動詞變位形 → 名詞複數形 → Partizip II」還原。
    索引全程式生成：VERB_META f 陣列首 token（可分離動詞的變位部分，如 fängt→anfangen）＋ du/er 欄
    ＋ 規則動詞字幹加 -e/-st/-t/-en ＋ NOUN_PL 反查。已知限制：可分離動詞拆到句尾的前綴（… ein）查不回動詞本體。*/
-let LEMMA_V=null,LEMMA_N=null;
+let LEMMA_V=null,LEMMA_N=null,LEMMA_A=null,LEMMA_P=null;
 /* N14：功能詞小辭典——導讀/整合閱讀點字查詢的最後一層兜底。
    這裡收的是「沒有獨立可產出意思」的純語法零件（冠詞/人稱代名詞主格/不定詞 zu 等）；
    ⚠️ 情態動詞／一般動詞一律仍要建單字卡（判準見 GUIDE_A §3 Step 1），此處只是它們變位形查義的第二層兜底，不是免建卡的理由。key 一律小寫。 */
@@ -4408,7 +4408,7 @@ const FUNC_GLOSS={
 };
 const PART2_STRONG={gegangen:"gehen",gesprochen:"sprechen",getroffen:"treffen",gegessen:"essen",getrunken:"trinken",geflogen:"fliegen",geschrieben:"schreiben",gewesen:"sein",genommen:"nehmen",verstanden:"verstehen",bekommen:"bekommen",aufgestanden:"aufstehen",gestanden:"stehen",ausgesehen:"aussehen",gefunden:"finden",gebracht:"bringen",verschoben:"verschieben",getan:"tun",mitgenommen:"mitnehmen",gerufen:"rufen",gestiegen:"steigen",abgeschlossen:"abschließen"};
 function buildLemma(){
-  LEMMA_V={};LEMMA_N={};
+  LEMMA_V={};LEMMA_N={};LEMMA_A={};LEMMA_P={};
   const addV=(form,inf)=>{const k=(form||'').toLowerCase();if(k&&k!=='…'&&!LEMMA_V[k])LEMMA_V[k]=inf;};
   /* 規則變位：小寫 -en 結尾的字（動詞）字幹＋詞尾；先加正規形，VERB_META 隨後覆蓋不了已存在的正確映射 */
   VOCAB.forEach(v=>{
@@ -4426,11 +4426,40 @@ function buildLemma(){
     if(m.er)addV(m.er,inf);
   });
   Object.entries(NOUN_PL).forEach(([sg,pl])=>{if(pl&&pl!==sg&&!LEMMA_N[pl])LEMMA_N[pl]=sg;});
+  /* 第三格複數 -n：複數形不以 n/s 結尾者補一形（die Bäume → mit den Bäumen）。
+     斜線／逗號分隔的多複數形逐個處理；不覆蓋既有映射。*/
+  Object.entries(NOUN_PL).forEach(([sg,pl])=>{String(pl||'').split(/[\/,\s]+/).forEach(p=>{
+    p=p.trim(); if(!p||/[ns]$/.test(p))return; const k=p+'n'; if(!LEMMA_N[k])LEMMA_N[k]=sg;});});
+  /* 純複數名詞（g:"plu"，如 Leute/Werktage）不在 NOUN_PL，第三格 -n 要另掛 */
+  VOCAB.forEach(v=>{if(v.g!=='plu'||/[ns]$/.test(v.de))return;const k=v.de+'n';if(!LEMMA_N[k])LEMMA_N[k]=v.de;});
+  /* Partizip II → 原形：N23 起 VERB_META.p2 是真相源（PART2_STRONG 是它之前的舊表，
+     兩者並存，查詢時 PART2_STRONG 優先，這裡補上舊表沒收的）。新增動詞只要登記 p2
+     就自動可查，不必再手動補 PART2_STRONG——GUIDE_B §8B 的 ferngesehen/angefangen 型漏洞由此關閉。*/
+  Object.entries(VERB_META).forEach(([inf,m])=>{
+    if(!m||!m.p2)return; const k=String(m.p2).toLowerCase(); if(k&&!LEMMA_P[k])LEMMA_P[k]=inf;});
+  /* 形容詞／副詞變格＋規則比較級還原（viele→viel、nette→nett、später→spät、dunkle→dunkel）。
+     判準：小寫純字母、無性別（非名詞）、非動詞（不在 VERB_META 且不以 en/ern/eln 結尾）。
+     不規則級變化（gut/besser、viel/mehr、gern/lieber、變音型 alt/älter）刻意不生成——
+     那些要另立單字卡，寧可查不到也不給錯答案。查詢優先序低於 LEMMA_V/LEMMA_N（見 tokLookup）。*/
+  const addA=(form,base)=>{const k=(form||'').toLowerCase();if(k&&!LEMMA_A[k])LEMMA_A[k]=base;};
+  const ADJ_E=['e','en','er','es','em'];
+  VOCAB.forEach(v=>{
+    const b=v.de;
+    if(v.g||!/^[a-zäöüß]{2,}$/.test(b)||/(en|ern|eln)$/.test(b)||VERB_META[b])return;
+    const stems=[b];
+    if(b.endsWith('e'))stems.push(b.slice(0,-1));                  /* müde→müd（müden）*/
+    if(/(el|er)$/.test(b))stems.push(b.slice(0,-2)+b.slice(-1));   /* dunkel→dunkl、teuer→teur */
+    stems.forEach(s=>ADJ_E.forEach(e=>addA(s+e,b)));               /* 原級變格 */
+    ADJ_E.forEach(e=>addA(b+'er'+e,b));                            /* 比較級變格 schönere */
+    const sup=/(t|d|s|ß|z|sch)$/.test(b)?'est':'st';               /* 最高級墊音 */
+    ['',...ADJ_E].forEach(e=>addA(b+sup+e,b));
+  });
 }
 /* Partizip II → 原形：弱變化 ge…t／可分離 …ge…(t|en)／-iert 程式化還原，強變化查 PART2_STRONG */
 function part2inf(w){
   const lw=w.toLowerCase();
   if(PART2_STRONG[lw])return PART2_STRONG[lw];
+  if(LEMMA_P&&LEMMA_P[lw])return LEMMA_P[lw];
   const V0=inf=>VOCAB.some(v=>v.de===inf)?inf:null;
   const V=stem=>V0(stem+'en')||V0(stem+'n'); /* 一般 -en；feiern/sammeln 型 -n */
   let m;
@@ -4475,6 +4504,8 @@ function tokLookup(raw){
   if(sg){const h=VOCAB.find(v=>v.de===sg);if(h)return{w,hit:h,via:'n'};}
   const pinf=part2inf(w);
   if(pinf){const h=VOCAB.find(v=>v.de===pinf);if(h)return{w,hit:h,via:'p'};}
+  const abase=LEMMA_A[w.toLowerCase()];
+  if(abase){const h=VOCAB.find(v=>v.de===abase);if(h)return{w,hit:h,via:'a'};}
   const gbase=gradToBase(w);
   if(gbase){const h=VOCAB.find(v=>v.de===gbase);if(h)return{w,hit:h,via:'g'};}
   /* N14：功能詞兜底（最低優先——單字卡/變位/複數/Partizip 都沒中才查） */
@@ -4492,6 +4523,7 @@ function tokPopShow(pop,raw){
     if(r.via==='v')head=`<b>${r.w}</b> → ${base} <span style="font-size:.78rem;color:var(--mut)">動詞變位形</span>`;
     else if(r.via==='n')head=`<b>${r.w}</b> → ${base} <span style="font-size:.78rem;color:var(--plu)">複數形</span>`;
     else if(r.via==='p')head=`<b>${r.w}</b> → ${base} <span style="font-size:.78rem;color:#b45309">Partizip II</span>`;
+    else if(r.via==='a')head=`<b>${r.w}</b> → ${base} <span style="font-size:.78rem;color:var(--mut)">形容詞變格／比較級</span>`;
     else if(r.via==='g')head=`<b>${r.w}</b> → ${base} <span style="font-size:.78rem;color:#7c3aed">比較級/最高級</span>`;
     pop.innerHTML=`${head} — ${r.hit.zh}`;speak(r.w);
   }else if(r.gloss){
