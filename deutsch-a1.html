@@ -4438,15 +4438,19 @@ function buildLemma(){
   Object.entries(VERB_META).forEach(([inf,m])=>{
     if(!m||!m.p2)return; const k=String(m.p2).toLowerCase(); if(k&&!LEMMA_P[k])LEMMA_P[k]=inf;});
   /* 形容詞／副詞變格＋規則比較級還原（viele→viel、nette→nett、später→spät、dunkle→dunkel）。
-     判準：小寫純字母、無性別（非名詞）、非動詞（不在 VERB_META 且不以 en/ern/eln 結尾）。
-     不規則級變化（gut/besser、viel/mehr、gern/lieber、變音型 alt/älter）刻意不生成——
-     那些要另立單字卡，寧可查不到也不給錯答案。查詢優先序低於 LEMMA_V/LEMMA_N（見 tokLookup）。*/
+     判準：小寫純字母、無性別（非名詞）、cat 不是動詞/指令動詞、不在 VERB_META。
+     不規則級變化（gut/besser、viel/mehr、hoch/höher、變音型 alt/älter）不在這裡處理，
+     由 gradToBase() 負責；本表只管規律形。查詢優先序低於 LEMMA_V/LEMMA_N（見 tokLookup）。*/
   const addA=(form,base)=>{const k=(form||'').toLowerCase();if(k&&!LEMMA_A[k])LEMMA_A[k]=base;};
   const ADJ_E=['e','en','er','es','em'];
+  /* 原級變格時字幹改變的例外（規則生不出來，只能列舉）。
+     比較級/最高級的不規則由 gradToBase 的 IRR_GRAD_REV 負責，兩張表分工不重疊。*/
+  const ADJ_STEM_ALT={hoch:'hoh'};
   VOCAB.forEach(v=>{
     const b=v.de;
-    if(v.g||!/^[a-zäöüß]{2,}$/.test(b)||/(en|ern|eln)$/.test(b)||VERB_META[b])return;
+    if(v.g||!/^[a-zäöüß]{2,}$/.test(b)||v.cat==='動詞'||v.cat==='指令動詞'||VERB_META[b])return;
     const stems=[b];
+    if(ADJ_STEM_ALT[b])stems.push(ADJ_STEM_ALT[b]);                /* hoch→hoh（hohe/hohen）*/
     if(b.endsWith('e'))stems.push(b.slice(0,-1));                  /* müde→müd（müden）*/
     if(/(el|er)$/.test(b))stems.push(b.slice(0,-2)+b.slice(-1));   /* dunkel→dunkl、teuer→teur */
     stems.forEach(s=>ADJ_E.forEach(e=>addA(s+e,b)));               /* 原級變格 */
