@@ -4356,7 +4356,7 @@ const textsList=document.getElementById('textsList');
 /* ② 還原查詢（N13）：點字查不到原形時，依序試「動詞變位形 → 名詞複數形 → Partizip II」還原。
    索引全程式生成：VERB_META f 陣列首 token（可分離動詞的變位部分，如 fängt→anfangen）＋ du/er 欄
    ＋ 規則動詞字幹加 -e/-st/-t/-en ＋ NOUN_PL 反查。已知限制：可分離動詞拆到句尾的前綴（… ein）查不回動詞本體。*/
-let LEMMA_V=null,LEMMA_N=null,LEMMA_A=null,LEMMA_P=null;
+let LEMMA_V=null,LEMMA_N=null,LEMMA_A=null,LEMMA_P=null,LEMMA_SEP=null;
 /* N14：功能詞小辭典——導讀/整合閱讀點字查詢的最後一層兜底。
    這裡收的是「沒有獨立可產出意思」的純語法零件（冠詞/人稱代名詞主格/不定詞 zu 等）；
    ⚠️ 情態動詞／一般動詞一律仍要建單字卡（判準見 GUIDE_A §3 Step 1），此處只是它們變位形查義的第二層兜底，不是免建卡的理由。key 一律小寫。 */
@@ -4425,6 +4425,27 @@ function buildLemma(){
     if(m.du)addV(m.du,inf);
     if(m.er)addV(m.er,inf);
   });
+  /* 可分離動詞「分開態」索引（2026-08-03）：變位形 → [[原形, 前綴], …]，多值。
+     不能併進 LEMMA_V——同一個變位形常同時屬於基礎動詞與數個可分離動詞
+     （mache → machen/anmachen/ausmachen/aufmachen/zumachen），單值表先到先得，
+     實測 42 個可分離動詞裡 31 個的字幹會被基礎動詞或別的可分離動詞吃掉。
+     查詢靠句子上下文，見 sepResolve()。來源含 f 陣列與 du/er 字串
+     （aufstehen 型只有 du/er 帶「…」、沒有 f 陣列，只讀 f 會整個漏掉）。*/
+  LEMMA_SEP={};
+  const addS=(s,inf)=>{s=String(s||'');if(s.indexOf('…')<0)return;
+    const p=s.trim().split(/\s+/),f=p[0].toLowerCase(),pre=p[p.length-1].toLowerCase();
+    if(!f||!pre||f===pre)return;(LEMMA_SEP[f]=LEMMA_SEP[f]||[]).push([inf,pre]);};
+  Object.entries(VERB_META).forEach(([inf,m])=>{if(!m)return;
+    (m.f||[]).forEach(x=>addS(x,inf));addS(m.du,inf);addS(m.er,inf);});
+  /* du/er 型可分離動詞（現況只有 aufstehen）沒有 f 陣列，只有那兩格帶「…」。
+     其餘四格由基礎動詞規則生成，否則最常用的「Ich stehe um 7 Uhr auf」整句查不到。*/
+  Object.entries(VERB_META).forEach(([inf,m])=>{
+    if(!m||!m.du||String(m.du).indexOf('…')<0)return;
+    if((m.f||[]).some(x=>String(x).indexOf('…')>=0))return;
+    const pre=String(m.du).trim().split(/\s+/).pop().toLowerCase();
+    const base=inf.indexOf(pre)===0?inf.slice(pre.length):'';
+    if(!base)return;
+    [base.replace(/e?n$/,'')+'e',base].forEach(f=>addS(f+' … '+pre,inf));});
   Object.entries(NOUN_PL).forEach(([sg,pl])=>{if(pl&&pl!==sg&&!LEMMA_N[pl])LEMMA_N[pl]=sg;});
   /* 第三格複數 -n：複數形不以 n/s 結尾者補一形（die Bäume → mit den Bäumen）。
      斜線／逗號分隔的多複數形逐個處理；不覆蓋既有映射。*/
@@ -4518,7 +4539,49 @@ function tokLookup(raw){
   return{w,hit:null};
 }
 /* 點字彈窗：導讀與單元整合閱讀共用；還原命中時顯示「形 → 原形」與還原類型 */
-function tokPopShow(pop,raw){
+/* ===== 可分離動詞分開態解析（2026-08-03 修 bug，使用者回報）=====
+   單一 token 查不出分開態：Ich rufe dich an. 的 rufe 查到 rufen（喊叫）、an 查到介係詞，
+   各自都「正確」，合起來卻是錯的。判準用德語框架結構（Satzklammer）：主句裡可分離前綴
+   一定落在子句末端。子句＝標點與對等連接詞（und/oder/aber/denn/sondern）切開。
+   實測依據（2026-08-03，導讀＋單元整合閱讀現有全部文本）：分開態共 11 處，本規則全中；
+   寬鬆版（前綴出現在子句任何位置就算）會多誤判 2 處——
+   「Meine Schwester sagt: Dein Büro ist zu klein」被判成 zusagen。 */
+const SEP_CONJ=/^(und|oder|aber|denn|sondern)$/i;
+function sepClean(x){return String(x||'').replace(/[.,!?:;„“”"—–()»«…]/g,'').trim();}
+function sepClause(toks,i){
+  let s=0,e=toks.length;
+  for(let k=i;k>0;k--){const p=String(toks[k-1]).trim();
+    if(/[.,!?:;—–]$/.test(p)||SEP_CONJ.test(sepClean(p))){s=k;break;}}
+  for(let k=i;k<toks.length;k++){const p=String(toks[k]).trim();
+    if(k>i&&SEP_CONJ.test(sepClean(p))){e=k;break;}
+    if(/[.,!?:;—–]$/.test(p)){e=k+1;break;}}
+  return[s,e];
+}
+function sepResolve(toks,i){
+  if(!Array.isArray(toks)||typeof i!=='number')return null;
+  if(!LEMMA_V)buildLemma();
+  const me=sepClean(toks[i]);if(!me||!LEMMA_SEP)return null;
+  const r=sepClause(toks,i),cl=[];
+  for(let k=r[0];k<r[1];k++){const c=sepClean(toks[k]);if(c)cl.push({w:c,k:k});}
+  if(cl.length<2)return null;
+  const last=cl[cl.length-1];
+  if(last.k!==i){                       /* A：點到動詞變位形，子句末端正好是它的前綴 */
+    const h=(LEMMA_SEP[me.toLowerCase()]||[]).find(x=>x[1]===last.w.toLowerCase());
+    if(h)return{inf:h[0],pre:h[1],verb:me};
+  }else{                                /* B：點到子句末端的前綴，往前找配對的動詞形 */
+    for(let j=0;j<cl.length-1;j++){
+      const h=(LEMMA_SEP[cl[j].w.toLowerCase()]||[]).find(x=>x[1]===me.toLowerCase());
+      if(h)return{inf:h[0],pre:h[1],verb:cl[j].w};
+    }
+  }
+  return null;
+}
+function tokPopShow(pop,raw,ctx){
+  const sr=ctx?sepResolve(ctx.toks,ctx.i):null;
+  if(sr){const sh=VOCAB.find(v=>v.de===sr.inf);
+    if(sh){pop.classList.remove('miss');
+      pop.innerHTML=`<b>${sr.verb} … ${sr.pre}</b> → <b>${sh.de}</b> <span style="font-size:.78rem;color:#0d9488">可分離動詞（框架結構：前綴丟到子句末）</span> — ${sh.zh}`;
+      speak(sh.de);return;}}
   const r=tokLookup(raw);if(!r)return;
   if(r.hit){
     pop.classList.remove('miss');
@@ -4550,7 +4613,8 @@ function renderTexts(){
       +`<div class="srcnote">來源：${t.src}</div>`;
     card.querySelector('.tplay').onclick=()=>speak(t.de);
     const pop=card.querySelector('.tokpop');
-    card.querySelectorAll('.tok').forEach(el=>{el.onclick=()=>tokPopShow(pop,el.textContent);});
+    const tks=[...card.querySelectorAll('.tok')].map(x=>x.textContent);
+    card.querySelectorAll('.tok').forEach((el,i)=>{el.onclick=()=>tokPopShow(pop,el.textContent,{toks:tks,i:i});});
     const z=card.querySelector('.tzh');z.onclick=()=>z.classList.toggle('hidden');
     card.querySelectorAll('.tq .opt').forEach(b=>{b.onclick=()=>{
       const q=t.qs[+b.dataset.q],ok=+b.dataset.o===q.a;
@@ -4574,7 +4638,8 @@ function renderTexts(){
       +`<div class="tq"><b style="font-size:.9rem">✏️ 自由練習（隨時可重答，不計分、不影響單元關卡進度）</b>${mt.qs.map((q,qi)=>`<div style="margin-top:8px;font-size:.92rem"><b>${qi+1}. ${q.q}</b>${q.options.map((o,oi)=>`<button class="opt" data-q="${qi}" data-o="${oi}">${o}</button>`).join('')}</div>`).join('')}</div>`;
     card.querySelector('.tplay').onclick=()=>speak(mt.de);
     const pop=card.querySelector('.tokpop');
-    card.querySelectorAll('.tok').forEach(el=>{el.onclick=()=>tokPopShow(pop,el.textContent);});
+    const tks=[...card.querySelectorAll('.tok')].map(x=>x.textContent);
+    card.querySelectorAll('.tok').forEach((el,i)=>{el.onclick=()=>tokPopShow(pop,el.textContent,{toks:tks,i:i});});
     const z=card.querySelector('.tzh');z.onclick=()=>z.classList.toggle('hidden');
     card.querySelectorAll('.tq .opt').forEach(b=>{b.onclick=()=>{
       const q=mt.qs[+b.dataset.q],ok=+b.dataset.o===q.a;
@@ -5390,7 +5455,8 @@ function buildReadCard(md){
     <div class="mtres" style="margin-top:8px;font-weight:700"></div>`;
   box.querySelector('.mtplay').onclick=()=>speak(mt.de);
   const pop=box.querySelector('.tokpop');
-  box.querySelectorAll('.tok').forEach(tk=>{tk.onclick=()=>tokPopShow(pop,tk.textContent);});
+  const tks=[...box.querySelectorAll('.tok')].map(x=>x.textContent);
+  box.querySelectorAll('.tok').forEach((tk,i)=>{tk.onclick=()=>tokPopShow(pop,tk.textContent,{toks:tks,i:i});});
   const z=box.querySelector('.tzh');z.onclick=()=>z.classList.toggle('hidden');
   const answered={};
   const finish=()=>{
