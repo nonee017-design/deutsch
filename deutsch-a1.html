@@ -4356,7 +4356,14 @@ const textsList=document.getElementById('textsList');
 /* ② 還原查詢（N13）：點字查不到原形時，依序試「動詞變位形 → 名詞複數形 → Partizip II」還原。
    索引全程式生成：VERB_META f 陣列首 token（可分離動詞的變位部分，如 fängt→anfangen）＋ du/er 欄
    ＋ 規則動詞字幹加 -e/-st/-t/-en ＋ NOUN_PL 反查。已知限制：可分離動詞拆到句尾的前綴（… ein）查不回動詞本體。*/
-let LEMMA_V=null,LEMMA_N=null,LEMMA_A=null,LEMMA_P=null,LEMMA_SEP=null;
+let LEMMA_V=null,LEMMA_N=null,LEMMA_A=null,LEMMA_P=null,LEMMA_SEP=null,LEMMA_POSS=null;
+/* 所有格冠詞／否定冠詞（2026-08-03 修 bug）：FUNC_GLOSS 是手打字典，只收裸形與零星變格形，
+   48 個變格形裡 22 個查無；更糟的是 mein／meine 被動詞 meinen 的字幹索引搶走（LEMMA_V
+   優先序在 FUNC_GLOSS 之前），seiner 被 gradToBase 當成比較級剝成 sein。
+   改成程式化生成，不再手打，未來不會有下一批漏收。 */
+const POSS_BASE={mein:"我的",dein:"你的",sein:"他的／它的",ihr:"她的／他們的（大寫 Ihr＝您的）",unser:"我們的",euer:"你們的",kein:"沒有（否定冠詞）"};
+const POSS_CASE={"":"陽 第一格／中 第一·四格",e:"陰 第一·四格／複數 第一·四格",en:"陽 第四格／複數 第三格",em:"第三格 陽/中",er:"第三格 陰／第二格 陰·複數",es:"第二格 陽/中"};
+const POSS_NOTE={ihr:"裸形 ihr 也可能是人稱代名詞「你們」"};
 /* N14：功能詞小辭典——導讀/整合閱讀點字查詢的最後一層兜底。
    這裡收的是「沒有獨立可產出意思」的純語法零件（冠詞/人稱代名詞主格/不定詞 zu 等）；
    ⚠️ 情態動詞／一般動詞一律仍要建單字卡（判準見 GUIDE_A §3 Step 1），此處只是它們變位形查義的第二層兜底，不是免建卡的理由。key 一律小寫。 */
@@ -4466,6 +4473,15 @@ function buildLemma(){
   const ADJ_E=['e','en','er','es','em'];
   /* 原級變格時字幹改變的例外（規則生不出來，只能列舉）。
      比較級/最高級的不規則由 gradToBase 的 IRR_GRAD_REV 負責，兩張表分工不重疊。*/
+  /* 所有格／否定冠詞變格表：7 個詞根 × 6 個詞尾。euer 變格時字幹縮短（eure/euren/eurem…），
+     兩種字幹都登記，讓口語的 euere 也查得到。*/
+  LEMMA_POSS={};
+  Object.entries(POSS_BASE).forEach(([b,zh])=>{
+    const stems=[b];if(b==='euer')stems.push('eur');
+    Object.entries(POSS_CASE).forEach(([e,cs])=>{
+      stems.forEach(st=>{if(!e&&st!==b)return;const k=(st+e).toLowerCase();
+        if(!LEMMA_POSS[k])LEMMA_POSS[k]={base:b,zh:zh,cs:cs};});});
+  });
   const ADJ_STEM_ALT={hoch:'hoh'};
   VOCAB.forEach(v=>{
     const b=v.de;
@@ -4523,6 +4539,10 @@ function tokLookup(raw){
   if(!hit){const lw=w.toLowerCase();hit=VOCAB.find(v=>v.de.toLowerCase()===lw);}
   if(hit)return{w,hit};
   if(!LEMMA_V)buildLemma();
+  /* 所有格層：優先於 LEMMA_V。裸形有單字卡的三個字（sein／meinen／ihr 之中有卡者）
+     在上面的字面比對就已命中，走不到這裡——那三個靠 tokPopShow 的上下文覆寫處理。*/
+  const pz=LEMMA_POSS[w.toLowerCase()];
+  if(pz)return{w,hit:null,poss:pz,alt:possAltOf(w),gloss:FUNC_GLOSS[w.toLowerCase()]||''};
   const inf=LEMMA_V[w.toLowerCase()];
   if(inf){const h=VOCAB.find(v=>v.de===inf);if(h)return{w,hit:h,via:'v'};const gv=FUNC_GLOSS[inf.toLowerCase()];if(gv)return{w,hit:null,gloss:gv,inf};}
   const sg=LEMMA_N[w]||LEMMA_N[w.charAt(0).toUpperCase()+w.slice(1)];
@@ -4576,6 +4596,32 @@ function sepResolve(toks,i){
   }
   return null;
 }
+/* 這個字除了所有格之外還可能是什麼（歧義不靠猜，兩種可能都攤出來）*/
+function possAltOf(w){
+  const lw=String(w||'').toLowerCase();
+  if(POSS_NOTE[lw])return POSS_NOTE[lw];
+  const v=LEMMA_V&&LEMMA_V[lw];if(v)return'也可能是動詞 '+v+' 的變位形';
+  const h=VOCAB.find(x=>x.de.toLowerCase()===lw);if(h)return'也可能是 '+h.de+'（'+h.zh+'）';
+  return'';
+}
+/* 上下文判準：德文名詞必大寫，所以同子句後方三個實詞內出現大寫字＝這裡是限定詞。
+   涵蓋「mein neues Auto」這種中間夾形容詞的情形；「Ich meine, dass…」因逗號收在子句內而不誤判。*/
+function possCtx(toks,i){
+  if(!Array.isArray(toks)||typeof i!=='number')return false;
+  if(/[.,!?:;—–]$/.test(String(toks[i]||'').trim()))return false;
+  for(let k=i+1,n=0;k<toks.length&&n<3;k++){
+    const t=String(toks[k]||'').trim(),c=sepClean(t);
+    if(!c)continue;n++;
+    if(/^[A-ZÄÖÜ]/.test(c))return true;
+    if(/[.,!?:;—–]$/.test(t))return false;
+  }
+  return false;
+}
+function possHTML(w,p,alt){
+  const head=String(w).toLowerCase()===p.base?`<b>${w}</b>`:`<b>${w}</b> → <b>${p.base}</b>`;
+  return head+` <span style="font-size:.78rem;color:#be185d">所有格・${p.cs}</span> — ${p.zh}`
+    +(alt?` <span style="font-size:.78rem;color:var(--mut)">（${alt}）</span>`:'');
+}
 function tokPopShow(pop,raw,ctx){
   const sr=ctx?sepResolve(ctx.toks,ctx.i):null;
   if(sr){const sh=VOCAB.find(v=>v.de===sr.inf);
@@ -4583,6 +4629,22 @@ function tokPopShow(pop,raw,ctx){
       pop.innerHTML=`<b>${sr.verb} … ${sr.pre}</b> → <b>${sh.de}</b> <span style="font-size:.78rem;color:#0d9488">可分離動詞（框架結構：前綴丟到子句末）</span> — ${sh.zh}`;
       speak(sh.de);return;}}
   const r=tokLookup(raw);if(!r)return;
+  /* 所有格覆寫：sein／meinen／ihr 這類「本身就是別的字」的裸形，字面比對會先命中單字卡；
+     後方接大寫名詞時改判所有格，並把原本的字義留在括號裡（不替使用者二選一）。*/
+  if(!r.poss&&LEMMA_POSS){const pw=r.w.toLowerCase(),pz=LEMMA_POSS[pw];
+    if(pz&&possCtx(ctx&&ctx.toks,ctx&&ctx.i)){
+      pop.classList.remove('miss');
+      const alt=r.hit?('也可能是 '+r.hit.de+'（'+r.hit.zh+'）'):possAltOf(pw);
+      pop.innerHTML=possHTML(r.w,pz,alt);speak(r.w);return;}}
+  if(r.poss){pop.classList.remove('miss');
+    /* 裸形若在 FUNC_GLOSS 有手打字義（ihr＝你們／她的、mein＝我的），那份字義比程式化推導精確：
+       後方沒有大寫名詞就照舊顯示功能詞，只在旁邊提示「接名詞時是所有格」。
+       變格形（meinem／Ihrer／keinen…）不在字典裡、也不可能是別的詞類，一律直接判所有格。*/
+    if(r.gloss&&!possCtx(ctx&&ctx.toks,ctx&&ctx.i)){
+      pop.innerHTML=`<b>${r.w}</b> — ${r.gloss} <span style="font-size:.78rem;color:var(--mut)">功能詞</span>`
+        +` <span style="font-size:.78rem;color:#be185d">（後接名詞時＝所有格「${r.poss.zh}」）</span>`;
+    }else{pop.innerHTML=possHTML(r.w,r.poss,r.alt);}
+    speak(r.w);return;}
   if(r.hit){
     pop.classList.remove('miss');
     const base=`<b>${(ART[r.hit.g]||'')+r.hit.de}</b>`;
