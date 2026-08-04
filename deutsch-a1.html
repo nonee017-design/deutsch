@@ -3841,20 +3841,64 @@ document.getElementById('btnWeakFilter').onclick=(e)=>{
 /* ---------- N2：全域搜尋（中德皆可、變音字容錯、不做跳轉導航——§9 已定案）---------- */
 function foldDe(s){return (s||'').toLowerCase().replace(/ä/g,'a').replace(/ö/g,'o').replace(/ü/g,'u').replace(/ß/g,'ss');}
 const SR_GCOL={der:'var(--der)',die:'var(--die)',das:'var(--das)'};
+/* 折疊索引（N24c）：把庫內所有可查鍵登記在「去變音」形之下，讓沒打變音的輸入
+   （grosser／naher）也走得進還原層。⚠️ 只供還原層使用，不參與子字串比對，
+   所以不會增加誤命中；建一次快取起來。*/
+let FOLD_IDX=null;
+function foldIdx(){
+  if(FOLD_IDX)return FOLD_IDX;
+  if(!LEMMA_V)buildLemma();
+  FOLD_IDX={};
+  const add=k=>{if(!k)return;const f=foldDe(k);if(f&&f!==String(k).toLowerCase()&&!FOLD_IDX[f])FOLD_IDX[f]=k;};
+  VOCAB.forEach(v=>add(v.de));
+  [LEMMA_V,LEMMA_N,LEMMA_A,LEMMA_P,IRR_GRAD_REV].forEach(t=>{if(t)Object.keys(t).forEach(add);});
+  return FOLD_IDX;
+}
+/* 還原查詢＋無變音容錯：直接查不到時，用折疊索引還原成正確拼法（grosser→größer）再查一次 */
+function tokLookupFold(w){
+  const r=tokLookup(w);
+  if(r&&(r.hit||r.gloss||r.poss))return r;
+  const alt=foldIdx()[foldDe(w)];
+  if(alt&&String(alt).toLowerCase()!==String(w).toLowerCase()){
+    const r2=tokLookup(alt);if(r2&&(r2.hit||r2.gloss))return r2;}
+  return r;
+}
 function runSearchInto(qRaw,box){
   const q=qRaw.trim(),fq=foldDe(q);
   if(!q){box.innerHTML='';return;}
-  const hits=[];
+  const hits=[],seen=new Set();
+  const pushV=v=>{const k='v:'+v.de;if(seen.has(k))return;seen.add(k);hits.push({t:'v',v});};
+  /* ① 形態還原優先（N24c，2026-08-04 修 bug）：還原命中的原形卡一律置頂。
+     舊版把還原擺在「子字串零結果」之後——只要庫內任何字碰巧含這串字元，正解就永遠不出現：
+     Beste → Bestellnummer 蓋掉 gut、älteste → Haltestelle 蓋掉 alt、meiste → meistens 蓋掉 viel。
+     smoke ㉑ 驗的是 tokLookup（導讀點字那條路），守不到這裡，所以這 bug 一路存活。
+     片語逐詞還原（am besten／besser als）；單詞查詢的既有行為不變，只是名次往前。
+     片語內的排序：需要「還原」才查到的詞（via 有值）排在直接命中的詞之前，
+     單字卡又排在功能詞釋義之前——否則查「am besten」會被 am（介係詞縮合）佔走第一筆，
+     但你要找的其實是 gut。sort 在現代 JS 是穩定排序，同級維持原本詞序。*/
+  const toks=q.split(/\s+/).filter(Boolean),lemV=[],lemG=[];
+  [q].concat(toks.length>1?toks:[]).forEach(t=>{
+    const r=tokLookupFold(t);if(!r)return;
+    if(r.hit)lemV.push({v:r.hit,red:r.via?1:0});
+    else if(r.gloss)lemG.push({t:'g',w:r.w||t,inf:r.inf||'',gloss:r.gloss});});
+  lemV.sort((a,b)=>b.red-a.red).forEach(x=>pushV(x.v));
+  lemG.forEach(g=>{const k='g:'+g.w;if(seen.has(k))return;seen.add(k);hits.push(g);});
+  /* ② 子字串比對。zh 多加一條折疊比對——舊版 v.zh.includes(q) 用原字串不折疊，
+     大寫輸入（Beste）比不中 zh 註記裡的小寫 beste。*/
   for(const v of VOCAB){
-    if(foldDe(v.de).includes(fq)||(v.zh&&v.zh.includes(q))||foldDe(NOUN_PL[v.de]||'').includes(fq)){hits.push({t:'v',v});if(hits.length>30)break;}
+    if(hits.length>30)break;
+    if(foldDe(v.de).includes(fq)||(v.zh&&(v.zh.includes(q)||foldDe(v.zh).includes(fq)))||foldDe(NOUN_PL[v.de]||'').includes(fq))pushV(v);
   }
   if(hits.length<=30)for(const s of SENTENCES){
     if(foldDe(s.de).includes(fq)||(s.zh&&s.zh.includes(q))){hits.push({t:'s',s});if(hits.length>30)break;}
   }
-  if(!hits.length){const r=tokLookup(q);if(r&&r.hit)hits.push({t:'v',v:r.hit});}
   if(!hits.length){box.innerHTML='<div style="color:var(--mut);font-size:.88rem;padding:6px 2px">找不到——庫內可能還沒收這個字，或換個關鍵字試試。</div>';return;}
   const over=hits.length>30;
   box.innerHTML=hits.slice(0,30).map(h=>{
+    if(h.t==='g'){
+      const ar=(h.inf&&h.inf.toLowerCase()!==h.w.toLowerCase())?`<b>${h.w}</b> → <b>${h.inf}</b>`:`<b>${h.w}</b>`;
+      return `<div class="sr" data-say="${String(h.inf||h.w).replace(/"/g,'&quot;')}" style="border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:6px;background:var(--card);cursor:pointer"><div style="font-size:.98rem">${ar} <span style="font-size:.72rem;color:var(--mut)">功能詞小辭典</span> <span style="font-size:.78rem">🔊</span></div><div style="font-size:.85rem;color:var(--mut)">${h.gloss}</div></div>`;
+    }
     if(h.t==='v'){
       const v=h.v,g=v.g?`<b style="color:${SR_GCOL[v.g]||'inherit'}">${v.g} </b>`:'';
       const pl=NOUN_PL[v.de]?` <span style="color:var(--plu);font-size:.85rem">· die ${NOUN_PL[v.de]}</span>`:'';
@@ -4540,6 +4584,7 @@ const FUNC_GLOSS={
   ihnen:"給他們／對他們（Dativ，sie 複數的第三格；大寫 Ihnen 是敬稱「您」）",
   sich:"自己（反身代名詞，第三人稱單複數＋敬稱 Sie 專用；ich/du 用 mich/dich）",
   zweihundert:"兩百（200；複合數詞，數字＋hundert 連寫不分開）",
+  nah:"近的（形容詞；比較級 näher／最高級 nächst-；名詞 die Nähe＝附近）",
   /* ===ANCHOR:FUNC_GLOSS===（新功能詞 "小寫形":"中文" 插在這行上方，記得上一行補逗號）*/
 };
 const PART2_STRONG={gegangen:"gehen",gesprochen:"sprechen",getroffen:"treffen",gegessen:"essen",getrunken:"trinken",geflogen:"fliegen",geschrieben:"schreiben",gewesen:"sein",genommen:"nehmen",verstanden:"verstehen",bekommen:"bekommen",aufgestanden:"aufstehen",gestanden:"stehen",ausgesehen:"aussehen",gefunden:"finden",gebracht:"bringen",verschoben:"verschieben",getan:"tun",mitgenommen:"mitnehmen",gerufen:"rufen",gestiegen:"steigen",abgeschlossen:"abschließen"};
@@ -4646,7 +4691,10 @@ function gradToBase(w){
   for(const e of ends){
     if(e&&!lw.endsWith(e))continue;
     const stem=e?lw.slice(0,-e.length):lw;
-    if(IRR_GRAD_REV[stem]&&VOCAB.some(v=>v.de===IRR_GRAD_REV[stem]))return IRR_GRAD_REV[stem];
+    const ir=IRR_GRAD_REV[stem];
+    /* 落點放寬到 FUNC_GLOSS：nah 沒有單字卡（教材語料 0 次，不建假卡），舊版在此跳過，
+       害 nächste 掉進下面的規律路徑，被「去變音」猜成 nach（介係詞）——那是錯答，不是查無。*/
+    if(ir&&(VOCAB.some(v=>v.de===ir)||FUNC_GLOSS[ir]))return ir;
   }
   for(const e of ends){
     if(e&&!lw.endsWith(e))continue;
@@ -4681,7 +4729,8 @@ function tokLookup(raw){
   const abase=LEMMA_A[w.toLowerCase()];
   if(abase){const h=VOCAB.find(v=>v.de===abase);if(h)return{w,hit:h,via:'a'};}
   const gbase=gradToBase(w);
-  if(gbase){const h=VOCAB.find(v=>v.de===gbase);if(h)return{w,hit:h,via:'g'};}
+  if(gbase){const h=VOCAB.find(v=>v.de===gbase);if(h)return{w,hit:h,via:'g'};
+    const gg=FUNC_GLOSS[String(gbase).toLowerCase()];if(gg)return{w,hit:null,gloss:gg,inf:gbase,via:'g'};}
   /* N14：功能詞兜底（最低優先——單字卡/變位/複數/Partizip 都沒中才查） */
   const g=FUNC_GLOSS[w.toLowerCase()];
   if(g)return{w,hit:null,gloss:g};
@@ -4786,7 +4835,8 @@ function tokPopShow(pop,raw,ctx){
     pop.innerHTML=`${head} — ${r.hit.zh}`;speak(r.w);
   }else if(r.gloss){
     pop.classList.remove('miss');
-    const gh=(r.inf&&r.inf.toLowerCase()!==r.w.toLowerCase())?`<b>${r.w}</b> → <b>${r.inf}</b> <span style="font-size:.78rem;color:var(--mut)">動詞變位形</span>`:`<b>${r.w}</b>`;pop.innerHTML=`${gh} — ${r.gloss} <span style="font-size:.78rem;color:var(--mut)">功能詞</span>`;speak(r.w);
+    const gvia=r.via==='g'?'<span style="font-size:.78rem;color:#7c3aed">比較級/最高級</span>':'<span style="font-size:.78rem;color:var(--mut)">動詞變位形</span>';
+    const gh=(r.inf&&r.inf.toLowerCase()!==r.w.toLowerCase())?`<b>${r.w}</b> → <b>${r.inf}</b> ${gvia}`:`<b>${r.w}</b>`;pop.innerHTML=`${gh} — ${r.gloss} <span style="font-size:.78rem;color:var(--mut)">功能詞</span>`;speak(r.w);
   }else{pop.classList.add('miss');pop.textContent=`「${r.w}」庫內無此字（可能是專有名詞）`;}
 }
 function renderTexts(){
