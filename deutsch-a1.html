@@ -197,8 +197,8 @@
 <body>
 <div class="wrap">
   <header style="position:relative">
-    <div class="eyebrow">Menschen · A1 · Lektion 1–18</div>
-    <h1>Deutsch A1 — L1–L18</h1>
+    <div class="eyebrow">Menschen · A1 · Lektion 1–19</div>
+    <h1>Deutsch A1 — L1–L19</h1>
     <details class="helpbox" id="outline" style="margin-top:10px;text-align:left"><summary>📚 每課大綱（點開看）</summary><div class="panel-intro" style="margin:8px 0 2px;line-height:1.9">
       L1 打招呼·自我介紹（heißen/kommen aus/wohnen in）·sein·W 問句·拼讀·數字 0–100<br>
       L2 個人資料·職業·規則動詞變位全表·ihr（你們）<br>
@@ -218,6 +218,7 @@
       L16 旅館客訴·Termine 改期·時間介係詞in/nach/vor/für·序數日期<br>
       L17 願望與計畫·wollen完整變位·werden登場·mit/ohne對比<br>
 L18 生病看醫生·Imperativ(Sie)命令句·sollen間接建議·seit+時長·疼痛表達tut/tun weh<br>
+L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Perfekt·un-前綴構詞<br>
       <!-- ===ANCHOR:OUTLINE===（新課大綱一行插在這行上方，格式照上）-->
     </div></details>
   </header>
@@ -242,6 +243,7 @@ L18 生病看醫生·Imperativ(Sie)命令句·sollen間接建議·seit+時長·�
     <button class="lchip" data-lesson="L16" data-on="false">L16</button>
     <button class="lchip" data-lesson="L17" data-on="false">L17</button>
     <button class="lchip" data-lesson="L18" data-on="false">L18</button>
+    <button class="lchip" data-lesson="L19" data-on="false">L19</button>
     <!-- ===ANCHOR:LESSON_CHIPS===（A1.2 新課按鈕插在這行上方、span#bookA11 之外）-->
     <button class="lchip" data-lesson="ALL" data-on="false">全選 · 模組複習</button>
     <span style="flex-basis:100%;font-size:.72rem;color:var(--mut)">單點換課 · 長按半秒加選複數課 · 📕 收合/展開整冊</span>
@@ -523,7 +525,7 @@ L18 生病看醫生·Imperativ(Sie)命令句·sollen間接建議·seit+時長·�
 const SPK_SVG='<svg viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>';
 
 /* ===== 範圍（課別·可多選）===== */
-const DEFAULT_LESSON="L18"; /* ===ANCHOR:DEFAULT_LESSON===（新課上線時改成最新課號；chip 的 data-on 由 syncLessonChips 執行期同步，新 chip 一律 data-on="false"）*/
+const DEFAULT_LESSON="L19"; /* ===ANCHOR:DEFAULT_LESSON===（新課上線時改成最新課號；chip 的 data-on 由 syncLessonChips 執行期同步，新 chip 一律 data-on="false"）*/
 let curLessons=new Set([DEFAULT_LESSON]);
 /* L123 是 L1/L2/L3 的合併篩選鈕，資料本身仍各自標 L1/L2/L3，故用此函式統一判斷範圍是否命中 */
 function inLessonScope(l){
@@ -1672,8 +1674,50 @@ const ADDCLOADJ=[
  {de:"tut mir leid",zh:"很抱歉、不好意思（比 Entschuldigung 更口語）",g:null,cat:"慣用語",lesson:"L7",ex:["Nein, tut mir leid.","不，很抱歉。"]},
  {de:"gar nicht",zh:"一點也不、完全不",g:null,cat:"副詞",lesson:"L7",ex:["Ich kann gar nicht malen.","我完全不會畫畫。"]},
 ];
+const ADD19=[
+{de:"Bart",zh:"鬍子",g:"der",cat:"外貌",lesson:"L19",ex:["Er hat einen Bart.","他留鬍子。"]},
+{de:"Haar",zh:"頭髮（單數指一根；日常談髮型一律用複數 die Haare）",g:"das",cat:"外貌",lesson:"L19",ex:["Er hat blonde Haare.","他有金髮。"]},
+{de:"Bäckerei",zh:"麵包店",g:"die",cat:"地點",lesson:"L19",ex:["Mein Vater hatte eine Bäckerei.","我爸爸以前開一家麵包店。"]},
+{de:"Locken",zh:"捲髮（複數專用；單數 die Locke 少用）",g:"plu",cat:"外貌",lesson:"L19",ex:["Früher hatte Herbert Locken.","Herbert 以前有捲髮。"]},
+{de:"Baby",zh:"嬰兒",g:"das",cat:"家庭",lesson:"L19",ex:["Sie haben ein Baby bekommen.","他們生了一個寶寶。"]},
+{de:"Paar",zh:"一對（情侶）",g:"das",cat:"社交",lesson:"L19",ex:["Sylvie und er sind noch ein Paar.","Sylvie 和他還是一對。"]},
+{de:"Diskothek",zh:"迪斯可舞廳",g:"die",cat:"休閒",lesson:"L19",ex:["Mike Palfinger hatte eine Diskothek.","Mike Palfinger 以前有一家迪斯可。"]},
+{de:"Architekt",zh:"建築師（弱變化陽性，Akk/Dat 加 -en）",g:"der",cat:"職業",lesson:"L19",ex:["Er war Architekt.","他以前是建築師。"]},
+{de:"Kontakt",zh:"聯絡、往來",g:"der",cat:"社交",lesson:"L19",ex:["Da hatten wir schon keinen Kontakt mehr.","那時候我們已經沒有聯絡了。"]},
+{de:"Ordnung",zh:"秩序、沒問題（in Ordnung 慣用）",g:"die",cat:"慣用語",lesson:"L19",ex:["Dann war alles in Ordnung.","那樣就沒問題了。"]},
+{de:"Sekretärin",zh:"女祕書",g:"die",cat:"職業",lesson:"L19",ex:["Früher war sie Sekretärin.","她以前是祕書。"]},
+{de:"Bürokaufmann",zh:"商務辦公人員（男）",g:"der",cat:"職業",lesson:"L19",ex:["Klaus war Bürokaufmann.","Klaus 以前是辦公人員。"]},
+{de:"Promi",zh:"名人（Prominente 的口語縮寫）",g:"der",cat:"社交",lesson:"L19",ex:["Haben Sie schon einmal einen Promi getroffen?","您曾經遇過名人嗎？"]},
+{de:"Regisseur",zh:"導演",g:"der",cat:"職業",lesson:"L19",ex:["Ich habe mal den Regisseur Tom Tykwer gesehen.","我曾經見過導演 Tom Tykwer。"]},
+{de:"Chefin",zh:"女老闆、女主管",g:"die",cat:"職業",lesson:"L19",ex:["Frau Bauer ist unsere neue Chefin.","Bauer 女士是我們的新主管。"]},
+{de:"Eingang",zh:"入口",g:"der",cat:"地點",lesson:"L19",ex:["Sie steht am Eingang.","她站在入口。"]},
+{de:"Besuch",zh:"訪客、拜訪",g:"der",cat:"社交",lesson:"L19",ex:["Ich bekomme noch Besuch.","我還有訪客要來。"]},
+{de:"Wahnsinn",zh:"太扯了／不可思議（驚訝感嘆，無複數）",g:"der",cat:"感嘆詞",lesson:"L19",ex:["Wahnsinn!","太扯了！"]},
+{de:"Aussehen",zh:"外貌、長相（動名詞化，恆為 das；無複數）",g:"das",cat:"外貌",lesson:"L19",ex:["Das Aussehen ist nicht alles.","外貌不是一切。"]},
+{de:"Charakter",zh:"性格、個性",g:"der",cat:"性格",lesson:"L19",ex:["Er hat einen guten Charakter.","他個性很好。"]},
+{de:"beschweren",zh:"抱怨、投訴 — 反身 sich beschweren（über+Akk）（完整反身規則 A2 才學）",g:null,cat:"動詞",lesson:"L19",pex:["Die Nachbarn haben sich beschwert.","鄰居投訴了。"]},
+{de:"erkennen",zh:"認出",g:null,cat:"動詞",lesson:"L19",pex:["Tom hat Natascha gleich erkannt.","Tom 馬上就認出了 Natascha。"]},
+{de:"vergessen",zh:"忘記（Partizip 與原形同形）",g:null,cat:"動詞",lesson:"L19",pex:["Leider hat Mark das Baby in einem Café vergessen.","很可惜，Mark 把嬰兒忘在咖啡店裡了。"]},
+{de:"entschuldigen",zh:"道歉 — 反身 sich entschuldigen（bei+Dat）（完整反身規則 A2 才學）",g:null,cat:"動詞",lesson:"L19",pex:["Mark hat sich entschuldigt.","Mark 道歉了。"]},
+{de:"erzählen",zh:"講述、說故事",g:null,cat:"動詞",lesson:"L19"},
+{de:"blond",zh:"金髮的",g:null,cat:"形容詞",lesson:"L19",ex:["Hattest du früher auch blonde Haare?","你以前也是金髮嗎？"]},
+{de:"dick",zh:"胖的、厚的",g:null,cat:"形容詞",lesson:"L19",ex:["Walter war ein bisschen dick.","Walter 以前有點胖。"]},
+{de:"dünn",zh:"瘦的、薄的",g:null,cat:"形容詞",lesson:"L19",ex:["Früher war er sehr dünn.","他以前很瘦。"]},
+{de:"glatt",zh:"直的、光滑的",g:null,cat:"形容詞",lesson:"L19",ex:["Sie hat glatte Haare.","她是直髮。"]},
+{de:"schlank",zh:"苗條的",g:null,cat:"形容詞",lesson:"L19",ex:["Jetzt ist sie so schlank.","她現在好苗條。"]},
+{de:"unfreundlich",zh:"不友善的",g:null,cat:"形容詞",lesson:"L19",ex:["Ich finde ihn ziemlich unfreundlich.","我覺得他滿不友善的。"]},
+{de:"fröhlich",zh:"開朗的、快樂的",g:null,cat:"形容詞",lesson:"L19",ex:["Mein Bruder und ich waren immer fröhlich.","我哥哥和我以前總是很開朗。"]},
+{de:"glücklich",zh:"幸福的",g:null,cat:"形容詞",lesson:"L19",ex:["Ich war sehr glücklich mit meinem Rad.","我以前有那台腳踏車很幸福。"]},
+{de:"unglücklich",zh:"不幸的",g:null,cat:"形容詞",lesson:"L19",ex:["Er sieht unglücklich aus.","他看起來不太幸福。"]},
+{de:"komisch",zh:"奇怪的、好笑的",g:null,cat:"形容詞",lesson:"L19",ex:["Das finde ich komisch.","我覺得那很奇怪。"]},
+{de:"sympathisch",zh:"討喜的、有好感的",g:null,cat:"形容詞",lesson:"L19",ex:["Angela Mai sieht wirklich sympathisch aus.","Angela Mai 看起來真的很討喜。"]},
+{de:"unsympathisch",zh:"令人反感的",g:null,cat:"形容詞",lesson:"L19",ex:["Die war nicht so sympathisch.","她（當時）不太討喜。"]},
+{de:"traurig",zh:"傷心的",g:null,cat:"形容詞",lesson:"L19",ex:["Warum bist du denn so traurig?","你怎麼這麼傷心？"]},
+{de:"uninteressant",zh:"無趣的",g:null,cat:"形容詞",lesson:"L19",ex:["Ich finde den Film uninteressant.","我覺得這部電影很無趣。"]},
+{de:"ziemlich",zh:"相當、頗（程度副詞）",g:null,cat:"副詞",lesson:"L19",ex:["Das Auto ist ziemlich teuer.","這台車相當貴。"]},
+];
 /* ===ANCHOR:VOCAB_ARRAYS===（新課單字陣列 const ADDn=[...] 宣告在這行上方，並把陣列名加進下面 VOCAB 合併行）*/
-const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B,...ADD18,...ADDP2V,...ADD10S,...ADDCLO,...ADDCLOADJ];
+const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B,...ADD18,...ADDP2V,...ADD10S,...ADDCLO,...ADDCLOADJ,...ADD19];
 VOCAB.forEach((v,i)=>v.id="v"+i);
 
 
@@ -1869,6 +1913,22 @@ const NOUN_PL={
   "Tipp":"Tipps",
   "Lebensmittel":"Lebensmittel",
   "Nonne":"Nonnen",
+  "Bart":"Bärte",
+  "Haar":"Haare",
+  "Bäckerei":"Bäckereien",
+  "Baby":"Babys",
+  "Paar":"Paare",
+  "Diskothek":"Diskotheken",
+  "Architekt":"Architekten",
+  "Kontakt":"Kontakte",
+  "Sekretärin":"Sekretärinnen",
+  "Bürokaufmann":"Bürokaufleute",
+  "Promi":"Promis",
+  "Regisseur":"Regisseure",
+  "Chefin":"Chefinnen",
+  "Eingang":"Eingänge",
+  "Besuch":"Besuche",
+  "Charakter":"Charaktere",
   /* ===ANCHOR:NOUN_PL===（新名詞複數 "單數":"複數", 插在這行上方）*/
 };
 const NOUN_PL_NOTE={
@@ -2011,6 +2071,9 @@ const NOUN_PL_NOTE={
   "Knie":"複數 die Knie：單複同形，只有冠詞會變（das → die）。",
   "Fuß":"複數 die Füße：u→ü 變音 → Forvo。",
   "Lebensmittel":"複數 die Lebensmittel：單複同形；日常幾乎只用複數。",
+  "Bart":"複數 die Bärte：a→ä 變音 → Forvo。",
+  "Eingang":"複數 die Eingänge：a→ä 變音 → Forvo。",
+  "Bürokaufmann":"複數 die Bürokaufleute：-mann→-leute 不規則複合詞（同 Kaufmann／Fachmann），非字尾變化 → Forvo。",
   /* ===ANCHOR:NOUN_PL_NOTE===（變音／同形／不規則等複數警語插在這行上方）*/
 };
 const NOUN_PLEX={
@@ -2441,6 +2504,22 @@ const NOUN_PLEX={
   "Tipp":["Danke für die vielen Tipps!","謝謝這麼多建議！"],
   "Lebensmittel":["Unser Körper braucht viele Lebensmittel.","我們的身體需要很多食物。"],
   "Nonne":["Im Kloster leben viele Nonnen.","修道院裡住著很多修女。"],
+  "Bart":["Die beiden Männer haben lange Bärte.","那兩個男人都留著長鬍子。"],
+  "Haar":["Er hat kurze Haare.","他留短髮。"],
+  "Bäckerei":["In der Stadt gibt es zwei Bäckereien.","城裡有兩家麵包店。"],
+  "Baby":["Auf der Party waren drei Babys.","派對上有三個嬰兒。"],
+  "Paar":["Auf dem Foto sind vier Paare.","照片上有四對情侶。"],
+  "Diskothek":["In der Stadt gibt es mehrere Diskotheken.","城裡有好幾家迪斯可舞廳。"],
+  "Architekt":["Die Architekten arbeiten im Büro.","那些建築師在辦公室工作。"],
+  "Kontakt":["Wir hatten lange keine Kontakte mehr.","我們很久沒有往來了。"],
+  "Sekretärin":["Die Firma hat zwei Sekretärinnen.","這家公司有兩位祕書。"],
+  "Bürokaufmann":["Die Bürokaufleute machen eine Pause.","那些辦公人員在休息。"],
+  "Promi":["Auf dem Filmfest waren viele Promis.","影展上有很多名人。"],
+  "Regisseur":["Die Regisseure sprechen über ihre Filme.","那些導演在談他們的電影。"],
+  "Chefin":["Unsere zwei Chefinnen sind sehr nett.","我們的兩位女主管人很好。"],
+  "Eingang":["Das Haus hat zwei Eingänge.","這棟房子有兩個入口。"],
+  "Besuch":["Am Wochenende hatten wir viele Besuche.","週末我們有很多訪客。"],
+  "Charakter":["Meine Freunde haben ganz verschiedene Charaktere.","我的朋友們性格各不相同。"],
   /* ===ANCHOR:NOUN_PLEX===（複數例句 "單數":["德文","中文"], 插在這行上方）*/
 };
 const VERB_META={
@@ -2465,8 +2544,8 @@ const VERB_META={
   fragen:{t:"reg"},
   heißen:{t:"sib",du:"heißt",er:"heißt",p2:"geheißen",aux:"h"},
   antworten:{t:"stemt",du:"antwortest",er:"antwortet"},
-  sein:{t:"irr",f:["bin","bist","ist","sind","seid","sind"],p2:"gewesen",aux:"s"},
-  haben:{t:"irr",f:["habe","hast","hat","haben","habt","haben"],p2:"gehabt",aux:"h"},
+  sein:{t:"irr",f:["bin","bist","ist","sind","seid","sind"],pt:["war","warst","war","waren","wart","waren"],p2:"gewesen",aux:"s"},
+  haben:{t:"irr",f:["habe","hast","hat","haben","habt","haben"],pt:["hatte","hattest","hatte","hatten","hattet","hatten"],p2:"gehabt",aux:"h"},
   buchstabieren:{t:"reg"},
   arbeiten:{t:"stemt",du:"arbeitest",er:"arbeitet",p2:"gearbeitet",aux:"h"},
   leben:{t:"reg",p2:"gelebt",aux:"h"},
@@ -2612,6 +2691,11 @@ const VERB_META={
   übernachten:{t:"stemt",du:"übernachtest",er:"übernachtet",p2:"übernachtet",aux:"h"},
   dürfen:{t:"irr",f:["darf","darfst","darf","dürfen","dürft","dürfen"]},
   müssen:{t:"irr",f:["muss","musst","muss","müssen","müsst","müssen"]},
+  beschweren:{t:"reg",p2:"beschwert",aux:"h"},
+  erkennen:{t:"reg",p2:"erkannt",aux:"h"},
+  vergessen:{t:"vowel",du:"vergisst",er:"vergisst",p2:"vergessen",aux:"h"},
+  entschuldigen:{t:"reg",p2:"entschuldigt",aux:"h"},
+  erzählen:{t:"reg"},
   /* ===ANCHOR:VERB_META===（新動詞變位 動詞:{t:"reg"|"stemt"|"vowel"|"irr",...}, 插在這行上方）*/
 };
 /* 可分離動詞 Partizip 組字（2026-07-31）：Partizip = 字首 + 母動詞 Partizip，
@@ -2731,6 +2815,14 @@ function perfektBoxHTML(vm,pex,inf){
   const rule = partizipRuleHTML(vm,inf);
   return `<div class="vbox pbox">Perfekt\uff1a${head}`
        + `<span class="vform" data-say="${say}">${vm.p2}</span>${tog}${rule}${note}${exl}</div>`;
+}
+/* Prateritum（L19，2026-08-03）：只有 sein/haben 登記 pt 欄位時才多渲一列，其餘卡片完全不受影響。 */
+function praeteritumBoxHTML(vm){
+  if(!vm||!vm.pt) return "";
+  const p=["ich","du","er","wir","ihr","Sie"];
+  const vf=(pr,f)=>`<span class="vform" data-say="${pr} ${f}">${pr} ${f}</span>`;
+  return `<div class="vbox reg"><b>Präteritum（過去式，日常口語常用）</b>`
+       + `<div class="virr">${vm.pt.map((f,i)=>vf(p[i],f)).join(" · ")}</div></div>`;
 }
 /* 卡背動詞區的 HTML */
 function verbBackHTML(vm,inf){
@@ -3326,6 +3418,34 @@ const SENTENCES=[
   {de:"Um halb acht habe ich E-Mails geschrieben.",zh:"七點半我寫了 email。（時間在句首，助動詞仍在第二位）",lesson:"L10"},
   {de:"Von 8 Uhr bis 9 Uhr habe ich Sport gemacht.",zh:"八點到九點我運動。（von…bis 骨架）",lesson:"L10"},
   {de:"Ich habe um 9 Uhr gefrühstückt.",zh:"我九點吃了早餐。",lesson:"L10"},
+  {de:"Er ist ein bisschen dick.",zh:"他有點胖（Er ist + 形容詞；可換 schlank／dünn）",lesson:"L19"},
+  {de:"Er hat blonde Haare.",zh:"他有金髮（hat + 形容詞+Haare；可換 dunkle／lange／kurze）",lesson:"L19"},
+  {de:"Er hat einen Bart.",zh:"他留鬍子（hat + einen/keinen Bart）",lesson:"L19"},
+  {de:"Er hat keine Brille.",zh:"他沒戴眼鏡（hat + (k)eine Brille）",lesson:"L19"},
+  {de:"Er sieht nett aus.",zh:"他看起來人很好（sieht + 形容詞 + aus；可換 sympathisch／lustig／interessant）",lesson:"L19"},
+  {de:"Er sieht sympathisch aus.",zh:"他看起來討喜（aussehen 可分離，aus 站句尾）",lesson:"L19"},
+  {de:"Früher war sie Sekretärin.",zh:"她以前是祕書（Früher war + 人 + 職業；職業前不加冠詞）",lesson:"L19"},
+  {de:"Früher hatte er lange Haare.",zh:"他以前留長髮（Früher hatte + 人 + 受詞）",lesson:"L19"},
+  {de:"Sie haben vor zwei Jahren ein Baby bekommen.",zh:"他們兩年前生了一個寶寶（vor + Dat 表「…之前」）",lesson:"L19"},
+  {de:"Ach komm!",zh:"少來了！（表不相信的驚訝反應）",lesson:"L19"},
+  {de:"Ach du liebe Zeit!",zh:"我的天啊！（表震驚）",lesson:"L19"},
+  {de:"Ach was!",zh:"才怪！／不會吧！（表否定式驚訝）",lesson:"L19"},
+  {de:"Echt?",zh:"真的假的？（最常用的口語追問）",lesson:"L19"},
+  {de:"Wahnsinn!",zh:"太扯了！（表強烈驚嘆）",lesson:"L19"},
+  {de:"Vor 20 Jahren war Simone Sekretärin. Was ist sie heute?",zh:"二十年前 Simone 是祕書。她現在做什麼？（Präteritum 對比 Präsens 的標準問法）",lesson:"L19"},
+  {de:"Heute ist sie Yoga-Lehrerin.",zh:"她現在是瑜伽老師（heute + Präsens 回應）",lesson:"L19"},
+  {de:"Wie sieht sie aus?",zh:"她長什麼樣子？（描述外貌的核心提問）",lesson:"L19"},
+  {de:"Wo hast du deine Traumfrau kennengelernt?",zh:"你在哪認識你的理想對象的？（Wo + Perfekt；可換 deinen Traummann）",lesson:"L19"},
+  {de:"Was macht sie beruflich?",zh:"她從事什麼職業？（問職業的口語說法）",lesson:"L19"},
+  {de:"Wann war das denn?",zh:"那是什麼時候的事？（denn 加強語氣，不譯）",lesson:"L19"},
+  {de:"Wie hat dir die Party gefallen?",zh:"你覺得這派對怎麼樣？（gefallen 吃 Dativ：dir）",lesson:"L19"},
+  {de:"Ich habe mich entschuldigt.",zh:"我道過歉了（反身動詞 + Perfekt）",lesson:"L19"},
+  {de:"Ich habe mein Handy vergessen.",zh:"我忘了帶手機（vergessen 的 Partizip 與原形同形）",lesson:"L19"},
+  {de:"Ich habe sie gar nicht erkannt.",zh:"我完全沒認出她（gar nicht ＝ 完全不）",lesson:"L19"},
+  {de:"Wie war noch gleich Ihr Name?",zh:"請問您的名字是？（忘記對方名字時的禮貌問法）",lesson:"L19"},
+  {de:"Hattest du früher auch blonde Haare?",zh:"你以前也是金髮嗎？（haben 的 Präteritum du 形）",lesson:"L19"},
+  {de:"Wo wart ihr gestern Abend?",zh:"你們昨天晚上在哪？（sein 的 Präteritum ihr 形 wart）",lesson:"L19"},
+  {de:"Ich bin in Paris geboren.",zh:"我在巴黎出生（geboren sein 用 sein，不是 haben）",lesson:"L19"},
   /* ===ANCHOR:SENTENCES===（新例句／Redemittel {de,zh,lesson} 插在這行上方）*/
 ];
 
@@ -3439,6 +3559,11 @@ const TEXTS=[
    de:"Sehr geehrte Frau Meier, vor drei Wochen habe ich in Ihrer Apotheke eine Salbe gegen Rückenschmerzen gekauft. Ihre Kollegin hat gesagt: „Nehmen Sie diese Salbe zweimal am Tag, dann tut der Rücken nicht mehr weh.“ Und so sieht es wirklich aus: Ich nehme die Salbe seit drei Wochen, aber mein Rücken tut immer noch weh. Ich war dreimal in Ihrer Apotheke. Am Montag war niemand da, am Dienstag habe ich zwanzig Minuten gewartet. Für die Salbe habe ich 24 Euro bezahlt. Ich möchte mein Geld zurück. Schreiben Sie mir bitte bis Freitag! Dann komme ich am Samstag wieder. Mit freundlichen Grüßen, Katrin Berger",
    zh:"敬啟者 Meier 女士：三週前我在您的藥局買了一條治背痛的藥膏。您的同事說：「這條藥膏一天塗兩次，背就不會再痛了。」而實際情況是這樣的：這條藥膏我已經用了三週，但我的背還是痛。我去過您的藥局三次。星期一沒有人在，星期二我等了二十分鐘。這條藥膏我付了 24 歐元。我想要退錢。請在星期五之前回覆我！否則星期六我會再去一次。敬祝安好，Katrin Berger",
    qs:[{q:"Katrin 買那條藥膏是為了治什麼？",options:["背痛","喉嚨痛","牙痛","發燒"],a:0},{q:"用了三週之後結果如何？",options:["背不痛了","背還是痛","變成頭痛","文中沒說"],a:1},{q:"文中「mein Rücken tut weh」用 tut 而不是 tun，原因是？",options:["Rücken 在這裡是單數主詞","tut 比較禮貌","因為有 mein","寫錯了"],a:0}]},
+  {id:"t-l19-1",lesson:"L19",genre:"論壇貼文",title:"Hast du schon mal einen Promi getroffen?",src:"AI 生成 · 未經母語者校對",
+   map:"<b>本課重點</b>：① Perfekt 五個動詞交替登場：treffen/sehen/erkennen/aussehen（規則 Partizip）＋ gehen（用 sein，移動類）；② sein 的 Präteritum war 與 Perfekt 並用——本課文法核心：sein/haben 走 Präteritum，其餘動詞走 Perfekt；③ 論壇口語連接詞：Also 開場、oder so 表列舉不盡、dann 推進時序、aber 收轉折。<br><b>建議走法</b>：讀完本文 → 文法「🧩動詞變位② ④ Präteritum」＋「🧩Perfekt」不可分離動詞新列 → 單字卡外貌/職業類 → 例句 → 測驗（Präteritum 填空＋Perfekt 助動詞＋可分離/不可分離 Partizip 對比）→ 🎓。",
+   de:"Also, mir ist heute langweilig. Ich habe eine Frage: Welchen Promi habt ihr schon einmal getroffen? Beim Einkaufen, im Zug oder so? Habt ihr ihn sofort erkannt? Und wie hat er ausgesehen?\n\nIch habe mal einen Regisseur gesehen! Es war 2019, beim Konzert in München. Ich habe am Eingang gewartet, dann ist er schnell nach Hause gegangen. Aber ich habe ihn gar nicht erkannt!",
+   zh:"欸，我今天有點無聊。我有個問題：你們有沒有遇過什麼名人？購物的時候？在火車上？還是類似的場合？你們當場就認出來了嗎？他長什麼樣子？\n\n我曾經見過一位導演！那是 2019 年，在慕尼黑的一場演唱會上。我在入口等，然後他很快就回家了。但我完全沒認出他！",
+   qs:[{q:"回覆者是在哪裡遇到那位導演的？",options:["在超市","在演唱會上","在飛機上","在學校"],a:1},{q:"回覆者最後認出那位導演了嗎？",options:["認出來了","完全沒認出來","不確定","文中沒說"],a:1},{q:"「Es war 2019」的 war 是什麼？",options:["sein 的 Präteritum","haben 的 Präteritum","過去分詞","現在式"],a:0}]},
   /* ===ANCHOR:TEXTS_ARRAYS===（新課導讀 {id,lesson,genre,title,src,map,de,zh,qs} 插在這行上方；de 只准用該課及之前的單字＋功能詞，寫完必跑 ROADMAP N12 的白名單驗證腳本）*/
 ];
 
@@ -3589,7 +3714,7 @@ function gramCardsOfQ(q){
   if(/疼痛表達|引語|Imperativ/.test(s))ks.add('pain');
   if(/Imperativ/.test(s))ks.add('satz');
   if(/母音變化|字尾/.test(s))ks.add('konj1');
-  const m=s.match(/^([a-zäöüß]+)：\s*(ich|du|er|es|sie|wir|ihr|Sie)\s*→/);
+  const m=s.match(/^(?:⭐\s*)?([a-zäöüß]+)：\s*(ich|du|er|es|sie|wir|ihr|Sie)\s*→/);
   if(m)ks.add(KONJ2_VERBS.has(m[1])?'konj2':'konj1');
   return ks;
 }
@@ -3675,6 +3800,7 @@ function render(){
     if(c.ex2)html+=`<div class="exline"><div class="exde">${c.ex2[0]}</div><button class="spk ex2spk" aria-label="唸例句②"></button><div class="exzh">${c.ex2[1]}</div></div>`;
     /* 2026-07-31：Perfekt 區移到現在式例句之後——原本夾在現在式變位與現在式例句中間，時態交錯 */
     if(c.vm)html+=perfektBoxHTML(c.vm,c.pex,c.de);
+    if(c.vm)html+=praeteritumBoxHTML(c.vm);
     /* 例句（複數）*/
     if(c.plEx)html+=`<div class="exline plex"><div class="exde">${c.plEx[0]}</div><button class="spk plexspk" aria-label="唸複數例句"></button><div class="exzh">${c.plEx[1]}</div></div>`;
     flashFace.innerHTML=html;
@@ -3769,7 +3895,7 @@ const GRAM=[
   </table>
   <div class="note"><b>最容易錯：</b>① Nominativ 階段 der→<b>er</b>（不是 sie）、das→<b>es</b>；② es 當 Akkusativ 不變、但當 Dativ 變成 <b>ihm</b>（跟 er 一樣）；③ sie（她/單數）的 Dativ 是 <b>ihr</b>，別跟 ihr（你們/Nom）搞混——完全同形但語意不同，要靠句子角色判斷。</div>
 </div>`},
-{l:"L6",ls:["L4","L5","L6"],html:`
+{l:"L6",ls:["L4","L5","L6","L19"],html:`
 <div class="card gcard">
   <div class="gtitle">🧭 陰陽性線索表（用你工具裡的字分類） <span class="lessontag">規則</span></div>
   <p style="font-size:.86rem;margin:.2em 0 .5em">母語者也是一個一個背的，沒人用推的。但下面的線索能把「要硬背」的量從 100% 砍到約 40%。<b>由強到弱</b>套：</p>
@@ -3784,6 +3910,8 @@ const GRAM=[
   <div class="note"><b>⚠️ 例外要記住：</b>der <b>See</b>（湖，不是 die）· der <b>Euro</b>（不是 das）。</div>
   <div class="note"><b>弱線索、別全信：</b>-er/-el 傾向 der（<span class="de2">der Drucker · Schlüssel · Sessel · Spiegel</span>＝工具/人），<b>但例外一堆</b>：die <b>Nummer</b> 家族（Hausnummer/Telefonnummer）→ die；das <b>Zimmer</b>/Fenster/Meer/Papier → das。看到 -er 別急著斷定 der。</div>
   <div class="note"><b>複合字別被前字騙：</b>die Schokolade ＋ der Kuchen = <b>der</b> Schokoladenkuchen；die Fischsuppe（+die Suppe）；das Schinkenbrot（+das Brot）。永遠看最後一節。</div>
+  <div class="note" style="margin-top:1em"><b>🔤 Wortbildung：形容詞前綴 un-（L19）</b><br>加 <b>un-</b> 可以造反義形容詞：<span class="de2">sympathisch → <b>un</b>sympathisch</span>、<span class="de2">freundlich → <b>un</b>freundlich</span>、<span class="de2">glücklich → <b>un</b>glücklich</span>。</div>
+  <div class="note"><b>⚠️ 老師補充的限制（課本沒寫）：</b>① <b>un- 不能跟每個形容詞組合</b>；② 通常優先用<b>反義詞</b>：dick–dünn／groß–klein／hübsch–hässlich／kurz–lang；③ <b>負面形容詞很少用 un-</b>，多半直接用反義詞——說 <b>falsch</b>，不要自己造 <span style="text-decoration:line-through">unrichtig</span>。</div>
 </div>`},
 {l:"L6",ls:["L4","L5","L6"],html:`
 <div class="card gcard">
@@ -4028,7 +4156,7 @@ const GRAM=[
   </table>
   <div class="note"><b>⚠️ 三個最容易錯</b><br>① 母音變化<b>只在 du / er-sie-es</b>，別套到 ich／wir／ihr（❌ ich spriche → ✓ ich spreche）。<br>② arbeiten 的 e 只加在 du/er/ihr，不是每個人稱都加。<br>③ essen：du 和 er 都是 <b>isst</b>（字幹本來就 -ss，變完母音長一樣）。</div>
 </div>`},
-{ls:["L1","L2","L6","L7","L9","L10","L17","L18"],html:`
+{ls:["L1","L2","L6","L7","L9","L10","L17","L18","L19"],html:`
 <div class="card gcard">
   <div class="gtitle">🧩 動詞變位②：特殊變位 sein · haben · 情態動詞 · werden <span class="lessontag">L1</span><span class="lessontag">L2</span><span class="lessontag">L6</span><span class="lessontag">L7</span><span class="lessontag">L9</span><span class="lessontag">L17</span><span class="lessontag">L18</span></div>
   <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：這些不照字幹規則，<b>整組背</b>。三群：高頻助動詞 sein／haben，情態動詞 können／mögen／möchten／wollen／sollen（共同標記＝<b>ich 和 er/sie/es 都不加字尾</b>：kann／mag／möchte／will／soll），以及 werden（常跟情態動詞放一起教，但變位規則不同，見③）。</p>
@@ -4065,7 +4193,7 @@ const GRAM=[
     <tr><td>Sie/sie</td><td class="de2">werden</td></tr>
   </table>
   <div class="note"><b>⚠️ werden 不是情態動詞</b>：② 的四個字 ich 和 er/sie/es 都<u>不</u>加字尾（kann/mag/möchte/will），但 <b>werden 的 ich 有 -e</b>（werde），文法上不符合那條規則，所以獨立列在這裡。老師的 Grammatik 講義可能把它跟情態動詞放在同一頁教（實務上常一起用：Was willst du werden?），但變位規則要分開記。du／er 的 wirst／wird 母音也變了，這兩格最容易錯。</div>
-<p style="font-size:.86rem;font-weight:700;margin:.4em 0 .2em">④ Präteritum：只有 sein／haben 兩個字（L10）</p>
+<p style="font-size:.86rem;font-weight:700;margin:.4em 0 .2em">④ Präteritum：只有 sein／haben 兩個字（L10 首見／L19 正式教）</p>
   <p style="font-size:.9rem;margin:.1em 0"><b>系統邏輯</b>：德文講過去，日常口語幾乎全用 <b>Perfekt</b>。但 <b>sein</b> 和 <b>haben</b> 例外——這兩個字習慣用 <b>Präteritum</b>（簡單過去式），因為 <i>ist gewesen／hat gehabt</i> 說起來累贅。</p>
   <table>
     <tr><th>人稱</th><th>sein → war</th><th>haben → hatte</th></tr>
@@ -4079,7 +4207,7 @@ const GRAM=[
   <p class="warn" style="font-size:.9rem"><b>最容易錯</b>：ich 和 er/sie/es 兩格<u>同形</u>（war／hatte），ihr 是 <b>wart／hattet</b>（不是 warst／hattest）。這跟 ② 情態動詞「ich 和 er 都不加字尾」是同一條共同標記，可以一起記。</p>
   <div class="note"><b>⛔ 邊界：A1 只收這兩個字</b>。其他動詞的 Präteritum（machte／ging／kam…）是 A2 的內容，<b>A1 階段一律用 Perfekt</b>。所以「我做了」講 <i>Ich habe gemacht</i>，不要自己造 <i>Ich machte</i>。兩者在 sein／haben 上是同義的：<i>Ich war in Deutschland.</i> ＝ <i>Ich bin in Deutschland gewesen.</i>（前者更常用）。</div>
 </div>`},
-{ls:["L10","L11","L12"],html:`
+{ls:["L10","L11","L12","L19"],html:`
 <div class="card gcard">
   <div class="gtitle">🧩 Perfekt 現在完成式：Partizip II 怎麼形成 <span class="lessontag">L10</span><span class="lessontag">L11</span><span class="lessontag">L12</span></div>
   <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：Perfekt 講「之前發生的事」，口語、聊天、email 都用它（書面過去式 Präteritum 是後面的事，A1 先不管）。結構＝<b>haben/sein（變位，站第2位）＋ Partizip II（原形變化，站句尾）</b>，跟 möchten/können 是同一個「框」（見句框卡）。唯一新東西是：<b>Partizip II 怎麼從動詞原形變出來</b>——看動詞屬於哪一型，五型判斷完就會拼。</p>
@@ -4089,7 +4217,7 @@ const GRAM=[
     <tr><td>① 規則動詞</td><td class="de2">ge + 字幹 + t</td><td class="de2">machen → <b>ge</b>mach<b>t</b> · kochen → <b>ge</b>koch<b>t</b> · lachen → <b>ge</b>lach<b>t</b></td></tr>
     <tr><td>② 不規則動詞</td><td class="de2">ge + 字幹（常變音）+ en，<b>沒有規則，要背</b></td><td class="de2">schreiben → <b>ge</b>schr<b>ie</b>b<b>en</b> · trinken → <b>ge</b>tr<b>u</b>nk<b>en</b> · lesen → <b>ge</b>les<b>en</b> · essen → <b>ge</b>gess<b>en</b></td></tr>
     <tr><td>③ 可分離動詞</td><td class="de2">字首 + ge + 字幹 + t/en（ge 塞在字首和字幹中間）</td><td class="de2">an<b>ge</b>ruf<b>en</b> · ein<b>ge</b>kauf<b>t</b> · auf<b>ge</b>räum<b>t</b> · fern<b>ge</b>seh<b>en</b></td></tr>
-    <tr><td>④ 不可分離動詞</td><td class="de2"><b>不加 ge</b>，字首本身不能拆（be-/ver-/er-/ent-/ge-/unter-…）</td><td class="de2">besuchen → besuch<b>t</b> · bezahlen → bezahl<b>t</b> · verstehen → verstand<b>en</b></td></tr>
+    <tr><td>④ 不可分離動詞</td><td class="de2"><b>不加 ge</b>，字首本身不能拆（be-/ge-/ver-/er-/ent-/emp-/miss-/zer-/unter-…）</td><td class="de2">besuchen → besuch<b>t</b> · bezahlen → bezahl<b>t</b> · verstehen → verstand<b>en</b> · erkennen → erkann<b>t</b> · beschweren → beschwer<b>t</b> · entschuldigen → entschuldig<b>t</b></td></tr>
     <tr><td>⑤ -ieren 結尾</td><td class="de2"><b>不加 ge</b>，直接 -t</td><td class="de2">telefonieren → telefoniert · fotografieren → fotografiert · studieren → studiert</td></tr>
   </table>
   <p style="font-size:.86rem;margin:.3em 0 .3em">判斷順序：先看動詞開頭——是 be-/ver-/er-/ent-/ge-/unter- 就④不加 ge；是 an-/aus-/ab-/auf-/ein-/mit-/um-/vor-/fern- 這種可拆字首就③；結尾 -ieren 就⑤不加 ge；剩下的動詞才問「規不規則」，規則套①，不規則（多數要背）套②。</p>
@@ -4110,6 +4238,7 @@ const GRAM=[
   </table>
   </div></details>
   <div class="note"><b>⚠️ 三個最容易錯</b><br>① 可分離動詞的 ge 塞在<b>字首和字幹中間</b>，不是黏在最前面：<span style="color:#b45309">an<b>ge</b>rufen</span>（不是 geanrufen）。<br>② 不可分離動詞（be-/ver-/er- 開頭）跟 -ieren 結尾動詞<b>永遠不加 ge</b>，這兩型是同一條「不加 ge」規則的兩個觸發條件，別搞混。<br>③ <b>sein 是例外，預設用 haben</b>——除非動詞明確是「移動／狀態改變」才換 sein，猜不準先用 haben。</div>
+  <div class="note"><b>⚠️ L19 對照：可分離 vs 不可分離的最小對立</b><br><b>anrufen → angerufen</b>（ge 夾在字首和字幹中間）　vs　<b>beschweren → beschwert</b>（完全不加 ge，因為 be- 是不可分離字首）。同一組邏輯也套用在 erkennen → erkannt、entschuldigen → entschuldigt。不可分離前綴完整清單：<b>be-／ge-／ver-／er-／ent-／emp-／miss-／zer-</b>。</div>
 </div>`},
 {ls:["L8","L10","L13"],html:`
 <div class="card gcard">
@@ -5124,11 +5253,11 @@ GR18.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answe
   ];
   GR10W.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
   const GR10PT=[
-   {l:"L10",sub:"⭐ Präteritum：sein 的 ich",before:"Gestern ",after:" ich in Berlin.",answer:"war",options:["war","warst","waren","bin"],full:"Gestern war ich in Berlin."},
-   {l:"L10",sub:"⭐ Präteritum：sein 的 du",before:"Wo ",after:" du gestern?",answer:"warst",options:["warst","war","wart","bist"],full:"Wo warst du gestern?"},
-   {l:"L10",sub:"⭐ Präteritum：sein 的 wir",before:"Wir ",after:" letztes Jahr in der Schweiz.",answer:"waren",options:["waren","war","wart","sind"],full:"Wir waren letztes Jahr in der Schweiz."},
-   {l:"L10",sub:"⭐ Präteritum：haben 的 ich",before:"Früher ",after:" ich einen Hund.",answer:"hatte",options:["hatte","hattest","hatten","habe"],full:"Früher hatte ich einen Hund."},
-   {l:"L10",sub:"⭐ Präteritum：haben 的 du",before:"",after:" du früher ein Fahrrad?",answer:"Hattest",options:["Hattest","Hatte","Hattet","Hast"],full:"Hattest du früher ein Fahrrad?"},
+   {l:"L10",sub:"⭐ sein：ich → ?",before:"Gestern ",after:" ich in Berlin.",answer:"war",options:["war","warst","waren","bin"],full:"Gestern war ich in Berlin."},
+   {l:"L10",sub:"⭐ sein：du → ?",before:"Wo ",after:" du gestern?",answer:"warst",options:["warst","war","wart","bist"],full:"Wo warst du gestern?"},
+   {l:"L10",sub:"⭐ sein：wir → ?",before:"Wir ",after:" letztes Jahr in der Schweiz.",answer:"waren",options:["waren","war","wart","sind"],full:"Wir waren letztes Jahr in der Schweiz."},
+   {l:"L10",sub:"⭐ haben：ich → ?",before:"Früher ",after:" ich einen Hund.",answer:"hatte",options:["hatte","hattest","hatten","habe"],full:"Früher hatte ich einen Hund."},
+   {l:"L10",sub:"⭐ haben：du → ?",before:"",after:" du früher ein Fahrrad?",answer:"Hattest",options:["Hattest","Hatte","Hattet","Hast"],full:"Hattest du früher ein Fahrrad?"},
    {l:"L10",sub:"⭐ 對比：同義改寫 Präteritum 或 Perfekt",before:"Ich war in Deutschland. = Ich ",after:" in Deutschland gewesen.",answer:"bin",options:["bin","habe","war","ist"],full:"Ich bin in Deutschland gewesen."},
    {l:"L10",sub:"⭐ 對比：同義改寫 Präteritum 或 Perfekt",before:"Ich hatte einen Hund. = Ich ",after:" einen Hund gehabt.",answer:"habe",options:["habe","bin","hatte","hat"],full:"Ich habe einen Hund gehabt."},
   ];
@@ -5201,6 +5330,17 @@ GR18.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answe
 {l:"L16",sub:"müssen：er → ?",before:"Er ",after:" zum Arzt gehen.",answer:"muss",options:["muss","müssen","müsst"],full:"Er muss zum Arzt gehen."},
 ];
   GRCLO.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+const GR19=[
+ {l:"L19",sub:"⭐ 對比：sein 用 Präteritum 還是 Perfekt",before:"Gestern ",after:" ich auf einer Party.",answer:"war",options:["war","bin gewesen","habe gewesen","bin"],full:"Gestern war ich auf einer Party."},
+ {l:"L19",sub:"⭐ Partizip：可分離 anrufen",before:"Herr Sander hat seine Frau ",after:" und sich beschwert.",answer:"angerufen",options:["angerufen","geanrufen","anrufen","angeruft"],full:"Herr Sander hat seine Frau angerufen und sich beschwert."},
+ {l:"L19",sub:"⭐ Partizip：不可分離 beschweren",before:"Herr Sander hat seine Frau angerufen und sich ",after:".",answer:"beschwert",options:["beschwert","gebeschwert","beschwart","beschweren"],full:"Herr Sander hat seine Frau angerufen und sich beschwert."},
+ {l:"L19",sub:"⭐ Wortbildung：un- 還是反義詞",before:"Die Antwort ist nicht richtig, sie ist ",after:".",answer:"falsch",options:["falsch","unrichtig","nichtrichtig","unfalsch"],full:"Die Antwort ist nicht richtig, sie ist falsch."},
+ {l:"L19",sub:"vergessen：du → ?",before:"Mensch, ",after:" du schon wieder dein Handy?",answer:"vergisst",options:["vergisst","vergesst","vergisst du","vergessst"],full:"Mensch, vergisst du schon wieder dein Handy?"},
+ {l:"L19",sub:"vergessen：er → ?",before:"Er ",after:" nie ihren Geburtstag.",answer:"vergisst",options:["vergisst","vergesse","vergesst","vergessen"],full:"Er vergisst nie ihren Geburtstag."},
+ {l:"L19",sub:"⭐ sein：ihr → ?",before:"Wo ",after:" gestern Abend?",answer:"wart",options:["wart","warst","waren","seid"],full:"Wo wart ihr gestern Abend?"},
+ {l:"L19",sub:"⭐ haben：ihr → ?",before:"Ihr ",after:" früher sicher Kontakt zu ihm, oder?",answer:"hattet",options:["hattet","habt","hatte","hattest"],full:"Ihr hattet früher sicher Kontakt zu ihm, oder?"},
+];
+GR19.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
   /* ===ANCHOR:GRAM_QUIZ===（新課文法填空題插在這行上方：宣告 const GRn=[{l,sub,before,after,answer,options,full},…]; 後接一行 GRn.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full})); ）*/
   return Q;
 }
