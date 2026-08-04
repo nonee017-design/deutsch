@@ -399,8 +399,12 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
       <tr><td>1.–19.</td><td>數字 + <b>-te</b></td><td class="de2">vierte, fünfte, sechste, zwölfte</td></tr>
       <tr><td>20. 起</td><td>數字 + <b>-ste</b></td><td class="de2">zwanzigste, dreißigste</td></tr>
       <tr><td>日期（am + 序數）</td><td>序數 + <b>-en</b></td><td class="de2">am ersten Mai, am fünfzehnten April</td></tr>
+      <tr><td>區間（vom … bis zum）</td><td><b>兩端都</b>是序數 + <b>-en</b></td><td class="de2">vom vierundzwanzigsten Oktober bis zum fünften November</td></tr>
+      <tr><td>月份寫成數字時</td><td>照序數唸，順序仍是「日 → 月」</td><td class="de2">24.10. → (vom) vierundzwanzigsten Zehnten</td></tr>
+      <tr><td>年份 1100–1999</td><td>「百位分段」：19 + hundert + 97</td><td class="de2">1997 → neunzehnhundertsiebenundneunzig</td></tr>
+      <tr><td>年份 2000 起</td><td>照一般大數字唸</td><td class="de2">2026 → zweitausendsechsundzwanzig</td></tr>
     </table>
-    <div class="note"><b>⚠️ 四個不規則要背下來</b>：1.=<b>erste</b>、3.=<b>dritte</b>、7.=<b>siebte</b>、8.=<b>achte</b>（不是 einste/dreite/siebente/achtte）。問答：Der Wievielte ist heute? — Der 15. (fünfzehnte) April.／Wann hast du Geburtstag? — Am 3. (dritten) Mai.<br>⚠️ 建議對照課堂筆記求證：序數上限、-ste 起點、老師是否教到 31. 全列——此表按標準德語規則建，若老師版本不同以老師為準。</div>
+    <div class="note"><b>⚠️ 四個不規則要背下來</b>：1.=<b>erste</b>、3.=<b>dritte</b>、7.=<b>siebte</b>、8.=<b>achte</b>（不是 einste/dreite/siebente/achtte）。問答：Der Wievielte ist heute? — Der 15. (fünfzehnte) April.／Wann hast du Geburtstag? — Am 3. (dritten) Mai.<br>⚠️ <b>年份不加介係詞</b>：說「在 1997 年」是 <b>1997</b> 或 <b>im Jahr 1997</b>，⛔ 不能說 in 1997（英文習慣，德文錯）。<br>⚠️ 建議對照課堂筆記求證：序數上限、-ste 起點、老師是否教到 31. 全列；以及<b>月份寫成序數時的大小寫</b>（vom vierundzwanzigsten Zehnten／zehnten）——此表按標準德語規則建，若老師版本不同以老師為準。</div>
   </div>
   </section>
 
@@ -1716,8 +1720,138 @@ const ADD19=[
 {de:"uninteressant",zh:"無趣的",g:null,cat:"形容詞",lesson:"L19",ex:["Ich finde den Film uninteressant.","我覺得這部電影很無趣。"]},
 {de:"ziemlich",zh:"相當、頗（程度副詞）",g:null,cat:"副詞",lesson:"L19",ex:["Das Auto ist ziemlich teuer.","這台車相當貴。"]},
 ];
+const ADD16S=[
+/* ── L16 老師補充：社區族群 ── */
+{de:"Überraschung",zh:"驚喜、意外",g:"die",cat:"社區",lesson:"L16",ex:["Das ist eine schöne Überraschung!","這真是個美好的驚喜！"]},
+{de:"Lieblingspark",zh:"最愛的公園",g:"der",cat:"社區",lesson:"L16",ex:["Mein Lieblingspark ist gleich hier.","我最愛的公園就在這附近。"]},
+{de:"Biergarten",zh:"啤酒花園（露天）",g:"der",cat:"社區",lesson:"L16",ex:["Wir sitzen im Biergarten.","我們坐在啤酒花園裡。"]},
+{de:"Flüchtling",zh:"難民",g:"der",cat:"社區",lesson:"L16",ex:["Der Flüchtling wohnt seit einem Jahr hier.","這位難民在這裡住了一年。"]},
+{de:"Künstler",zh:"藝術家",g:"der",cat:"社區",lesson:"L16",ex:["Der Künstler wohnt im Stadtviertel.","這位藝術家住在這個城區。"]},
+{de:"Hundebesitzer",zh:"狗主人",g:"der",cat:"社區",lesson:"L16",ex:["Der Hundebesitzer geht in den Park.","狗主人去公園。"]},
+{de:"Senior",zh:"長者、年長者",g:"der",cat:"社區",lesson:"L16",ex:["Der Senior sitzt auf der Bank.","那位長者坐在長椅上。"]},
+{de:"Pensionär",zh:"退休人員（領退休金者）",g:"der",cat:"社區",lesson:"L16",ex:["Mein Nachbar ist Pensionär.","我鄰居是退休人員。"]},
+{de:"Obdachlose",zh:"無家者（形容詞變格名詞，字尾隨冠詞改變）",g:"der",cat:"社區",lesson:"L16",ex:["Der Obdachlose schläft vor dem Bahnhof.","那位無家者睡在車站前。"]},
+{de:"Geschäftsleute",zh:"商務人士（只有複數；單數用 der Geschäftsmann／die Geschäftsfrau）",g:"plu",cat:"社區",lesson:"L16",ex:["Im Hotel wohnen viele Geschäftsleute.","旅館裡住了很多商務人士。"]},
+/* ── L16 老師補充：社區的問題 ── */
+{de:"Gestank",zh:"惡臭",g:"der",cat:"社區",lesson:"L16",ex:["Der Gestank kommt aus der Küche.","臭味從廚房來。"]},
+{de:"stinken",zh:"發臭（無人稱常用 es stinkt）",g:null,cat:"動詞",lesson:"L16",ex:["Hier stinkt es.","這裡很臭。"],pex:["Gestern hat es im Treppenhaus gestunken.","昨天樓梯間很臭。"]},
+{de:"Stau",zh:"塞車",g:"der",cat:"社區",lesson:"L16",ex:["Wir stehen im Stau.","我們塞在車陣裡。"]},
+{de:"Fahrradweg",zh:"自行車道",g:"der",cat:"社區",lesson:"L16",ex:["Hier fehlt ein Fahrradweg.","這裡缺一條自行車道。"]},
+{de:"rücksichtslos",zh:"不顧他人的、莽撞的（反：rücksichtsvoll）",g:null,cat:"形容詞",lesson:"L16",ex:["Der Fahrradfahrer ist rücksichtslos.","那個騎車的人很不顧別人。"]},
+/* ── L16 老師補充：電梯受困情境 ── */
+{de:"Strom",zh:"電、電流",g:"der",cat:"旅館",lesson:"L16",ex:["Im Aufzug ist kein Strom.","電梯裡沒電。"]},
+{de:"Notfallknopf",zh:"緊急按鈕",g:"der",cat:"旅館",lesson:"L16",ex:["Ich drücke den Notfallknopf.","我按緊急按鈕。"]},
+{de:"Feuerwehr",zh:"消防隊",g:"die",cat:"社區",lesson:"L16",ex:["Die Feuerwehr kommt sofort.","消防隊馬上來。"]},
+{de:"Sauerstoff",zh:"氧氣",g:"der",cat:"旅館",lesson:"L16",ex:["Im Aufzug gibt es wenig Sauerstoff.","電梯裡氧氣很少。"]},
+{de:"reagieren",zh:"反應、作出回應（auf＋Akk）",g:null,cat:"動詞",lesson:"L16",ex:["Die Rezeption reagiert sofort.","櫃台馬上處理。"],pex:["Das Hotel hat schnell reagiert.","旅館反應很快。"]},
+/* ── L16 老師補充：旅館設施 ── */
+{de:"Reservierung",zh:"訂位、預訂",g:"die",cat:"旅館",lesson:"L16",ex:["Ich habe eine Reservierung.","我有預訂。"]},
+{de:"Frühstücksraum",zh:"早餐室",g:"der",cat:"旅館",lesson:"L16",ex:["Der Frühstücksraum ist im ersten Stock.","早餐室在二樓。"]},
+{de:"Minibar",zh:"迷你吧（房內小冰箱）",g:"die",cat:"旅館",lesson:"L16",ex:["Die Minibar ist leer.","迷你吧是空的。"]},
+{de:"Doppelzimmer",zh:"雙人房",g:"das",cat:"旅館",lesson:"L16",ex:["Ich möchte ein Doppelzimmer.","我想要一間雙人房。"]},
+{de:"Einzelzimmer",zh:"單人房",g:"das",cat:"旅館",lesson:"L16",ex:["Das Einzelzimmer ist billiger.","單人房比較便宜。"]},
+{de:"Pool",zh:"泳池",g:"der",cat:"旅館",lesson:"L16",ex:["Der Pool ist im Garten.","泳池在花園裡。"]},
+{de:"Bademeister",zh:"泳池管理員、救生員",g:"der",cat:"旅館",lesson:"L16",ex:["Der Bademeister arbeitet am Pool.","救生員在泳池邊工作。"]},
+{de:"Wagenmeister",zh:"車務管理員（建議問老師求證：此字一般用於鐵路調車場，旅館場景較少見）",g:"der",cat:"旅館",lesson:"L16",ex:["Der Wagenmeister kommt gleich.","車務管理員馬上來。"]},
+{de:"Safe",zh:"保險箱（唸法同英文 seif）",g:"der",cat:"旅館",lesson:"L16",ex:["Der Safe ist im Schrank.","保險箱在櫃子裡。"]},
+{de:"Tresor",zh:"保險櫃",g:"der",cat:"旅館",lesson:"L16",ex:["Das Geld liegt im Tresor.","錢放在保險櫃裡。"]},
+{de:"Kleiderschrank",zh:"衣櫃",g:"der",cat:"旅館",lesson:"L16",ex:["Der Kleiderschrank ist sehr groß.","衣櫃很大。"]},
+{de:"Wäscheservice",zh:"洗衣服務",g:"der",cat:"旅館",lesson:"L16",ex:["Das Hotel hat einen Wäscheservice.","旅館有洗衣服務。"]},
+{de:"Roomservice",zh:"客房服務",g:"der",cat:"旅館",lesson:"L16",ex:["Ich bestelle etwas über den Roomservice.","我用客房服務點東西。"]},
+{de:"Hotelbar",zh:"旅館酒吧",g:"die",cat:"旅館",lesson:"L16",ex:["Die Hotelbar ist bis eins offen.","旅館酒吧開到一點。"]},
+{de:"Fernbedienung",zh:"遙控器",g:"die",cat:"旅館",lesson:"L16",ex:["Die Fernbedienung funktioniert nicht.","遙控器不能用。"]},
+{de:"einchecken",zh:"辦理入住（可分離）",g:null,cat:"動詞",lesson:"L16",ex:["Wir checken um 15 Uhr ein.","我們十五點辦入住。"],pex:["Ich habe schon eingecheckt.","我已經辦好入住了。"]},
+{de:"auschecken",zh:"辦理退房（可分離）",g:null,cat:"動詞",lesson:"L16",ex:["Wir checken um zehn Uhr aus.","我們十點退房。"],pex:["Sie hat gestern ausgecheckt.","她昨天退房了。"]},
+{de:"ausprobieren",zh:"試用、試試看（可分離）",g:null,cat:"動詞",lesson:"L16",ex:["Ich probiere die Fernbedienung aus.","我試試看遙控器。"],pex:["Haben Sie die Fernbedienung ausprobiert?","您試過遙控器了嗎？"]},
+/* ── L16 老師補充：狗與鄰里 ── */
+{de:"bellen",zh:"（狗）吠叫",g:null,cat:"動詞",lesson:"L16",ex:["Der Hund bellt laut.","狗大聲叫。"],pex:["Der Hund hat die ganze Nacht gebellt.","狗叫了一整夜。"]},
+{de:"streicheln",zh:"撫摸、輕撫",g:null,cat:"動詞",lesson:"L16",ex:["Ich streichle den Hund.","我摸摸這隻狗。"],pex:["Sie hat die Katze gestreichelt.","她摸了那隻貓。"]},
+{de:"reinkommen",zh:"進來（口語說法，可分離）",g:null,cat:"動詞",lesson:"L16",ex:["Kommen Sie bitte rein!","請進！"],pex:["Der Nachbar ist kurz reingekommen.","鄰居進來了一下。"]},
+/* ── L16 老師補充：副詞與約時間 ── */
+{de:"hoffentlich",zh:"但願、希望（說話者的期待）",g:null,cat:"副詞",lesson:"L16",ex:["Hoffentlich kommt der Techniker bald.","希望技師快點來。"]},
+{de:"höchstens",zh:"最多、頂多（反：mindestens）",g:null,cat:"副詞",lesson:"L16",ex:["Ich warte höchstens zehn Minuten.","我最多等十分鐘。"]},
+{de:"spätestens",zh:"最晚、至遲",g:null,cat:"副詞",lesson:"L16",ex:["Ich komme spätestens um acht.","我最晚八點到。"]},
+{de:"frühestens",zh:"最早也要",g:null,cat:"副詞",lesson:"L16",ex:["Der Techniker kommt frühestens morgen.","技師最早明天來。"]},
+{de:"wahrscheinlich",zh:"大概、很可能",g:null,cat:"形容詞",lesson:"L16",ex:["Der Aufzug ist wahrscheinlich kaputt.","電梯大概壞了。"]},
+];
+const ADD18S=[
+/* ── L18 老師補充：願望與人生 ── */
+{de:"verlieben",zh:"愛上（反身動詞，搭 sich in＋Akk）",g:null,cat:"動詞",lesson:"L18",ex:["Ich verliebe mich immer zu schnell.","我總是太快就愛上人。"],pex:["Sie hat sich in ihn verliebt.","她愛上他了。"]},
+{de:"verliebt",zh:"戀愛中的、墜入愛河的",g:null,cat:"形容詞",lesson:"L18",ex:["Ich bin verliebt.","我戀愛了。"]},
+{de:"Karriere",zh:"事業、職涯（常與 machen 連用）",g:"die",cat:"人生",lesson:"L18",ex:["Sie möchte Karriere machen.","她想在事業上有所發展。"]},
+{de:"erfolgreich",zh:"成功的",g:null,cat:"形容詞",lesson:"L18",ex:["Mein Bruder ist sehr erfolgreich.","我哥哥很成功。"]},
+{de:"Hauptsache",zh:"最重要的事、重點",g:"die",cat:"人生",lesson:"L18",ex:["Das ist die Hauptsache.","這才是重點。"]},
+{de:"Kofferpacken",zh:"打包行李（動詞名詞化）",g:"das",cat:"人生",lesson:"L18",ex:["Das Kofferpacken dauert immer lange.","打包行李總是很花時間。"]},
+/* ── L18 老師補充：身體部位（第二圈）── */
+{de:"Ellbogen",zh:"手肘",g:"der",cat:"身體",lesson:"L18",ex:["Mein Ellbogen tut weh.","我的手肘痛。"]},
+{de:"Gesicht",zh:"臉",g:"das",cat:"身體",lesson:"L18",ex:["Sie hat ein freundliches Gesicht.","她有一張親切的臉。"]},
+{de:"Lippe",zh:"嘴唇",g:"die",cat:"身體",lesson:"L18",ex:["Meine Lippe ist trocken.","我的嘴唇很乾。"]},
+{de:"Hüfte",zh:"髖部、腰胯",g:"die",cat:"身體",lesson:"L18",ex:["Meine Hüfte tut beim Laufen weh.","我跑步時髖部會痛。"]},
+{de:"Taille",zh:"腰（腰線）",g:"die",cat:"身體",lesson:"L18",ex:["Der Rock ist an der Taille zu eng.","這裙子腰部太緊。"]},
+{de:"Wange",zh:"臉頰",g:"die",cat:"身體",lesson:"L18",ex:["Das Kind hat rote Wangen.","這孩子臉頰紅紅的。"]},
+{de:"Schulter",zh:"肩膀",g:"die",cat:"身體",lesson:"L18",ex:["Meine Schulter tut weh.","我的肩膀痛。"]},
+{de:"Kinn",zh:"下巴",g:"das",cat:"身體",lesson:"L18",ex:["Er hat ein rundes Kinn.","他有個圓下巴。"]},
+{de:"Stirn",zh:"額頭",g:"die",cat:"身體",lesson:"L18",ex:["Meine Stirn ist heiß.","我的額頭很燙。"]},
+{de:"Nacken",zh:"後頸（頸背）",g:"der",cat:"身體",lesson:"L18",ex:["Mein Nacken ist steif.","我的後頸很僵硬。"]},
+{de:"Nagel",zh:"指甲；釘子",g:"der",cat:"身體",lesson:"L18",ex:["Mein Nagel ist kaputt.","我的指甲斷了。"]},
+{de:"Kopfschmerzen",zh:"頭痛（只有複數形）",g:"plu",cat:"身體",lesson:"L18",ex:["Ich habe Kopfschmerzen.","我頭痛。"]},
+/* ── L18 老師補充：身體部位的動作 ── */
+{de:"nicken",zh:"點頭",g:null,cat:"動詞",lesson:"L18",ex:["Er nickt und sagt nichts.","他點點頭，什麼也沒說。"],pex:["Sie hat nur genickt.","她只是點了點頭。"]},
+{de:"riechen",zh:"聞、嗅；散發氣味（nach＋Dat）",g:null,cat:"動詞",lesson:"L18",ex:["Die Blumen riechen gut.","這些花很香。"],pex:["Ich habe den Kaffee schon gerochen.","我已經聞到咖啡了。"]},
+{de:"atmen",zh:"呼吸",g:null,cat:"動詞",lesson:"L18",ex:["Bitte atmen Sie langsam!","請慢慢呼吸！"],pex:["Ich habe tief geatmet.","我深呼吸了一下。"]},
+{de:"beißen",zh:"咬",g:null,cat:"動詞",lesson:"L18",ex:["Der Hund beißt nicht.","這隻狗不咬人。"],pex:["Der Hund hat mich gebissen.","那隻狗咬了我。"]},
+{de:"tragen",zh:"搬、拿；穿（身上）",g:null,cat:"動詞",lesson:"L18",ex:["Er trägt den Koffer.","他提著行李箱。"],pex:["Ich habe die Tasche selbst getragen.","那個包我自己拿的。"]},
+{de:"tippen",zh:"打字、輕觸",g:null,cat:"動詞",lesson:"L18",ex:["Ich tippe die E-Mail schnell.","我很快把郵件打好。"],pex:["Sie hat den Text selbst getippt.","那份文字是她自己打的。"]},
+{de:"zeigen",zh:"指出、展示（auf＋Akk＝指向）",g:null,cat:"動詞",lesson:"L18",ex:["Er zeigt auf das Bild.","他指著那幅畫。"],pex:["Sie hat mir die Stadt gezeigt.","她帶我看了這座城市。"]},
+{de:"berühren",zh:"觸碰",g:null,cat:"動詞",lesson:"L18",ex:["Bitte berühren Sie das nicht!","請不要碰那個！"],pex:["Er hat meine Hand berührt.","他碰了我的手。"]},
+{de:"rennen",zh:"奔跑（比 laufen 更快、更急）",g:null,cat:"動詞",lesson:"L18",ex:["Die Kinder rennen durch den Park.","孩子們在公園裡跑來跑去。"],pex:["Ich bin zum Bus gerannt.","我跑去趕公車。"]},
+{de:"füttern",zh:"餵（動物、嬰兒）",g:null,cat:"動詞",lesson:"L18",ex:["Ich füttere den Hund am Morgen.","我早上餵狗。"],pex:["Hast du die Katze schon gefüttert?","你餵過貓了嗎？"]},
+{de:"verdauen",zh:"消化",g:null,cat:"動詞",lesson:"L18",ex:["Der Bauch verdaut das Essen.","肚子消化食物。"],pex:["Ich habe das Essen schlecht verdaut.","那頓飯我消化不良。"]},
+{de:"schließen",zh:"關上、閉上（反：öffnen）",g:null,cat:"動詞",lesson:"L18",ex:["Schließen Sie bitte die Augen!","請閉上眼睛！"],pex:["Ich habe das Fenster geschlossen.","我把窗戶關上了。"]},
+{de:"spazieren",zh:"散步（日常多與 gehen 連用）",g:null,cat:"動詞",lesson:"L18",ex:["Wir spazieren durch den Park.","我們在公園散步。"],pex:["Wir sind am Sonntag spaziert.","我們星期天散了步。"]},
+/* ── L18 老師補充：自然療法 ── */
+{de:"heilen",zh:"治癒、痊癒",g:null,cat:"健康",lesson:"L18",ex:["Kräuter heilen nicht alles.","草藥不是什麼都能治。"],pex:["Die Wunde ist gut geheilt.","傷口癒合得很好。"]},
+{de:"erscheinen",zh:"出現；（書）出版（建議問老師求證：老師只寫了 erschienen，未給上下文，兩義都成立）",g:null,cat:"動詞",lesson:"L18",ex:["Der Arzt erscheint sofort.","醫生馬上出現。"],pex:["Das Buch ist letztes Jahr erschienen.","這本書去年出版了。"]},
+{de:"Rat",zh:"建議、忠告（複數不規則，見複數欄）",g:"der",cat:"健康",lesson:"L18",ex:["Ich brauche deinen Rat.","我需要你的建議。"]},
+{de:"Ratschlag",zh:"（一則）建議",g:"der",cat:"健康",lesson:"L18",ex:["Das ist ein guter Ratschlag.","這是個好建議。"]},
+{de:"Heilkräuter",zh:"藥草（複數；單數 das Heilkraut）",g:"plu",cat:"健康",lesson:"L18",ex:["Heilkräuter helfen gegen Husten.","藥草對咳嗽有幫助。"]},
+{de:"Granatapfel",zh:"石榴",g:"der",cat:"健康",lesson:"L18",ex:["Der Granatapfel ist sehr gesund.","石榴很健康。"]},
+{de:"Honig",zh:"蜂蜜",g:"der",cat:"健康",lesson:"L18",ex:["Ich trinke Tee mit Honig.","我喝加蜂蜜的茶。"]},
+{de:"Ingwer",zh:"薑",g:"der",cat:"健康",lesson:"L18",ex:["Ingwer schmeckt scharf.","薑吃起來很辣。"]},
+{de:"Zimt",zh:"肉桂",g:"der",cat:"健康",lesson:"L18",ex:["Der Tee schmeckt nach Zimt.","這茶有肉桂味。"]},
+{de:"Knoblauch",zh:"大蒜",g:"der",cat:"健康",lesson:"L18",ex:["Ich koche gern mit Knoblauch.","我喜歡用大蒜做菜。"]},
+{de:"Schnaps",zh:"烈酒",g:"der",cat:"健康",lesson:"L18",ex:["Ein Schnaps hilft nicht gegen Husten.","一杯烈酒治不了咳嗽。"]},
+{de:"Kräuterschnaps",zh:"草藥利口酒",g:"der",cat:"健康",lesson:"L18",ex:["Meine Oma trinkt abends einen Kräuterschnaps.","我奶奶晚上會喝一杯草藥酒。"]},
+];
+const ADD13S=[
+/* ── L13 老師補充：地點與辦事 ── */
+{de:"Wegbeschreibung",zh:"路線指引、指路",g:"die",cat:"城市",lesson:"L13",ex:["Ich brauche eine Wegbeschreibung.","我需要有人幫我指路。"]},
+{de:"Kredit",zh:"貸款",g:"der",cat:"銀行",lesson:"L13",ex:["Ich möchte einen Kredit aufnehmen.","我想辦一筆貸款。"]},
+{de:"Karte",zh:"卡片；票；地圖",g:"die",cat:"銀行",lesson:"L13",ex:["Ich bestelle eine Karte.","我要辦一張卡。"]},
+{de:"Tatort",zh:"案發現場",g:"der",cat:"城市",lesson:"L13",ex:["Die Polizei ist schon am Tatort.","警察已經到現場了。"]},
+{de:"Tour",zh:"行程、導覽",g:"die",cat:"城市",lesson:"L13",ex:["Wir machen eine Tour durch die Stadt.","我們來趟市區導覽。"]},
+{de:"Fahrschein",zh:"車票",g:"der",cat:"車站",lesson:"L13",ex:["Ich kaufe einen Fahrschein.","我買一張車票。"]},
+{de:"Unfall",zh:"事故、車禍",g:"der",cat:"城市",lesson:"L13",ex:["Ich melde einen Unfall.","我要報一起事故。"]},
+{de:"Dokument",zh:"文件",g:"das",cat:"城市",lesson:"L13",ex:["Ich hole das Dokument ab.","我去領那份文件。"]},
+{de:"ausruhen",zh:"休息（反身動詞，可分離）",g:null,cat:"動詞",lesson:"L13",ex:["Im Café ruhe ich mich aus.","我在咖啡館休息一下。"],pex:["Ich habe mich kurz ausgeruht.","我休息了一下。"]},
+{de:"aufnehmen",zh:"辦理（貸款）；錄製；接納（可分離）",g:null,cat:"動詞",lesson:"L13",ex:["Er nimmt einen Kredit auf.","他辦了一筆貸款。"],pex:["Sie hat einen Kredit aufgenommen.","她辦了一筆貸款。"]},
+];
+const ADD15T=[
+/* ── L15 老師補充 ── */
+{de:"philippinisch",zh:"菲律賓的",g:null,cat:"形容詞",lesson:"L15",ex:["Mir fehlt ein philippinisches Restaurant.","這裡缺一家菲律賓餐廳。"]},
+];
+const ADD17S=[
+/* ── L17 老師補充 ── */
+{de:"Veranstaltung",zh:"活動、公開節目",g:"die",cat:"活動",lesson:"L17",ex:["Die Veranstaltung beginnt um acht.","活動八點開始。"]},
+{de:"spannend",zh:"精彩的、引人入勝的（反：langweilig）",g:null,cat:"形容詞",lesson:"L17",ex:["Der Film ist sehr spannend.","這部電影很精彩。"]},
+{de:"Theateraufführung",zh:"劇場演出",g:"die",cat:"活動",lesson:"L17",ex:["Die Theateraufführung dauert zwei Stunden.","這場演出兩個小時。"]},
+{de:"Zukunft",zh:"未來、將來",g:"die",cat:"人生",lesson:"L17",ex:["Was willst du in der Zukunft machen?","你將來想做什麼？"]},
+{de:"Berufsausbildung",zh:"職業訓練、職訓",g:"die",cat:"人生",lesson:"L17",ex:["Meine Berufsausbildung dauert drei Jahre.","我的職訓要三年。"]},
+{de:"Schule",zh:"學校",g:"die",cat:"人生",lesson:"L17",ex:["Ich melde mich an einer Schule an.","我要去學校報名。"]},
+{de:"zählen",zh:"數；算數、有份量",g:null,cat:"動詞",lesson:"L17",ex:["Das Kind zählt bis zwanzig.","這孩子數到二十。"],pex:["Ich habe die Karten gezählt.","我數過那些卡了。"]},
+];
 /* ===ANCHOR:VOCAB_ARRAYS===（新課單字陣列 const ADDn=[...] 宣告在這行上方，並把陣列名加進下面 VOCAB 合併行）*/
-const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B,...ADD18,...ADDP2V,...ADD10S,...ADDCLO,...ADDCLOADJ,...ADD19];
+const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B,...ADD18,...ADDP2V,...ADD10S,...ADDCLO,...ADDCLOADJ,...ADD19,...ADD16S,...ADD18S,...ADD13S,...ADD15T,...ADD17S];
 VOCAB.forEach((v,i)=>v.id="v"+i);
 
 
@@ -1929,6 +2063,28 @@ const NOUN_PL={
   "Eingang":"Eingänge",
   "Besuch":"Besuche",
   "Charakter":"Charaktere",
+  /* L16 老師補充 */
+  "Überraschung":"Überraschungen","Lieblingspark":"Lieblingsparks","Biergarten":"Biergärten",
+  "Flüchtling":"Flüchtlinge","Künstler":"Künstler","Hundebesitzer":"Hundebesitzer",
+  "Senior":"Senioren","Pensionär":"Pensionäre","Obdachlose":"Obdachlose",
+  "Stau":"Staus","Fahrradweg":"Fahrradwege","Notfallknopf":"Notfallknöpfe",
+  "Feuerwehr":"Feuerwehren","Reservierung":"Reservierungen","Frühstücksraum":"Frühstücksräume",
+  "Minibar":"Minibars","Doppelzimmer":"Doppelzimmer","Einzelzimmer":"Einzelzimmer",
+  "Pool":"Pools","Bademeister":"Bademeister","Wagenmeister":"Wagenmeister",
+  "Safe":"Safes","Tresor":"Tresore","Kleiderschrank":"Kleiderschränke",
+  "Hotelbar":"Hotelbars","Fernbedienung":"Fernbedienungen",
+  /* L18 老師補充 */
+  "Karriere":"Karrieren","Ellbogen":"Ellbogen","Gesicht":"Gesichter","Lippe":"Lippen",
+  "Hüfte":"Hüften","Taille":"Taillen","Wange":"Wangen","Schulter":"Schultern",
+  "Kinn":"Kinne","Stirn":"Stirnen","Nacken":"Nacken","Nagel":"Nägel",
+  "Rat":"Ratschläge","Ratschlag":"Ratschläge","Granatapfel":"Granatäpfel",
+  "Schnaps":"Schnäpse","Kräuterschnaps":"Kräuterschnäpse",
+  /* L13／L17 老師補充 */
+  "Wegbeschreibung":"Wegbeschreibungen","Kredit":"Kredite","Karte":"Karten",
+  "Tatort":"Tatorte","Tour":"Touren","Fahrschein":"Fahrscheine",
+  "Unfall":"Unfälle","Dokument":"Dokumente",
+  "Veranstaltung":"Veranstaltungen","Theateraufführung":"Theateraufführungen",
+  "Berufsausbildung":"Berufsausbildungen","Schule":"Schulen",
   /* ===ANCHOR:NOUN_PL===（新名詞複數 "單數":"複數", 插在這行上方）*/
 };
 const NOUN_PL_NOTE={
@@ -2074,6 +2230,31 @@ const NOUN_PL_NOTE={
   "Bart":"複數 die Bärte：a→ä 變音 → Forvo。",
   "Eingang":"複數 die Eingänge：a→ä 變音 → Forvo。",
   "Bürokaufmann":"複數 die Bürokaufleute：-mann→-leute 不規則複合詞（同 Kaufmann／Fachmann），非字尾變化 → Forvo。",
+  /* L16 老師補充 */
+  "Biergarten":"複數 die Biergärten：a→ä 變音 → Forvo。",
+  "Künstler":"複數同形 die Künstler（-er 結尾陽性多同形），只能靠冠詞／數詞判斷。",
+  "Hundebesitzer":"複數同形 die Hundebesitzer，看冠詞判斷。",
+  "Senior":"複數 die Senioren（-en，重音也前移），不是 Seniore。",
+  "Obdachlose":"形容詞變格名詞：der Obdachlose／ein Obdachloser／複數 die Obdachlosen（無冠詞時 Obdachlose）。",
+  "Notfallknopf":"複數 die Notfallknöpfe：o→ö 變音 → Forvo。",
+  "Frühstücksraum":"複數 die Frühstücksräume：au→äu 變音 → Forvo。",
+  "Doppelzimmer":"複數同形 die Doppelzimmer，只能靠冠詞／數詞判斷。",
+  "Einzelzimmer":"複數同形 die Einzelzimmer，只能靠冠詞／數詞判斷。",
+  "Bademeister":"複數同形 die Bademeister。",
+  "Wagenmeister":"複數同形 die Wagenmeister。",
+  "Kleiderschrank":"複數 die Kleiderschränke：a→ä 變音 → Forvo。",
+  /* L18 老師補充 */
+  "Ellbogen":"複數同形 die Ellbogen，只能靠冠詞／數詞判斷。",
+  "Schulter":"複數 die Schultern（-n，不是 Schultere）。",
+  "Nacken":"複數同形 die Nacken。",
+  "Nagel":"複數 die Nägel：a→ä 變音 → Forvo。",
+  "Rat":"⚠️ 複數不是 Rate，而是借用 die Ratschläge（不規則、要背）。",
+  "Granatapfel":"複數 die Granatäpfel：a→ä 變音 → Forvo。",
+  "Schnaps":"複數 die Schnäpse：a→ä 變音 → Forvo。",
+  "Kräuterschnaps":"複數 die Kräuterschnäpse：a→ä 變音 → Forvo。",
+  /* L13／L17 老師補充 */
+  "Unfall":"複數 die Unfälle：a→ä 變音 → Forvo。",
+  "Tour":"複數 die Touren（-en，不是 Tours）。",
   /* ===ANCHOR:NOUN_PL_NOTE===（變音／同形／不規則等複數警語插在這行上方）*/
 };
 const NOUN_PLEX={
@@ -2520,6 +2701,64 @@ const NOUN_PLEX={
   "Eingang":["Das Haus hat zwei Eingänge.","這棟房子有兩個入口。"],
   "Besuch":["Am Wochenende hatten wir viele Besuche.","週末我們有很多訪客。"],
   "Charakter":["Meine Freunde haben ganz verschiedene Charaktere.","我的朋友們性格各不相同。"],
+  /* L16 老師補充 */
+  "Überraschung":["Der Abend hatte zwei Überraschungen.","那個晚上有兩個驚喜。"],
+  "Lieblingspark":["In Berlin habe ich zwei Lieblingsparks.","在柏林我有兩個最愛的公園。"],
+  "Biergarten":["In München gibt es viele Biergärten.","慕尼黑有很多啤酒花園。"],
+  "Flüchtling":["Im Viertel leben viele Flüchtlinge.","這一區住了很多難民。"],
+  "Künstler":["Hier arbeiten drei Künstler.","這裡有三位藝術家在工作。"],
+  "Hundebesitzer":["Die Hundebesitzer treffen sich am Morgen.","狗主人們早上會碰面。"],
+  "Senior":["Im Park sind viele Senioren.","公園裡有很多長者。"],
+  "Pensionär":["Zwei Pensionäre trinken Kaffee.","兩位退休的人在喝咖啡。"],
+  "Obdachlose":["Vor dem Bahnhof sitzen zwei Obdachlose.","車站前坐著兩位無家者。"],
+  "Stau":["Auf der Autobahn gibt es oft Staus.","高速公路上常常塞車。"],
+  "Fahrradweg":["Im Viertel gibt es keine Fahrradwege.","這一區沒有自行車道。"],
+  "Notfallknopf":["Im Aufzug sind zwei Notfallknöpfe.","電梯裡有兩個緊急按鈕。"],
+  "Feuerwehr":["Zwei Feuerwehren sind im Einsatz.","兩支消防隊出動了。"],
+  "Reservierung":["Wir haben zwei Reservierungen.","我們有兩筆預訂。"],
+  "Frühstücksraum":["Das Hotel hat zwei Frühstücksräume.","這家旅館有兩間早餐室。"],
+  "Minibar":["In allen Zimmern sind Minibars.","所有房間裡都有迷你吧。"],
+  "Doppelzimmer":["Das Hotel hat zwanzig Doppelzimmer.","這家旅館有二十間雙人房。"],
+  "Einzelzimmer":["Nur zwei Einzelzimmer sind frei.","只有兩間單人房空著。"],
+  "Pool":["Das Hotel hat zwei Pools.","這家旅館有兩座泳池。"],
+  "Bademeister":["Am Pool arbeiten zwei Bademeister.","泳池邊有兩位救生員在工作。"],
+  "Wagenmeister":["Die Wagenmeister sind schon da.","車務管理員們已經到了。"],
+  "Safe":["In den Zimmern sind Safes.","房間裡有保險箱。"],
+  "Tresor":["Im Hotel gibt es zwei Tresore.","旅館裡有兩個保險櫃。"],
+  "Kleiderschrank":["Im Zimmer sind zwei Kleiderschränke.","房間裡有兩個衣櫃。"],
+  "Hotelbar":["Das Hotel hat zwei Hotelbars.","這家旅館有兩間酒吧。"],
+  "Fernbedienung":["Wir haben zwei Fernbedienungen.","我們有兩個遙控器。"],
+  /* L18 老師補充 */
+  "Karriere":["Die beiden Karrieren sind sehr verschieden.","這兩段職涯很不一樣。"],
+  "Ellbogen":["Beide Ellbogen tun mir weh.","我兩邊手肘都痛。"],
+  "Gesicht":["Ich sehe viele fremde Gesichter.","我看到很多陌生的臉。"],
+  "Lippe":["Meine Lippen sind trocken.","我的嘴唇很乾。"],
+  "Hüfte":["Meine Hüften tun beim Sport weh.","我運動時髖部會痛。"],
+  "Taille":["Die Taillen der Kleider sind zu eng.","這些衣服的腰身太緊。"],
+  "Wange":["Das Kind hat rote Wangen.","這孩子臉頰紅紅的。"],
+  "Schulter":["Meine Schultern sind steif.","我的肩膀很僵硬。"],
+  "Kinn":["Auf dem Bild sieht man zwei runde Kinne.","照片上看得到兩個圓下巴。"],
+  "Stirn":["Die Stirnen der Kinder sind heiß.","孩子們的額頭都很燙。"],
+  "Nacken":["Unsere Nacken tun nach der Arbeit weh.","我們工作後脖子後面都痛。"],
+  "Nagel":["Meine Nägel sind zu lang.","我的指甲太長了。"],
+  "Rat":["Danke für deine Ratschläge!","謝謝你的建議！"],
+  "Ratschlag":["Der Arzt gibt mir drei Ratschläge.","醫生給了我三個建議。"],
+  "Granatapfel":["Ich kaufe zwei Granatäpfel.","我買兩顆石榴。"],
+  "Schnaps":["Zwei Schnäpse sind genug.","兩杯烈酒就夠了。"],
+  "Kräuterschnaps":["Im Schrank stehen zwei Kräuterschnäpse.","櫃子裡放著兩瓶草藥酒。"],
+  /* L13／L17 老師補充 */
+  "Wegbeschreibung":["Die zwei Wegbeschreibungen sind verschieden.","這兩份路線指引不一樣。"],
+  "Kredit":["Die Bank gibt keine zwei Kredite.","銀行不會給兩筆貸款。"],
+  "Karte":["Ich habe zwei Karten bestellt.","我辦了兩張卡。"],
+  "Tatort":["Die Polizei hat zwei Tatorte.","警方有兩個案發現場。"],
+  "Tour":["Wir machen heute zwei Touren.","我們今天跑兩個行程。"],
+  "Fahrschein":["Ich kaufe zwei Fahrscheine.","我買兩張車票。"],
+  "Unfall":["Heute gab es zwei Unfälle.","今天發生了兩起事故。"],
+  "Dokument":["Ich hole drei Dokumente ab.","我去領三份文件。"],
+  "Veranstaltung":["Am Wochenende gibt es viele Veranstaltungen.","週末有很多活動。"],
+  "Theateraufführung":["Es gibt zwei Theateraufführungen am Tag.","一天有兩場演出。"],
+  "Berufsausbildung":["Die beiden Berufsausbildungen dauern drei Jahre.","這兩種職訓都要三年。"],
+  "Schule":["Im Viertel gibt es zwei Schulen.","這一區有兩所學校。"],
   /* ===ANCHOR:NOUN_PLEX===（複數例句 "單數":["德文","中文"], 插在這行上方）*/
 };
 const VERB_META={
@@ -2696,6 +2935,36 @@ const VERB_META={
   vergessen:{t:"vowel",du:"vergisst",er:"vergisst",p2:"vergessen",aux:"h"},
   entschuldigen:{t:"reg",p2:"entschuldigt",aux:"h"},
   erzählen:{t:"reg"},
+  /* L16 老師補充 */
+  bellen:{t:"reg",p2:"gebellt",aux:"h"},
+  streicheln:{t:"reg",p2:"gestreichelt",aux:"h"},
+  stinken:{t:"reg",p2:"gestunken",aux:"h"},
+  reagieren:{t:"reg",p2:"reagiert",aux:"h"},
+  reinkommen:{t:"irr",f:["komme … rein","kommst … rein","kommt … rein","kommen … rein","kommt … rein","kommen … rein"],p2:"reingekommen",aux:"s"},
+  einchecken:{t:"irr",f:["checke … ein","checkst … ein","checkt … ein","checken … ein","checkt … ein","checken … ein"],p2:"eingecheckt",aux:"h"},
+  auschecken:{t:"irr",f:["checke … aus","checkst … aus","checkt … aus","checken … aus","checkt … aus","checken … aus"],p2:"ausgecheckt",aux:"h"},
+  ausprobieren:{t:"irr",f:["probiere … aus","probierst … aus","probiert … aus","probieren … aus","probiert … aus","probieren … aus"],p2:"ausprobiert",aux:"h"},
+  /* L18 老師補充 */
+  verlieben:{t:"reg",p2:"verliebt",aux:"h"},
+  nicken:{t:"reg",p2:"genickt",aux:"h"},
+  riechen:{t:"reg",p2:"gerochen",aux:"h"},
+  atmen:{t:"stemt",du:"atmest",er:"atmet",p2:"geatmet",aux:"h"},
+  beißen:{t:"sib",du:"beißt",er:"beißt",p2:"gebissen",aux:"h"},
+  tragen:{t:"vowel",du:"trägst",er:"trägt",p2:"getragen",aux:"h"},
+  tippen:{t:"reg",p2:"getippt",aux:"h"},
+  zeigen:{t:"reg",p2:"gezeigt",aux:"h"},
+  berühren:{t:"reg",p2:"berührt",aux:"h"},
+  rennen:{t:"reg",p2:"gerannt",aux:"s"},
+  füttern:{t:"reg",p2:"gefüttert",aux:"h"},
+  verdauen:{t:"reg",p2:"verdaut",aux:"h"},
+  schließen:{t:"sib",du:"schließt",er:"schließt",p2:"geschlossen",aux:"h"},
+  spazieren:{t:"reg",p2:"spaziert",aux:"s"},
+  heilen:{t:"reg",p2:"geheilt",aux:"h"},
+  erscheinen:{t:"reg",p2:"erschienen",aux:"s"},
+  /* L13／L17 老師補充 */
+  ausruhen:{t:"irr",f:["ruhe … aus","ruhst … aus","ruht … aus","ruhen … aus","ruht … aus","ruhen … aus"],p2:"ausgeruht",aux:"h"},
+  aufnehmen:{t:"irr",f:["nehme … auf","nimmst … auf","nimmt … auf","nehmen … auf","nehmt … auf","nehmen … auf"],p2:"aufgenommen",aux:"h"},
+  zählen:{t:"reg",p2:"gezählt",aux:"h"},
   /* ===ANCHOR:VERB_META===（新動詞變位 動詞:{t:"reg"|"stemt"|"vowel"|"irr",...}, 插在這行上方）*/
 };
 /* 可分離動詞 Partizip 組字（2026-07-31）：Partizip = 字首 + 母動詞 Partizip，
@@ -3446,6 +3715,91 @@ const SENTENCES=[
   {de:"Hattest du früher auch blonde Haare?",zh:"你以前也是金髮嗎？（haben 的 Präteritum du 形）",lesson:"L19"},
   {de:"Wo wart ihr gestern Abend?",zh:"你們昨天晚上在哪？（sein 的 Präteritum ihr 形 wart）",lesson:"L19"},
   {de:"Ich bin in Paris geboren.",zh:"我在巴黎出生（geboren sein 用 sein，不是 haben）",lesson:"L19"},
+  {de:"Was ist los?",zh:"怎麼了？出什麼事了？",lesson:"L16"},
+  {de:"Ich gehe mit dem Hund Gassi.",zh:"我帶狗去遛。",lesson:"L16"},
+  {de:"Hilfst du mir?",zh:"你幫我一下好嗎？",lesson:"L16"},
+  {de:"Ja, der Stift gehört mir.",zh:"對，這支筆是我的。",lesson:"L16"},
+  {de:"Ja, Berlin gefällt mir.",zh:"對，我喜歡柏林。",lesson:"L16"},
+  {de:"Gestern hat es im Treppenhaus gestunken.",zh:"昨天樓梯間很臭。",lesson:"L16"},
+  {de:"Der Aufzug funktioniert nicht.",zh:"電梯壞了。",lesson:"L16"},
+  {de:"Sie sind genervt.",zh:"他們很煩躁。",lesson:"L16"},
+  {de:"Wir warten auf die Feuerwehr.",zh:"我們在等消防隊。",lesson:"L16"},
+  {de:"Haben Sie die Fernbedienung ausprobiert?",zh:"您試過遙控器了嗎？",lesson:"L16"},
+  {de:"Ich kümmere mich um das Problem.",zh:"這個問題我來處理。",lesson:"L16"},
+  {de:"Ich sage Ihnen Bescheid.",zh:"我會通知您。",lesson:"L16"},
+  {de:"Ich habe immer mehr Angst.",zh:"我越來越害怕。",lesson:"L16"},
+  {de:"Es ist langweilig.",zh:"很無聊。",lesson:"L16"},
+  {de:"Ich möchte ein Doppelzimmer reservieren.",zh:"我想訂一間雙人房。",lesson:"L16"},
+  {de:"Wann kann ich einchecken?",zh:"我什麼時候可以辦入住？",lesson:"L16"},
+  {de:"Mit dem Kopf kann man denken und nicken.",zh:"頭可以用來思考和點頭。",lesson:"L18"},
+  {de:"Mit den Augen kann man sehen und lesen.",zh:"眼睛可以用來看和閱讀。",lesson:"L18"},
+  {de:"Mit der Nase kann man riechen und atmen.",zh:"鼻子可以用來聞和呼吸。",lesson:"L18"},
+  {de:"Mit dem Mund kann man sprechen, essen und singen.",zh:"嘴巴可以用來說話、吃東西和唱歌。",lesson:"L18"},
+  {de:"Mit den Zähnen kann man essen und beißen.",zh:"牙齒可以用來吃東西和咬。",lesson:"L18"},
+  {de:"Mit den Armen kann man schwimmen und tragen.",zh:"手臂可以用來游泳和搬東西。",lesson:"L18"},
+  {de:"Mit den Händen kann man schreiben und malen.",zh:"手可以用來寫字和畫畫。",lesson:"L18"},
+  {de:"Mit den Fingern kann man tippen und auf etwas zeigen.",zh:"手指可以用來打字和指東西。",lesson:"L18"},
+  {de:"Mit den Beinen kann man laufen und rennen.",zh:"腿可以用來走路和奔跑。",lesson:"L18"},
+  {de:"Mit den Knien kann man sitzen und Treppen steigen.",zh:"膝蓋可以用來坐下和爬樓梯。",lesson:"L18"},
+  {de:"Mit den Füßen kann man gehen und tanzen.",zh:"腳可以用來走路和跳舞。",lesson:"L18"},
+  {de:"Mit den Ohren kann man hören und zuhören.",zh:"耳朵可以用來聽見和傾聽。",lesson:"L18"},
+  {de:"Mit dem Hals kann man atmen und husten.",zh:"喉嚨可以用來呼吸和咳嗽。",lesson:"L18"},
+  {de:"Mit der Brust kann man atmen.",zh:"胸腔可以用來呼吸。",lesson:"L18"},
+  {de:"Mit dem Bauch kann man das Essen verdauen.",zh:"肚子可以用來消化食物。",lesson:"L18"},
+  {de:"Mit dem Rücken kann man tragen.",zh:"背可以用來揹東西。",lesson:"L18"},
+  {de:"Ich habe mich verliebt.",zh:"我戀愛了。",lesson:"L18"},
+  {de:"Ich möchte Karriere machen.",zh:"我想在事業上有所發展。",lesson:"L18"},
+  {de:"Ich will etwas dafür tun.",zh:"我想為此做點什麼。",lesson:"L18"},
+  {de:"Ich mache das für andere.",zh:"我是為了別人做這件事。",lesson:"L18"},
+  {de:"Ich gehe nie ohne mein Handy aus dem Haus.",zh:"我從不會沒帶手機就出門。",lesson:"L18"},
+  {de:"Ich fahre immer mit meiner Brille in den Urlaub.",zh:"我度假一定會帶眼鏡。",lesson:"L18"},
+  {de:"Mein Rücken tut nicht mehr weh.",zh:"我的背不痛了。",lesson:"L18"},
+  {de:"Mein Rücken tut immer noch weh.",zh:"我的背還是在痛。",lesson:"L18"},
+  {de:"Gehen Sie viel spazieren!",zh:"請多散散步！",lesson:"L18"},
+  {de:"Trink viel Wasser!",zh:"多喝水！",lesson:"L18"},
+  {de:"Tee mit Honig und Zitrone hilft gegen Husten.",zh:"加蜂蜜和檸檬的茶對咳嗽有幫助。",lesson:"L18"},
+  {de:"Schließen Sie bitte die Augen!",zh:"請閉上眼睛！",lesson:"L18"},
+  {de:"Ich habe das gewusst.",zh:"這件事我早就知道了。",lesson:"L18"},
+  {de:"Das ist die Hauptsache.",zh:"這才是重點。",lesson:"L18"},
+  {de:"Wie spät ist es?",zh:"現在幾點？",lesson:"L13"},
+  {de:"Ich hole Geld von der Bank.",zh:"我去銀行領錢。",lesson:"L13"},
+  {de:"Bei der Bank kann man Fragen stellen.",zh:"在銀行可以提問。",lesson:"L13"},
+  {de:"Ich möchte einen Kredit aufnehmen.",zh:"我想辦一筆貸款。",lesson:"L13"},
+  {de:"Ich bestelle eine Karte.",zh:"我要辦一張卡。",lesson:"L13"},
+  {de:"Ich zahle Geld ein.",zh:"我要存錢。",lesson:"L13"},
+  {de:"Ich melde einen Unfall.",zh:"我要報一起事故。",lesson:"L13"},
+  {de:"Ich kaufe einen Fahrschein.",zh:"我買一張車票。",lesson:"L13"},
+  {de:"Bei der Polizei bekommt man Hilfe.",zh:"在警局可以得到協助。",lesson:"L13"},
+  {de:"Ich hole die Dokumente ab.",zh:"我去領那些文件。",lesson:"L13"},
+  {de:"Die Polizei überprüft die Dokumente.",zh:"警方查驗那些文件。",lesson:"L13"},
+  {de:"Im Dom kann man beten und heiraten.",zh:"在大教堂可以禱告和結婚。",lesson:"L13"},
+  {de:"Im Café ruhe ich mich aus.",zh:"我在咖啡館休息一下。",lesson:"L13"},
+  {de:"Es gefällt mir.",zh:"我喜歡（這個）。",lesson:"L15"},
+  {de:"Es gefällt mir nicht.",zh:"我不喜歡（這個）。",lesson:"L15"},
+  {de:"Wir kommen da hin.",zh:"我們到得了那裡。",lesson:"L15"},
+  {de:"Was fehlt?",zh:"缺什麼？",lesson:"L15"},
+  {de:"Mir fehlt ein Einkaufszentrum.",zh:"這裡少了一間購物中心。",lesson:"L15"},
+  {de:"Ich mag den Müll nicht.",zh:"我不喜歡這些垃圾。",lesson:"L15"},
+  {de:"Manchmal gibt es zu viele junge Menschen.",zh:"有時候年輕人太多了。",lesson:"L15"},
+  {de:"Mir fehlt ein philippinisches Restaurant.",zh:"這裡缺一家菲律賓餐廳。",lesson:"L15"},
+  {de:"Es fehlen mir die Berge.",zh:"我想念（這裡沒有的）山。",lesson:"L15"},
+  {de:"Ich gehe zu Fuß.",zh:"我走路去。",lesson:"L15"},
+  {de:"Das ist ganz normal.",zh:"這很正常。",lesson:"L15"},
+  {de:"Die alten Häuser gefallen mir.",zh:"我喜歡那些老房子。",lesson:"L15"},
+  {de:"Hast du dich an einer Schule angemeldet?",zh:"你在學校報名了嗎？",lesson:"L17"},
+  {de:"Ja, habe ich.",zh:"對，我有。（Perfekt 的簡答）",lesson:"L17"},
+  {de:"Nein, habe ich nicht.",zh:"沒有，我沒有。（Perfekt 的簡答）",lesson:"L17"},
+  {de:"Nein, noch nie.",zh:"沒有，從來沒有過。",lesson:"L17"},
+  {de:"Sie bringt mir Glück.",zh:"她為我帶來好運。",lesson:"L17"},
+  {de:"Viel Glück!",zh:"祝你好運！",lesson:"L17"},
+  {de:"Ja, das will ich noch machen.",zh:"對，這個我還想做。",lesson:"L17"},
+  {de:"Nein, den will ich nicht mehr machen.",zh:"不，這個我不想再做了。",lesson:"L17"},
+  {de:"Die Veranstaltung ist sehr spannend.",zh:"這場活動很精彩。",lesson:"L17"},
+  {de:"Ich habe einen Termin für eine Aufnahmeprüfung.",zh:"我有一個入學考試的預約時間。",lesson:"L17"},
+  {de:"Die Theateraufführung läuft vom 24.10. bis zum 05.11.",zh:"這齣戲從 10/24 演到 11/5。",lesson:"L17"},
+  {de:"Sie läuft vom vierundzwanzigsten Oktober bis zum fünften November.",zh:"從十月二十四日演到十一月五日。（同一句的完整唸法）",lesson:"L17"},
+  {de:"Am neunundzwanzigsten Dezember habe ich einen Termin.",zh:"我十二月二十九日有個約。",lesson:"L17"},
+  {de:"Ich bin am vierten Juli neunzehnhundertsiebenundneunzig geboren.",zh:"我出生於 1997 年 7 月 4 日。",lesson:"L17"},
   /* ===ANCHOR:SENTENCES===（新例句／Redemittel {de,zh,lesson} 插在這行上方）*/
 ];
 
@@ -5391,6 +5745,21 @@ const GR19=[
  {l:"L19",sub:"⭐ haben：ihr → ?",before:"Ihr ",after:" früher sicher Kontakt zu ihm, oder?",answer:"hattet",options:["hattet","habt","hatte","hattest"],full:"Ihr hattet früher sicher Kontakt zu ihm, oder?"},
 ];
 GR19.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+const GR18S=[
+ {l:"L18",sub:"⭐ tragen：du → ?（母音變化）",before:"Du ",after:" den Koffer.",answer:"trägst",options:["trägst","tragst","trägt","tragt"],full:"Du trägst den Koffer."},
+ {l:"L18",sub:"⭐ tragen：er → ?（母音變化）",before:"Er ",after:" den Koffer.",answer:"trägt",options:["trägt","tragt","trägst","tragen"],full:"Er trägt den Koffer."},
+ {l:"L18",sub:"⭐ schließen：du → ?（字尾 -ß 只加 -t）",before:"Du ",after:" das Fenster.",answer:"schließt",options:["schließt","schließst","schließen","schließe"],full:"Du schließt das Fenster."},
+ {l:"L18",sub:"⭐ atmen：du → ?（字幹要墊 e）",before:"Du ",after:" zu schnell.",answer:"atmest",options:["atmest","atmst","atmet","atme"],full:"Du atmest zu schnell."},
+];
+GR18S.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+const GRSUP=[
+ {l:"L13",sub:"⭐ aufnehmen：du → ?（可分離＋母音變化）",before:"Du ",after:" einen Kredit auf.",answer:"nimmst",options:["nimmst","nehmst","nimmt","nehmt"],full:"Du nimmst einen Kredit auf."},
+ {l:"L13",sub:"⭐ aufnehmen：er → ?（可分離＋母音變化）",before:"Er ",after:" einen Kredit auf.",answer:"nimmt",options:["nimmt","nehmt","nimmst","nehmen"],full:"Er nimmt einen Kredit auf."},
+ {l:"L17",sub:"⭐ 序數日期·區間：起點用哪個介係詞",before:"Die Aufführung läuft ",after:" vierundzwanzigsten Oktober bis zum fünften November.",answer:"vom",options:["vom","am","zum","im"],full:"Die Aufführung läuft vom vierundzwanzigsten Oktober bis zum fünften November."},
+ {l:"L17",sub:"⭐ 序數日期·區間：終點的介係詞＋冠詞",before:"Sie läuft vom ersten Mai ",after:" zehnten Mai.",answer:"bis zum",options:["bis zum","bis am","bis im","bis den"],full:"Sie läuft vom ersten Mai bis zum zehnten Mai."},
+ {l:"L17",sub:"⭐ 年份唸法：1997 怎麼唸",before:"Ich bin ",after:" geboren.",answer:"neunzehnhundertsiebenundneunzig",options:["neunzehnhundertsiebenundneunzig","eintausendneunhundertsiebenundneunzig","neunzehnsiebenundneunzig","neunzehnhundertneunundsiebzig"],full:"Ich bin neunzehnhundertsiebenundneunzig geboren."},
+];
+GRSUP.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
   /* ===ANCHOR:GRAM_QUIZ===（新課文法填空題插在這行上方：宣告 const GRn=[{l,sub,before,after,answer,options,full},…]; 後接一行 GRn.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full})); ）*/
   return Q;
 }
