@@ -197,8 +197,8 @@
 <body>
 <div class="wrap">
   <header style="position:relative">
-    <div class="eyebrow">Menschen · A1 · Lektion 1–19</div>
-    <h1>Deutsch A1 — L1–L19</h1>
+    <div class="eyebrow">Menschen · A1 · Lektion 1–20</div>
+    <h1>Deutsch A1 — L1–L20</h1>
     <details class="helpbox" id="outline" style="margin-top:10px;text-align:left"><summary>📚 每課大綱（點開看）</summary><div class="panel-intro" style="margin:8px 0 2px;line-height:1.9">
       L1 打招呼·自我介紹（heißen/kommen aus/wohnen in）·sein·W 問句·拼讀·數字 0–100<br>
       L2 個人資料·職業·規則動詞變位全表·ihr（你們）<br>
@@ -219,6 +219,7 @@
       L17 願望與計畫·wollen完整變位·werden登場·mit/ohne對比<br>
 L18 生病看醫生·Imperativ(Sie)命令句·sollen間接建議·seit+時長·疼痛表達tut/tun weh<br>
 L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Perfekt·un-前綴構詞<br>
+      L20 家務與同居生活·Imperativ(du/ihr)登場·Personalpronomen im Akkusativ全面實戰<br>
       <!-- ===ANCHOR:OUTLINE===（新課大綱一行插在這行上方，格式照上）-->
     </div></details>
   </header>
@@ -244,6 +245,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
     <button class="lchip" data-lesson="L17" data-on="false">L17</button>
     <button class="lchip" data-lesson="L18" data-on="false">L18</button>
     <button class="lchip" data-lesson="L19" data-on="false">L19</button>
+    <button class="lchip" data-lesson="L20" data-on="false">L20</button>
     <!-- ===ANCHOR:LESSON_CHIPS===（A1.2 新課按鈕插在這行上方、span#bookA11 之外）-->
     <button class="lchip" data-lesson="ALL" data-on="false">全選 · 模組複習</button>
     <span style="flex-basis:100%;font-size:.72rem;color:var(--mut)">單點換課 · 長按半秒加選複數課 · 📕 收合/展開整冊</span>
@@ -529,7 +531,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
 const SPK_SVG='<svg viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>';
 
 /* ===== 範圍（課別·可多選）===== */
-const DEFAULT_LESSON="L19"; /* ===ANCHOR:DEFAULT_LESSON===（新課上線時改成最新課號；chip 的 data-on 由 syncLessonChips 執行期同步，新 chip 一律 data-on="false"）*/
+const DEFAULT_LESSON="L20"; /* ===ANCHOR:DEFAULT_LESSON===（新課上線時改成最新課號；chip 的 data-on 由 syncLessonChips 執行期同步，新 chip 一律 data-on="false"）*/
 let curLessons=new Set([DEFAULT_LESSON]);
 /* L123 是 L1/L2/L3 的合併篩選鈕，資料本身仍各自標 L1/L2/L3，故用此函式統一判斷範圍是否命中 */
 function inLessonScope(l){
@@ -1850,8 +1852,65 @@ const ADD17S=[
 {de:"Schule",zh:"學校",g:"die",cat:"人生",lesson:"L17",ex:["Ich melde mich an einer Schule an.","我要去學校報名。"]},
 {de:"zählen",zh:"數；算數、有份量",g:null,cat:"動詞",lesson:"L17",ex:["Das Kind zählt bis zwanzig.","這孩子數到二十。"],pex:["Ich habe die Karten gezählt.","我數過那些卡了。"]},
 ];
+const ADD20=[
+/* ── L20 名詞（22 張新卡；Ordnung/Müll/Gepäck 既有卡不重建，見 smoke.py NO_PL_EXEMPT；Wort 既有卡不重建，L5 已建） ── */
+{de:"Abfall",zh:"垃圾、廢棄物",g:"der",cat:"家務",lesson:"L20",ex:["Bringst du bitte den Abfall raus?","你可以把垃圾拿出去嗎？"]},
+{de:"Boden",zh:"地板",g:"der",cat:"家務",lesson:"L20",ex:["Wisch bitte den Boden!","請拖地！"]},
+{de:"Geschirr",zh:"餐具（碗盤刀叉的總稱）",g:"das",cat:"家務",lesson:"L20",ex:["Spül bitte das Geschirr!","請洗碗！"]},
+{de:"Haushalt",zh:"家務；家庭",g:"der",cat:"家務",lesson:"L20",ex:["Was machst du gern im Haushalt?","你喜歡做哪些家務？"]},
+{de:"Unordnung",zh:"凌亂、不整齊",g:"die",cat:"家務",lesson:"L20",ex:["Ich hasse Unordnung.","我討厭凌亂。"]},
+{de:"Spülmaschine",zh:"洗碗機",g:"die",cat:"家務",lesson:"L20",ex:["Räum bitte die Spülmaschine aus!","請把洗碗機清空！"]},
+{de:"Wäsche",zh:"待洗／洗好的衣物",g:"die",cat:"家務",lesson:"L20",ex:["Die Wäsche ist fertig.","衣服洗好了。"]},
+{de:"Anruf",zh:"來電",g:"der",cat:"通訊",lesson:"L20",ex:["Auf dem Anrufbeantworter war ein Anruf von Peter.","答錄機上有 Peter 的來電。"]},
+{de:"Anrufbeantworter",zh:"電話答錄機",g:"der",cat:"通訊",lesson:"L20",ex:["Sprich bitte auf den Anrufbeantworter!","請在答錄機上留言！"]},
+{de:"Brief",zh:"信",g:"der",cat:"通訊",lesson:"L20",ex:["Line schreibt einen Brief.","Line 在寫一封信。"]},
+{de:"Größe",zh:"大小、尺寸",g:"die",cat:"居住",lesson:"L20",ex:["Die Zimmergröße ist 20 m².","房間大小是 20 平方公尺。"]},
+{de:"Mülleimer",zh:"垃圾桶",g:"der",cat:"家務",lesson:"L20",ex:["Der Mülleimer ist voll.","垃圾桶滿了。"]},
+{de:"Waschmaschine",zh:"洗衣機",g:"die",cat:"家務",lesson:"L20",ex:["Frau Richter räumt die Waschmaschine aus.","Richter 太太在把洗衣機清空。"]},
+{de:"Mitbewohner",zh:"室友（男）",g:"der",cat:"居住",lesson:"L20",ex:["Wir suchen noch zwei Mitbewohner.","我們還在找兩位室友。"]},
+{de:"Mitbewohnerin",zh:"室友（女）",g:"die",cat:"居住",lesson:"L20",ex:["Dann bist du vielleicht unsere perfekte Mitbewohnerin!","那你也許就是我們完美的室友！"]},
+{de:"Wohngemeinschaft",zh:"合租公寓（WG）",g:"die",cat:"居住",lesson:"L20",ex:["Ich suche ein Zimmer in einer Wohngemeinschaft.","我在找合租公寓裡的一個房間。"]},
+{de:"Dreck",zh:"髒污",g:"der",cat:"家務",lesson:"L20",ex:["Ich hasse Unordnung und Dreck.","我討厭髒亂。"]},
+{de:"Tagebuch",zh:"日記",g:"das",cat:"日常",lesson:"L20",ex:["Schreibst du Tagebuch?","你有寫日記嗎？"]},
+{de:"Architektur",zh:"建築學",g:"die",cat:"學科",lesson:"L20",ex:["Ich studiere Architektur.","我讀建築系。"]},
+{de:"Einkauf",zh:"採買、購物（名詞）",g:"der",cat:"家務",lesson:"L20",ex:["Vergiss bitte nicht den Einkauf für Frau Leitner.","請別忘了幫 Leitner 太太採買的東西。"]},
+{de:"Notiz",zh:"便條",g:"die",cat:"日常",lesson:"L20",ex:["Lesen Sie die Notiz.","請看這張便條。"]},
+/* ── L20 動詞（20 張新卡）；p2/aux 只在有課本 Perfekt 來源的 7 個字登記，其餘留白（記 P2_TODO）── */
+{de:"abtrocknen",zh:"擦乾（碗盤）",g:null,cat:"動詞",lesson:"L20",ex:["Ich trockne das Geschirr ab.","我把碗盤擦乾。"],pex:["Ich habe das Geschirr schon abgetrocknet.","我已經把碗盤擦乾了。"]},
+{de:"abwaschen",zh:"洗碗",g:null,cat:"動詞",lesson:"L20",ex:["Ich wasche das Geschirr ab.","我在洗碗。"],pex:["Hast du schon abgewaschen?","你洗過碗了嗎？"]},
+{de:"spülen",zh:"沖洗、洗（碗）",g:null,cat:"動詞",lesson:"L20",ex:["Spül bitte das Geschirr!","請洗碗！"],pex:["Ich habe das Geschirr gespült.","我洗過碗了。"]},
+{de:"waschen",zh:"洗（衣物）— 母音變：du wäschst",g:null,cat:"動詞",lesson:"L20",ex:["Ich wasche heute die Wäsche.","我今天洗衣服。"],pex:["Ich habe die Wäsche gewaschen.","我洗過衣服了。"]},
+{de:"hassen",zh:"討厭、恨",g:null,cat:"動詞",lesson:"L20",ex:["Ich hasse Unordnung und Dreck.","我討厭髒亂。"],pex:["Ich habe Unordnung immer gehasst.","我一直都討厭凌亂。"]},
+{de:"ausräumen",zh:"清空、把東西拿出來",g:null,cat:"動詞",lesson:"L20",ex:["Räum bitte die Spülmaschine aus!","請把洗碗機清空！"],pex:["Hast du die Spülmaschine schon ausgeräumt?","你把洗碗機清空了嗎？"]},
+{de:"runterbringen",zh:"拿下樓",g:null,cat:"動詞",lesson:"L20",ex:["Bringst du den Müll runter?","你要把垃圾拿下樓嗎？"],pex:["Hast du schon den Müll runtergebracht?","你把垃圾拿下樓了嗎？"]},
+{de:"rausbringen",zh:"拿出去（丟垃圾）",g:null,cat:"動詞",lesson:"L20",ex:["Bringt den Müll raus!","（你們）把垃圾拿出去！"],pex:["Ich habe den Müll rausgebracht.","我把垃圾拿出去了。"]},
+{de:"decken",zh:"鋪（桌）",g:null,cat:"動詞",lesson:"L20",ex:["Deckt den Tisch!","（你們）鋪桌子！"]},
+{de:"aufhängen",zh:"晾（衣物）",g:null,cat:"動詞",lesson:"L20",ex:["Häng bitte die Wäsche auf!","請把衣服晾起來！"],pex:["Ich habe die Wäsche aufgehängt.","我把衣服晾起來了。"]},
+{de:"bügeln",zh:"燙衣服",g:null,cat:"動詞",lesson:"L20",ex:["Ich bügle die Wäsche jeden Samstag.","我每週六燙衣服。"]},
+{de:"wischen",zh:"拖（地）",g:null,cat:"動詞",lesson:"L20",ex:["Wisch bitte den Boden!","請拖地！"]},
+{de:"staubsaugen",zh:"吸地板",g:null,cat:"動詞",lesson:"L20",ex:["Ich staubsauge das Wohnzimmer.","我在客廳吸地板。"]},
+{de:"runterkommen",zh:"下樓來",g:null,cat:"動詞",lesson:"L20",ex:["Komm bitte runter!","請下來！"],pex:["Ich bin runtergekommen.","我下樓了。"]},
+{de:"zurückrufen",zh:"回電",g:null,cat:"動詞",lesson:"L20",ex:["Ruf ihn doch bitte zurück.","請回電給他。"],pex:["Ich habe dich zurückgerufen.","我回電給你了。"]},
+{de:"vermissen",zh:"想念",g:null,cat:"動詞",lesson:"L20",ex:["Ich vermisse meine Familie.","我想念我的家人。"]},
+{de:"nerven",zh:"惹人煩",g:null,cat:"動詞",lesson:"L20",ex:["Das nervt mich total.","這讓我超級煩。"]},
+{de:"tauschen",zh:"交換",g:null,cat:"動詞",lesson:"L20",ex:["Kannst du mit mir tauschen?","你可以跟我換嗎？"]},
+{de:"grüßen",zh:"問候、打招呼",g:null,cat:"動詞",lesson:"L20",ex:["Grüß die Kinder ganz lieb!","替我好好問候孩子們！"]},
+{de:"freuen",zh:"高興、期待（反身動詞，搭 auf＋Akk）",g:null,cat:"動詞",lesson:"L20",ex:["Ich freue mich schon auf deine Antwort.","我很期待你的回覆。"]},
+/* ── L20 形容詞／副詞（11 張新卡） ── */
+{de:"ordentlich",zh:"整齊的、有條理的",g:null,cat:"形容詞",lesson:"L20",ex:["Ich bin sehr ordentlich.","我很整齊。"]},
+{de:"schmutzig",zh:"髒的",g:null,cat:"形容詞",lesson:"L20",ex:["Das Bad war sehr schmutzig.","浴室之前很髒。"]},
+{de:"gründlich",zh:"徹底地",g:null,cat:"副詞",lesson:"L20",ex:["Ich putze oft und gründlich.","我常打掃而且很徹底。"]},
+{de:"freiwillig",zh:"自願地",g:null,cat:"副詞",lesson:"L20",ex:["Putzt du auch freiwillig mal Bad und Küche?","你也會自願打掃浴室和廚房嗎？"]},
+{de:"wahnsinnig",zh:"非常（口語強調）",g:null,cat:"副詞",lesson:"L20",ex:["Ich koche wahnsinnig gern.","我超愛做飯。"]},
+{de:"peinlich",zh:"尷尬的",g:null,cat:"形容詞",lesson:"L20",ex:["Das war so peinlich!","那真是太尷尬了！"]},
+{de:"faul",zh:"懶惰的",g:null,cat:"形容詞",lesson:"L20",ex:["Seid nicht so faul!","（你們）別那麼懶！"]},
+{de:"gegenseitig",zh:"互相地",g:null,cat:"副詞",lesson:"L20",ex:["Korrigieren Sie gegenseitig Ihre Sätze.","請互相修改你們的句子。"]},
+{de:"still",zh:"安靜的",g:null,cat:"形容詞",lesson:"L20",ex:["Sei still!","安靜！"]},
+{de:"inklusive",zh:"含、包含在內（縮寫 inkl.）",g:null,cat:"副詞",lesson:"L20",ex:["Miete: 250,00 Euro (inkl. Nebenkosten).","租金：250 歐元（含雜費）。"]},
+{de:"weiter",zh:"更多的、進一步的",g:null,cat:"副詞",lesson:"L20",ex:["Weitere wichtige Wörter","更多重要單字"]},
+];
 /* ===ANCHOR:VOCAB_ARRAYS===（新課單字陣列 const ADDn=[...] 宣告在這行上方，並把陣列名加進下面 VOCAB 合併行）*/
-const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B,...ADD18,...ADDP2V,...ADD10S,...ADDCLO,...ADDCLOADJ,...ADD19,...ADD16S,...ADD18S,...ADD13S,...ADD15T,...ADD17S];
+const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B,...ADD18,...ADDP2V,...ADD10S,...ADDCLO,...ADDCLOADJ,...ADD19,...ADD16S,...ADD18S,...ADD13S,...ADD15T,...ADD17S,...ADD20];
 VOCAB.forEach((v,i)=>v.id="v"+i);
 
 
@@ -2085,6 +2144,12 @@ const NOUN_PL={
   "Unfall":"Unfälle","Dokument":"Dokumente",
   "Veranstaltung":"Veranstaltungen","Theateraufführung":"Theateraufführungen",
   "Berufsausbildung":"Berufsausbildungen","Schule":"Schulen",
+  /* L20 */
+  "Abfall":"Abfälle","Boden":"Böden","Haushalt":"Haushalte","Spülmaschine":"Spülmaschinen",
+  "Anruf":"Anrufe","Anrufbeantworter":"Anrufbeantworter","Brief":"Briefe","Größe":"Größen",
+  "Mülleimer":"Mülleimer","Waschmaschine":"Waschmaschinen","Mitbewohner":"Mitbewohner",
+  "Mitbewohnerin":"Mitbewohnerinnen","Wohngemeinschaft":"Wohngemeinschaften","Tagebuch":"Tagebücher",
+  "Einkauf":"Einkäufe","Notiz":"Notizen",
   /* ===ANCHOR:NOUN_PL===（新名詞複數 "單數":"複數", 插在這行上方）*/
 };
 const NOUN_PL_NOTE={
@@ -2255,6 +2320,15 @@ const NOUN_PL_NOTE={
   /* L13／L17 老師補充 */
   "Unfall":"複數 die Unfälle：a→ä 變音 → Forvo。",
   "Tour":"複數 die Touren（-en，不是 Tours）。",
+  /* L20 */
+  "Abfall":"複數 die Abfälle：a→ä 變音 → Forvo。",
+  "Boden":"複數 die Böden：o→ö 變音 → Forvo。",
+  "Anrufbeantworter":"複數同形 die Anrufbeantworter，只能靠冠詞／數詞判斷。",
+  "Mülleimer":"複數同形 die Mülleimer，只能靠冠詞／數詞判斷。",
+  "Mitbewohner":"複數同形 die Mitbewohner，只能靠冠詞／數詞判斷。",
+  "Tagebuch":"複數 die Tagebücher：u→ü 變音 → Forvo。",
+  "Haushalt":"⚠️ 複數 die Haushalte 為推導值（AB Lw L20 未列、課本無複數形出現），同課另有變音例外（Boden→Böden、Abfall→Abfälle），建議問老師求證。",
+  "Einkauf":"⚠️ 複數 die Einkäufe 為推導值（AB Lw L20 未列、課本無複數形出現），建議問老師求證。",
   /* ===ANCHOR:NOUN_PL_NOTE===（變音／同形／不規則等複數警語插在這行上方）*/
 };
 const NOUN_PLEX={
@@ -2759,6 +2833,23 @@ const NOUN_PLEX={
   "Theateraufführung":["Es gibt zwei Theateraufführungen am Tag.","一天有兩場演出。"],
   "Berufsausbildung":["Die beiden Berufsausbildungen dauern drei Jahre.","這兩種職訓都要三年。"],
   "Schule":["Im Viertel gibt es zwei Schulen.","這一區有兩所學校。"],
+  /* L20 */
+  "Abfall":["Die Abfälle sind schon draußen.","垃圾已經放到外面了。"],
+  "Boden":["Die Böden in der Wohnung sind sehr schmutzig.","公寓裡的地板都很髒。"],
+  "Haushalt":["In dem Haus gibt es zwölf Haushalte.","這棟房子裡有十二戶人家。"],
+  "Spülmaschine":["In der WG gibt es zwei Spülmaschinen.","合租公寓裡有兩台洗碗機。"],
+  "Anruf":["Heute waren drei Anrufe auf dem Anrufbeantworter.","今天答錄機上有三通來電。"],
+  "Anrufbeantworter":["Die Anrufbeantworter sind alle kaputt.","那些答錄機全都壞了。"],
+  "Brief":["Line schreibt viele Briefe.","Line 寫了很多信。"],
+  "Größe":["Die Zimmer haben verschiedene Größen.","這些房間有不同的大小。"],
+  "Mülleimer":["Die Mülleimer sind alle voll.","垃圾桶全都滿了。"],
+  "Waschmaschine":["Die Waschmaschinen sind im Keller.","洗衣機在地下室。"],
+  "Mitbewohner":["Wir suchen noch zwei Mitbewohner.","我們還在找兩位室友。"],
+  "Mitbewohnerin":["Meine Mitbewohnerinnen sind sehr ordentlich.","我的室友們都很整齊。"],
+  "Tagebuch":["Ihre Tagebücher liegen auf dem Tisch.","她們的日記放在桌上。"],
+  "Wohngemeinschaft":["In Hamburg gibt es viele Wohngemeinschaften.","漢堡有很多合租公寓。"],
+  "Notiz":["Alex schreibt immer Notizen für seine Mitbewohner.","Alex 總是留便條給他的室友們。"],
+  "Einkauf":["Die Einkäufe stehen noch im Auto.","買的東西還放在車上。"],
   /* ===ANCHOR:NOUN_PLEX===（複數例句 "單數":["德文","中文"], 插在這行上方）*/
 };
 const VERB_META={
@@ -2965,6 +3056,30 @@ const VERB_META={
   ausruhen:{t:"irr",f:["ruhe … aus","ruhst … aus","ruht … aus","ruhen … aus","ruht … aus","ruhen … aus"],p2:"ausgeruht",aux:"h"},
   aufnehmen:{t:"irr",f:["nehme … auf","nimmst … auf","nimmt … auf","nehmen … auf","nehmt … auf","nehmen … auf"],p2:"aufgenommen",aux:"h"},
   zählen:{t:"reg",p2:"gezählt",aux:"h"},
+  /* L20 */
+  abtrocknen:{t:"irr",f:["trockne … ab","trocknest … ab","trocknet … ab","trocknen … ab","trocknet … ab","trocknen … ab"],p2:"abgetrocknet",aux:"h"},
+  abwaschen:{t:"irr",f:["wasche … ab","wäschst … ab","wäscht … ab","waschen … ab","wascht … ab","waschen … ab"],p2:"abgewaschen",aux:"h"},
+  spülen:{t:"reg",p2:"gespült",aux:"h"},
+  waschen:{t:"vowel",du:"wäschst",er:"wäscht",p2:"gewaschen",aux:"h"},
+  hassen:{t:"sib",du:"hasst",er:"hasst",p2:"gehasst",aux:"h"},
+  ausräumen:{t:"irr",f:["räume … aus","räumst … aus","räumt … aus","räumen … aus","räumt … aus","räumen … aus"],p2:"ausgeräumt",aux:"h"},
+  runterbringen:{t:"irr",f:["bringe … runter","bringst … runter","bringt … runter","bringen … runter","bringt … runter","bringen … runter"],p2:"runtergebracht",aux:"h"},
+  rausbringen:{t:"irr",f:["bringe … raus","bringst … raus","bringt … raus","bringen … raus","bringt … raus","bringen … raus"]},
+  decken:{t:"reg"},
+  /* ⚠️ 不留白讓它自動組字：母動詞 hängen 在庫是不及物強變化義（hängen/gehangen，"掛著/懸掛"），
+     但 aufhängen（晾衣服）是及物弱變化義（hängen/hängte/gehängt），字首＋母動詞p2會自動組出
+     錯誤的 *aufgehangen。手動登記正確的弱變化 p2 覆蓋掉自動組字。 */
+  aufhängen:{t:"irr",f:["hänge … auf","hängst … auf","hängt … auf","hängen … auf","hängt … auf","hängen … auf"],p2:"aufgehängt",aux:"h"},
+  bügeln:{t:"reg"},
+  wischen:{t:"reg"},
+  staubsaugen:{t:"reg"},
+  runterkommen:{t:"irr",f:["komme … runter","kommst … runter","kommt … runter","kommen … runter","kommt … runter","kommen … runter"]},
+  zurückrufen:{t:"irr",f:["rufe … zurück","rufst … zurück","ruft … zurück","rufen … zurück","ruft … zurück","rufen … zurück"]},
+  vermissen:{t:"sib",du:"vermisst",er:"vermisst"},
+  nerven:{t:"reg"},
+  tauschen:{t:"reg"},
+  grüßen:{t:"sib",du:"grüßt",er:"grüßt"},
+  freuen:{t:"reg"},
   /* ===ANCHOR:VERB_META===（新動詞變位 動詞:{t:"reg"|"stemt"|"vowel"|"irr",...}, 插在這行上方）*/
 };
 /* 可分離動詞 Partizip 組字（2026-07-31）：Partizip = 字首 + 母動詞 Partizip，
@@ -3800,6 +3915,96 @@ const SENTENCES=[
   {de:"Sie läuft vom vierundzwanzigsten Oktober bis zum fünften November.",zh:"從十月二十四日演到十一月五日。（同一句的完整唸法）",lesson:"L17"},
   {de:"Am neunundzwanzigsten Dezember habe ich einen Termin.",zh:"我十二月二十九日有個約。",lesson:"L17"},
   {de:"Ich bin am vierten Juli neunzehnhundertsiebenundneunzig geboren.",zh:"我出生於 1997 年 7 月 4 日。",lesson:"L17"},
+  // L20
+  // A. Kommunikation 黃框（KB p48）
+  {de:"Spül bitte das Geschirr!",zh:"請洗碗（Imperativ du；可換 Deck den Tisch／Putz das Bad）",lesson:"L20"},
+  {de:"Deckt bitte den Tisch!",zh:"（你們）請鋪桌（Imperativ ihr；可換 Räumt … aus）",lesson:"L20"},
+  {de:"Komm bitte sofort runter da!",zh:"請馬上下來（課本原文如此，語感罕見，建議問老師求證）",lesson:"L20"},
+  {de:"Sei doch so lieb und häng sie bitte auf.",zh:"拜託你幫個忙把它晾起來（Sei doch so lieb und + Imperativ；客氣化萬用開頭）",lesson:"L20"},
+  {de:"Ruf ihn doch bitte zurück.",zh:"請回電給他（Ruf + Akk 代名詞 + zurück）",lesson:"L20"},
+  // B. E-Mail Redemittel（KB p48）
+  {de:"Die Wohnung sieht sehr schön aus.",zh:"這公寓看起來很棒（… sieht … aus；可換 Das Zimmer／toll）",lesson:"L20"},
+  {de:"Ich heiße Gert und studiere Architektur.",zh:"我叫 Gert，我讀建築（自我介紹骨架；可換 arbeite als …）",lesson:"L20"},
+  {de:"Ich bin sehr ordentlich.",zh:"我很整齊（可換 sympathisch／lustig）",lesson:"L20"},
+  {de:"Ich hasse Unordnung und Dreck.",zh:"我討厭髒亂（Ich hasse + Akk）",lesson:"L20"},
+  {de:"Ich koche wahnsinnig gern.",zh:"我超愛做飯（Ich … wahnsinnig/sehr gern）",lesson:"L20"},
+  {de:"Ich kann sehr gut kochen.",zh:"我很會做飯（Ich kann sehr gut + 原形）",lesson:"L20"},
+  // C. WG 便條 Alex→Sara（KB p47）
+  {de:"Die Wäsche ist fertig.",zh:"衣服洗好了",lesson:"L20"},
+  {de:"Das Bad war sehr schmutzig.",zh:"浴室之前很髒",lesson:"L20"},
+  {de:"Auf dem Anrufbeantworter war ein Anruf von Peter.",zh:"答錄機上有 Peter 的留言",lesson:"L20"},
+  {de:"Meine Fenster sind alle noch auf.",zh:"我的窗戶都還開著（auf sein＝開著）",lesson:"L20"},
+  {de:"Ich komme nächsten Mittwoch um 10.00 Uhr am Bahnhof an.",zh:"我下週三十點到車站（ankommen 可分離）",lesson:"L20"},
+  {de:"Ich habe es noch schnell geputzt.",zh:"我還趕快擦了一下（es＝das Bad，Akk 代名詞回指）",lesson:"L20"},
+  {de:"Jetzt ist es ganz sauber.",zh:"現在完全乾淨了",lesson:"L20"},
+  {de:"Kannst du mich vielleicht abholen?",zh:"你可以來接我嗎？（Kannst du + mich + 原形）",lesson:"L20"},
+  {de:"Kannst du sie heute Abend bitte zumachen?",zh:"你今晚可以把它們關上嗎？（sie＝die Fenster）",lesson:"L20"},
+  {de:"Miriam möchte euch zu ihrem Geburtstag einladen.",zh:"Miriam 想邀請你們參加她的生日（euch＝Akk）",lesson:"L20"},
+  // D. Line 的日記／Imperativ 示範（KB p45）
+  {de:"Deckt den Tisch!",zh:"（你們）鋪桌子！",lesson:"L20"},
+  {de:"Bringt den Müll raus!",zh:"（你們）把垃圾拿出去！",lesson:"L20"},
+  {de:"Räumt die Spülmaschine aus!",zh:"（你們）把洗碗機清空！",lesson:"L20"},
+  {de:"Mach dein Bett!",zh:"（你）鋪好你的床！",lesson:"L20"},
+  {de:"Vergiss deine Hausaufgaben nicht!",zh:"別忘了你的作業！（vergessen e→i，Imperativ 保留 i）",lesson:"L20"},
+  {de:"Schlaft nicht so lange!",zh:"別睡那麼久！",lesson:"L20"},
+  {de:"Seid nicht so faul!",zh:"別那麼懶！（sein 的 ihr 形特殊）",lesson:"L20"},
+  // E. Aktionsseite（KB p83）
+  {de:"Das Bad ist schmutzig! Putz es doch bitte!",zh:"浴室很髒！拜託你擦一下（狀況＋Imperativ＋Akk 代名詞，本課主句型）",lesson:"L20"},
+  // F. AB Imperativ 練習（p60）
+  {de:"Kommt gut nach Hause!",zh:"（你們）路上小心！",lesson:"L20"},
+  {de:"Sei nicht traurig!",zh:"別難過！",lesson:"L20"},
+  {de:"Räum bitte die Küche auf!",zh:"請把廚房收一收！",lesson:"L20"},
+  {de:"Hilf mir bitte kurz!",zh:"請幫我一下！（helfen e→i，Imperativ 保留 i）",lesson:"L20"},
+  {de:"Seid bitte nicht so laut!",zh:"（你們）請別那麼大聲！",lesson:"L20"},
+  // G. AB Akkusativ 代名詞練習（p61–62）
+  {de:"Das Bad ist nicht sauber. Kannst du es bitte putzen?",zh:"浴室不乾淨，你可以擦一下嗎？（es＝das Bad）",lesson:"L20"},
+  {de:"Dann räum sie bitte aus!",zh:"那就把它清空吧！（sie＝die Spülmaschine）",lesson:"L20"},
+  {de:"Die Türe ist auf. Kannst du sie bitte zumachen?",zh:"門開著，你可以關上嗎？",lesson:"L20"},
+  {de:"Ich habe ihn nicht gesehen.",zh:"我沒看到他（ihn＝Akk 陽性）",lesson:"L20"},
+  {de:"Kannst du uns bitte abholen?",zh:"你可以來接我們嗎？",lesson:"L20"},
+  {de:"Ich kann dich nicht hören.",zh:"我聽不到你（電話用語）",lesson:"L20"},
+  {de:"Ich möchte euch zum Essen einladen.",zh:"我想請你們吃飯",lesson:"L20"},
+  // H. AB Aussprache Satzmelodie（p63）
+  {de:"Räum auf, wasch ab, putz das Bad!",zh:"收拾、洗碗、擦浴室！（三連 Imperativ，語調練習）",lesson:"L20"},
+  {de:"Hör endlich auf!",zh:"你夠了！／別再說了！",lesson:"L20"},
+  {de:"Ich kann nicht mehr.",zh:"我受不了了",lesson:"L20"},
+  // I. 老師教材：Personalpronomen im Akkusativ 棋盤遊戲
+  {de:"Die Wäsche ist gewaschen. Hängst du sie bitte auf?",zh:"衣服洗好了，你把它們晾起來好嗎？（sie＝die Wäsche）",lesson:"L20"},
+  {de:"Mein Computer ist kaputt. Kannst du ihn reparieren?",zh:"我的電腦壞了，你能修嗎？（ihn＝der Computer）",lesson:"L20"},
+  {de:"Wann kommt dein Zug an? Ich möchte dich gern abholen.",zh:"你的火車幾點到？我想去接你",lesson:"L20"},
+  {de:"Der Mülleimer ist voll. Bringst du ihn bitte raus?",zh:"垃圾桶滿了，你拿出去好嗎？",lesson:"L20"},
+  {de:"Hallo, hier spricht Biggi. Kannst du mich bitte schnell zurückrufen?",zh:"哈囉，我是 Biggi，你可以快點回電給我嗎？（電話標準開場）",lesson:"L20"},
+  {de:"Wir gehen nicht zu Bertas Party. Sie hat uns nicht eingeladen.",zh:"我們不去 Berta 的派對，她沒邀我們",lesson:"L20"},
+  {de:"Das ist also dein Tagebuch. Kann ich es lesen?",zh:"原來這是你的日記，我可以看嗎？",lesson:"L20"},
+  {de:"Kinder, kommt! Ich fahre euch heute zur Schule.",zh:"孩子們，來吧！今天我載你們上學",lesson:"L20"},
+  {de:"Erkennst du mich nicht? Ich bin Gabi.",zh:"你認不出我嗎？我是 Gabi",lesson:"L20"},
+  {de:"Gibst du mir kurz dein Handy? Du bekommst es gleich zurück.",zh:"手機借我一下？馬上還你",lesson:"L20"},
+  {de:"Sag bloß, du hast ihn im Zug vergessen!",zh:"別跟我說你把它忘在火車上了！（ihn＝der Koffer）",lesson:"L20"},
+  {de:"In Ordnung, Frau Westerkamp, wir rufen Sie später noch einmal an.",zh:"好的 Westerkamp 女士，我們晚點再打給您（Sie＝您，Akk 同形）",lesson:"L20"},
+  {de:"Meine Fenster sind sehr schmutzig. Ich putze sie heute Nachmittag.",zh:"我的窗戶很髒，我今天下午擦",lesson:"L20"},
+  // K. WG 便條補收（KB p47）
+  {de:"Habt ihr morgen Zeit?",zh:"你們明天有空嗎？（約人萬用句）",lesson:"L20"},
+  {de:"Ich habe es nicht mehr geschafft.",zh:"我來不及做完了（geschafft＝schaffen 的完成式）",lesson:"L20"},
+  {de:"Ich habe so viel Gepäck.",zh:"我行李好多",lesson:"L20"},
+  // L. WG 廣告＋應徵 E-Mail 補收（KB p48）
+  {de:"Bist du ordentlich?",zh:"你整齊嗎？（找室友的篩選提問）",lesson:"L20"},
+  {de:"Putzt du auch freiwillig mal Bad und Küche?",zh:"你也會自願打掃浴室和廚房嗎？",lesson:"L20"},
+  {de:"Ich putze oft und gründlich.",zh:"我常打掃而且很徹底",lesson:"L20"},
+  {de:"Ich freue mich schon auf deine Antwort.",zh:"我很期待你的回覆（書信結尾萬用句；sich freuen auf＋Akk）",lesson:"L20"},
+  // M. Au-pair Notizzettel 補收（AB p62）
+  {de:"Ich bin schon fast weg.",zh:"我快要出門了",lesson:"L20"},
+  {de:"Bring Sara bitte schon um halb acht in den Kindergarten.",zh:"請七點半就把 Sara 送到幼稚園（Imperativ du＋時間＋地點）",lesson:"L20"},
+  {de:"Sei bitte auf jeden Fall zu Hause.",zh:"請你務必待在家（auf jeden Fall＝務必、無論如何）",lesson:"L20"},
+  {de:"Vergiss bitte nicht den Einkauf für Frau Leitner.",zh:"請別忘了幫 Leitner 太太採買（vergessen e→i，Imperativ 保留 i）",lesson:"L20"},
+  {de:"Sie wartet auf deinen Anruf.",zh:"她在等你的電話（warten auf＋Akk）",lesson:"L20"},
+  {de:"Grüß die Kinder ganz lieb!",zh:"替我好好問候孩子們！",lesson:"L20"},
+  // J. 老師教材：Kartenspiel für zwei 命令句卡
+  {de:"Sei still!",zh:"安靜！（sein 的 du 形特殊）",lesson:"L20"},
+  {de:"Vergesst den Termin nicht!",zh:"（你們）別忘了約！",lesson:"L20"},
+  {de:"Seien Sie bitte pünktlich!",zh:"請您準時！（Sie 形 Imperativ，L18 已學）",lesson:"L20"},
+  {de:"Räum dein Zimmer auf!",zh:"（你）把房間收一收！",lesson:"L20"},
+  {de:"Schlaft gut!",zh:"（你們）好好睡！",lesson:"L20"},
+  {de:"Vergiss deinen Schlüssel nicht!",zh:"（你）別忘了鑰匙！",lesson:"L20"},
   /* ===ANCHOR:SENTENCES===（新例句／Redemittel {de,zh,lesson} 插在這行上方）*/
 ];
 
@@ -3818,6 +4023,7 @@ const RULES=[
   {l:"L12",key:"vokalisches r",lead:"字尾/非重音節的 r 常弱化成類似「a」的音，不捲舌",exs:["Silvester","Besucher","Erlebnis","Restaurant"]},
   {l:"L13",key:"au",lead:"唸「au」（阿烏，類似英文 ow）——跟已學的 ei（唸ai）、eu/äu（唸oy）是同一組雙元音家族",exs:["Auto","auch","Frau","genau"]},
   {l:"L17",key:"外來語 Wortakzent",lead:"國際詞重音因字而異，無統一規則，逐字記；常見落在字尾前一音節（-tion, -ieren, -isch）",exs:["Politiker","studieren","international"]},
+  {l:"L20",key:"satzmelodie",lead:"Imperativ／陳述句尾音下降 ↘，Ja/Nein 問句尾音上升 ↗",exs:["Deckt bitte den Tisch. ↘","Deckt ihr den Tisch? ↗","Ihr deckt den Tisch. ↘"]},
   /* ===ANCHOR:RULES===（新發音規則 {l,key,lead,exs} 插在這行上方）*/
 ];
 
@@ -3918,6 +4124,11 @@ const TEXTS=[
    de:"Also, mir ist heute langweilig. Ich habe eine Frage: Welchen Promi habt ihr schon einmal getroffen? Beim Einkaufen, im Zug oder so? Habt ihr ihn sofort erkannt? Und wie hat er ausgesehen?\n\nIch habe mal einen Regisseur gesehen! Es war 2019, beim Konzert in München. Ich habe am Eingang gewartet, dann ist er schnell nach Hause gegangen. Aber ich habe ihn gar nicht erkannt!",
    zh:"欸，我今天有點無聊。我有個問題：你們有沒有遇過什麼名人？購物的時候？在火車上？還是類似的場合？你們當場就認出來了嗎？他長什麼樣子？\n\n我曾經見過一位導演！那是 2019 年，在慕尼黑的一場演唱會上。我在入口等，然後他很快就回家了。但我完全沒認出他！",
    qs:[{q:"回覆者是在哪裡遇到那位導演的？",options:["在超市","在演唱會上","在飛機上","在學校"],a:1},{q:"回覆者最後認出那位導演了嗎？",options:["認出來了","完全沒認出來","不確定","文中沒說"],a:1},{q:"「Es war 2019」的 war 是什麼？",options:["sein 的 Präteritum","haben 的 Präteritum","過去分詞","現在式"],a:0}]},
+  {id:"t-l20-1",lesson:"L20",genre:"手寫日記",title:"Immer diese Kommandos!",src:"AI 生成 · 未經母語者校對",
+   map:"<b>本課重點</b>：① Imperativ (du/ihr) 登場——命令式只留動詞字幹，du 形去 -st、ihr 形只拿掉人稱代名詞；② e→i 換音動詞的 Imperativ <b>保留 i</b>（Vergiss!/Hilf!/Lies!），a→ä 換音動詞反而<b>還原成 a</b>（Wasch!/Fahr!）；③ sein/haben 是特殊形（Sei!/Seid!、Hab!/Habt!）；④ Personalpronomen im Akkusativ 實戰：mich/dich/ihn/es/sie/uns/euch，最常見的用法是「前句給名詞、後句用代名詞回指」；⑤ 家務動詞群（Bildlexikon 13 個活動）。<br><b>建議走法</b>：讀完本文 → 文法「🧩Imperativ 命令式總表」（先看系統邏輯段，再看橘框三條換音規則）＋「🧩人稱代名詞總表」複習 Akkusativ 欄 → 單字卡家務名詞＋動詞 → 例句（老師棋盤遊戲那 13 句是 Akkusativ 的最佳練習）→ 測驗（本課 Akkusativ 題與 du/ihr 對比題最重要）→ 🎓。",
+   de:"Donnerstag, 14. August.\n\nWarum ruft meine Mutter eigentlich immer? „Räumt eure Zimmer auf! Deckt den Tisch! Räumt die Spülmaschine aus! Bringt den Abfall raus!\u201c So geht das den ganzen Tag, und das nervt mich total. Und sie selbst sagt nie „bitte\u201c — nur wir müssen das immer sagen.\n\nGestern war Melanie bei mir, und wir haben in meinem Zimmer geredet. Und dann kommt Mama rein: „Räum sofort dein Zimmer auf! Wisch auch gleich den Boden!\u201c Das war mir so peinlich vor Melanie!\n\nOh nein, jetzt ruft sie wieder. Sicher soll ich die Wäsche waschen oder das Bad putzen.",
+   zh:"八月十四日，星期四。\n\n為什麼我媽媽老是這樣喊來喊去？「把房間收一收！鋪桌子！把洗碗機清空！把垃圾拿出去！」一整天都這樣，這讓我超級煩。而她自己從來不說「請」——只有我們一定要說。\n\n昨天 Melanie 來我家，我們在我房間裡聊天。然後媽媽就走進來：「馬上把房間收一收！順便拖一下地板！」在 Melanie 面前真的好尷尬！\n\n喔不，她又在叫了。她八成是要我洗衣服或是擦浴室。",
+   qs:[{q:"Line 對媽媽最主要的抱怨是什麼？",options:["媽媽整天下命令、自己卻不說「請」","媽媽從不打掃","媽媽不讓朋友來家裡","媽媽忘記做家事"],a:0},{q:"昨天發生了什麼事讓 Line 覺得尷尬？",options:["她自己忘記做家事","媽媽在朋友面前下命令","她跟朋友吵架","她忘記寫日記"],a:1},{q:"「Räumt eure Zimmer auf!」用的是哪一種 Imperativ？",options:["du 形","ihr 形","Sie 形","不是 Imperativ"],a:1}]},
   /* ===ANCHOR:TEXTS_ARRAYS===（新課導讀 {id,lesson,genre,title,src,map,de,zh,qs} 插在這行上方；de 只准用該課及之前的單字＋功能詞，寫完必跑 ROADMAP N12 的白名單驗證腳本）*/
 ];
 
@@ -4036,7 +4247,7 @@ function logAnswer(){
 function weekCount(){const cut=Date.now()-7*864e5;let n=0;Object.entries(qlog).forEach(([k,v])=>{const ts=new Date(k+'T00:00:00').getTime();if(isFinite(ts)&&ts>=cut)n+=(+v||0);});return n;}
 function updateDash(){const el=document.getElementById('dash');if(el)el.textContent=`已畢業 ${Object.keys(mastered).length} / ${VOCAB.length} 字 · 本週答題 ${weekCount()} 題`;}
 /* 文法卡穩定 key：由標題衍生（改標題會孤兒化標記，與例句 de-key 同一取捨） */
-const GKEY_MAP=[["疼痛表達","pain"],["人稱代名詞","pron"],["陰陽性線索","gclue"],["複數線索","pclue"],["所有格","poss"],["schon vs erst","advw"],["時間介係詞","zeit"],["序數","datum"],["地方介係詞","lokal"],["冠詞變格","art"],["句框","satz"],["動詞支配格","rekt"],["動詞變位①","konj1"],["動詞變位②","konj2"],["不規則動詞總表","irrv"],["Perfekt 現在完成式","pii"],["價格唸法","preis"],["字母表","abc"],["挑任一數字","numtry"],["大數字","bignum"],["數字測驗","numquiz"],["數字的系統","numsys"]];
+const GKEY_MAP=[["疼痛表達","pain"],["人稱代名詞","pron"],["陰陽性線索","gclue"],["複數線索","pclue"],["所有格","poss"],["schon vs erst","advw"],["時間介係詞","zeit"],["序數","datum"],["地方介係詞","lokal"],["冠詞變格","art"],["句框","satz"],["動詞支配格","rekt"],["動詞變位①","konj1"],["動詞變位②","konj2"],["不規則動詞總表","irrv"],["Perfekt 現在完成式","pii"],["價格唸法","preis"],["字母表","abc"],["挑任一數字","numtry"],["大數字","bignum"],["數字測驗","numquiz"],["數字的系統","numsys"],["Imperativ","imp"]];
 function gramKeyOf(t){for(const[s,k]of GKEY_MAP)if(t.includes(s))return k;return t.trim().slice(0,8);}
 function gramKeyOfCard(g){const m=g.html.match(/gtitle">([^<]+)/);return gramKeyOf(m?m[1]:g.html);}
 /* 題目→卡片映射（執行期分類，一題可命中多卡） */
@@ -4065,8 +4276,8 @@ function gramCardsOfQ(q){
   if(/Wortbildung/.test(s))ks.add('gclue');
   if(/所有格/.test(s))ks.add('poss');
   if(/schon vs erst/.test(s))ks.add('advw');
-  if(/疼痛表達|引語|Imperativ/.test(s))ks.add('pain');
-  if(/Imperativ/.test(s))ks.add('satz');
+  if(/疼痛表達|引語/.test(s))ks.add('pain');
+  if(/Imperativ/.test(s))ks.add('imp');
   if(/母音變化|字尾/.test(s))ks.add('konj1');
   const m=s.match(/^(?:⭐\s*)?([a-zäöüß]+)：\s*(ich|du|er|es|sie|wir|ihr|Sie)\s*→/);
   if(m)ks.add(KONJ2_VERBS.has(m[1])?'konj2':'konj1');
@@ -4267,9 +4478,9 @@ function runSearch(qRaw){runSearchInto(qRaw,document.getElementById('searchResul
 document.getElementById('searchBox').addEventListener('input',e=>runSearch(e.target.value));
 /* ---------- GRAMMAR (filterable) ---------- */
 const GRAM=[
-{ls:["L4","L15"],html:`
+{ls:["L4","L15","L20"],html:`
 <div class="card gcard">
-  <div class="gtitle">🧩 人稱代名詞 Nom/Akk/Dativ 總表 <span class="lessontag">L4</span><span class="lessontag">L15</span></div>
+  <div class="gtitle">🧩 人稱代名詞 Nom/Akk/Dativ 總表 <span class="lessontag">L4</span><span class="lessontag">L15</span><span class="lessontag">L20</span></div>
   <p style="font-size:.88rem;margin:.2em 0 .6em">系統先抓：德文的「它/他/她」跟著名詞<b>性別</b>走，不是一律 it（der→er、das→es、die→sie，這條先別忘）。而同一個代名詞當「受詞」時還要看<b>格</b>再變一次形——是 Akkusativ 還是 Dativ，由<b>動詞</b>決定（見🧩動詞支配格表）。L15 起補齊 Akk/Dativ 兩欄，就是完整系統了。</p>
   <table>
     <tr><th>Nominativ</th><th>Akkusativ</th><th>Dativ</th></tr>
@@ -4291,6 +4502,7 @@ const GRAM=[
     <tr><td class="de2">das Bett</td><td><b style="color:var(--das)">es</b></td><td class="de2">Das Bett ist groß. Es kostet 1499 Euro.</td></tr>
     <tr><td class="de2">die Lampe</td><td><b style="color:var(--die)">sie</b></td><td class="de2">Die Lampe ist modern. Sie kostet 119 Euro.</td></tr>
   </table>
+  <p style="font-size:.86rem;margin:.5em 0 .2em"><b>L20 起最常見的組合</b>：「狀況陳述＋Imperativ／請求」，Akkusativ 代名詞在後句回指前句名詞，性別要對上：<span class="de2">Das Bad ist schmutzig! <b>Putz es</b> doch bitte!</span></p>
   <div class="note"><b>最容易錯：</b>① Nominativ 階段 der→<b>er</b>（不是 sie）、das→<b>es</b>；② es 當 Akkusativ 不變、但當 Dativ 變成 <b>ihm</b>（跟 er 一樣）；③ sie（她/單數）的 Dativ 是 <b>ihr</b>，別跟 ihr（你們/Nom）搞混——完全同形但語意不同，要靠句子角色判斷。</div>
 </div>`},
 {l:"L6",ls:["L4","L5","L6","L19"],html:`
@@ -4421,9 +4633,9 @@ const GRAM=[
   </div></details>
   <div class="note"><b>⚠️ 全表唯一會變的是「陽性受格」；Dativ 是「陽性和中性一起變」</b>：der/das→<span style="color:#b45309">dem</span>、die→<span style="color:#b45309">der</span>、複數→<span style="color:#b45309">den</span>。das／die／複數 在 Nom 和 Akk 完全同形，別自己亂加字尾。<b>Dativ 複數名詞本身也要加字尾 -n</b>（本身已是 -n/-s 結尾則不加）：die Frauen→den <span style="color:#b45309">Frauen</span>（本來就是n結尾，不變）、der Kalender→den <span style="color:#b45309">Kalendern</span>（加n）、die Autos→den <span style="color:#b45309">Autos</span>（s結尾不加）。這張表會隨進度長大，⬜ 是還沒學的格子。</div>
 </div>`},
-{ls:["L6","L7","L8","L10","L11","L12","L15","L18"],html:`
+{ls:["L6","L7","L8","L10","L11","L12","L15","L18","L20"],html:`
 <div class="card gcard">
-  <div class="gtitle">🧩 句框 Satzklammer ＋ 動詞位置 <span class="lessontag">L6</span><span class="lessontag">L7</span><span class="lessontag">L8</span><span class="lessontag">L10</span><span class="lessontag">L11</span><span class="lessontag">L12</span><span class="lessontag">L15</span><span class="lessontag">L18</span></div>
+  <div class="gtitle">🧩 句框 Satzklammer ＋ 動詞位置 <span class="lessontag">L6</span><span class="lessontag">L7</span><span class="lessontag">L8</span><span class="lessontag">L10</span><span class="lessontag">L11</span><span class="lessontag">L12</span><span class="lessontag">L15</span><span class="lessontag">L18</span><span class="lessontag">L20</span></div>
   <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯（兩條地基）：① <b>變位動詞的位置由句型決定</b>——陳述句第2位、Ja/Nein 問句第1位、W 問句第2位。② 當一句話有<b>兩個動詞</b>時，第一個（變位／情態）照上面規則站定，第二個（原形）一律踢到<b>句尾</b>——這兩個動詞像夾子夾出一個「框」。之後的完成式、可分離動詞都是同一個框，不是新規則。</p>
   <details data-rule="satz-typen"><summary>① 句型定位：陳述句第2位／Ja-Nein 第1位／W 問句第2位／命令句第1位</summary><div class="dbody">
   <table>
@@ -4472,8 +4684,9 @@ const GRAM=[
     <tr><td>陳述句</td><td class="de2">Der Bus <b>fährt</b></td><td class="de2">um 17 Uhr <b>ab</b>.</td></tr>
     <tr><td>Ja/Nein 問句</td><td class="de2"><b>Rufst</b> du deine Mutter</td><td class="de2">heute Abend <b>an</b>?</td></tr>
     <tr><td>W 問句</td><td class="de2">Wo <b>steigst</b> du</td><td class="de2"><b>ein</b>?</td></tr>
+    <tr><td>Imperativ</td><td class="de2"><b>Räum</b> die Küche</td><td class="de2"><b>auf</b>!</td></tr>
   </table>
-  <p style="font-size:.86rem;margin:.3em 0 .1em">動詞被拆成兩半：變位的部分照三種句型規則站定，<b>字首單獨飛到句尾</b>，跟原形動詞是同一個「框右牆」位置。常見字首：an-／aus-／ab-／auf-／ein-／mit-／um-／fern-。</p>
+  <p style="font-size:.86rem;margin:.3em 0 .1em">動詞被拆成兩半：變位的部分照三種句型規則站定，<b>字首單獨飛到句尾</b>，跟原形動詞是同一個「框右牆」位置。常見字首：an-／aus-／ab-／auf-／ein-／mit-／um-／fern-。<b>Imperativ 也吃這個框</b>（L20）：Räum … aus!／Bring … raus!／Ruf … zurück!／Häng … auf!——字首一樣被踢到句尾，是「動詞拆兩半」家族第四個成員（現在式、Perfekt、情態動詞之後）。</p>
   </div></details>
   <details data-rule="satz-perfekt"><summary>⑤ Perfekt 語序：haben/sein 站第2位，Partizip II 踢句尾（同一個框）</summary><div class="dbody">
   <table>
@@ -4493,17 +4706,17 @@ const GRAM=[
   </table>
   <p style="font-size:.86rem;margin:.3em 0 .1em">系統邏輯：weil 引導的是<b>從句</b>（Nebensatz），從句裡的變位動詞被踢到<b>從句句尾</b>，不再站第2位——跟「兩個動詞夾框」是同一條「動詞被踢到底」的邏輯，只是這次整個從句都被框住。對照 <b>denn</b>（並列連接詞，動詞留在原地、正常 V2）。weil 從句也能整個放到句子最前面：<b>Weil</b> es ruhig ist, <b>bleibe</b> ich hier.（此時主句動詞退到第2位，主詞 ich 退到動詞後面）。</p>
   </div></details>
-  <p style="font-size:.86rem;margin:.3em 0">已學會塞進框的：<b>möchten</b>／<b>können</b>＋原形（L6/L7）、<b>可分離動詞</b>（L10）、<b>Perfekt</b> haben/sein＋P.II（L10–L12）、<b>weil 從句</b>動詞後置（L15）、<b>wollen</b>（L17）、<b>sollen</b>＋原形（L18）、<b>Imperativ(Sie)</b> 動詞衝第1位（L18）。<br>⬜ 之後塞進同一框：dürfen、未來式——A2 解鎖。</p>
+  <p style="font-size:.86rem;margin:.3em 0">已學會塞進框的：<b>möchten</b>／<b>können</b>＋原形（L6/L7）、<b>可分離動詞</b>（L10）、<b>Perfekt</b> haben/sein＋P.II（L10–L12）、<b>weil 從句</b>動詞後置（L15）、<b>wollen</b>（L17）、<b>sollen</b>＋原形（L18）、<b>Imperativ(Sie)</b> 動詞衝第1位（L18）、<b>Imperativ(du/ihr)</b> 可分離動詞字首同樣踢句尾（L20）。<br>⬜ 之後塞進同一框：dürfen、未來式——A2 解鎖。</p>
   <div class="note"><b>⚠️ 三個最容易錯</b><br>① 換 Leider／Heute 到位置一後，主詞要退到動詞後面：<b>Leider habe ich</b>…（❌ Leider ich habe…）。<br>② <b>nicht 貼在句尾原形動詞前面</b>：Ich kann heute <span style="color:#b45309">nicht</span> kommen. 原形動詞是框的右牆，nicht 站牆內側。（否定名詞才用 kein，見冠詞表；否定動作／形容詞用 nicht。）<br>③ <b>weil 後面動詞一定到句尾</b>：❌ weil es ist ruhig → ✓ weil es ruhig ist。</div>
 </div>`},
-{ls:["L6","L7","L8","L9","L10","L12","L13","L15","L17"],html:`
+{ls:["L6","L7","L8","L9","L10","L12","L13","L15","L17","L20"],html:`
 <div class="card gcard">
-  <div class="gtitle">🧩 動詞支配格表（動詞吃哪個格） <span class="lessontag">L6</span><span class="lessontag">L7</span><span class="lessontag">L8</span><span class="lessontag">L9</span><span class="lessontag">L10</span><span class="lessontag">L12</span><span class="lessontag">L13</span><span class="lessontag">L15</span><span class="lessontag">L17</span></div>
+  <div class="gtitle">🧩 動詞支配格表（動詞吃哪個格） <span class="lessontag">L6</span><span class="lessontag">L7</span><span class="lessontag">L8</span><span class="lessontag">L9</span><span class="lessontag">L10</span><span class="lessontag">L12</span><span class="lessontag">L13</span><span class="lessontag">L15</span><span class="lessontag">L17</span><span class="lessontag">L20</span></div>
   <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：及物動詞後面的名詞要用哪個「格」，是<b>動詞決定的</b>。老師說 90% 的德文動詞吃 Akkusativ——所以你目前遇到的幾乎全是 Akk。這張表現在看似多餘，但先把格子留好，A2 一出現吃 Dativ 的動詞（那 10%）你才不會措手不及。</p>
   <details data-rule="rekt-akk"><summary>① Akkusativ 動詞群：你目前學的動詞 90% 都在這格</summary><div class="dbody">
   <table>
     <tr><th>動詞（受詞用 Akk）</th><th>例句</th></tr>
-    <tr><td class="de2">haben, brauchen, suchen, kaufen, nehmen, bestellen, essen, trinken, finden, sehen, lesen, kennen, möchten, anrufen, abholen, abschließen…</td><td class="de2">Ich brauche <b>einen</b> Termin.<br>Ich rufe <b>den</b> Chef an.</td></tr>
+    <tr><td class="de2">haben, brauchen, suchen, kaufen, nehmen, bestellen, essen, trinken, finden, sehen, lesen, kennen, möchten, anrufen, abholen, abschließen, einladen, zurückrufen, aufhängen, ausräumen, rausbringen, putzen, reparieren, zumachen, erkennen, lieben, vergessen, bekommen…</td><td class="de2">Ich brauche <b>einen</b> Termin.<br>Ich rufe <b>den</b> Chef an.</td></tr>
   </table>
   <p style="font-size:.9rem;margin:.3em 0 .1em">Ich bestelle <b>einen</b> Salat und ein Wasser.（我點一份沙拉和一杯水）</p>
   <p style="font-size:.9rem;margin:.1em 0">Ich finde <b>den</b> Film super.（我覺得這部電影很棒）</p>
@@ -4706,6 +4919,22 @@ const GRAM=[
   </table>
   <p style="font-size:.86rem;margin:.3em 0 .1em">轉換三步：① 拿掉引號與驚嘆號 ② 把被命令的人改成主詞（Sie → ich／er／mein Mann…）③ 補 <b>sollen</b> 到第2位、原動詞變原形丟句尾。反向轉換就是倒著做。</p>
   <div class="note"><b>⚠️ 三個最容易錯</b><br>① <b>tut 還是 tun，看的是身體部位、不是你自己</b>：Meine Beine <b>tun</b> weh（兩條腿＝複數）／Mein Bein <b>tut</b> weh（一條腿＝單數）。中文「我腿痛」沒有單複數，這格最容易漏。<br>② <b>兩條路不能混著用</b>：❌ Ich habe mein Kopf tut weh. ✓ Ich habe Kopfschmerzen. ／ ✓ Mein Kopf tut weh. 選一條走完。<br>③ <b>間接引語的 sollen 要跟新主詞變位</b>：Er sagt, ich <b>soll</b>…（不是 sollst）；Er sagt, du <b>sollst</b>…。人稱一換，sollen 就得換，這比記引號更容易錯。</div>
+</div>`},
+{ls:["L18","L20"],html:`
+<div class="card gcard">
+  <div class="gtitle">🧩 Imperativ 命令式總表（du／ihr／Sie） <span class="lessontag">L18</span><span class="lessontag">L20</span></div>
+  <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：Imperativ 只留動詞字幹，人稱代名詞整個消失。<b>du 形</b>＝現在式 du 形去掉字尾 <b>-st</b>；<b>ihr 形</b>＝現在式 ihr 形原封不動、只是把「ihr」拿掉；<b>Sie 形</b>＝動詞搬到第1位、<b>Sie</b> 留著不省略。三形共用同一條「動詞衝第1位」規則（見🧩句框卡①-2段）。</p>
+  <table>
+    <tr><th>原形</th><th>du</th><th>ihr</th><th>Sie</th></tr>
+    <tr><td class="de2">decken</td><td class="de2">Deck …!</td><td class="de2">Deckt …!</td><td class="de2">Decken Sie …!</td></tr>
+    <tr><td class="de2">schlafen</td><td class="de2">Schlaf …!</td><td class="de2">Schlaft …!</td><td class="de2">Schlafen Sie …!</td></tr>
+    <tr><td class="de2">vergessen</td><td class="de2">Vergiss …!</td><td class="de2">Vergesst …!</td><td class="de2">Vergessen Sie …!</td></tr>
+    <tr><td class="de2">ausräumen</td><td class="de2">Räum … aus!</td><td class="de2">Räumt … aus!</td><td class="de2">Räumen Sie … aus!</td></tr>
+    <tr><td class="de2">sein</td><td class="de2">Sei …!</td><td class="de2">Seid …!</td><td class="de2">Seien Sie …!</td></tr>
+    <tr><td class="de2">haben</td><td class="de2">Hab …!</td><td class="de2">Habt …!</td><td class="de2">Haben Sie …!</td></tr>
+  </table>
+  <p style="font-size:.86rem;margin:.5em 0 .2em">句型定位、Sie 不省略、疑問句↗與命令句↘的語調對比 → 完整規則見「🧩句框 Satzklammer」①-2 段；本卡專注在<b>字幹怎麼變</b>。</p>
+  <div class="note"><b>⚠️ 最容易錯（來源：老師講義）</b><br>① <b>e→i 換音的動詞，Imperativ 保留 i</b>（極常見）：sprechen→<b>Sprich!</b>、geben→<b>Gib!</b>、lesen→<b>Lies!</b>、vergessen→<b>Vergiss!</b>、helfen→<b>Hilf!</b><br>② <b>a→ä 換音的動詞，Imperativ 反而變回 a</b>：fahren→du fährst→<b>Fahr!</b>、waschen→du wäschst→<b>Wasch!</b><br>③ <b>sein／haben 是特殊形</b>：<b>Sei still!</b>／<b>Seid still!</b>；<b>Hab Geduld!</b>／<b>Habt Spaß!</b><br>④ <b>可分離動詞照樣拆開</b>，字首踢句尾：<b>Räum die Spülmaschine aus!</b>／<b>Ruf ihn zurück!</b></div>
 </div>`},
 /* ===ANCHOR:GRAM===（新文法卡 {l:"Ln",html:`<div class="card gcard">…`} 插在這行上方）*/
 ];
@@ -5760,6 +5989,37 @@ const GRSUP=[
  {l:"L17",sub:"⭐ 年份唸法：1997 怎麼唸",before:"Ich bin ",after:" geboren.",answer:"neunzehnhundertsiebenundneunzig",options:["neunzehnhundertsiebenundneunzig","eintausendneunhundertsiebenundneunzig","neunzehnsiebenundneunzig","neunzehnhundertneunundsiebzig"],full:"Ich bin neunzehnhundertsiebenundneunzig geboren."},
 ];
 GRSUP.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+  const GR20=[
+   {l:"L20",sub:"⭐ Imperativ(du)：decken",before:"",after:" bitte den Tisch!",answer:"Deck",options:["Deck","Deckst","Decke"],full:"Deck bitte den Tisch!"},
+   {l:"L20",sub:"⭐ Imperativ(ihr)：decken",before:"",after:" bitte den Tisch!",answer:"Deckt",options:["Deckt","Decken","Deckst"],full:"Deckt bitte den Tisch!"},
+   {l:"L20",sub:"⭐ Imperativ(Sie)：decken",before:"",after:" Sie bitte den Tisch!",answer:"Decken",options:["Decken","Deckt","Deck"],full:"Decken Sie bitte den Tisch!"},
+   {l:"L20",sub:"⭐ Imperativ 對比：e→i 保留 i（vergessen）",before:"",after:" deinen Schlüssel nicht!",answer:"Vergiss",options:["Vergiss","Vergess","Wäsch"],full:"Vergiss deinen Schlüssel nicht!"},
+   {l:"L20",sub:"⭐ Imperativ 對比：a→ä 還原成 a（waschen）",before:"",after:" bitte ab!",answer:"Wasch",options:["Wasch","Wäsch","Vergiss"],full:"Wasch bitte ab!"},
+   {l:"L20",sub:"waschen：du → ?",before:"",after:" du die Wäsche?",answer:"Wäschst",options:["Wäschst","Waschst","Wäscht"],full:"Wäschst du die Wäsche?"},
+   {l:"L20",sub:"waschen：er → ?",before:"Er ",after:" das Auto.",answer:"wäscht",options:["wäscht","wascht","wäschst"],full:"Er wäscht das Auto."},
+   {l:"L20",sub:"abwaschen：du → ?",before:"",after:" du schon ab?",answer:"Wäschst",options:["Wäschst","Waschst","Wäscht"],full:"Wäschst du schon ab?"},
+   {l:"L20",sub:"abwaschen：er → ?",before:"Er ",after:" nie ab.",answer:"wäscht",options:["wäscht","wascht","wäschst"],full:"Er wäscht nie ab."},
+   {l:"L20",sub:"⭐ Imperativ(ihr)：schlafen",before:"",after:" nicht so lange!",answer:"Schlaft",options:["Schlaft","Schlafen","Schläft"],full:"Schlaft nicht so lange!"},
+   {l:"L20",sub:"⭐ Imperativ(ihr)：sein 特殊形",before:"",after:" nicht so faul!",answer:"Seid",options:["Seid","Sei","Seien"],full:"Seid nicht so faul!"},
+   {l:"L20",sub:"⭐ Imperativ(du)：sein 特殊形",before:"",after:" still!",answer:"Sei",options:["Sei","Seid","Bist"],full:"Sei still!"},
+   {l:"L20",sub:"⭐ Imperativ(Sie)：sein 特殊形",before:"",after:" bitte pünktlich!",answer:"Seien",options:["Seien","Sei","Seid"],full:"Seien Sie bitte pünktlich!"},
+   {l:"L20",sub:"⭐ Imperativ(du)：e→i 保留 i（helfen）",before:"",after:" mir bitte kurz!",answer:"Hilf",options:["Hilf","Helf","Hilfst"],full:"Hilf mir bitte kurz!"},
+   {l:"L20",sub:"⭐ Imperativ(du)：可分離動詞字首踢句尾（ausräumen）",before:"Dann ",after:" sie bitte aus!",answer:"räum",options:["räum","räumst","räumt"],full:"Dann räum sie bitte aus!"},
+   {l:"L20",sub:"⭐ Imperativ(Sie)：haben 特殊形",before:"",after:" Sie viel Spaß!",answer:"Haben",options:["Haben","Habt","Hab"],full:"Haben Sie viel Spaß!"},
+   {l:"L20",sub:"⭐ Imperativ(ihr)：可分離動詞字首踢句尾（ausräumen）",before:"",after:" die Spülmaschine aus!",answer:"Räumt",options:["Räumt","Räumen","Räum"],full:"Räumt die Spülmaschine aus!"},
+   {l:"L20",sub:"⭐ Imperativ(Sie)：可分離動詞字首踢句尾（zumachen）",before:"",after:" Sie bitte das Fenster zu!",answer:"Machen",options:["Machen","Macht","Mach"],full:"Machen Sie bitte das Fenster zu!"},
+   {l:"L20",sub:"⭐ 人稱代名詞：Akkusativ 回指 der Computer",before:"Mein Computer ist kaputt. Kannst du ",after:" reparieren?",answer:"ihn",options:["ihn","ihm","es"],full:"Mein Computer ist kaputt. Kannst du ihn reparieren?"},
+   {l:"L20",sub:"⭐ 人稱代名詞：Akkusativ 回指 das Bad",before:"Das Bad ist schmutzig! Putz ",after:" doch bitte!",answer:"es",options:["es","ihn","sie"],full:"Das Bad ist schmutzig! Putz es doch bitte!"},
+   {l:"L20",sub:"⭐ 人稱代名詞：Akkusativ 回指 die Spülmaschine",before:"Dann räum ",after:" bitte aus!",answer:"sie",options:["sie","ihn","es"],full:"Dann räum sie bitte aus!"},
+   {l:"L20",sub:"⭐ 人稱代名詞：Akkusativ（ich 的受格）",before:"Kannst du ",after:" bitte schnell zurückrufen?",answer:"mich",options:["mich","mir","dich"],full:"Kannst du mich bitte schnell zurückrufen?"},
+   {l:"L20",sub:"⭐ 人稱代名詞：Akkusativ（du 的受格）",before:"Ich kann ",after:" nicht hören.",answer:"dich",options:["dich","dir","mich"],full:"Ich kann dich nicht hören."},
+   {l:"L20",sub:"⭐ 人稱代名詞：Akkusativ（wir 的受格）",before:"Kannst du ",after:" bitte abholen?",answer:"uns",options:["uns","euch","ihnen"],full:"Kannst du uns bitte abholen?"},
+   {l:"L20",sub:"⭐ 人稱代名詞：Akkusativ（ihr 的受格）",before:"Ich möchte ",after:" zum Essen einladen.",answer:"euch",options:["euch","uns","ihnen"],full:"Ich möchte euch zum Essen einladen."},
+   {l:"L20",sub:"⭐ 人稱代名詞對比：Akkusativ vs Dativ（helfen）",before:"Hilf ",after:" bitte kurz!",answer:"mir",options:["mir","mich","dir"],full:"Hilf mir bitte kurz!"},
+   {l:"L20",sub:"⭐ 人稱代名詞：Akkusativ 回指 der Mülleimer",before:"Der Mülleimer ist voll. Bringst du ",after:" bitte raus?",answer:"ihn",options:["ihn","es","sie"],full:"Der Mülleimer ist voll. Bringst du ihn bitte raus?"},
+   {l:"L20",sub:"⭐ 人稱代名詞：Akkusativ 回指 die Wäsche",before:"Die Wäsche ist gewaschen. Hängst du ",after:" bitte auf?",answer:"sie",options:["sie","es","ihn"],full:"Die Wäsche ist gewaschen. Hängst du sie bitte auf?"},
+  ];
+  GR20.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
   /* ===ANCHOR:GRAM_QUIZ===（新課文法填空題插在這行上方：宣告 const GRn=[{l,sub,before,after,answer,options,full},…]; 後接一行 GRn.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full})); ）*/
   return Q;
 }
