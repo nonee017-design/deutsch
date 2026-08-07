@@ -6556,9 +6556,27 @@ function poolFor(mode){
 }
 /* 抽牌不放回 */
 let bags={};
+/* 2026-08-07：原本「這一輪出過哪些」只隱含在 bags 裡，而 bags 在切課別／切篩選時
+   被整袋倒掉（selectLesson 等處的 bags={}），於是抽牌不放回形同虛設——使用者實測回報
+   「跨不同課的測驗再回來就忘光了」。
+   改法：另記 drawn[mode]（本輪已出過的題目），袋子一律照**當前**題池重建再扣掉 drawn。
+   為什麼不是「切課別時濾掉不合範圍的題目」：濾只會變少不會變多，從單課切回全範圍時
+   新課永遠進不了袋（2026-08-07 實跑量到 mean:130→0）。記已出過才對稱。
+   ⚠️ typed／listen 的 poolFor 每次呼叫都新建包裝物件（{tm,src}、生成題），
+   物件同一性比對永遠落空 → 這兩型行為與改版前完全相同，不受惠也不受損。
+   drawn 仍是記憶體變數：重新整理／app 被系統回收仍會歸零，跨 session 持久化另案。 */
+var drawn={};
 function drawQ(mode){
-  if(!bags[mode]||!bags[mode].length){const p=poolFor(mode);if(!p.length)return null;bags[mode]=[...p].sort(()=>Math.random()-.5);}
-  return bags[mode].shift();
+  if(!bags[mode]||!bags[mode].length){
+    const p=poolFor(mode);if(!p.length)return null;
+    const seenSet=drawn[mode]||(drawn[mode]=new Set());
+    let rest=p.filter(x=>!seenSet.has(x));
+    if(!rest.length){seenSet.clear();rest=[...p];}   /* 整輪跑完才重洗 */
+    bags[mode]=rest.sort(()=>Math.random()-.5);
+  }
+  const it=bags[mode].shift();
+  if(it&&drawn[mode])drawn[mode].add(it);
+  return it;
 }
 function requeue(mode,item){const b=bags[mode]||(bags[mode]=[]);b.splice(Math.min(b.length,2+(Math.random()*3|0)),0,item);}
 
@@ -6636,6 +6654,7 @@ qnext.onclick=()=>{saveLastQ();newQ();};
 function qWordOf(){
   if(qmode==='grad')return null;
   if((qCurMode==='mean'||qCurMode==='gender')&&qCur&&qCur.id!==undefined)return qCur;
+  if(qCurMode==='prod'&&qCur&&qCur.id!==undefined)return qCur;   /* 2026-08-07：中→德也掛狀態鈕 */
   if(qCurMode==='listen'&&qCur&&qCur.wl&&qCur.v&&qCur.v.id!==undefined)return qCur.v;   /* N22 單字聽辨義 */
   let src=null;
   if(qCurMode==='plural'&&qCur)src=qCur;
@@ -7178,11 +7197,23 @@ function renderProd(pre){
       }
       requeue('prod',v);
     }
-    if(!ok||usedHint){weakProd[v.id]=1;saveWeakProd();}
+    /* 2026-08-07：產出成功是比辨識成功更強的證據，單向往上傳遞——答對即畢業。
+       但**必須未用救生圈**：字母磚給了就不算自己撈出來的。
+       反向不成立（產出失敗不取消畢業），因為 mastered 記的是「看得懂」，那沒有退步。
+       畢業不會讓這個字退出 prod 題池——mastered 只擋 mean/gender。
+       用「看得懂」豁免「說得出」是錯的，退場交給 N15 衰退（DECAY_DAYS）管。 */
+    if(ok&&!usedHint){
+      if(weakProd[v.id]){delete weakProd[v.id];saveWeakProd();}
+      if(v.id!==undefined){
+        if(!mastered[v.id]){mastered[v.id]=1;saveMastered();}
+        if(weak[v.id]){delete weak[v.id];saveWeak();}
+        seen[v.id]=Date.now();saveSeen();
+      }
+    }else{weakProd[v.id]=1;saveWeakProd();}
     note.innerHTML=h;
     var cl=document.getElementById('prodClue');
     if(cl){cl.textContent=(needArt?(ART[v.g]||''):'')+ans;cl.style.color=ok?'#15803d':'#b91c1c';cl.style.fontWeight='700';}
-    qscore.textContent='分數 '+qScore+' / '+qTotal;qnext.hidden=false;speak(qSpeak);
+    qscore.textContent='分數 '+qScore+' / '+qTotal;qnext.hidden=false;renderQMark();speak(qSpeak);
   }
   go.onclick=finish;
   inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();finish();}});
