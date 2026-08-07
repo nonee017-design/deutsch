@@ -467,6 +467,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
       <button class="chip" data-qmode="typed" data-on="false">⌨️ 打字</button>
       <button class="chip" data-qmode="listen" data-on="false">👂 聽力</button>
       <button class="chip" data-qmode="satzbau" data-on="false">🧱 語序</button>
+      <button class="chip" data-qmode="prod" data-on="false">✍️ 中→德</button>
       <button class="chip" data-qmode="meilen" data-on="false">🏁 總複習</button>
       <button class="chip" data-qmode="grad" data-on="false">🎓 畢業考</button>
     </div>
@@ -673,8 +674,8 @@ const ADD4=[
   {de:"brauchen",zh:"需要（延伸；Brauchen Sie Hilfe?）",g:null,cat:"動詞",lesson:"L4",ex:["Brauchen Sie Hilfe?","您需要幫忙嗎？"]},
   {de:"leicht",zh:"輕／容易（↔ schwer）",g:null,cat:"形容詞",lesson:"L4",ex:["Die Aufgabe ist leicht.","這作業很簡單。"]},
   {de:"schwer",zh:"重／難（↔ leicht）",g:null,cat:"形容詞",lesson:"L4",ex:["Der Schrank ist schwer.","這櫃子很重。"]},
-  {de:"machen",zh:"做；算錢時「一共」（Das macht 9,99 €.）",g:null,cat:"動詞",lesson:"L4",ex:["Das macht neun Euro neunundneunzig.","一共 9.99 歐。"]},
-  {de:"sagen",zh:"說",g:null,cat:"動詞",lesson:"L4",ex:["Wie sagt man das auf Deutsch?","這德文怎麼說？"]},
+  {de:"machen",zh:"做；算錢時「一共」（Das macht 9,99 €.）",q:"做（一般動作／算錢「一共」）",g:null,cat:"動詞",lesson:"L4",ex:["Das macht neun Euro neunundneunzig.","一共 9.99 歐。"]},
+  {de:"sagen",zh:"說",q:"說（說出某句話）",g:null,cat:"動詞",lesson:"L4",ex:["Wie sagt man das auf Deutsch?","這德文怎麼說？"]},
   {de:"Angebot",zh:"報價／優惠（das, -e）",g:"das",cat:"數字",lesson:"L4",ex:["Das ist ein gutes Angebot.","這是個好價。"]},
   {de:"Hilfe",zh:"幫助（Brauchen Sie Hilfe?）",g:"die",cat:"常用",lesson:"L4",ex:["Brauchen Sie Hilfe?","您需要幫忙嗎？"]},
   {de:"Aufgabe",zh:"作業／任務",g:"die",cat:"常用",lesson:"L4",ex:["Die Aufgabe ist nicht schwer.","這作業不難。"]},
@@ -738,7 +739,7 @@ const ADD6=[
   {de:"Meer",zh:"海",g:"das",cat:"自然",lesson:"L6",ex:["Das Meer ist blau.","大海是藍的。"]},
   {de:"Fluss",zh:"河（複數 Flüsse 變音）",g:"der",cat:"自然",lesson:"L6",ex:["Der Fluss ist lang.","這條河很長。"]},
   /* 動詞（多為 Akkusativ 動詞）*/
-  {de:"möchten",zh:"想要（禮貌；ich möchte/du möchtest）",g:null,cat:"動詞",lesson:"L6",ex:["Ich möchte einen Kaffee.","我想要一杯咖啡。"],ex2:["Möchtest du auch einen Kaffee?","你也想要一杯咖啡嗎？"]},
+  {de:"möchten",zh:"想要（禮貌；ich möchte/du möchtest）",q:"想要（禮貌委婉）",g:null,cat:"動詞",lesson:"L6",ex:["Ich möchte einen Kaffee.","我想要一杯咖啡。"],ex2:["Möchtest du auch einen Kaffee?","你也想要一杯咖啡嗎？"]},
   {de:"bestellen",zh:"訂購",g:null,cat:"動詞",lesson:"L6",ex:["Ich möchte die Uhr bestellen.","我想訂這只錶。"]},
   {de:"nehmen",zh:"拿／選（不規則：du nimmst/er nimmt）",g:null,cat:"動詞",lesson:"L6",ex:["Ich nehme den Stift.","我拿這支筆。"],ex2:["Nimmst du den Bus oder das Auto?","你要搭公車還是開車？"],pex:["Ich habe den Stift genommen.","我拿了那支筆。"]},
   {de:"suchen",zh:"找、尋找",g:null,cat:"動詞",lesson:"L6",ex:["Ich suche einen Stift.","我在找一支筆。"]},
@@ -765,7 +766,7 @@ const ADD5B=[
   {de:"Fax",zh:"傳真",g:"das",cat:"個人資料",lesson:"L5",ex:["Haben Sie ein Fax?","您有傳真嗎？"]},
   /* L5 常用 — 字表補漏 */
   {de:"Entschuldigung",zh:"不好意思／對不起（搭話常用）",g:"die",cat:"常用",lesson:"L5",ex:["Entschuldigung, wie heißt das?","不好意思，這叫什麼？"]},
-  {de:"Problem",zh:"問題（kein Problem 沒問題）",g:"das",cat:"常用",lesson:"L5",ex:["Kein Problem!","沒問題！"]},
+  {de:"Problem",zh:"問題（kein Problem 沒問題）",q:"問題（麻煩、困難）",g:"das",cat:"常用",lesson:"L5",ex:["Kein Problem!","沒問題！"]},
   {de:"Wort",zh:"字、詞（複數 Wörter）",g:"das",cat:"常用",lesson:"L5",ex:["Wie heißt das Wort auf Deutsch?","這個字德文怎麼說？"]},
   {de:"Wörterbuch",zh:"字典（複數 Wörterbücher）",g:"das",cat:"常用",lesson:"L5",ex:["Ich brauche ein Wörterbuch.","我需要一本字典。"]},
   {de:"Menge",zh:"數量",g:"die",cat:"常用",lesson:"L5",ex:["Welche Menge möchten Sie?","您要多少數量？"]},
@@ -833,7 +834,7 @@ const ADD123=[
   {de:"genau",zh:"正是、沒錯",g:null,cat:"常用語",lesson:"L3",ex:["Ja, genau!","對，沒錯！"]},
   {de:"doch",zh:"不，其實有（反駁否定）",g:null,cat:"常用語",lesson:"L3",ex:["Doch, ich bin verheiratet.","不，我（其實）結婚了。"]},
   {de:"mehr",zh:"更多（nicht mehr＝不再）",g:null,cat:"常用語",lesson:"L3",ex:["Ich brauche mehr Zeit.","我需要更多時間。"]},
-  {de:"sprechen",zh:"說（語言）— e→i 變音",g:null,cat:"動詞",lesson:"L3",ex:["Welche Sprachen sprichst du?","你說哪些語言？"],ex2:["Er spricht sehr gut Englisch.","他英文說得很好。"],pex:["Er hat sehr gut Englisch gesprochen.","他那時英文說得很好。"]},
+  {de:"sprechen",zh:"說（語言）— e→i 變音",q:"說（說某種語言）",g:null,cat:"動詞",lesson:"L3",ex:["Welche Sprachen sprichst du?","你說哪些語言？"],ex2:["Er spricht sehr gut Englisch.","他英文說得很好。"],pex:["Er hat sehr gut Englisch gesprochen.","他那時英文說得很好。"]},
   {de:"lesen",zh:"讀、閱讀 — e→ie 變音",g:null,cat:"動詞",lesson:"L3",ex:["Ich lese ein Buch.","我在讀一本書。"],ex2:["Liest du gern Zeitungen?","你喜歡看報紙嗎？"]},
   {de:"hören",zh:"聽（廣義：聽到、聽音樂）",g:null,cat:"動詞",lesson:"L3",ex:["Ich höre gern Musik.","我喜歡聽音樂。"]},
   {de:"sehen",zh:"看 — e→ie 變音",g:null,cat:"動詞",lesson:"L3",ex:["Er sieht einen Film.","他在看電影。"],ex2:["Siehst du das Schild dort?","你看到那邊的招牌嗎？"],pex:["Er hat einen Film gesehen.","他看了一部電影。"]},
@@ -860,7 +861,7 @@ const ADD7=[
  {de:"schwimmen",zh:"游泳（現在式規則變化）",g:null,cat:"動詞",lesson:"L7",ex:["Wir schwimmen im See.","我們在湖裡游泳。"],pex:["Wir sind im See geschwommen.","我們在湖裡游了泳。"]},
  {de:"singen",zh:"唱歌",g:null,cat:"動詞",lesson:"L7",ex:["Sie singt sehr gut.","她唱歌唱得很好。"]},
  {de:"gehen",zh:"去、走（高頻動詞，現在式規則變化）",g:null,cat:"動詞",lesson:"L7",ex:["Wir gehen ins Kino.","我們去看電影。"]},
- {de:"spazieren gehen",zh:"散步（固定搭配）",g:null,cat:"動詞",lesson:"L7",ex:["Ich gehe gern spazieren.","我喜歡去散步。"]},
+ {de:"spazieren gehen",zh:"散步（固定搭配）",q:"去散步（固定搭配）",g:null,cat:"動詞",lesson:"L7",ex:["Ich gehe gern spazieren.","我喜歡去散步。"]},
  {de:"spielen",zh:"玩、演奏（Fußball/Tennis/Gitarre spielen）",g:null,cat:"動詞",lesson:"L7",ex:["Ich spiele gern Gitarre.","我喜歡彈吉他。"],pex:["Wir haben im Park gespielt.","我們在公園玩了。"]},
  {de:"tanzen",zh:"跳舞（字尾z：du/er只加t，不加st）",g:null,cat:"動詞",lesson:"L7",ex:["Du kannst wirklich toll tanzen.","你真的很會跳舞。"]},
  {de:"treffen",zh:"見面、遇到 — e→i 變音（wir treffen uns＝我們彼此碰面，uns 是反身用法）",g:null,cat:"動詞",lesson:"L7",ex:["Ich treffe heute Freunde.","我今天要跟朋友見面。"],ex2:["Triffst du sie am Wochenende?","你週末要跟她見面嗎？"]},
@@ -1084,7 +1085,7 @@ const ADD12=[
  {de:"Silvester",zh:"跨年夜（不可數）",g:"das",cat:"節慶",lesson:"L12",ex:["Ich möchte gern Silvester in Berlin feiern.","我想在柏林跨年。"]},
  {de:"Leute",zh:"人們（只有複數）",g:"plu",cat:"節慶",lesson:"L12",ex:["Ich habe viele nette Leute getroffen.","我認識了很多不錯的人。"]},
  {de:"Person",zh:"人、人物",g:"die",cat:"節慶",lesson:"L12",ex:["Wie viele Personen kommen?","有多少人要來？"]},
- {de:"anfangen",zh:"開始（可分離＋母音變：du fängst an）",g:null,cat:"動詞",lesson:"L12",ex:["Der Karneval fängt im November an.","嘉年華十一月開始。"],ex2:["Wann fängst du mit der Arbeit an?","你什麼時候開始工作？"],pex:["Das Oktoberfest hat im September angefangen.","啤酒節九月開始了。"]},
+ {de:"anfangen",zh:"開始（可分離＋母音變：du fängst an）",q:"開始（口語，可分離動詞）",g:null,cat:"動詞",lesson:"L12",ex:["Der Karneval fängt im November an.","嘉年華十一月開始。"],ex2:["Wann fängst du mit der Arbeit an?","你什麼時候開始工作？"],pex:["Das Oktoberfest hat im September angefangen.","啤酒節九月開始了。"]},
  {de:"aufhören",zh:"結束、停止（可分離）",g:null,cat:"動詞",lesson:"L12",ex:["Der Karneval hört im Februar auf.","嘉年華二月結束。"],pex:["Der Karneval hat im Februar aufgehört.","嘉年華在二月結束了。"]},
  {de:"feiern",zh:"慶祝",g:null,cat:"動詞",lesson:"L12",ex:["Wir feiern Silvester und Neujahr.","我們慶祝跨年和新年。"],pex:["Wir haben letzte Woche gefeiert.","我們上週慶祝了。"]},
  {de:"dauern",zh:"持續（時間長度）",g:null,cat:"動詞",lesson:"L12",ex:["Das Oktoberfest dauert zwei Wochen.","啤酒節持續兩週。"]},
@@ -1219,7 +1220,7 @@ const ADD13=[
  {de:"nett",zh:"親切、貼心（Sehr nett!＝真貼心！）",g:null,cat:"禮貌用語",lesson:"L13",ex:["Sehr nett!","真貼心！"]},
  {de:"Einen Moment!",zh:"稍等一下！",g:null,cat:"禮貌用語",lesson:"L13"},
  /* 常用 */
- {de:"Frage",zh:"問題",g:"die",cat:"常用",lesson:"L13",ex:["Ich habe eine Frage.","我有一個問題。"]},
+ {de:"Frage",zh:"問題",q:"問題（提問）",g:"die",cat:"常用",lesson:"L13",ex:["Ich habe eine Frage.","我有一個問題。"]},
  {de:"Moment",zh:"片刻、時刻",g:"der",cat:"常用",lesson:"L13"},
  {de:"die beiden",zh:"這兩者、兩個都",g:null,cat:"常用",lesson:"L13"},
  /* 動詞：核心 Lernwortschatz */
@@ -1228,7 +1229,7 @@ const ADD13=[
  {de:"weiterfahren",zh:"繼續開／繼續走（可分離，sein 類動詞，母音變：du fährst weiter）",g:null,cat:"動詞",lesson:"L13",ex:["Fahren Sie hier weiter.","請從這裡繼續走。"],ex2:["Er fährt noch bis zur Ampel weiter.","他還要繼續開到紅綠燈那裡。"],pex:["Er ist noch bis zur Ampel weitergefahren.","他又往前開到了紅綠燈。"]},
  {de:"wenden",zh:"迴轉、調頭",g:null,cat:"動詞",lesson:"L13",ex:["Wenden Sie bitte hier.","請在這裡迴轉。"]},
  {de:"zurückfahren",zh:"開回去（可分離，sein 類動詞，母音變：du fährst zurück）",g:null,cat:"動詞",lesson:"L13",ex:["Fahren Sie zurück!","請開回去！"],ex2:["Wann fährst du nach Taiwan zurück?","你什麼時候要回台灣？"]},
- {de:"anmachen",zh:"打開（可分離，開關類）",g:null,cat:"動詞",lesson:"L13",ex:["Machen Sie das Licht an.","請把燈打開。"]},
+ {de:"anmachen",zh:"打開（可分離，開關類）",q:"打開（電器、開關）",g:null,cat:"動詞",lesson:"L13",ex:["Machen Sie das Licht an.","請把燈打開。"]},
  {de:"helfen",zh:"幫助（母音變：du hilfst, er hilft；受詞用 Dativ！）",g:null,cat:"動詞",lesson:"L13",ex:["Können Sie mir helfen?","您可以幫我嗎？"],ex2:["Er hilft seiner Oma oft im Garten.","他常常在花園裡幫他奶奶。"]},
  {de:"stimmen",zh:"正確、沒錯",g:null,cat:"動詞",lesson:"L13",ex:["Ja, das stimmt.","對，沒錯。"]},
  /* 動詞：延伸（老師骰子活動） */
@@ -1344,7 +1345,7 @@ const ADDFIXL8=[
  ex:["Leider habe ich keine Zeit.","可惜我沒空。"]},
 {de:"ins",zh:"去…（方向，in+das 縮合，回答 Wohin?）",g:null,cat:"常用",lesson:"L8",
  ex:["Gehen wir ins Kino?","我們要去看電影嗎？"]},
-{de:"wollen",zh:"想要（比 möchten 語氣更強烈、指已下定決心的計畫；提議句型 Wollen wir…?＝要不要一起…？；完整變位已補）",g:null,cat:"常用",lesson:"L8",
+{de:"wollen",zh:"想要（比 möchten 語氣更強烈、指已下定決心的計畫；提議句型 Wollen wir…?＝要不要一起…？；完整變位已補）",q:"想要（意志堅決的計畫）",g:null,cat:"常用",lesson:"L8",
  ex:["Wollen wir ins Kino gehen?","我們要不要去看電影？"]},
 {de:"Viertel",zh:"一刻鐘、四分之一（das Viertel；Viertel vor/nach ＋整點＝差一刻/過一刻）",g:"das",cat:"常用",lesson:"L8",
  ex:["Es ist Viertel vor zehn.","現在是九點四十五分（差一刻十點）。"]},
@@ -1439,7 +1440,7 @@ const ADD16=[
 {de:"ausmachen",zh:"關掉／約定（可分離）",g:null,cat:"動詞",lesson:"L16",ex:["Ich mache das Licht aus.","我把燈關掉。"],pex:["Ich habe das Licht ausgemacht.","我把燈關掉了。"]},
 {de:"kennenlernen",zh:"認識（可分離）",g:null,cat:"動詞",lesson:"L16",ex:["Ich möchte ihn gern kennenlernen.","我想認識他。"]},
 {de:"mitnehmen",zh:"帶走、隨身帶（可分離；母音變：du nimmst, er nimmt）",g:null,cat:"動詞",lesson:"L16",ex:["Ich nehme mein Handy immer mit.","我總是隨身帶手機。"],ex2:["Nimmst du deinen Föhn mit?","你會帶你的吹風機嗎？"],pex:["Ich habe mein Handy immer mitgenommen.","我一直都把手機帶在身上。"]},
-{de:"tun",zh:"做",g:null,cat:"動詞",lesson:"L16",ex:["Was kann ich für Sie tun?","我能為您做什麼？"]},
+{de:"tun",zh:"做",q:"做（較抽象：做某件事）",g:null,cat:"動詞",lesson:"L16",ex:["Was kann ich für Sie tun?","我能為您做什麼？"]},
 {de:"warten",zh:"等（字幹加 e：du wartest, er wartet）",g:null,cat:"動詞",lesson:"L16",ex:["Ich warte auf den Techniker.","我在等技師。"]},
 {de:"vereinbaren",zh:"約定",g:null,cat:"動詞",lesson:"L16",ex:["Wir vereinbaren einen Termin.","我們約個時間。"]},
 {de:"absagen",zh:"取消（可分離）",g:null,cat:"動詞",lesson:"L16",ex:["Ich muss den Termin absagen.","我得取消約會。"]},
@@ -1596,7 +1597,7 @@ const ADDP2V=[
 {de:"telefonieren",zh:"打電話",g:null,cat:"動詞",lesson:"L7",ex:["Kann ich mal telefonieren?","我可以借打個電話嗎？"],pex:["Ich habe gestern lange telefoniert.","我昨天講了很久的電話。"]},
 ];
 const ADD10S=[
-{de:"aufmachen",zh:"打開（門、窗）",g:null,cat:"動詞",lesson:"L10",ex:["Du machst die Tür auf.","你把門打開。"],pex:["Wir haben das Fenster aufgemacht.","我們把窗戶打開了。"]},
+{de:"aufmachen",zh:"打開（門、窗）",q:"打開（門、窗）",g:null,cat:"動詞",lesson:"L10",ex:["Du machst die Tür auf.","你把門打開。"],pex:["Wir haben das Fenster aufgemacht.","我們把窗戶打開了。"]},
 {de:"zumachen",zh:"關上（反義 aufmachen）",g:null,cat:"動詞",lesson:"L10"},
 {de:"mitkommen",zh:"一起來、跟著來",g:null,cat:"動詞",lesson:"L10",ex:["Paul kommt nach Berlin mit.","Paul 一起去柏林。"],ex2:["Kommt Paul nach Berlin mit?","Paul 要一起去柏林嗎？"],pex:["Paul ist nach Berlin mitgekommen.","Paul 一起去了柏林。"]},
 {de:"zuhören",zh:"傾聽、專心聽（＋Dativ）",g:null,cat:"動詞",lesson:"L10",ex:["Die Schüler hören im Unterricht gut zu.","學生們上課認真聽。"],ex2:["Hören die Schüler im Unterricht gut zu?","學生們上課有認真聽嗎？"],pex:["Die Schüler haben im Unterricht gut zugehört.","學生們上課聽得很認真。"]},
@@ -1609,7 +1610,7 @@ const ADD10S=[
 ];
 const ADDCLO=[
 {de:"liegen",zh:"（平放地）在、位於（東西橫躺著；人站著用 stehen、坐著用 sitzen。南德/奧地利完成式用 ist gelegen，漢堡用 hat gelegen——建議問老師求證考試接受哪種）",g:null,cat:"動詞",lesson:"L4",ex:["Im Wohnzimmer liegen zwei Teppiche.","客廳裡鋪著兩張地毯。"],ex2:["Auf dem Tisch liegen zwei Mäuse.","桌上放著兩隻滑鼠。"],pex:["Das Buch hat auf dem Tisch gelegen.","那本書剛才放在桌上。"]},
-{de:"beginnen",zh:"開始（強變化：begonnen。與 anfangen 幾乎同義，anfangen 較口語、且可分離）",g:null,cat:"動詞",lesson:"L12",ex:["Im September beginnt der Kurs.","課程九月開始。"],ex2:["Die Kurse beginnen im September.","課程們九月開始。"],pex:["Der Kurs hat um acht begonnen.","課程八點開始了。"]},
+{de:"beginnen",zh:"開始（強變化：begonnen。與 anfangen 幾乎同義，anfangen 較口語、且可分離）",q:"開始（較正式）",g:null,cat:"動詞",lesson:"L12",ex:["Im September beginnt der Kurs.","課程九月開始。"],ex2:["Die Kurse beginnen im September.","課程們九月開始。"],pex:["Der Kurs hat um acht begonnen.","課程八點開始了。"]},
 {de:"hängen",zh:"掛著／掛上（⚠️ 兩個 Partizip：不及物「東西掛在那裡」＝hat gehangen（強變化）；及物「把東西掛上去」＝hat gehängt（弱變化）。本卡登記不及物形，建議問老師求證用法差異）",g:null,cat:"動詞",lesson:"L4",ex:["Im Bad hängen zwei Spiegel.","浴室裡掛著兩面鏡子。"],ex2:["Die Bademäntel hängen im Bad.","浴袍掛在浴室裡。"],pex:["Der Spiegel hat im Bad gehangen.","那面鏡子（剛才）掛在浴室裡。"]},
 {de:"führen",zh:"帶領、經營、進行（führen ein Gespräch＝進行對話；規則變化）",g:null,cat:"動詞",lesson:"L7",ex:["Wir führen zwei wichtige Gespräche.","我們進行兩場重要的談話。"],ex2:["Die beiden Partnerinnen führen die Firma.","這兩位合夥人經營這家公司。"],pex:["Wir haben ein langes Gespräch geführt.","我們進行了一場很長的談話。"]},
 {de:"anbieten",zh:"提供、供應（可分離：Ich biete … an；字幹 -t 結尾 → du bietest）",g:null,cat:"動詞",lesson:"L9",ex:["Das Restaurant bietet zwei Suppen an.","這家餐廳供應兩種湯。"],ex2:["Das Hotel bietet zwei Frühstücke an.","這家旅館供應兩種早餐。"],pex:["Das Restaurant hat zwei Suppen angeboten.","這家餐廳供應了兩種湯。"]},
@@ -1633,7 +1634,7 @@ const ADDCLOADJ=[
  {de:"viel",zh:"多的（複數 viele；比較級 mehr／最高級 meist）",g:null,cat:"形容詞",lesson:"L4",ex:["Im Laden gibt es viele Sofas.","店裡有很多沙發。"]},
  {de:"unterschiedlich",zh:"不同的、各異的",g:null,cat:"形容詞",lesson:"L5",ex:["Die Häuser haben unterschiedliche Hausnummern.","這些房子的門牌號碼各不相同。"]},
  {de:"warm",zh:"溫暖的（↔ kalt）",g:null,cat:"形容詞",lesson:"L8",ex:["Wir haben warme Mittage im Sommer.","我們夏天的中午很溫暖。"]},
- {de:"ruhig",zh:"安靜的（↔ laut）",g:null,cat:"形容詞",lesson:"L8",ex:["Wir haben zwei ruhige Abende.","我們有兩個安靜的夜晚。"]},
+ {de:"ruhig",zh:"安靜的（↔ laut）",q:"安靜的（環境不吵）",g:null,cat:"形容詞",lesson:"L8",ex:["Wir haben zwei ruhige Abende.","我們有兩個安靜的夜晚。"]},
  {de:"frei",zh:"自由的、空閒的（↔ besetzt）",g:null,cat:"形容詞",lesson:"L123",ex:["Am Samstag bin ich frei.","星期六我有空。"]},
  {de:"letzt",zh:"上一個、最後一個（限定詞尾變化：letzte/letzten/letztes，恆需詞尾、不單獨使用——建議問老師求證確切用法）",g:null,cat:"形容詞",lesson:"L11",ex:["Was hast du letzte Woche gemacht?","你上星期做了什麼？"]},
  {de:"windig",zh:"有風的",g:null,cat:"形容詞",lesson:"L12",ex:["Im Herbst ist es windig.","秋天多風。"]},
@@ -1810,7 +1811,7 @@ const ADD18S=[
 {de:"füttern",zh:"餵（動物、嬰兒）",g:null,cat:"動詞",lesson:"L18",ex:["Ich füttere den Hund am Morgen.","我早上餵狗。"],pex:["Hast du die Katze schon gefüttert?","你餵過貓了嗎？"]},
 {de:"verdauen",zh:"消化",g:null,cat:"動詞",lesson:"L18",ex:["Der Bauch verdaut das Essen.","肚子消化食物。"],pex:["Ich habe das Essen schlecht verdaut.","那頓飯我消化不良。"]},
 {de:"schließen",zh:"關上、閉上（反：öffnen）",g:null,cat:"動詞",lesson:"L18",ex:["Schließen Sie bitte die Augen!","請閉上眼睛！"],pex:["Ich habe das Fenster geschlossen.","我把窗戶關上了。"]},
-{de:"spazieren",zh:"散步（日常多與 gehen 連用）",g:null,cat:"動詞",lesson:"L18",ex:["Wir spazieren durch den Park.","我們在公園散步。"],pex:["Wir sind am Sonntag spaziert.","我們星期天散了步。"]},
+{de:"spazieren",zh:"散步（日常多與 gehen 連用）",q:"散步（單一動詞）",g:null,cat:"動詞",lesson:"L18",ex:["Wir spazieren durch den Park.","我們在公園散步。"],pex:["Wir sind am Sonntag spaziert.","我們星期天散了步。"]},
 /* ── L18 老師補充：自然療法 ── */
 {de:"heilen",zh:"治癒、痊癒",g:null,cat:"健康",lesson:"L18",ex:["Kräuter heilen nicht alles.","草藥不是什麼都能治。"],pex:["Die Wunde ist gut geheilt.","傷口癒合得很好。"]},
 {de:"erscheinen",zh:"出現；（書）出版（建議問老師求證：老師只寫了 erschienen，未給上下文，兩義都成立）",g:null,cat:"動詞",lesson:"L18",ex:["Der Arzt erscheint sofort.","醫生馬上出現。"],pex:["Das Buch ist letztes Jahr erschienen.","這本書去年出版了。"]},
@@ -1905,7 +1906,7 @@ const ADD20=[
 {de:"peinlich",zh:"尷尬的",g:null,cat:"形容詞",lesson:"L20",ex:["Das war so peinlich!","那真是太尷尬了！"]},
 {de:"faul",zh:"懶惰的",g:null,cat:"形容詞",lesson:"L20",ex:["Seid nicht so faul!","（你們）別那麼懶！"]},
 {de:"gegenseitig",zh:"互相地",g:null,cat:"副詞",lesson:"L20",ex:["Korrigieren Sie gegenseitig Ihre Sätze.","請互相修改你們的句子。"]},
-{de:"still",zh:"安靜的",g:null,cat:"形容詞",lesson:"L20",ex:["Sei still!","安靜！"]},
+{de:"still",zh:"安靜的",q:"安靜的（無聲、靜止）",g:null,cat:"形容詞",lesson:"L20",ex:["Sei still!","安靜！"]},
 {de:"inklusive",zh:"含、包含在內（縮寫 inkl.）",g:null,cat:"副詞",lesson:"L20",ex:["Miete: 250,00 Euro (inkl. Nebenkosten).","租金：250 歐元（含雜費）。"]},
 {de:"weiter",zh:"更多的、進一步的",g:null,cat:"副詞",lesson:"L20",ex:["Weitere wichtige Wörter","更多重要單字"]},
 ];
@@ -4216,6 +4217,11 @@ async function saveWeakSent(){try{await Store.set('a1:weakSent',JSON.stringify(w
 let weakGram={},gramWeakOnly=false,gramAllOpen=false;
 async function loadWeakGram(){try{const v=await Store.get('a1:weakGram');if(v)weakGram=JSON.parse(v);}catch(e){weakGram={};}}
 async function saveWeakGram(){try{await Store.set('a1:weakGram',JSON.stringify(weakGram));}catch(e){}}
+/* ✍️ 中→德產出題專用弱點集（2026-08-07）：刻意不共用 weak／mastered——
+   那兩個記的是「看得懂」，產出失敗是另一種知識狀態，混在一起會讓辨識進度被產出失敗污染。 */
+let weakProd={};
+async function loadWeakProd(){try{const v=await Store.get('a1:weakProd');if(v)weakProd=JSON.parse(v);}catch(e){weakProd={};}}
+async function saveWeakProd(){try{await Store.set('a1:weakProd',JSON.stringify(weakProd));}catch(e){}}
 
 let errors={}; /* M1：錯題統計，key=文法點（sub 冒號前段），value=錯誤次數 */
 async function loadErrors(){try{const v=await Store.get('a1:errors');if(v)errors=JSON.parse(v);}catch(e){errors={};}}
@@ -6415,7 +6421,7 @@ function renderSwList(id){
 
 /* 🏁 總複習：全課別混抽固定 30 題，「對比」題權重 ×2，結束出各文法點答對率 */
 let meilenQueue=[],meilenStats={},meilenDone=0,meilenTotal=0;const MEILEN_N=30;
-function statKeyOf(m,q){if(m==='mean')return '字義';if(m==='gender')return '性別 der/die/das';if(m==='listen')return (q&&q.syn)?errKeyOf(m,q):'👂 聽力';if(m==='satzbau')return '🧱 語序';return q.ng?'📚 詞彙/表達':(errKeyOf(m,q)||m);}
+function statKeyOf(m,q){if(m==='mean')return '字義';if(m==='gender')return '性別 der/die/das';if(m==='listen')return (q&&q.syn)?errKeyOf(m,q):'👂 聽力';if(m==='satzbau')return '🧱 語序';if(m==='prod')return '✍️ 中→德';return q.ng?'📚 詞彙/表達':(errKeyOf(m,q)||m);}
 /* 2026-07 改版：總複習跟著課別範圍走（全選＝舊的全課行為），字義/性別預設排除已畢業字（「含已掌握」chip 生效）；「只考不熟」不影響總複習 */
 /* N11.5：單元挑戰（modulRun）版總複習走加難固定配方——聽力8＋語序8＋文法7＋複數4＋字義2＋性別1，
    聽＋排占過半、與一般 🏁 做出難度區隔；某維度題池不足時由其餘題池隨機補位，門檻 85% 不變 */
@@ -6534,6 +6540,10 @@ function poolFor(mode){
       /* N22：單字聽辨義只在純 👂 進池——🎓 配方門檻不動、🏁 是 🏆 第①關門檻 */
       return lp.concat(numListenPool(lp.length),qmode==='listen'?wordListenPool(lp.length):[]);})();
   if(mode==='satzbau')return satzbauPool(qWeak,false);
+  if(mode==='prod'){
+    const base=VOCAB.filter(prodOK);
+    return qWeak?base.filter(v=>weakProd[v.id]):base.filter(lessonMatch);
+  }
   if(mode==='mean')return qWeak?VOCAB.filter(v=>v.cat!=='數字'&&weak[v.id]):VOCAB.filter(v=>v.cat!=='數字'&&lessonMatch(v)&&(qInclM||!mastered[v.id]||isDecayDue(v.id)));
   if(mode==='gender')return qWeak?VOCAB.filter(v=>v.g&&v.g!=='plu'&&weak[v.id]):VOCAB.filter(v=>v.g&&v.g!=='plu'&&lessonMatch(v)&&(qInclM||!mastered[v.id]||isDecayDue(v.id)));
   if(mode==='gram'){
@@ -6687,6 +6697,8 @@ function newQ(){
     (qCur&&qCur.syn)?renderNumListen(pre):(qCur&&qCur.wl)?renderWordListen(pre):renderListen(pre);
   }else if(m==='satzbau'){
     renderSatzbau(pre);
+  }else if(m==='prod'){
+    renderProd(pre);
   }else if(m==='typed'){
     renderTyped(pre);
   }else{ // gram / dusie / plural
@@ -7038,6 +7050,145 @@ function renderTyped(pre){
   wrap.appendChild(inp);wrap.appendChild(go);wrap.appendChild(note);
   qopts.appendChild(wrap);
   setTimeout(()=>inp.focus(),50);
+}
+/* ═══ ✍️ 中→德產出題（2026-08-07）═══════════════════════════════════════
+   缺口：全庫題型都是「看到德文 → 反應」。renderSatzbau 雖以中文起題，但字塊
+   全給，詞彙提取量為零。本題型專打「從中文撈出德文字」這一步。
+   三層難度：① 中文題幹＋首字母＋空格數（預設）② 🔡 字母磚（自己點，記入
+   weakProd）③ 揭曉。首字母＋字數同時是**解歧義機制**：19 組同義／近義撞名
+   （沙發 Sofa/Couch、大學 Universität/Uni、浴室 Bad/Badezimmer…）靠這兩個
+   線索全部唯一化，所以不需要多答案接受機制。smoke ㉘ 全掃保證此不變式，
+   未來新卡若破壞唯一性會直接擋下 push。
+   答錯與點救生圈都只寫 weakProd，不動 mastered／weak。
+   不進 🎓/🏁：畢業門檻是既有六項，不因新題型改判。 */
+function prodBase(v){
+  if(v.q)return String(v.q);
+  var z=String(v.zh||'');
+  z=z.replace(/（[^（）]*）/g,function(m){return /[♂♀男女]/.test(m)?m:'';});
+  z=z.replace(/\([^()]*\)/g,'');
+  z=z.split(/[—;；·]/)[0];
+  return z.replace(/^[\s、，,；;]+/,'').replace(/[\s、，,；;]+$/,'');
+}
+function prodPos(v){return v.g?'名詞':(v.cat==='動詞'?'動詞':'');}
+var PROD_Q=null;
+function buildProdQ(){
+  PROD_Q={};var grp={};
+  VOCAB.forEach(function(v){var b=prodBase(v);(grp[b]||(grp[b]=[])).push(v);});
+  Object.keys(grp).forEach(function(b){
+    var arr=grp[b],ps={};
+    arr.forEach(function(v){var p=prodPos(v);if(p)ps[p]=1;});
+    var multi=Object.keys(ps).length>1;
+    arr.forEach(function(v){var p=prodPos(v);PROD_Q[v.id]=(multi&&p)?b+'（'+p+'）':b;});
+  });
+}
+function prodQ(v){if(!PROD_Q)buildProdQ();return PROD_Q[v.id]||'';}
+/* 收題條件：答案是 1–3 個純字母詞、題幹非空且不含拉丁字母（含拉丁字母＝洩答案） */
+function prodOK(v){
+  if(v.prod===false||v.cat==='數字')return false;
+  var de=String(v.de||'').trim();
+  if(!/^[A-Za-zÄÖÜäöüß-]+( [A-Za-zÄÖÜäöüß-]+){0,2}$/.test(de))return false;
+  var q=prodQ(v);
+  return !!q&&!/[A-Za-zÄÖÜäöüß]/.test(q);
+}
+/* 線索列：每個詞給首字母，其餘一律底線（連字號原樣保留，它不是要你猜的） */
+function prodClue(de){
+  return String(de).split(' ').map(function(w){
+    return w.charAt(0)+' '+w.slice(1).split('').map(function(c){return c==='-'?'-':'_';}).join(' ');
+  }).join('　　');
+}
+function renderProd(pre){
+  var v=qCur,ans=String(v.de).trim(),needArt=!!(v.g&&v.g!=='plu');
+  qsub.textContent=pre+'✍️ 中→德：先在腦中想出德文，再拼出來';
+  qSpeak=(needArt?(ART[v.g]||''):'')+ans;
+  qprompt.innerHTML='<div style="font-size:1.15rem;font-weight:700;margin-bottom:10px">'+prodQ(v)+'</div>'
+    +(needArt?'<div id="prodArt" style="margin-bottom:10px"></div>':'')
+    +'<div id="prodClue" style="font-family:monospace;letter-spacing:.05em;color:var(--mut);font-size:1.1rem">'+prodClue(ans)+'</div>';
+  var art=null,usedHint=false,done=false;
+  if(needArt){
+    var ab=document.getElementById('prodArt');
+    ['der','die','das'].forEach(function(g){
+      var b=document.createElement('button');b.className='opt';b.textContent=g;
+      b.style.cssText='width:auto;display:inline-block;margin:0 4px;padding:6px 14px';
+      b.onclick=function(){
+        if(done)return;art=g;
+        [].forEach.call(ab.children,function(x){x.style.outline='';x.style.fontWeight='';});
+        b.style.outline='2px solid #2563eb';b.style.fontWeight='700';
+      };
+      ab.appendChild(b);
+    });
+  }
+  var wrap=document.createElement('div');
+  wrap.style.cssText='display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap';
+  var inp=document.createElement('input');
+  inp.type='text';inp.lang='de';inp.autocapitalize='off';inp.autocomplete='off';inp.spellcheck=false;
+  inp.placeholder='拼出德文…';
+  inp.style.cssText='font-size:1.05rem;padding:10px 12px;border:2px solid #cbd5e1;border-radius:10px;width:min(240px,60vw);text-align:center';
+  var go=document.createElement('button');go.className='btn';go.textContent='⏎ 送出';
+  var hint=document.createElement('button');hint.className='btn';hint.textContent='🔡 給我字母';hint.style.fontSize='.85rem';
+  var tiles=document.createElement('div');tiles.style.cssText='width:100%;margin-top:6px';
+  var note=document.createElement('div');note.style.cssText='width:100%;font-size:.85rem;margin-top:6px';
+  /* 救生圈：字母磚含 3 顆干擾磚，否則磚數＝答案長度，數磚就能刪去法 */
+  hint.onclick=function(){
+    if(done||usedHint)return;
+    usedHint=true;hint.disabled=true;hint.style.opacity=.5;
+    var pool=ans.replace(/ /g,'').split('');
+    var extra='abcdefghiklmnoprstuäöü'.split('');
+    for(var k=0;k<3;k++)pool.push(extra[Math.random()*extra.length|0]);
+    pool.sort(function(){return Math.random()-.5;}).forEach(function(c){
+      var b=document.createElement('button');b.className='opt';b.textContent=c;
+      b.style.cssText='width:auto;display:inline-block;margin:3px;padding:6px 11px;font-size:1rem';
+      b.onclick=function(){if(!done){inp.value+=c;}};
+      tiles.appendChild(b);
+    });
+    var bs=document.createElement('button');bs.className='btn';bs.textContent='⌫';
+    bs.style.cssText='margin:3px;font-size:.9rem';
+    bs.onclick=function(){if(!done)inp.value=inp.value.slice(0,-1);};
+    tiles.appendChild(bs);
+    note.innerHTML='<span style="color:var(--mut)">已用救生圈——這題會記進 ✍️ 弱點，之後會再遇到。</span>';
+  };
+  function bumpErr(k){errors[k]=(errors[k]||0)+1;saveErrors();renderErrPanel();}
+  function finish(){
+    if(done)return;
+    var raw=inp.value.trim().replace(/\s+/g,' ');
+    if(!raw)return;
+    if(needArt&&!art){note.innerHTML='<span style="color:#b45309;font-weight:600">先選 der / die / das</span>';return;}
+    done=true;inp.disabled=true;go.disabled=true;hint.disabled=true;
+    [].forEach.call(tiles.children,function(x){x.disabled=true;});
+    qTotal++;logAnswer();
+    var exact=raw===ans,caseOnly=!exact&&raw.toLowerCase()===ans.toLowerCase();
+    var spellOK=exact||caseOnly,artOK=!needArt||art===v.g,ok=spellOK&&artOK;
+    var h='';
+    if(ok){
+      qScore++;inp.style.borderColor='#15803d';inp.style.color='#15803d';
+      if(caseOnly&&ans.charAt(0)===ans.charAt(0).toUpperCase()&&raw.charAt(0)!==ans.charAt(0))
+        h+='<div style="color:#b45309;font-weight:600">⚠️ 算你對，但德文名詞要大寫：'+ans+'</div>';
+    }else{
+      inp.style.borderColor='#b91c1c';inp.style.color='#b91c1c';
+      if(!spellOK){
+        h+='<div style="color:#b91c1c;font-weight:600">✗ 正解：'+(needArt?(ART[v.g]||''):'')+ans+'</div>';
+        if(/[äöüßÄÖÜ]/.test(ans)){
+          if(foldDe(raw)===foldDe(ans))h+='<div style="color:#b45309;margin-top:4px">只差變音——ä/ö/ü/ß 必須打對。</div>';
+          h+='<div style="color:var(--mut);margin-top:4px">iPhone 德文鍵盤長按 a / o / u / s 可打出 ä ö ü ß。</div>';
+        }
+        bumpErr('✍️ 中→德拼字');
+      }
+      if(!artOK){
+        h+='<div style="color:#b91c1c;font-weight:600">✗ 性別是 '+(ART[v.g]||v.g)+'，你選了 '+art+'</div>';
+        bumpErr('✍️ 中→德性別');
+      }
+      requeue('prod',v);
+    }
+    if(!ok||usedHint){weakProd[v.id]=1;saveWeakProd();}
+    note.innerHTML=h;
+    var cl=document.getElementById('prodClue');
+    if(cl){cl.textContent=(needArt?(ART[v.g]||''):'')+ans;cl.style.color=ok?'#15803d':'#b91c1c';cl.style.fontWeight='700';}
+    qscore.textContent='分數 '+qScore+' / '+qTotal;qnext.hidden=false;speak(qSpeak);
+  }
+  go.onclick=finish;
+  inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();finish();}});
+  wrap.appendChild(inp);wrap.appendChild(go);wrap.appendChild(hint);wrap.appendChild(tiles);wrap.appendChild(note);
+  qopts.appendChild(wrap);
+  setTimeout(function(){inp.focus();},50);
 }
 function addOpt(label,correct){
   const b=document.createElement('button');b.className='opt';b.textContent=label;
@@ -7398,7 +7549,7 @@ async function renderContinueCard(){
     const v=await Store.get('a1:lastQ');if(!v)return;
     const s=JSON.parse(v);
     const el=document.getElementById('continueCard');if(!el)return;
-    const modeLabel={'mean':'字義','gender':'性別','gram':'文法填空','plural':'複數','typed':'⌨️ 打字','listen':'👂 聽力','satzbau':'🧱 語序','meilen':'🏁 總複習','grad':'🎓 畢業考'}[s.mode]||s.mode;
+    const modeLabel={'mean':'字義','gender':'性別','gram':'文法填空','plural':'複數','typed':'⌨️ 打字','listen':'👂 聽力','satzbau':'🧱 語序','prod':'✍️ 中→德','meilen':'🏁 總複習','grad':'🎓 畢業考'}[s.mode]||s.mode;
     el.innerHTML=`<button class="btn" id="btnContinue" style="width:100%;text-align:left">▶ 繼續：${modeLabel}</button>`;
     document.getElementById('btnContinue').onclick=()=>{
       document.querySelectorAll('[data-qmode]').forEach(x=>x.dataset.on=(x.dataset.qmode===s.mode));
@@ -7437,7 +7588,7 @@ function renderNewCard(){
 
 /* ---------- init ---------- */
 (async()=>{
-  await loadMastered();await loadWeak();await loadWeakSent();await loadWeakGram();await loadErrors();await loadLog();
+  await loadMastered();await loadWeak();await loadWeakSent();await loadWeakGram();await loadWeakProd();await loadErrors();await loadLog();
   await loadGrad();await loadModul();await loadSchreib();
   await loadSeen();await runDecayMig();
   /* 記住上次課別選擇；首次使用（含新裝置）預設 L1–3 */
