@@ -6203,11 +6203,22 @@ function satzKlammerScore(s){
   if(/\b(möchte|möchtest|möchten|kann|kannst|können|muss|musst|müssen|will|darf|soll)\b/i.test(s.de))return 2;
   return 1;
 }
+/* 2026-08-09 使用者回報：語序題全面掃描後，432 句候選裡 2 句的 zh 提示本身就是
+   「『A』的意思就是『B』」這種後設語言等價解釋句，正文直接引用完整德文對照，
+   不是附加括號能清乾淨的（見 SATZBAU_EXCLUDE 逐句理由）。這種句子的教學目的是
+   展示「兩種說法等價」，不適合拿來考「憑中文提示排語序」。
+   不用正則猜測（例如「多詞拉丁字母片語」），因為會誤傷 Deutsch Akademie／
+   Glückstadt Mitte 這類複合公司名/地名——寧可明列已知案例、不確定就不排除。 */
+const SATZBAU_EXCLUDE=new Set([
+  "Ottos Nachbarin ist die Nachbarin von Otto.",
+  "Vanillas Garten ist der Garten von Vanilla."
+]);
 function satzbauPool(wk,all){
   const base=SENTENCES.filter(s=>{
     const n=SENT_WORDS(s).length;
     if(/[–—,:;„"]/.test(s.de))return false;            /* 對話破折號、逗號、冒號 → 多句或多子句，不進語序池 */
     if((s.de.match(/[.!?]/g)||[]).length>1)return false; /* 超過一個結尾標點＝不只一句 */
+    if(SATZBAU_EXCLUDE.has(s.de))return false;          /* 中文提示本身就是德文等價解釋句，見上方註解 */
     return s.listen!==false&&n>=4&&n<=9&&(all||(wk?weakSent[s.de]:lessonMatch(s)));
   });
   const out=[];base.forEach(s=>{out.push(s);if(satzKlammerScore(s)>1)out.push(s);});return out;
@@ -7118,7 +7129,13 @@ function renderSatzbau(pre){
   const pool=ws.concat(dist);
   qsub.textContent=pre+'🧱 點字塊，排出正確語序'+(distOn?'（含干擾字）':'');
   qSpeak=s.de;
-  qprompt.innerHTML='<div style="font-size:.92rem;color:var(--mut);font-weight:400;margin-bottom:8px">🎯 '+s.zh+'</div><div id="sbAns" style="min-height:2em;border-bottom:2px dashed #bbb;margin-bottom:10px;font-size:1.05rem;text-align:left;font-weight:600"></div>';
+  /* 2026-08-09 使用者回報：SENTENCES 裡不少 zh 帶（教學用途的德文/文法提示，例如
+     「（der→einen）」「（du）」「（時間在句首，助動詞仍在第二位）」——這類提示對單字卡／
+     例句分頁是有用的輔助，但直接印進語序題提示等於把答案骨架寫在題目上。語序池 432 句裡
+     37.7%（163 句）帶括號，不是邊緣案例。只在這裡（顯示層）清括號，不動 SENTENCES 原始
+     資料——因為其他分頁引用的是完整 zh，清括號只該發生在「排語序」這個情境。 */
+  const sbZh=s.zh.replace(/\s*（[^）]*）/g,'').trim();
+  qprompt.innerHTML='<div style="font-size:.92rem;color:var(--mut);font-weight:400;margin-bottom:8px">🎯 '+sbZh+'</div><div id="sbAns" style="min-height:2em;border-bottom:2px dashed #bbb;margin-bottom:10px;font-size:1.05rem;text-align:left;font-weight:600"></div>';
   const picked=[],ansEl=()=>document.getElementById('sbAns');
   const rb=document.createElement('button');rb.className='btn';rb.textContent='↺ 重排';rb.style.marginTop='8px';
   const subBtn=document.createElement('button');subBtn.className='btn';subBtn.textContent='✅ 提交';subBtn.style.marginTop='8px';subBtn.style.marginLeft='6px';subBtn.disabled=true;
