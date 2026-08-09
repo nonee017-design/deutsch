@@ -6570,23 +6570,37 @@ function poolFor(mode){
   if(mode==='typed')return poolFor('gram').map(q=>({tm:'gram',src:q})).concat(poolFor('plural').map(q=>({tm:'plural',src:q})));
   return dusieBank.filter(lessonMatch);
 }
-function updateModeCounts(){
-  /* N?? 題型即時題數（2026-08-09，使用者提出）：8 個一般題型 chip 直接顯示
-     「當下範圍＋篩選」下的可用題數，算法就是 poolFor(mode).length——與實際抽題
-     同一顆函式，數字保證跟真的出題一致，不必另外維護一套計數邏輯。
-     🏁 總複習／🎓 畢業考不比照：兩者本來就是「上限」不是精確值（畢業考缺題型自動
-     跳過、總複習題目不足就整池出完），已在上方 <details> 說明講清楚，硬塞即時數字
-     反而跟固定配方敘述打架、更容易誤導。
-     觸發點：課別切換／篩選切換（applyLesson／qWeakOnly／qInclMastered），
-     不追蹤逐題作答造成的池變動（例如標一個字「已掌握」）——那個量級的即時性
-     使用者沒有要求，加了只是徒增複雜度。 */
-  ['mean','gender','gram','plural','typed','listen','satzbau','prod'].forEach(m=>{
-    const btn=document.querySelector(`[data-qmode="${m}"]`);
-    if(!btn)return;
-    if(!btn.dataset.baseLabel)btn.dataset.baseLabel=btn.textContent;
-    let n;try{n=poolFor(m).length;}catch(e){n=null;}
-    btn.textContent=n==null?btn.dataset.baseLabel:`${btn.dataset.baseLabel}（${n}）`;
-  });
+function roundProgress(mode){
+  /* 本輪進度（2026-08-09，使用者提出）：回傳 {done,total} ＝「當前題池」裡本輪已抽過幾題。
+     為什麼分子不是 drawn[mode].size：drawn 切課別時**刻意不清空**（2026-08-07 修正，
+     不然跨課切回來抽牌不放回會形同虛設），所以它可能含別的課的 key，
+     直接相除會出現 80/67 這種鬼數字。分母分子一律以**當前題池**為準——
+     用的就是 drawQ 算剩餘牌的同一條 filter，數字保證跟真正的出題行為一致。
+     生成題（qKeyOf 回 null，如數字聽寫）不計入分母：它們是無限變體，
+     drawQ 也永遠不把它們濾掉，本來就不存在「刷完」這回事（使用者 2026-08-09 選 A：
+     不動 drawQ，聽力顯示到可追蹤題為止）。 */
+  try{
+    const p=poolFor(mode);
+    const seen=drawn[mode];
+    let total=0,done=0;
+    for(const x of p){
+      const k=qKeyOf(mode,x);
+      if(k===null)continue;
+      total++;
+      if(seen&&seen.has(k))done++;
+    }
+    return total?{done,total}:null;
+  }catch(e){return null;}
+}
+function roundDoneNote(mode){
+  /* 一輪跑完的提示（2026-08-09 使用者要求）：drawQ 重洗的那一刻才觸發，
+     不靠使用者自己盯數字。沿用既有 bkNote 提示條，不新增 UI 元件。
+     ⚠️ 聽力等含生成題的題型永遠走不到這裡（rest 永遠非空），這是 A 案的已知結果、不是 bug。 */
+  try{
+    const nm={'mean':'字義','gender':'性別','gram':'文法填空','plural':'複數',
+              'typed':'⌨️ 打字','listen':'👂 聽力','satzbau':'🧱 語序','prod':'✍️ 中→德'}[mode]||mode;
+    if(typeof bkNote==='function')bkNote(`🃏 ${nm}：這一輪全部刷完了，重新洗牌開始下一輪`,1);
+  }catch(e){}
 }
 
 /* 抽牌不放回 */
@@ -6645,7 +6659,7 @@ function drawQ(mode){
     const p=poolFor(mode);if(!p.length)return null;
     const seenSet=drawn[mode]||(drawn[mode]=new Set());
     let rest=p.filter(x=>{const k=qKeyOf(mode,x);return k===null||!seenSet.has(k);});
-    if(!rest.length){seenSet.clear();rest=[...p];saveDrawn();}   /* 整輪跑完才重洗 */
+    if(!rest.length){seenSet.clear();rest=[...p];saveDrawn();roundDoneNote(mode);}   /* 整輪跑完才重洗 */
     bags[mode]=rest.sort(()=>Math.random()-.5);
   }
   const it=bags[mode].shift();
@@ -6665,7 +6679,7 @@ document.querySelectorAll('[data-qmode]').forEach(b=>b.onclick=()=>{
 });
 document.getElementById('qInclMastered').onclick=(e)=>{
   qInclM=!qInclM;e.target.dataset.on=qInclM;
-  bags={};qScore=0;qTotal=0;qscore.textContent='分數 0 / 0';if(qmode==='meilen')buildMeilen();if(qmode==='grad')buildGrad();newQ();updateModeCounts();
+  bags={};qScore=0;qTotal=0;qscore.textContent='分數 0 / 0';if(qmode==='meilen')buildMeilen();if(qmode==='grad')buildGrad();newQ();
 };
 document.getElementById('qReshuffle').onclick=()=>{
   /* 題袋持久化後不會自己歸零，這是唯一出口。只清「當前題型」，不動其他題型已累積的一輪進度。
@@ -6724,7 +6738,7 @@ document.getElementById('bkImport').onclick=()=>{
 };
 document.getElementById('qWeakOnly').onclick=(e)=>{
   qWeak=!qWeak;e.target.dataset.on=qWeak;
-  bags={};qScore=0;qTotal=0;qscore.textContent='分數 0 / 0';if(qmode==='meilen')buildMeilen();if(qmode==='grad')buildGrad();newQ();updateModeCounts();
+  bags={};qScore=0;qTotal=0;qscore.textContent='分數 0 / 0';if(qmode==='meilen')buildMeilen();if(qmode==='grad')buildGrad();newQ();
 };
 function sample(arr,n,exclude){const out=[],pool=arr.filter(x=>x!==exclude);while(out.length<n&&pool.length){out.push(pool.splice(Math.random()*pool.length|0,1)[0]);}return out;}
 /* 選項清洗：卡片正面照樣顯示完整 zh（含（…）註記），測驗選項只顯示核心義。剝空則保留原文 */
@@ -6786,7 +6800,7 @@ function newQ(){
     const it=gradQueue.shift();qCurMode=it.m;qCur=it.q;
   }else{qCurMode=qmode;qCur=drawQ(qmode);}
   if(!qCur){qsub.textContent='';qprompt.textContent='此範圍沒有這種題目，換個範圍或題型';return;}
-  const m=qCurMode,pre=(qmode==='meilen'?`🏁 ${meilenDone+1}/${meilenTotal}　`:qmode==='grad'?`🎓 ${gradDone+1}/${gradTotal}　`:'');
+  const m=qCurMode,pre=(qmode==='meilen'?`🏁 ${meilenDone+1}/${meilenTotal}　`:qmode==='grad'?`🎓 ${gradDone+1}/${gradTotal}　`:(function(){const r=roundProgress(qmode);return r?`🃏 ${r.done}/${r.total}　`:'';})());
   if(m==='mean'){
     qsub.textContent=pre+'這個德文是什麼意思？';
     qprompt.textContent=(qCur.g?(ART[qCur.g]||''):'')+qCur.de;
@@ -7580,7 +7594,7 @@ function applyLesson(){
   renderSentences();
   renderTexts();
   bags={};qScore=0;qTotal=0;qscore.textContent='分數 0 / 0';if(qmode==='meilen')buildMeilen();if(qmode==='grad')buildGrad();newQ();
-  updateRouteBtn();renderNewCard();updateModeCounts();
+  updateRouteBtn();renderNewCard();
 }
 function lessonKeys(){return[...document.querySelectorAll('[data-lesson]')].map(x=>x.dataset.lesson).filter(k=>k!=="ALL");}
 function syncLessonChips(){
