@@ -452,6 +452,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
     <details class="helpbox"><summary>❓ 這一頁怎麼用</summary><ul class="panel-intro">
       <li>題庫跟著上面「範圍」走；答完自動唸整句。</li>
       <li><b>👂 聽力</b>＝只聽不看；<b>🧱 語序</b>＝點字塊排句（句框句加倍）；<b>⌨️ 打字</b>＝不給選項、用鍵盤拼答案。</li>
+      <li><b>🧱 語序選項</b>：<b>🙈 先想再看</b>＝字塊先藏起來，點開才顯示（這樣你得先看中文在腦中提取，不是看到字就直接拼）；<b>🎭 加干擾塊</b>＝混入同文法點的其他正確形式（冠詞、動詞變位、介系詞、可分離前綴），殺消去法；干擾塊點錯也算進答案、直接算錯。兩項預設關，在 🏁/🎓 中強制關閉。</li>
       <li><b>🏁 總複習</b>＝範圍內全題型混抽 30 題（其中最多 4 題文法/複數以打字型態出；題目不足就整池出完），結束給各文法點答對率。想複習全部＝課別「全選」。</li>
       <li>答錯自動記錄：字義/性別→標 🔖 不熟；文法/複數→進「弱點排行」。已標「我會了」的字預設不出題，「含已掌握」切回全量。</li>
       <li><b style="color:#b45309">🔖 只考不熟</b>＝跨課只抽標過不熟的內容（不影響總複習與畢業考）。</li>
@@ -476,6 +477,8 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
       <button class="chip" id="qWeakOnly" data-on="false">🔖 只考不熟</button>
       <button class="chip" id="qInclMastered" data-on="false">含已掌握</button>
       <button class="chip" id="qReshuffle">🔄 重洗題袋</button>
+      <button class="chip" id="sbHide" data-on="false">🙈 先想再看</button>
+      <button class="chip" id="sbDist" data-on="false">🎭 加干擾塊</button>
     </div>
     <div class="qbox">
       <div class="qsub" id="qsub"></div>
@@ -6185,6 +6188,7 @@ const PLURAL=[
 ];
 
 let qWeak=false;
+let sbHide=false,sbDist=false;
 function weakNounSet(){const s=new Set();VOCAB.forEach(v=>{if(weak[v.id]&&v.g&&v.g!=='plu')s.add(v.de);});return s;}
 /* ---------- M1/M2/M3：聽力/語序題池、已掌握排除、錯題統計、總複習 ---------- */
 let qInclM=false,qCurMode='mean';
@@ -6602,6 +6606,10 @@ function saveDrawn(){   /* debounce 500ms：drawQ 每題都會呼叫，不能每
     try{const o={};for(const m in drawn)o[m]=[...drawn[m]];await Store.set('a1:drawn',JSON.stringify(o));}catch(e){}
   },500);
 }
+async function loadSbOpt(){
+  try{const v=await Store.get('a1:sbOpt');if(v){const o=JSON.parse(v);sbHide=!!o.h;sbDist=!!o.d;}}catch(e){}
+}
+function saveSbOpt(){try{Store.set('a1:sbOpt',JSON.stringify({h:sbHide,d:sbDist}));}catch(e){}}
 function drawQ(mode){
   if(!bags[mode]||!bags[mode].length){
     const p=poolFor(mode);if(!p.length)return null;
@@ -6635,6 +6643,16 @@ document.getElementById('qReshuffle').onclick=()=>{
   if(qmode!=='meilen'&&qmode!=='grad'){delete drawn[qmode];delete bags[qmode];saveDrawn();}
   qScore=0;qTotal=0;qscore.textContent='分數 0 / 0';
   if(qmode==='meilen')buildMeilen();if(qmode==='grad')buildGrad();newQ();
+};
+document.getElementById('sbHide').onclick=(e)=>{
+  sbHide=!sbHide;e.target.dataset.on=sbHide;saveSbOpt();
+  delete bags.satzbau;
+  if(qmode==='satzbau')newQ();
+};
+document.getElementById('sbDist').onclick=(e)=>{
+  sbDist=!sbDist;e.target.dataset.on=sbDist;saveSbOpt();
+  delete bags.satzbau;
+  if(qmode==='satzbau')newQ();
 };
 /* ---------- M1：進度匯出 / 匯入 ---------- */
 function bkNote(t,ok){const m=document.getElementById('bkMsg');m.textContent=t;m.style.color=ok?'#15803d':'#b91c1c';}
@@ -7020,18 +7038,94 @@ function renderListen(pre){
   }
   speak(s.de);
 }
-/* 🧱 語序題：點字塊排出正確句子 */
+/* 🧱 語序題：點字塊排出正確句子
+   sbHide=🙈先想再看（延後出字塊，先靠中文提取）／sbDist=🎭加干擾塊（同文法點的干擾字，殺消去法）
+   兩者預設關、皆持久化於 a1:sbOpt；🏁/🎓 強制關閉（避免中途變更難度動及格門檻，同 N22 先例）。
+   2026-08-09 使用者提出：先驗證手感，不做多解 checker（既有「算我對」按鈕已處理語序彈性）。
+   2026-08-09（第二批，使用者回報）：
+     ① 干擾塊移除人稱代名詞類，聚焦冠詞（性別/格位）、動詞變位、介系詞、可分離前綴；
+        動詞變位不再只靠手抄的 aux 清單——新增 buildVerbFormsRev()，從既有 VERB_META
+        機械推導六人稱形式（irr 型直接讀 f[]；reg/stemt/sib 型用既有 irrRegForms() 算，
+        跟 🧩 不規則動詞總表、smoke ⑦ 同一套函式，零新造德文）。
+     ② 干擾塊不再是「點了無效的假動作」——現在跟正解一起進 picked，答案組完直接比對，
+        含錯字就是錯，跟其他題型的錯誤處理一致；移除 item.real 分支與逐塊視覺標記。
+   2026-08-09（第三批，使用者回報）：
+     ③ 湊滿 ws.length 塊不再自動送出判分——改成鎖住其餘字塊、亮起「✅ 提交」鍵，
+        使用者看過整句再自己送出；沒按提交不觸發 finish()／不算分。↺ 重排會把提交鍵
+        重新鎖上。干擾塊點擊前後都不變色（跟正解一樣，只淡化＋停用），色彩回饋只留在
+        finish() 之後的整句判定，不逐塊洩題。 */
+const SB_CLASSES=[
+  ["der","die","das","den","dem","des","ein","eine","einen","einem","einer","mein","meine","meinen","dein","deine","sein","seine","ihr","ihre","unser","unsere"],
+  ["habe","hast","hat","haben","habt","bin","bist","ist","sind","seid","war","warst","waren"],
+  ["in","an","auf","mit","bei","von","nach","aus","zu","für","über","unter","vor","zwischen"]
+];
+/* 動詞變位反查表：surface form(小寫) → 同一動詞的其他五個人稱形式。
+   irr 型直接讀既有 VERB_META[].f（已驗證過的資料，不重新推導）；
+   reg／stemt／sib 型用既有 irrRegForms() 算 du/er，其餘人稱走全規則公式。
+   可分離動詞若無 du/er/f 覆寫可核對，寧可跳過不猜——wir/sie 是拆開後的字幹，
+   不是原形整個黏在一起，猜錯比不猜更糟。 */
+function buildVerbFormsRev(){
+  const cut=x=>String(x||'').split(' …')[0].trim();
+  const rev={};
+  Object.entries(VERB_META).forEach(([inf,mt])=>{
+    let forms;
+    if(mt.f){
+      forms=mt.f.map(cut);
+    }else if(mt.du&&mt.er){
+      const st=inf.replace(/e?n$/,'');
+      forms=[st+'e',mt.du,mt.er,inf,st+'t',inf];
+    }else{
+      if(SEP_PREFIX.test(inf))return;
+      const st=inf.replace(/e?n$/,'');
+      const[du,er]=irrRegForms(inf);
+      forms=[st+'e',du,er,inf,st+'t',inf];
+    }
+    forms.forEach(f=>{
+      const k=f.toLowerCase();if(!k)return;
+      if(!rev[k])rev[k]=[];
+      forms.forEach(g=>{if(g.toLowerCase()!==k&&!rev[k].includes(g))rev[k].push(g);});
+    });
+  });
+  return rev;
+}
+const VERB_FORMS_REV=buildVerbFormsRev();
+function sbDistractors(ws){
+  /* 句首詞永遠大寫（Ich/Der…），比對與排除都須忽略大小寫，否則系統性漏掉最常見的句首字 */
+  const clean=w=>w.replace(/[.,!?]/g,'').toLowerCase();
+  const used=new Set(ws.map(clean));
+  const out=[];
+  SB_CLASSES.forEach(cls=>{
+    if(!ws.some(w=>cls.includes(clean(w))))return;
+    cls.filter(c=>!used.has(c)).sort(()=>Math.random()-.5).slice(0,2).forEach(c=>{if(!out.includes(c))out.push(c);});
+  });
+  ws.forEach(w=>{
+    const sibs=VERB_FORMS_REV[clean(w)];
+    if(!sibs)return;
+    sibs.filter(s=>!used.has(s.toLowerCase())).sort(()=>Math.random()-.5).slice(0,2).forEach(s=>{if(!out.includes(s))out.push(s);});
+  });
+  const last=clean(ws[ws.length-1]);
+  if(SEP_PREFIX.test(last)){
+    ["ab","an","auf","aus","ein","mit","vor","zu","zurück"].filter(p=>p!==last&&!used.has(p))
+      .sort(()=>Math.random()-.5).slice(0,1).forEach(p=>{if(!out.includes(p))out.push(p);});
+  }
+  return out.sort(()=>Math.random()-.5).slice(0,3);
+}
 function renderSatzbau(pre){
   const s=qCur,ws=SENT_WORDS(s);
-  qsub.textContent=pre+'🧱 點字塊，排出正確語序';
+  const distOn=sbDist&&qmode!=='meilen'&&qmode!=='grad';
+  const hideOn=sbHide&&qmode!=='meilen'&&qmode!=='grad';
+  const dist=distOn?sbDistractors(ws):[];
+  const pool=ws.concat(dist);
+  qsub.textContent=pre+'🧱 點字塊，排出正確語序'+(distOn?'（含干擾字）':'');
   qSpeak=s.de;
   qprompt.innerHTML='<div style="font-size:.92rem;color:var(--mut);font-weight:400;margin-bottom:8px">🎯 '+s.zh+'</div><div id="sbAns" style="min-height:2em;border-bottom:2px dashed #bbb;margin-bottom:10px;font-size:1.05rem;text-align:left;font-weight:600"></div>';
   const picked=[],ansEl=()=>document.getElementById('sbAns');
   const rb=document.createElement('button');rb.className='btn';rb.textContent='↺ 重排';rb.style.marginTop='8px';
+  const subBtn=document.createElement('button');subBtn.className='btn';subBtn.textContent='✅ 提交';subBtn.style.marginTop='8px';subBtn.style.marginLeft='6px';subBtn.disabled=true;
   function finish(){
-    rb.disabled=true;[...qopts.querySelectorAll('.opt')].forEach(x=>x.disabled=true);
+    subBtn.disabled=true;rb.disabled=true;[...qopts.querySelectorAll('.opt')].forEach(x=>x.disabled=true);
     qTotal++;logAnswer();
-    const ok=picked.map(j=>ws[j]).join(' ')===ws.join(' ');
+    const ok=picked.join(' ')===ws.join(' ');
     const a=ansEl();
     if(ok){qScore++;if(a)a.style.color='#15803d';}
     else{
@@ -7051,17 +7145,31 @@ function renderSatzbau(pre){
     if(qmode==='meilen'){meilenRecord('satzbau',s,ok);meilenDone++;}
     qscore.textContent=`分數 ${qScore} / ${qTotal}`;qnext.hidden=false;speak(s.de);
   }
-  ws.map((w,i)=>i).sort(()=>Math.random()-.5).forEach(i=>{
-    const b=document.createElement('button');b.className='opt';b.style.width='auto';b.style.display='inline-block';b.style.margin='4px';b.textContent=ws[i];
-    b.onclick=()=>{
-      if(b.disabled)return;b.disabled=true;b.style.opacity=.35;picked.push(i);
-      const a=ansEl();if(a)a.textContent=picked.map(j=>ws[j]).join(' ');
-      if(picked.length===ws.length)finish();
-    };
-    qopts.appendChild(b);
-  });
-  rb.onclick=()=>{picked.length=0;const a=ansEl();if(a){a.textContent='';a.style.color='';}[...qopts.querySelectorAll('.opt')].forEach(x=>{x.disabled=false;x.style.opacity=1;});};
-  qopts.appendChild(document.createElement('br'));qopts.appendChild(rb);
+  subBtn.onclick=()=>{if(picked.length===ws.length)finish();};
+  function buildBlocks(){
+    pool.slice().sort(()=>Math.random()-.5).forEach(w=>{
+      const b=document.createElement('button');b.className='opt';b.style.width='auto';b.style.display='inline-block';b.style.margin='4px';b.textContent=w;
+      b.onclick=()=>{
+        if(b.disabled||picked.length>=ws.length)return;
+        b.disabled=true;b.style.opacity=.35;
+        picked.push(w);const a=ansEl();if(a)a.textContent=picked.join(' ');
+        if(picked.length===ws.length){
+          [...qopts.querySelectorAll('.opt')].forEach(x=>{if(!x.disabled){x.disabled=true;x.style.opacity=.5;}});
+          subBtn.disabled=false;
+        }
+      };
+      qopts.appendChild(b);
+    });
+    qopts.appendChild(document.createElement('br'));qopts.appendChild(subBtn);qopts.appendChild(rb);
+  }
+  rb.onclick=()=>{picked.length=0;const a=ansEl();if(a){a.textContent='';a.style.color='';}[...qopts.querySelectorAll('.opt')].forEach(x=>{x.disabled=false;x.style.opacity=1;});subBtn.disabled=true;};
+  if(hideOn){
+    const sb=document.createElement('button');sb.className='btn';sb.textContent='🧱 顯示字塊';
+    sb.onclick=()=>{sb.remove();buildBlocks();};
+    qopts.appendChild(sb);
+  }else{
+    buildBlocks();
+  }
 }
 /* N5 ⌨️ 打字輸入題：不給選項、鍵盤拼答案。判定容錯（ROADMAP N5 規格）：
    忽略大小寫，但答案字首大寫（名詞）而輸入小寫時判對＋提示「名詞要大寫」；ä/ö/ü/ß 必須正確，
@@ -7664,7 +7772,9 @@ function renderNewCard(){
 (async()=>{
   await loadMastered();await loadWeak();await loadWeakSent();await loadWeakGram();await loadWeakProd();await loadErrors();await loadLog();
   await loadGrad();await loadModul();await loadSchreib();
-  await loadSeen();await runDecayMig();await loadDrawn();
+  await loadSeen();await runDecayMig();await loadDrawn();await loadSbOpt();
+  {const h=document.getElementById('sbHide');if(h)h.dataset.on=sbHide;}
+  {const d=document.getElementById('sbDist');if(d)d.dataset.on=sbDist;}
   /* 記住上次課別選擇；首次使用（含新裝置）預設 L1–3 */
   try{
     const v=await Store.get('a1:lesson');
