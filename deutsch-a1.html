@@ -6570,6 +6570,25 @@ function poolFor(mode){
   if(mode==='typed')return poolFor('gram').map(q=>({tm:'gram',src:q})).concat(poolFor('plural').map(q=>({tm:'plural',src:q})));
   return dusieBank.filter(lessonMatch);
 }
+function updateModeCounts(){
+  /* N?? 題型即時題數（2026-08-09，使用者提出）：8 個一般題型 chip 直接顯示
+     「當下範圍＋篩選」下的可用題數，算法就是 poolFor(mode).length——與實際抽題
+     同一顆函式，數字保證跟真的出題一致，不必另外維護一套計數邏輯。
+     🏁 總複習／🎓 畢業考不比照：兩者本來就是「上限」不是精確值（畢業考缺題型自動
+     跳過、總複習題目不足就整池出完），已在上方 <details> 說明講清楚，硬塞即時數字
+     反而跟固定配方敘述打架、更容易誤導。
+     觸發點：課別切換／篩選切換（applyLesson／qWeakOnly／qInclMastered），
+     不追蹤逐題作答造成的池變動（例如標一個字「已掌握」）——那個量級的即時性
+     使用者沒有要求，加了只是徒增複雜度。 */
+  ['mean','gender','gram','plural','typed','listen','satzbau','prod'].forEach(m=>{
+    const btn=document.querySelector(`[data-qmode="${m}"]`);
+    if(!btn)return;
+    if(!btn.dataset.baseLabel)btn.dataset.baseLabel=btn.textContent;
+    let n;try{n=poolFor(m).length;}catch(e){n=null;}
+    btn.textContent=n==null?btn.dataset.baseLabel:`${btn.dataset.baseLabel}（${n}）`;
+  });
+}
+
 /* 抽牌不放回 */
 let bags={};
 /* 2026-08-07：原本「這一輪出過哪些」只隱含在 bags 裡，而 bags 在切課別／切篩選時
@@ -6646,7 +6665,7 @@ document.querySelectorAll('[data-qmode]').forEach(b=>b.onclick=()=>{
 });
 document.getElementById('qInclMastered').onclick=(e)=>{
   qInclM=!qInclM;e.target.dataset.on=qInclM;
-  bags={};qScore=0;qTotal=0;qscore.textContent='分數 0 / 0';if(qmode==='meilen')buildMeilen();if(qmode==='grad')buildGrad();newQ();
+  bags={};qScore=0;qTotal=0;qscore.textContent='分數 0 / 0';if(qmode==='meilen')buildMeilen();if(qmode==='grad')buildGrad();newQ();updateModeCounts();
 };
 document.getElementById('qReshuffle').onclick=()=>{
   /* 題袋持久化後不會自己歸零，這是唯一出口。只清「當前題型」，不動其他題型已累積的一輪進度。
@@ -6705,7 +6724,7 @@ document.getElementById('bkImport').onclick=()=>{
 };
 document.getElementById('qWeakOnly').onclick=(e)=>{
   qWeak=!qWeak;e.target.dataset.on=qWeak;
-  bags={};qScore=0;qTotal=0;qscore.textContent='分數 0 / 0';if(qmode==='meilen')buildMeilen();if(qmode==='grad')buildGrad();newQ();
+  bags={};qScore=0;qTotal=0;qscore.textContent='分數 0 / 0';if(qmode==='meilen')buildMeilen();if(qmode==='grad')buildGrad();newQ();updateModeCounts();
 };
 function sample(arr,n,exclude){const out=[],pool=arr.filter(x=>x!==exclude);while(out.length<n&&pool.length){out.push(pool.splice(Math.random()*pool.length|0,1)[0]);}return out;}
 /* 選項清洗：卡片正面照樣顯示完整 zh（含（…）註記），測驗選項只顯示核心義。剝空則保留原文 */
@@ -7561,7 +7580,7 @@ function applyLesson(){
   renderSentences();
   renderTexts();
   bags={};qScore=0;qTotal=0;qscore.textContent='分數 0 / 0';if(qmode==='meilen')buildMeilen();if(qmode==='grad')buildGrad();newQ();
-  updateRouteBtn();renderNewCard();
+  updateRouteBtn();renderNewCard();updateModeCounts();
 }
 function lessonKeys(){return[...document.querySelectorAll('[data-lesson]')].map(x=>x.dataset.lesson).filter(k=>k!=="ALL");}
 function syncLessonChips(){
