@@ -197,8 +197,8 @@
 <body>
 <div class="wrap">
   <header style="position:relative">
-    <div class="eyebrow">Menschen · A1 · Lektion 1–20</div>
-    <h1>Deutsch A1 — L1–L20</h1>
+    <div class="eyebrow">Menschen · A1 · Lektion 1–21</div>
+    <h1>Deutsch A1 — L1–L21</h1>
     <details class="helpbox" id="outline" style="margin-top:10px;text-align:left"><summary>📚 每課大綱（點開看）</summary><div class="panel-intro" style="margin:8px 0 2px;line-height:1.9">
       L1 打招呼·自我介紹（heißen/kommen aus/wohnen in）·sein·W 問句·拼讀·數字 0–100<br>
       L2 個人資料·職業·規則動詞變位全表·ihr（你們）<br>
@@ -220,6 +220,7 @@
 L18 生病看醫生·Imperativ(Sie)命令句·sollen間接建議·seit+時長·疼痛表達tut/tun weh<br>
 L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Perfekt·un-前綴構詞<br>
       L20 家務與同居生活·Imperativ(du/ihr)登場·Personalpronomen im Akkusativ全面實戰<br>
+      L21 交通與生活規則·dürfen/müssen（許可 vs 義務）擴充·Modul 7 末課<br>
       <!-- ===ANCHOR:OUTLINE===（新課大綱一行插在這行上方，格式照上）-->
     </div></details>
   </header>
@@ -246,6 +247,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
     <button class="lchip" data-lesson="L18" data-on="false">L18</button>
     <button class="lchip" data-lesson="L19" data-on="false">L19</button>
     <button class="lchip" data-lesson="L20" data-on="false">L20</button>
+    <button class="lchip" data-lesson="L21" data-on="false">L21</button>
     <!-- ===ANCHOR:LESSON_CHIPS===（A1.2 新課按鈕插在這行上方、span#bookA11 之外）-->
     <button class="lchip" data-lesson="ALL" data-on="false">全選 · 模組複習</button>
     <span style="flex-basis:100%;font-size:.72rem;color:var(--mut)">單點換課 · 長按半秒加選複數課 · 📕 收合/展開整冊</span>
@@ -536,7 +538,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
 const SPK_SVG='<svg viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>';
 
 /* ===== 範圍（課別·可多選）===== */
-const DEFAULT_LESSON="L20"; /* ===ANCHOR:DEFAULT_LESSON===（新課上線時改成最新課號；chip 的 data-on 由 syncLessonChips 執行期同步，新 chip 一律 data-on="false"）*/
+const DEFAULT_LESSON="L21"; /* ===ANCHOR:DEFAULT_LESSON===（新課上線時改成最新課號；chip 的 data-on 由 syncLessonChips 執行期同步，新 chip 一律 data-on="false"）*/
 let curLessons=new Set([DEFAULT_LESSON]);
 /* L123 是 L1/L2/L3 的合併篩選鈕，資料本身仍各自標 L1/L2/L3，故用此函式統一判斷範圍是否命中 */
 function inLessonScope(l){
@@ -1914,8 +1916,56 @@ const ADD20=[
 {de:"inklusive",zh:"含、包含在內（縮寫 inkl.）",g:null,cat:"副詞",lesson:"L20",ex:["Miete: 250,00 Euro (inkl. Nebenkosten).","租金：250 歐元（含雜費）。"]},
 {de:"weiter",zh:"更多的、進一步的",g:null,cat:"副詞",lesson:"L20",ex:["Weitere wichtige Wörter","更多重要單字"]},
 ];
+const ADD21=[
+{de:"Fahrer",zh:"駕駛人",g:"der",cat:"交通",lesson:"L21",ex:["Die Fahrer müssen einen Helm tragen.","駕駛必須戴安全帽。"]},
+{de:"Regel",zh:"規則",g:"die",cat:"規則",lesson:"L21",ex:["In der Bibliothek gibt es viele Regeln.","圖書館裡有很多規則。"]},
+{de:"Schild",zh:"標誌牌",g:"das",cat:"規則",lesson:"L21",ex:["Im Park stehen viele Schilder.","公園裡有很多標誌牌。"]},
+{de:"Wiese",zh:"草地",g:"die",cat:"戶外",lesson:"L21",ex:["Im Park gibt es schöne Wiesen.","公園裡有漂亮的草地。"]},
+{de:"Helm",zh:"安全帽",g:"der",cat:"交通",lesson:"L21",ex:["Motorradfahrer brauchen Helme.","機車騎士需要安全帽。"]},
+{de:"Beispiel",zh:"例子",g:"das",cat:"日常",lesson:"L21",ex:["Hier sind drei Beispiele für Regeln.","這裡有三個規則的例子。"]},
+{de:"Picknick",zh:"野餐",g:"das",cat:"戶外",lesson:"L21",ex:["Im Sommer gibt es hier viele Picknicke.","夏天這裡有很多野餐。"]},
+{de:"Liegestuhl",zh:"躺椅",g:"der",cat:"戶外",lesson:"L21",ex:["Am Strand stehen viele Liegestühle.","海灘上有很多躺椅。"]},
+{de:"Bibliotheksausweis",zh:"借書證",g:"der",cat:"公共場所",lesson:"L21",ex:["Die Bibliothek gibt neue Bibliotheksausweise aus.","圖書館發放新的借書證。"]},
+{de:"Lesebrille",zh:"老花眼鏡",g:"die",cat:"公共場所",lesson:"L21",ex:["Im Museum liegen mehrere Lesebrillen aus.","博物館裡放著好幾副老花眼鏡。"]},
+{de:"Katalog",zh:"目錄",g:"der",cat:"公共場所",lesson:"L21",ex:["Im Museum liegen viele Kataloge aus.","博物館裡放著很多目錄。"]},
+{de:"Gepäckraum",zh:"行李艙",g:"der",cat:"交通",lesson:"L21",ex:["Das Flugzeug hat zwei Gepäckräume.","這架飛機有兩個行李艙。"]},
+{de:"Pilot",zh:"機師",g:"der",cat:"職業",lesson:"L21",ex:["Die Piloten kontrollieren das Flugzeug.","機師們在操控飛機。"]},
+{de:"MP3-Player",zh:"MP3 播放器",g:"der",cat:"通訊",lesson:"L21",ex:["Im Museum darf man keine MP3-Player benutzen.","博物館裡不可以使用 MP3 播放器。"]},
+{de:"Verabredung",zh:"約會/約定",g:"die",cat:"社交",lesson:"L21",ex:["In allen D-A-CH-Ländern darf man nicht zu spät zu Verabredungen kommen.","在所有德語系國家，赴約都不可以遲到。"]},
+{de:"Geschäftsfahrt",zh:"商務出差",g:"die",cat:"職業",lesson:"L21",ex:["In Deutschland darf man auf Geschäftsfahrten nicht ohne Schuhe Auto fahren.","在德國，出差開車不可以不穿鞋。"]},
+{de:"Fußgänger",zh:"行人",g:"der",cat:"交通",lesson:"L21",ex:["Autofahrer müssen auf Fußgänger achten.","汽車駕駛必須注意行人。"]},
+{de:"Spielstraße",zh:"兒童遊戲街（車輛需龜速）",g:"die",cat:"交通",lesson:"L21",ex:["In der Stadt gibt es viele Spielstraßen.","城裡有很多兒童遊戲街。"]},
+{de:"Handyverbot",zh:"手機禁令",g:"das",cat:"規則",lesson:"L21",ex:["An manchen Schulen gibt es strenge Handyverbote.","有些學校有嚴格的手機禁令。"]},
+{de:"Eintritt",zh:"入場（費）",g:"der",cat:"公共場所",lesson:"L21",ex:["Man muss hier Eintritt bezahlen.","這裡必須付入場費。"]},
+{de:"Öffnungszeiten",zh:"開放時間",g:"plu",cat:"公共場所",lesson:"L21",ex:["Man muss zu den Öffnungszeiten kommen.","必須在開放時間內來。"]},
+{de:"achten",zh:"注意/留意",g:null,cat:"動詞",lesson:"L21",ex:["Fahrer müssen auf Kinder achten.","駕駛必須注意小孩。"]},
+{de:"hupen",zh:"按喇叭",g:null,cat:"動詞",lesson:"L21",ex:["Manchmal darf man nicht hupen, zum Beispiel in der Nähe von Krankenhäusern.","有時候不可以按喇叭，比如在醫院附近。"]},
+{de:"parken",zh:"停車",g:null,cat:"動詞",lesson:"L21",ex:["Hier darf man parken.","這裡可以停車。"]},
+{de:"schieben",zh:"推",g:null,cat:"動詞",lesson:"L21",ex:["Man darf im Park nicht Fahrrad fahren. Man muss das Fahrrad schieben.","公園裡不可以騎腳踏車，必須用推的。"]},
+{de:"stehen bleiben",zh:"停下不動",g:null,cat:"動詞",lesson:"L21",ex:["Ich bleibe bei Rot immer stehen.","紅燈時我總是會停下來。"]},
+{de:"baden",zh:"游泳/泡水",g:null,cat:"動詞",lesson:"L21",ex:["Der See ist für alle da. Hier dürfen Sie baden.","這座湖是給大家的，這裡可以游泳。"]},
+{de:"grillen",zh:"烤肉",g:null,cat:"動詞",lesson:"L21",ex:["Wir dürfen nicht auf dem Balkon grillen.","我們不可以在陽台烤肉。"]},
+{de:"zelten",zh:"露營",g:null,cat:"動詞",lesson:"L21",ex:["Ihr dürft hier leider nicht zelten.","很可惜你們不可以在這裡露營。"]},
+{de:"angeln",zh:"釣魚",g:null,cat:"動詞",lesson:"L21",ex:["Hier darf man angeln.","這裡可以釣魚。"]},
+{de:"föhnen",zh:"吹頭髮",g:null,cat:"動詞",lesson:"L21",ex:["Im Schwimmbad darf man die Haare föhnen.","游泳池裡可以吹頭髮。"]},
+{de:"duschen",zh:"淋浴",g:null,cat:"動詞",lesson:"L21",ex:["Im Schwimmbad muss man duschen.","在游泳池必須淋浴。"]},
+{de:"benutzen",zh:"使用",g:null,cat:"動詞",lesson:"L21",ex:["Man darf hier einen Liegestuhl benutzen.","這裡可以使用躺椅。"]},
+{de:"springen",zh:"跳",g:null,cat:"動詞",lesson:"L21",ex:["Im Schwimmbad darf man nicht ins Wasser springen.","游泳池裡不可以跳進水裡。"]},
+{de:"einschließen",zh:"鎖起來",g:null,cat:"動詞",lesson:"L21",ex:["Im Schwimmbad muss man seine Sachen einschließen.","在游泳池必須把自己的東西鎖起來。"]},
+{de:"ansehen",zh:"觀看/端詳",g:null,cat:"動詞",lesson:"L21",ex:["Im Kunstmuseum darf man die Bilder nur ansehen.","在美術館只能用看的欣賞畫作。"]},
+{de:"herumlaufen",zh:"到處走動",g:null,cat:"動詞",lesson:"L21",ex:["Im Flugzeug darf man nicht herumlaufen.","飛機上不可以到處走動。"]},
+{de:"abgeben",zh:"交出/托運",g:null,cat:"動詞",lesson:"L21",ex:["Im Flugzeug muss man die Koffer vorher abgeben.","搭飛機必須先托運行李箱。"]},
+{de:"anschnallen",zh:"繫安全帶",g:null,cat:"動詞",lesson:"L21",ex:["Im Flugzeug muss man sich anschnallen.","飛機上必須繫安全帶。"]},
+{de:"erlaubt",zh:"被允許的",g:null,cat:"形容詞",lesson:"L21",ex:["Das ist erlaubt. Das darf man.","這是被允許的，這是可以做的。"]},
+{de:"verboten",zh:"被禁止的",g:null,cat:"形容詞",lesson:"L21",ex:["Das ist verboten. Das darf man nicht.","這是被禁止的，這是不可以做的。"]},
+{de:"zu Fuß",zh:"步行",g:null,cat:"副詞",lesson:"L21",ex:["Ich gehe zu Fuß zur Arbeit.","我走路去上班。"]},
+{de:"gefährlich",zh:"危險的",g:null,cat:"形容詞",lesson:"L21",ex:["Ich finde das (sehr) gefährlich.","我覺得這（很）危險。"]},
+{de:"schlimm",zh:"糟糕的",g:null,cat:"形容詞",lesson:"L21",ex:["Das finde ich nicht (so) schlimm.","我覺得這沒有（那麼）糟。"]},
+{de:"in Ordnung",zh:"沒問題/合適",g:null,cat:"副詞",lesson:"L21",ex:["Diese Regel ist in Ordnung.","這條規則沒問題。"]},
+{de:"leise",zh:"安靜地",g:null,cat:"形容詞",lesson:"L21",ex:["Man muss in der Bibliothek leise sein.","在圖書館必須保持安靜。"]},
+];
 /* ===ANCHOR:VOCAB_ARRAYS===（新課單字陣列 const ADDn=[...] 宣告在這行上方，並把陣列名加進下面 VOCAB 合併行）*/
-const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B,...ADD18,...ADDP2V,...ADD10S,...ADDCLO,...ADDCLOADJ,...ADD19,...ADD16S,...ADD18S,...ADD13S,...ADD15T,...ADD17S,...ADD20];
+const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B,...ADD18,...ADDP2V,...ADD10S,...ADDCLO,...ADDCLOADJ,...ADD19,...ADD16S,...ADD18S,...ADD13S,...ADD15T,...ADD17S,...ADD20,...ADD21];
 VOCAB.forEach((v,i)=>v.id="v"+i);
 
 
@@ -2155,6 +2205,12 @@ const NOUN_PL={
   "Mülleimer":"Mülleimer","Waschmaschine":"Waschmaschinen","Mitbewohner":"Mitbewohner",
   "Mitbewohnerin":"Mitbewohnerinnen","Wohngemeinschaft":"Wohngemeinschaften","Tagebuch":"Tagebücher",
   "Einkauf":"Einkäufe","Notiz":"Notizen",
+  "Fahrer":"Fahrer","Regel":"Regeln","Schild":"Schilder","Wiese":"Wiesen","Helm":"Helme",
+  "Beispiel":"Beispiele","Picknick":"Picknicke","Liegestuhl":"Liegestühle",
+  "Bibliotheksausweis":"Bibliotheksausweise","Lesebrille":"Lesebrillen","Katalog":"Kataloge",
+  "Gepäckraum":"Gepäckräume","Pilot":"Piloten","MP3-Player":"MP3-Player",
+  "Verabredung":"Verabredungen","Geschäftsfahrt":"Geschäftsfahrten","Fußgänger":"Fußgänger",
+  "Spielstraße":"Spielstraßen","Handyverbot":"Handyverbote",
   /* ===ANCHOR:NOUN_PL===（新名詞複數 "單數":"複數", 插在這行上方）*/
 };
 const NOUN_PL_NOTE={
@@ -2334,6 +2390,12 @@ const NOUN_PL_NOTE={
   "Tagebuch":"複數 die Tagebücher：u→ü 變音 → Forvo。",
   "Haushalt":"⚠️ 複數 die Haushalte 為推導值（AB Lw L20 未列、課本無複數形出現），同課另有變音例外（Boden→Böden、Abfall→Abfälle），建議問老師求證。",
   "Einkauf":"⚠️ 複數 die Einkäufe 為推導值（AB Lw L20 未列、課本無複數形出現），建議問老師求證。",
+  "Fahrer":"-er 結尾：單複數同形（der Fahrer → die Fahrer）。",
+  "Fußgänger":"-er 結尾：單複數同形（der Fußgänger → die Fußgänger）。",
+  "MP3-Player":"-er 結尾：單複數同形（der MP3-Player → die MP3-Player）。",
+  "Liegestuhl":"複數 die Liegestühle：u→ü 變音 → Forvo。",
+  "Gepäckraum":"複數 die Gepäckräume：au→äu 變音 → Forvo。",
+  "Picknick":"外來詞複數 die Picknicke，口語也常見 die Picknicks，兩者皆通。",
   /* ===ANCHOR:NOUN_PL_NOTE===（變音／同形／不規則等複數警語插在這行上方）*/
 };
 const NOUN_PLEX={
@@ -2855,6 +2917,25 @@ const NOUN_PLEX={
   "Wohngemeinschaft":["In Hamburg gibt es viele Wohngemeinschaften.","漢堡有很多合租公寓。"],
   "Notiz":["Alex schreibt immer Notizen für seine Mitbewohner.","Alex 總是留便條給他的室友們。"],
   "Einkauf":["Die Einkäufe stehen noch im Auto.","買的東西還放在車上。"],
+  "Fahrer":["Die Fahrer müssen einen Helm tragen.","駕駛必須戴安全帽。"],
+  "Regel":["In der Bibliothek gibt es viele Regeln.","圖書館裡有很多規則。"],
+  "Schild":["Im Park stehen viele Schilder.","公園裡有很多標誌牌。"],
+  "Wiese":["Im Park gibt es schöne Wiesen.","公園裡有漂亮的草地。"],
+  "Helm":["Motorradfahrer brauchen Helme.","機車騎士需要安全帽。"],
+  "Beispiel":["Hier sind drei Beispiele für Regeln.","這裡有三個規則的例子。"],
+  "Picknick":["Im Sommer gibt es hier viele Picknicke.","夏天這裡有很多野餐。"],
+  "Liegestuhl":["Am Strand stehen viele Liegestühle.","海灘上有很多躺椅。"],
+  "Bibliotheksausweis":["Die Bibliothek gibt neue Bibliotheksausweise aus.","圖書館發放新的借書證。"],
+  "Lesebrille":["Im Museum liegen mehrere Lesebrillen aus.","博物館裡放著好幾副老花眼鏡。"],
+  "Katalog":["Im Museum liegen viele Kataloge aus.","博物館裡放著很多目錄。"],
+  "Gepäckraum":["Das Flugzeug hat zwei Gepäckräume.","這架飛機有兩個行李艙。"],
+  "Pilot":["Die Piloten kontrollieren das Flugzeug.","機師們在操控飛機。"],
+  "MP3-Player":["Im Museum darf man keine MP3-Player benutzen.","博物館裡不可以使用 MP3 播放器。"],
+  "Verabredung":["In allen D-A-CH-Ländern darf man nicht zu spät zu Verabredungen kommen.","在所有德語系國家，赴約都不可以遲到。"],
+  "Geschäftsfahrt":["In Deutschland darf man auf Geschäftsfahrten nicht ohne Schuhe Auto fahren.","在德國，出差開車不可以不穿鞋。"],
+  "Fußgänger":["Autofahrer müssen auf Fußgänger achten.","汽車駕駛必須注意行人。"],
+  "Spielstraße":["In der Stadt gibt es viele Spielstraßen.","城裡有很多兒童遊戲街。"],
+  "Handyverbot":["An manchen Schulen gibt es strenge Handyverbote.","有些學校有嚴格的手機禁令。"],
   /* ===ANCHOR:NOUN_PLEX===（複數例句 "單數":["德文","中文"], 插在這行上方）*/
 };
 const VERB_META={
@@ -3085,6 +3166,23 @@ const VERB_META={
   tauschen:{t:"reg"},
   grüßen:{t:"sib",du:"grüßt",er:"grüßt"},
   freuen:{t:"reg"},
+  achten:{t:"stemt",du:"achtest",er:"achtet"},
+  hupen:{t:"reg"},
+  parken:{t:"reg"},
+  schieben:{t:"reg"},
+  baden:{t:"stemt",du:"badest",er:"badet"},
+  grillen:{t:"reg"},
+  zelten:{t:"stemt",du:"zeltest",er:"zeltet"},
+  angeln:{t:"reg"},
+  föhnen:{t:"reg"},
+  duschen:{t:"reg"},
+  benutzen:{t:"reg"},
+  springen:{t:"reg"},
+  einschließen:{t:"irr",du:"schließt … ein",er:"schließt … ein"},
+  ansehen:{t:"irr",du:"siehst … an",er:"sieht … an"},
+  herumlaufen:{t:"irr",du:"läufst … herum",er:"läuft … herum"},
+  abgeben:{t:"irr",du:"gibst … ab",er:"gibt … ab"},
+  anschnallen:{t:"irr",du:"schnallst … an",er:"schnallt … an"},
   /* ===ANCHOR:VERB_META===（新動詞變位 動詞:{t:"reg"|"stemt"|"vowel"|"irr",...}, 插在這行上方）*/
 };
 /* 可分離動詞 Partizip 組字（2026-07-31）：Partizip = 字首 + 母動詞 Partizip，
@@ -4010,6 +4108,43 @@ const SENTENCES=[
   {de:"Räum dein Zimmer auf!",zh:"（你）把房間收一收！",lesson:"L20"},
   {de:"Schlaft gut!",zh:"（你們）好好睡！",lesson:"L20"},
   {de:"Vergiss deinen Schlüssel nicht!",zh:"（你）別忘了鑰匙！",lesson:"L20"},
+  {de:"Hier darf man (nicht) rauchen.",zh:"這裡（不）可以抽菸。",lesson:"L21"},
+  {de:"Motorradfahrer müssen einen Helm tragen.",zh:"機車騎士必須戴安全帽。",lesson:"L21"},
+  {de:"Das ist (nicht) verboten.",zh:"這是（不）被禁止的。",lesson:"L21"},
+  {de:"Das ist (nicht) erlaubt.",zh:"這是（不）被允許的。",lesson:"L21"},
+  {de:"Das finde ich falsch/nicht in Ordnung.",zh:"我覺得這不對／不合適。",lesson:"L21"},
+  {de:"Das finde ich richtig/in Ordnung.",zh:"我覺得這是對的／合適的。",lesson:"L21"},
+  {de:"Das finde ich nicht so schlimm.",zh:"我覺得這沒那麼糟。",lesson:"L21"},
+  {de:"Das finde ich (sehr) gefährlich.",zh:"我覺得這（很）危險。",lesson:"L21"},
+  {de:"Bei Rot musst du stehen, bei Grün darfst du gehen.",zh:"紅燈要停，綠燈才能走。",lesson:"L21"},
+  {de:"Man muss in der Bibliothek leise sein.",zh:"在圖書館必須保持安靜。",lesson:"L21"},
+  {de:"Man darf im Bus nicht essen.",zh:"公車上不可以吃東西。",lesson:"L21"},
+  {de:"Darf ich hier fotografieren?",zh:"我可以在這裡拍照嗎？",lesson:"L21"},
+  {de:"Im Flugzeug muss man sich anschnallen.",zh:"飛機上必須繫安全帶。",lesson:"L21"},
+  {de:"Im Park darf man kein Fahrrad fahren. Man muss es schieben.",zh:"公園裡不可以騎腳踏車，必須用推的。",lesson:"L21"},
+  {de:"Zu Fuß gehe ich manchmal bei Rot über die Ampel.",zh:"走路的時候我有時候會闖紅燈。",lesson:"L21"},
+  {de:"Als Fußgänger gehe ich manchmal bei Rot über die Ampel.",zh:"身為行人，我有時候會闖紅燈。",lesson:"L21"},
+  {de:"Warum darf man hier nicht grillen?",zh:"為什麼這裡不可以烤肉？",lesson:"L21"},
+  {de:"Hier muss man rechts abbiegen.",zh:"這裡必須右轉。",lesson:"L21"},
+  {de:"Wir müssen morgen sehr früh aufstehen.",zh:"我們明天必須很早起床。",lesson:"L21"},
+  {de:"Sara will unbedingt ihren Führerschein machen, aber sie darf noch nicht.",zh:"Sara 一定要考駕照，但她還不可以。",lesson:"L21"},
+  {de:"Wir machen ein Picknick im Park. Sind da Hunde erlaubt?",zh:"我們要在公園野餐，那裡可以帶狗嗎？",lesson:"L21"},
+  {de:"Ich finde, es gibt hier zu viele Regeln.",zh:"我覺得這裡的規則太多了。",lesson:"L21"},
+  {de:"Mein Vermieter hat sich schon wieder beschwert.",zh:"我的房東又抱怨了。",lesson:"L21"},
+  {de:"Wir dürfen nicht auf dem Balkon grillen.",zh:"我們不可以在陽台烤肉。",lesson:"L21"},
+  {de:"Das verstehe ich nicht.",zh:"這個我不懂。",lesson:"L21"},
+  {de:"In Deutschland darf man auf Geschäftsfahrten nicht ohne Schuhe Auto fahren.",zh:"在德國，出差開車不可以不穿鞋。",lesson:"L21"},
+  {de:"In allen D-A-CH-Ländern darf man nicht zu spät zu Verabredungen kommen.",zh:"在所有德語系國家，赴約都不可以遲到。",lesson:"L21"},
+  {de:"Ich tue doch keinem was.",zh:"我又沒有惹到誰。",lesson:"L21"},
+  {de:"Entschuldigen Sie, aber das ist eine Bibliothek.",zh:"不好意思，這裡是圖書館。",lesson:"L21"},
+  {de:"Das wusste ich nicht.",zh:"我不知道這件事。",lesson:"L21"},
+  {de:"Ich mache es nicht mehr.",zh:"我不會再這樣做了。",lesson:"L21"},
+  {de:"Was wollen Sie denn von mir?",zh:"您到底想要我怎樣？",lesson:"L21"},
+  {de:"Sie haben recht.",zh:"您說得對。",lesson:"L21"},
+  {de:"Warten Sie bitte mal!",zh:"請您等一下！",lesson:"L21"},
+  {de:"Das ist doch gefährlich, oder?",zh:"這很危險吧？",lesson:"L21"},
+  {de:"Das weiß ich nicht.",zh:"這個我不知道。",lesson:"L21"},
+  {de:"Warum sind eigentlich Handys in Flugzeugen verboten?",zh:"為什麼飛機上禁止使用手機呢？",lesson:"L21"},
   /* ===ANCHOR:SENTENCES===（新例句／Redemittel {de,zh,lesson} 插在這行上方）*/
 ];
 
@@ -4134,6 +4269,11 @@ const TEXTS=[
    de:"Donnerstag, 14. August.\n\nWarum ruft meine Mutter eigentlich immer? „Räumt eure Zimmer auf! Deckt den Tisch! Räumt die Spülmaschine aus! Bringt den Abfall raus!\u201c So geht das den ganzen Tag, und das nervt mich total. Und sie selbst sagt nie „bitte\u201c — nur wir müssen das immer sagen.\n\nGestern war Melanie bei mir, und wir haben in meinem Zimmer geredet. Und dann kommt Mama rein: „Räum sofort dein Zimmer auf! Wisch auch gleich den Boden!\u201c Das war mir so peinlich vor Melanie!\n\nOh nein, jetzt ruft sie wieder. Sicher soll ich die Wäsche waschen oder das Bad putzen.",
    zh:"八月十四日，星期四。\n\n為什麼我媽媽老是這樣喊來喊去？「把房間收一收！鋪桌子！把洗碗機清空！把垃圾拿出去！」一整天都這樣，這讓我超級煩。而她自己從來不說「請」——只有我們一定要說。\n\n昨天 Melanie 來我家，我們在我房間裡聊天。然後媽媽就走進來：「馬上把房間收一收！順便拖一下地板！」在 Melanie 面前真的好尷尬！\n\n喔不，她又在叫了。她八成是要我洗衣服或是擦浴室。",
    qs:[{q:"Line 對媽媽最主要的抱怨是什麼？",options:["媽媽整天下命令、自己卻不說「請」","媽媽從不打掃","媽媽不讓朋友來家裡","媽媽忘記做家事"],a:0},{q:"昨天發生了什麼事讓 Line 覺得尷尬？",options:["她自己忘記做家事","媽媽在朋友面前下命令","她跟朋友吵架","她忘記寫日記"],a:1},{q:"「Räumt eure Zimmer auf!」用的是哪一種 Imperativ？",options:["du 形","ihr 形","Sie 形","不是 Imperativ"],a:1}]},
+  {id:"t-l21-1",lesson:"L21",genre:"訪談短文",title:"Montagmorgen am Bahnhof",src:"AI 生成 · 未經母語者校對",
+   map:"<b>本課重點</b>：① dürfen（許可）vs müssen（義務）對比——本課文法核心；② Fahrer 的日常規則：Helm／Fußgänger／Regel；③ weil 從句動詞後置、dann 推進時序。<br><b>建議走法</b>：讀完本文 → 文法「動詞變位②」看 dürfen/müssen → 單字卡交通/規則類 → 例句刷 Kommunikation 句型 → 測驗（dürfen/müssen 對比題最重要）→ 🎓。",
+   de:"Montag, kurz vor sieben Uhr am Bahnhof. Jemand fragt: „Entschuldigung, darf ich Ihnen eine Frage stellen?“\n\nDie Person heißt Jonas und ist Fahrer von Beruf. „Ja, kein Problem“, sagt er.\n\nBei der Arbeit muss Jonas einen Helm tragen. Das ist eine wichtige Regel für alle Fahrer. Er muss auch immer auf die Fußgänger achten, weil die Straße oft gefährlich ist. Aber in der Pause darf er Musik hören — das ist erlaubt.\n\nDann fragt die Person noch weiter. Und Sie? Was erzählen Sie über Ihren Morgen?",
+   zh:"星期一，快七點，在車站。有人問：「不好意思，我可以問您一個問題嗎？」\n\n這位是 Jonas，職業是駕駛。「沒問題」，他說。\n\n上班時，Jonas 必須戴安全帽。這是所有駕駛都要遵守的重要規則。他也必須隨時注意行人，因為路上常常很危險。但休息時他可以聽音樂——這是被允許的。\n\n然後這個人繼續往下問。那你呢？你會怎麼形容你的早晨？",
+   qs:[{q:"訪談中的 Fahrer 為什麼要戴 Helm？",options:["因為天氣冷","這是所有駕駛都要遵守的重要規則","因為他喜歡","文中沒說"],a:1},{q:"Fahrer 在什麼時候可以聽音樂？",options:["開車時","休息時","從不可以","一直都可以"],a:1},{q:"「weil die Straße oft gefährlich ist」中，weil 從句的動詞放在哪裡？",options:["句子第二位","句尾","句首","沒有動詞"],a:1}]},
   /* ===ANCHOR:TEXTS_ARRAYS===（新課導讀 {id,lesson,genre,title,src,map,de,zh,qs} 插在這行上方；de 只准用該課及之前的單字＋功能詞，寫完必跑 ROADMAP N12 的白名單驗證腳本）*/
 ];
 
@@ -4777,9 +4917,9 @@ const GRAM=[
   </table>
   <div class="note"><b>⚠️ 三個最容易錯</b><br>① 母音變化<b>只在 du / er-sie-es</b>，別套到 ich／wir／ihr（❌ ich spriche → ✓ ich spreche）。<br>② arbeiten 的 e 只加在 du/er/ihr，不是每個人稱都加。<br>③ essen：du 和 er 都是 <b>isst</b>（字幹本來就 -ss，變完母音長一樣）。</div>
 </div>`},
-{ls:["L1","L2","L6","L7","L9","L10","L17","L18","L19"],html:`
+{ls:["L1","L2","L6","L7","L9","L10","L17","L18","L19","L21"],html:`
 <div class="card gcard">
-  <div class="gtitle">🧩 動詞變位②：特殊變位 sein · haben · 情態動詞 · werden <span class="lessontag">L1</span><span class="lessontag">L2</span><span class="lessontag">L6</span><span class="lessontag">L7</span><span class="lessontag">L9</span><span class="lessontag">L17</span><span class="lessontag">L18</span></div>
+  <div class="gtitle">🧩 動詞變位②：特殊變位 sein · haben · 情態動詞 · werden <span class="lessontag">L1</span><span class="lessontag">L2</span><span class="lessontag">L6</span><span class="lessontag">L7</span><span class="lessontag">L9</span><span class="lessontag">L17</span><span class="lessontag">L18</span><span class="lessontag">L21</span></div>
   <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：這些不照字幹規則，<b>整組背</b>。三群：高頻助動詞 sein／haben，情態動詞 können／mögen／möchten／wollen／sollen（共同標記＝<b>ich 和 er/sie/es 都不加字尾</b>：kann／mag／möchte／will／soll），以及 werden（常跟情態動詞放一起教，但變位規則不同，見③）。</p>
   <p style="font-size:.86rem;font-weight:700;margin:.4em 0 .2em">① sein／haben（最高頻，背到反射）</p>
   <table>
@@ -6030,6 +6170,15 @@ GRSUP.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answ
    {l:"L20",sub:"⭐ 人稱代名詞：Akkusativ 回指 die Wäsche",before:"Die Wäsche ist gewaschen. Hängst du ",after:" bitte auf?",answer:"sie",options:["sie","es","ihn"],full:"Die Wäsche ist gewaschen. Hängst du sie bitte auf?"},
   ];
   GR20.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+const GR21=[
+ {l:"L21",sub:"müssen：sie → ?",before:"Motorradfahrer ",after:" immer einen Helm tragen.",answer:"müssen",options:["müssen","muss","musst","müsst"],full:"Motorradfahrer müssen immer einen Helm tragen."},
+ {l:"L21",sub:"dürfen：er → ?",before:"Im Flugzeug ",after:" man nicht telefonieren.",answer:"darf",options:["darf","darfst","dürft","dürfen"],full:"Im Flugzeug darf man nicht telefonieren."},
+ {l:"L21",sub:"dürfen：ihr → ?",before:"Hier ",after:" ihr leider nicht zelten.",answer:"dürft",options:["dürft","darf","dürfen","darfst"],full:"Hier dürft ihr leider nicht zelten."},
+ {l:"L21",sub:"müssen：ich → ?",before:"Ich ",after:" heute noch Hausaufgaben machen.",answer:"muss",options:["muss","musst","müsst","müssen"],full:"Ich muss heute noch Hausaufgaben machen."},
+ {l:"L21",sub:"⭐ 對比：müssen（義務）vs dürfen（許可）①",before:"In der Bibliothek ",after:" man leise sein.",answer:"muss",options:["muss","darf"],full:"In der Bibliothek muss man leise sein."},
+ {l:"L21",sub:"⭐ 對比：müssen（義務）vs dürfen（許可）②",before:"Hier ",after:" man (nicht) rauchen.",answer:"darf",options:["darf","muss"],full:"Hier darf man (nicht) rauchen."},
+];
+GR21.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
   /* ===ANCHOR:GRAM_QUIZ===（新課文法填空題插在這行上方：宣告 const GRn=[{l,sub,before,after,answer,options,full},…]; 後接一行 GRn.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full})); ）*/
   return Q;
 }
@@ -6249,6 +6398,7 @@ const MODULE_DEF=[
   {id:"M4",name:"Modul 4（L10–12）",lessons:["L10","L11","L12"]},
   {id:"M5",name:"Modul 5（L13–15）",lessons:["L13","L14","L15"]},
   {id:"M6",name:"Modul 6（L16–18）",lessons:["L16","L17","L18"]},
+  {id:"M7",name:"Modul 7（L19–21）",lessons:["L19","L20","L21"]},
   /* ===ANCHOR:MODULE_DEF===（新單元湊滿 3 課時在這行上方登記 {id,name,lessons}）*/
 ];
 const MODUL_TOPICS={
@@ -6258,6 +6408,7 @@ const MODUL_TOPICS={
   M4:{title:"我的上個週末（Perfekt）",task:"用現在完成式寫 3–5 句上個週末做了什麼。至少一句用 sein 當助動詞（gefahren/gegangen）、一句用可分離動詞（eingekauft/aufgeräumt）。注意句框：haben/sein 第二位、Partizip 句尾。",req:["haben/sein + Partizip","zuerst / dann / danach","einkaufen","fahren"],rm:["Am Samstag habe ich … gemacht.","Dann bin ich nach … gefahren."]},
   M5:{title:"我的新家與新街區",task:"寫 4–6 句描述你（可假想）搬到一個新住處：① 房子/公寓的樣子，用所有格 sein/ihr 或 Genitiv；② 怎麼找到那裡，用地方介係詞或 helfen；③ 對新街區的評價，用 gefallen/gehören/fehlen 等 Dativ 動詞。至少一句要用到完整 Dativ 人稱代名詞（mir/dir/ihm…）。",req:["所有格 sein/ihr","地方介係詞","Dativ 動詞（gefallen/gehören/fehlen/danken）","umziehen"],rm:["Ich bin nach … umgezogen.","Die Wohnung ist neben/an/in der Nähe von …","Was mir an … gefällt, ist …"]},
  M6:{title:"我的一封訊息：飯店插曲、我的計畫、還有最近的身體",task:"寫 4–6 句：①提一件你在飯店或某個約會中遇到、需要改期或客訴的狀況，用時間介係詞（in/nach/vor/für）；②說一件你未來想做或絕對不想做的計畫，用 wollen 完整變位；③說你最近的身體狀況以及別人給你的建議，用 sollen 或 tut/tun weh。三部分至少各一句。",req:["時間介係詞(in/nach/vor/für)","wollen完整變位","tut/tun weh 或 haben+Schmerzen","sollen"],rm:["Ich möchte den Termin verschieben, vor/nach/in …","Ich will unbedingt …, aber ich will auf keinen Fall …","Ich habe seit … Schmerzen. Der Arzt sagt, ich soll …"]},
+  M7:{title:"Mal ehrlich: Welche Regeln akzeptieren Sie?",task:"針對三個情境（圖書館手機響/朋友邀約烤肉但有禁令/海邊想游泳但禁止）寫下你會怎麼做，並說明理由。至少各用一句 müssen、一句 dürfen、一句「Das finde ich...」意見句。",req:["müssen","dürfen","Das ist (nicht) erlaubt/verboten","Das finde ich..."],rm:["Das ist (nicht) erlaubt/verboten.","Das finde ich richtig/falsch/nicht so schlimm/gefährlich.","Hier darf man (nicht) ..."]},
   /* ===ANCHOR:MODUL_TOPICS===（新單元寫作題插在這行上方，key 對齊 MODULE_DEF 的 id）*/
 };
 /* 單元整合閱讀（🏆 第②關）：一篇串起單元三課單字、動詞人稱 ≥4 種的文章；生成規則見 ROADMAP「導讀生成管線 v2」，白名單以單元最後一課為截止。4 題以第一次作答計分，答對 ≥3 過關 */
@@ -6304,6 +6455,13 @@ const MODUL_TEXTS={
       {q:"飯店房間出了什麼問題？",options:["太小","不安靜而且淋浴壞了","沒有窗戶","太貴"],a:1},
       {q:"Nina 絕對不想做什麼？",options:["學德文","去漢堡","再坐辦公室","去看醫生"],a:2},
       {q:"「Der Arzt sagt, ich soll viel Tee trinken」為什麼用 soll，而不是「Trinken Sie viel Tee!」？",options:["這是轉述醫生的建議（間接引語），不是直接對人下命令","soll 比較有禮貌","因為主詞是 ich 就一定要用 soll","兩種寫法完全沒差"],a:0}]},
+ M7:{title:"Montagmorgen am Bahnhof",
+  de:"Montag, kurz vor sieben Uhr am Bahnhof. Jemand fragt: „Entschuldigung, darf ich Ihnen eine Frage stellen?“\n\nDie Person heißt Jonas und ist Fahrer von Beruf. „Ich bin sehr ordentlich“, sagt Jonas. „Jeden Morgen räume ich zuerst mein Zimmer auf, dann gehe ich aus dem Haus.“ Seine Schwester ist auch hübsch und ordentlich, aber sie räumt nie ihr Zimmer auf. Ihre Mutter sagt dann oft: „Räum dein Zimmer auf!“\n\nBei der Arbeit muss Jonas einen Helm tragen. Das ist eine wichtige Regel für alle Fahrer. Er muss auch immer auf die Fußgänger achten, weil die Straße oft gefährlich ist. Aber in der Pause darf er Musik hören — das ist erlaubt.\n\nDann fragt die Person noch weiter. Und Sie? Was erzählen Sie über Ihren Morgen?",
+  zh:"星期一，快七點，在車站。有人問：「不好意思，我可以問您一個問題嗎？」\n\n這位是 Jonas，職業是駕駛。「我很守規矩、很整齊」，Jonas 說。「每天早上我都先整理房間，然後才出門。」他妹妹也很漂亮、很整齊，但她從來不整理自己的房間。她們的媽媽常說：「把你的房間整理一下！」\n\n上班時，Jonas 必須戴安全帽。這是所有駕駛都要遵守的重要規則。他也必須隨時注意行人，因為路上常常很危險。但休息時他可以聽音樂——這是被允許的。\n\n然後這個人繼續往下問。那你呢？你會怎麼形容你的早晨？",
+  qs:[{q:"第一位受訪者的職業與 L21 哪個規則主題相關？",options:["交通規則","圖書館規則","機場規則"],a:0},
+      {q:"文中用 müssen 表達的是義務還是禁止？",options:["義務","禁止","許可"],a:0},
+      {q:"受訪者提到的規則裡，dürfen 用來表達什麼？",options:["被允許做的事","一定要做的事","完全做不到的事"],a:0},
+      {q:"文章結尾的開放式問句是要讀者做什麼？",options:["模仿描述自己的通勤情境","回答是非題","訂正錯字"],a:0}]},
  /* ===ANCHOR:MODUL_TEXTS===（新單元整合閱讀插在這行上方，key 對齊 MODULE_DEF 的 id；先跑白名單驗證再入庫）*/
 };
 let modulRun=null; /* 進行中的單元挑戰 id；手動換課別/題型＝放棄本輪判定 */
