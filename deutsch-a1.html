@@ -6404,7 +6404,10 @@ function satzbauPool(wk,all){
 }
 function errKeyOf(mode,q){const s=q.sub||'';const i=s.indexOf('：');return i>0?s.slice(0,i):s;}
 function recordError(mode,q){
-  if(mode==='mean'||mode==='gender'){if(q.id!==undefined){weak[q.id]=1;saveWeak();if(mastered[q.id]){unmaster(q.id);delete seen[q.id];saveSeen();}}return;}
+  /* 2026-08-11：字義/性別答錯只清 mastered，不連動 prodDone——答錯是手滑，不是「我確認
+     自己不會產出這個字」的訊號。prodDone 只在使用者主動點取消（單字卡／qmark 兩顆鈕，
+     見 unmaster() 呼叫點）或 N15 自然衰退時才會失去，不該被一次無關的答錯悄悄清掉。 */
+  if(mode==='mean'||mode==='gender'){if(q.id!==undefined){weak[q.id]=1;saveWeak();if(mastered[q.id]){delete mastered[q.id];saveMastered();delete seen[q.id];saveSeen();}}return;}
   if(mode==='rf'){const k='🧠 '+(RF_MECH[q.m]||'理解判斷');errors[k]=(errors[k]||0)+1;saveErrors();renderErrPanel();return;}
   if(mode==='listen'||mode==='satzbau'){
     if(q.syn){const k=errKeyOf(mode,q);if(k){errors[k]=(errors[k]||0)+1;saveErrors();renderErrPanel();}return;}   /* N7 生成題 */
