@@ -471,6 +471,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
       <button class="chip" data-qmode="listen" data-on="false">👂 聽力</button>
       <button class="chip" data-qmode="satzbau" data-on="false">🧱 語序</button>
       <button class="chip" data-qmode="prod" data-on="false">✍️ 中→德</button>
+      <button class="chip" data-qmode="rf" data-on="false">🧠 理解</button>
       <button class="chip" data-qmode="meilen" data-on="false">🏁 總複習</button>
       <button class="chip" data-qmode="grad" data-on="false">🎓 畢業考</button>
     </div>
@@ -6375,6 +6376,7 @@ function satzbauPool(wk,all){
 function errKeyOf(mode,q){const s=q.sub||'';const i=s.indexOf('：');return i>0?s.slice(0,i):s;}
 function recordError(mode,q){
   if(mode==='mean'||mode==='gender'){if(q.id!==undefined){weak[q.id]=1;saveWeak();if(mastered[q.id]){delete mastered[q.id];saveMastered();delete seen[q.id];saveSeen();}}return;}
+  if(mode==='rf'){const k='🧠 '+(RF_MECH[q.m]||'理解判斷');errors[k]=(errors[k]||0)+1;saveErrors();renderErrPanel();return;}
   if(mode==='listen'||mode==='satzbau'){
     if(q.syn){const k=errKeyOf(mode,q);if(k){errors[k]=(errors[k]||0)+1;saveErrors();renderErrPanel();}return;}   /* N7 生成題 */
     if(q.wl){errors['👂 單字聽辨']=(errors['👂 單字聽辨']||0)+1;saveErrors();renderErrPanel();return;}   /* N22：不動 mastered/weak，要標不熟走 N21 狀態鈕 */
@@ -6594,14 +6596,62 @@ function renderSwList(id){
 }
 
 /* 🏁 總複習：全課別混抽固定 30 題，「對比」題權重 ×2，結束出各文法點答對率 */
-let meilenQueue=[],meilenStats={},meilenDone=0,meilenTotal=0;const MEILEN_N=30;
-function statKeyOf(m,q){if(m==='mean')return '字義';if(m==='gender')return '性別 der/die/das';if(m==='listen')return (q&&q.syn)?errKeyOf(m,q):'👂 聽力';if(m==='satzbau')return '🧱 語序';if(m==='prod')return '✍️ 中→德';return q.ng?'📚 詞彙/表達':(errKeyOf(m,q)||m);}
+let meilenQueue=[],meilenStats={},meilenDone=0,meilenTotal=0;/* ---------- 🧠 理解判斷（R/F）題型 ----------
+   考的是「原句 ↔ 陳述句」的關係判斷，不是認字。七種機制見 RF_MECH。
+   資料來源：全部取自既有 SENTENCES 的原句；st 為自造陳述句（繼承 AI 生成免責，路由卡鐵律 5 例外條）。
+   ⚠️ 新增條目一律插在 ANCHOR:RF_ITEMS 上方。 */
+const RF_MECH={1:'同義改寫',2:'否定改肯定',3:'意圖 vs 實際',4:'槽位竊取',5:'片段重組',6:'時間／方向反轉',7:'量詞／例外反轉'};
+const RF_ITEMS=[
+ {de:"Am Sonntag frühstücke ich oft erst um elf Uhr.",st:"Sonntags frühstückt die Person spät.",a:true,m:1,lesson:"L9"},
+ {de:"Maria hat viele Bilder und ihre Möbel sind sehr modern.",st:"Marias Möbel sind nicht alt.",a:true,m:1,lesson:"L14"},
+ {de:"Wir sind nicht verheiratet, aber wir leben zusammen.",st:"Die beiden wohnen zusammen.",a:true,m:1,lesson:"L2"},
+ {de:"Ich habe heute keine Zeit. Ich habe Stress.",st:"Die Person ist heute beschäftigt.",a:true,m:2,lesson:"L6"},
+ {de:"Hast du letzten Sonntag keinen Kaffee getrunken? Doch, ich trinke am Sonntag immer Kaffee.",st:"Die Person trinkt sonntags Kaffee.",a:true,m:2,lesson:"L11"},
+ {de:"Ich kann gar nicht malen.",st:"Die Person malt nicht gut.",a:true,m:2,lesson:"L7"},
+ {de:"Ich möchte den Termin verschieben.",st:"Der Termin ist schon verschoben.",a:false,m:3,lesson:"L16"},
+ {de:"Ich will Lehrer werden.",st:"Die Person arbeitet als Lehrer.",a:false,m:3,lesson:"L17"},
+ {de:"Die Wohnung soll 40 bis 50 Quadratmeter groß sein.",st:"Die Wohnung hat 45 Quadratmeter.",a:false,m:3,lesson:"L14"},
+ {de:"Meine Wohnung ist 60 Quadratmeter groß und kostet 800 Euro im Monat.",st:"Die Wohnung kostet 60 Euro im Monat.",a:false,m:4,lesson:"L14"},
+ {de:"Ich liebe Davids Haus, es hat sieben Zimmer und zwei Bäder.",st:"Davids Haus hat sieben Bäder.",a:false,m:4,lesson:"L14"},
+ {de:"Am Montag frühstückt Lisa um 7 Uhr. Ab 8 Uhr arbeitet sie. Von 18 bis 19 Uhr kauft sie ein und kocht.",st:"Lisa arbeitet ab 7 Uhr.",a:false,m:4,lesson:"L11"},
+ {de:"Auf Bild A sind drei Stühle. Auf Bild B sind nur zwei Stühle.",st:"Auf Bild A sind mehr Stühle als auf Bild B.",a:true,m:4,lesson:"L6"},
+ {de:"Das Haus in der Blumenstraße hat vier Zimmer und zwei Bäder.",st:"In der Blumenstraße gibt es ein Haus mit vier Bädern.",a:false,m:5,lesson:"L14"},
+ {de:"Von 8 Uhr bis 9 Uhr habe ich Sport gemacht.",st:"Die Person hat eine Stunde Sport gemacht.",a:true,m:5,lesson:"L10"},
+ {de:"Sie haben vor zwei Jahren ein Baby bekommen.",st:"Das Baby kommt in zwei Jahren.",a:false,m:6,lesson:"L19"},
+ {de:"Ich komme nächsten Mittwoch um 10.00 Uhr am Bahnhof an.",st:"Die Person fährt nächsten Mittwoch vom Bahnhof ab.",a:false,m:6,lesson:"L20"},
+ {de:"Die Theateraufführung läuft vom 24.10. bis zum 05.11.",st:"Am 1. November läuft die Aufführung noch.",a:true,m:6,lesson:"L17"},
+ {de:"In Giesing gibt es leider nur sehr wenige Geschäfte.",st:"In Giesing gibt es viele Geschäfte.",a:false,m:7,lesson:"L15"},
+ {de:"Die Lampe kostet nur 119 Euro.",st:"Die Lampe ist billig.",a:true,m:7,lesson:"L4"},
+ /* ANCHOR:RF_ITEMS */
+];
+function renderRF(pre){
+  qsub.textContent=pre+'\U0001F9E0 這句陳述符合原文嗎？';
+  qprompt.innerHTML='';
+  const src=document.createElement('div');
+  src.style.cssText='font-size:.95rem;line-height:1.55';
+  src.textContent=qCur.de;
+  const st=document.createElement('div');
+  st.style.cssText='margin-top:10px;padding:8px 10px;border-left:3px solid var(--line);font-size:.95rem;line-height:1.55';
+  st.textContent=qCur.st;
+  const why=document.createElement('div');
+  why.className='rfwhy';why.hidden=true;
+  why.style.cssText='margin-top:8px;font-size:.8rem;color:var(--mut)';
+  why.textContent='機制：'+(RF_MECH[qCur.m]||'');
+  qprompt.appendChild(src);qprompt.appendChild(st);qprompt.appendChild(why);
+  qSpeak=qCur.de;
+  addOpt('\u2713 Richtig',qCur.a===true);
+  addOpt('\u2717 Falsch',qCur.a===false);
+  qopts.querySelectorAll('button.opt').forEach(b=>b.addEventListener('click',()=>{why.hidden=false;}));
+}
+const MEILEN_N=30;
+function statKeyOf(m,q){if(m==='rf')return '🧠 理解判斷';if(m==='mean')return '字義';if(m==='gender')return '性別 der/die/das';if(m==='listen')return (q&&q.syn)?errKeyOf(m,q):'👂 聽力';if(m==='satzbau')return '🧱 語序';if(m==='prod')return '✍️ 中→德';return q.ng?'📚 詞彙/表達':(errKeyOf(m,q)||m);}
 /* 2026-07 改版：總複習跟著課別範圍走（全選＝舊的全課行為），字義/性別預設排除已畢業字（「含已掌握」chip 生效）；「只考不熟」不影響總複習 */
 /* N11.5：單元挑戰（modulRun）版總複習走加難固定配方——聽力8＋語序8＋文法7＋複數4＋字義2＋性別1，
    聽＋排占過半、與一般 🏁 做出難度區隔；某維度題池不足時由其餘題池隨機補位，門檻 85% 不變 */
 const MODUL_RECIPE=[['listen',8],['satzbau',8],['gram',7],['plural',4],['mean',2],['gender',1]];
 function buildMeilen(){
-  const pm={mean:[],gender:[],plural:[],gram:[],listen:[],satzbau:[]};
+  const pm={mean:[],gender:[],plural:[],gram:[],listen:[],satzbau:[],rf:[]};
+  RF_ITEMS.filter(lessonMatch).forEach(q=>pm.rf.push({m:'rf',q}));
   VOCAB.filter(v=>v.cat!=='數字'&&lessonMatch(v)&&(qInclM||!mastered[v.id])).forEach(v=>pm.mean.push({m:'mean',q:v}));
   VOCAB.filter(v=>v.g&&v.g!=='plu'&&lessonMatch(v)&&(qInclM||!mastered[v.id])).forEach(v=>pm.gender.push({m:'gender',q:v}));
   PLURAL.filter(q=>inLessonScope(q.l)).forEach(q=>pm.plural.push({m:'plural',q}));
@@ -6614,11 +6664,11 @@ function buildMeilen(){
   if(modulRun){
     pool=[];
     MODUL_RECIPE.forEach(([k,n])=>{pool.push(...pm[k].splice(0,n));});
-    const rest=[].concat(pm.listen,pm.satzbau,pm.gram,pm.plural,pm.mean,pm.gender).sort(()=>Math.random()-.5);
+    const rest=[].concat(pm.listen,pm.satzbau,pm.gram,pm.plural,pm.mean,pm.gender,pm.rf).sort(()=>Math.random()-.5);
     while(pool.length<MEILEN_N&&rest.length)pool.push(rest.shift());
     pool.sort(()=>Math.random()-.5);
   }else{
-    pool=[].concat(pm.mean,pm.gender,pm.plural,pm.gram,pm.listen,pm.satzbau).sort(()=>Math.random()-.5);
+    pool=[].concat(pm.mean,pm.gender,pm.plural,pm.gram,pm.listen,pm.satzbau,pm.rf).sort(()=>Math.random()-.5);
   }
   meilenQueue=pool.slice(0,MEILEN_N);
   /* N14：混入打字題——隊列中最多 4 題文法/複數改以打字型態出（回憶提取），統計仍計入原文法點；🎓 畢業考不適用 */
@@ -6657,12 +6707,13 @@ function showMeilenStats(){
 
 /* ---------- 🎓 畢業考：一課的期末檢定。固定配方、含已畢業字全量出題、分維度門檻 ---------- */
 let gradQueue=[],gradStats={},gradDone=0,gradTotal=0;
-const GRAD_RECIPE=[['mean',15],['gender',10],['gram',10],['plural',5],['listen',5]];
-const GRAD_TH={mean:90,gender:75,gram:80,plural:70,listen:80};
-const GRAD_LABEL={mean:'字義',gender:'性別 der/die/das',gram:'文法填空',plural:'複數',listen:'👂 聽力'};
+const GRAD_RECIPE=[['mean',15],['gender',10],['gram',10],['plural',5],['listen',5],['rf',5]];
+const GRAD_TH={mean:90,gender:75,gram:80,plural:70,listen:80,rf:70};
+const GRAD_LABEL={mean:'字義',gender:'性別 der/die/das',gram:'文法填空',plural:'複數',listen:'👂 聽力',rf:'🧠 理解判斷'};
 function buildGrad(){
   gradQueue=[];gradStats={};gradDone=0;
   const pools={
+    rf:RF_ITEMS.filter(lessonMatch),
     mean:VOCAB.filter(v=>v.cat!=='數字'&&lessonMatch(v)),
     gender:VOCAB.filter(v=>v.g&&v.g!=='plu'&&lessonMatch(v)),
     gram:[...gramBank.filter(lessonMatch),...dusieBank.filter(lessonMatch)], /* du/Sie 是 L1–2 的核心文法，畢業考必考 */
@@ -6713,6 +6764,7 @@ function poolFor(mode){
     :(function(){const lp=listenPool(false,false);
       /* N22：單字聽辨義只在純 👂 進池——🎓 配方門檻不動、🏁 是 🏆 第①關門檻 */
       return lp.concat(numListenPool(lp.length),qmode==='listen'?wordListenPool(lp.length):[]);})();
+  if(mode==='rf')return RF_ITEMS.filter(lessonMatch);
   if(mode==='satzbau')return satzbauPool(qWeak,false);
   if(mode==='prod'){
     const base=VOCAB.filter(prodOK);
@@ -6790,6 +6842,7 @@ function qKeyOf(mode,it){
   if(it.wl&&it.v)return 'w|'+it.v.id;                                              /* 👂單字聽辨義包裝 */
   if(it.syn)return null;                                                           /* N7 生成題 */
   if(it.id!==undefined)return 'v|'+it.id;                                          /* VOCAB */
+  if(it.st!==undefined)return 'rf|'+(it.lesson||'')+'|'+it.st;  /* 🧠 理解判斷（須早於 SENTENCES 分支） */
   if(it.de)return 's|'+(it.lesson||'')+'|'+it.de;                                  /* SENTENCES */
   if(it.answer!==undefined)return 'q|'+(it.lesson||it.l||'')+'|'+(it.sub||'')+'|'+it.answer+'|'+(it.full||'');
   return null;
@@ -6979,6 +7032,8 @@ function newQ(){
     (qCur&&qCur.syn)?renderNumListen(pre):(qCur&&qCur.wl)?renderWordListen(pre):renderListen(pre);
   }else if(m==='satzbau'){
     renderSatzbau(pre);
+  }else if(m==='rf'){
+    renderRF(pre);
   }else if(m==='prod'){
     renderProd(pre);
   }else if(m==='typed'){
