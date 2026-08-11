@@ -459,7 +459,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
       <li><b>🏁 總複習</b>＝範圍內全題型混抽 30 題（其中最多 4 題文法/複數以打字型態出；題目不足就整池出完），結束給各文法點答對率。想複習全部＝課別「全選」。</li>
       <li>答錯自動記錄：字義/der-die-das→標 🔖 不熟；文法填空→進「弱點排行」。已標「我會了」的字預設不出題；<b>✍️ 中→德</b>則排除「已經自己產出成功過」的字（跟「我會了」是兩本帳——看得懂不等於說得出）。兩者都可用「含已掌握」切回全量。</li>
       <li><b style="color:#b45309">🔖 只考不熟</b>＝跨課只抽標過不熟的內容（不影響總複習與畢業考）。</li>
-      <li><b>🎓 畢業考</b>＝一課期末檢定，固定 45 題（字義15＋der-die-das 10＋文法10＋複數5＋聽力5，缺的題型自動跳過），<b>含已畢業字全量出題</b>。門檻：字義≥90%·文法≥80%·der-die-das≥75%·複數≥70%·聽力≥80%，全過＝畢業、課別鈕掛 🎓。認得意思是硬門檻，冠詞複數容許長尾。</li>
+      <li><b>🎓 畢業考</b>＝一課期末檢定，題數依該課題庫大小自動調整（各維度抽池的 40%，全卷不足 30 題就整份抽滿），<b>含已畢業字全量出題</b>。門檻：<b>全卷加權答對率 ≥85%</b>，另加保底——字義 ≥75%、其餘題數 ≥6 的維度 ≥60%（題數少於 6 的維度不設保底，只計入總分，避免一題定生死）。通過＝畢業、課別鈕掛 🎓。</li>
       <li><b>🏆 單元特別測驗</b>＝每 3 課一關（加難總複習 → 整合閱讀 → 迷你寫作），見最下方區塊。</li>
     </ul></details>
     <div class="qhead">
@@ -4497,7 +4497,7 @@ function buildDeck(){
   deck=weakOnly?VOCAB.filter(v=>weak[v.id]):lessonVocab().filter(v=>curCat==="全部"||posOf(v)===curCat);
   idx=0;flipped=false;render();
 }
-function shuffle(){for(let i=deck.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[deck[i],deck[j]]=[deck[j],deck[i]];}idx=0;flipped=false;render();}
+function shuffleDeck(){for(let i=deck.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[deck[i],deck[j]]=[deck[j],deck[i]];}idx=0;flipped=false;render();}
 const flash=document.getElementById('flash'),flashTop=document.getElementById('flashTop'),flashFace=document.getElementById('flashFace');
 function render(){
   saveFlash(); /* N11.5 記住目前這張卡 */
@@ -4564,7 +4564,7 @@ function next(){idx=idx<deck.length-1?idx+1:0;flipped=false;render();}
 document.getElementById('btnKnow').onclick=()=>{const c=deck[idx];if(!c)return;if(mastered[c.id]){unmaster(c.id);render();}else{mastered[c.id]=1;saveMastered();next();}};
 document.getElementById('btnSpeak').onclick=()=>{const c=deck[idx];if(c)speak((ART[c.g]||'')+c.de);};
 document.getElementById('btnNext').onclick=next;
-document.getElementById('btnShuffle').onclick=shuffle;
+document.getElementById('btnShuffle').onclick=shuffleDeck;
 document.getElementById('btnReset').onclick=()=>{mastered={};saveMastered();render();};
 document.getElementById('btnWeak').onclick=()=>{const c=deck[idx];if(!c)return;if(weak[c.id])delete weak[c.id];else weak[c.id]=1;saveWeak();render();};
 document.getElementById('btnWeakFilter').onclick=(e)=>{
@@ -6739,9 +6739,26 @@ function showMeilenStats(){
 
 /* ---------- 🎓 畢業考：一課的期末檢定。固定配方、含已畢業字全量出題、分維度門檻 ---------- */
 let gradQueue=[],gradStats={},gradDone=0,gradTotal=0;
-const GRAD_RECIPE=[['mean',15],['gender',10],['gram',10],['plural',5],['listen',5],['rf',5]];
-const GRAD_TH={mean:90,gender:75,gram:80,plural:70,listen:80,rf:70};
+/* 2026-08-11 重新設計（使用者提出）。舊制＝固定 50 題 × 六道各自獨立的 AND 門檻。
+   實測缺陷（超幾何模型，20,000 次模擬）：真實掌握率 90% 者單次通過率僅 43–51%、
+   85% 者 13–19%；且小池維度被 Math.round 放大——🧠 池只有 1 題時「門檻 70%」實際＝100%，
+   複數池 3 題時實際也＝100%。在可無限重考的前提下，這種門檻量到的是耐心不是實力。
+   新制＝動態配題 ＋ 全卷加權總分 ＋ 少數維度保底。 */
+const GRAD_PLAN=[['mean',24],['gender',14],['gram',14],['plural',8],['listen',8],['rf',6]]; /* [維度, 題數上限] */
+const GRAD_RATIO=.4;        /* 每維題數 ＝ 池 × 此比例（無條件進位） */
+const GRAD_NMIN=3;          /* 每維題數下限（池夠時） */
+const GRAD_TOTMIN=30;       /* 全卷題數下限；達不到就整份改抽滿池——早期小課變成零抽樣變異的全卷檢定 */
+const GRAD_PASS=85;         /* 通過門檻＝全卷加權答對率 %（題數多的維度自然權重大） */
+const GRAD_FLOOR={mean:75}; /* 維度保底 %：防某一維整個崩掉還靠總分過關。字義是硬需求故拉高 */
+const GRAD_FLOOR_DEF=60;
+const GRAD_FLOOR_NMIN=6;    /* 題數 < 此值的維度不設保底、只計入總分——這是「一題定生死」的解方 */
 const GRAD_LABEL={mean:'字義',gender:'der/die/das',gram:'文法填空',plural:'複數',listen:'👂 聽力',rf:'🧠 理解判斷'};
+function gradPlan(pools){
+  const f=r=>{const o={};GRAD_PLAN.forEach(([m,cap])=>{const N=pools[m].length;o[m]=N?Math.min(N,cap,Math.max(GRAD_NMIN,Math.ceil(N*r))):0;});return o;};
+  let o=f(GRAD_RATIO);
+  if(GRAD_PLAN.reduce((s,[m])=>s+o[m],0)<GRAD_TOTMIN)o=f(1);
+  return o;
+}
 function buildGrad(){
   gradQueue=[];gradStats={};gradDone=0;
   const pools={
@@ -6752,16 +6769,22 @@ function buildGrad(){
     plural:PLURAL.filter(q=>inLessonScope(q.l)),
     listen:listenPool(false,false)
   };
-  GRAD_RECIPE.forEach(([m,n])=>{[...pools[m]].sort(()=>Math.random()-.5).slice(0,n).forEach(q=>gradQueue.push({m,q}));});
-  gradQueue.sort(()=>Math.random()-.5);
+  const plan=gradPlan(pools);
+  /* 2026-08-11：抽題改 Fisher–Yates（shuffle()）。舊的 sort(()=>Math.random()-.5) 非均勻，
+     實測 20,000 次：池 92 抽 15 時，陣列第 0 個被抽中機率 31.8%、中段僅 12.0%（2.66 倍差）。
+     單字是照課本順序累加的，等於每次畢業考都在重考該課開頭那幾個字。別再退回 sort 洗牌。 */
+  GRAD_PLAN.forEach(([m])=>{shuffle(pools[m].slice()).slice(0,plan[m]).forEach(q=>gradQueue.push({m,q}));});
+  shuffle(gradQueue);
   gradTotal=gradQueue.length;
 }
 function gradRecord(m,ok){const s=gradStats[m]||(gradStats[m]={ok:0,tot:0});s.tot++;if(ok)s.ok++;}
 function showGradStats(){
   qsub.textContent='🎓 畢業考結束';qSpeak='';qopts.innerHTML='';qnext.hidden=true;
-  const rows=GRAD_RECIPE.map(([m])=>{const s=gradStats[m];return s&&s.tot?{m,...s,pct:Math.round(s.ok/s.tot*100)}:null;}).filter(Boolean);
-  const fails=rows.filter(r=>r.pct<GRAD_TH[r.m]);
-  const pass=rows.length>0&&fails.length===0;
+  const rows=GRAD_PLAN.map(([m])=>{const s=gradStats[m];return s&&s.tot?{m,ok:s.ok,tot:s.tot,pct:Math.round(s.ok/s.tot*100),fl:s.tot>=GRAD_FLOOR_NMIN?(GRAD_FLOOR[m]||GRAD_FLOOR_DEF):0}:null;}).filter(Boolean);
+  const tOk=rows.reduce((a,r)=>a+r.ok,0),tAll=rows.reduce((a,r)=>a+r.tot,0);
+  const tPct=tAll?Math.round(tOk/tAll*100):0;
+  const fails=rows.filter(r=>r.fl&&r.pct<r.fl);
+  const pass=tAll>0&&tPct>=GRAD_PASS&&!fails.length;
   const single=curLessons.size===1?[...curLessons][0]:null;
   let head;
   if(pass){
@@ -6769,20 +6792,22 @@ function showGradStats(){
       if(!grad[single]){grad[single]=new Date().toISOString().slice(0,10);saveGrad();syncLessonChips();renderModulPanel();}
       const md=MODULE_DEF.find(m=>m.lessons.includes(single));
       const unlocked=md&&md.lessons.every(k=>grad[k])&&!(modul[md.id]&&modul[md.id].w);
-      head=`<div style="color:#15803d;font-weight:800;font-size:1.05rem">🎓 ${single==='L123'?'L1–3':single} 達畢業標準！</div>`
-        +(unlocked?`<div style="margin-top:6px;font-size:.88rem">🏆 ${md.name} 全數畢業——特別測驗已解鎖，往下捲到「單元特別測驗」區。</div>`:'');
+      head=`<div style=\"color:#15803d;font-weight:800;font-size:1.05rem\">🎓 ${single==='L123'?'L1–3':single} 達畢業標準！</div>`
+        +(unlocked?`<div style=\"margin-top:6px;font-size:.88rem\">🏆 ${md.name} 全數畢業——特別測驗已解鎖，往下捲到「單元特別測驗」區。</div>`:'');
     }else{
-      head=`<div style="color:#15803d;font-weight:800">🎓 此範圍達畢業標準！</div><div style="font-size:.8rem;color:var(--mut);margin-top:4px">畢業標記只在單選一課時記錄——想給某課掛 🎓，把範圍縮到那一課再考一次。</div>`;
+      head=`<div style=\"color:#15803d;font-weight:800\">🎓 此範圍達畢業標準！</div><div style=\"font-size:.8rem;color:var(--mut);margin-top:4px\">畢業標記只在單選一課時記錄——想給某課掛 🎓，把範圍縮到那一課再考一次。</div>`;
     }
   }else{
-    head=`<div style="color:#b45309;font-weight:800">還差一點——未達標維度：</div>`
-      +fails.map(r=>`<div style="font-size:.88rem;margin-top:4px">${GRAD_LABEL[r.m]}：${r.pct}%（門檻 ${GRAD_TH[r.m]}%）</div>`).join('')
-      +`<div style="font-size:.8rem;color:var(--mut);margin-top:6px">答錯的內容已自動標 🔖／進弱點排行——用「只考不熟」刷完再回來考。畢業考每次隨機抽題，可以隨時重考。</div>`;
+    head=`<div style=\"color:#b45309;font-weight:800\">還差一點</div>`
+      +(tPct<GRAD_PASS?`<div style=\"font-size:.88rem;margin-top:4px\">總分 ${tPct}%，差 ${GRAD_PASS-tPct} 個百分點</div>`:'')
+      +fails.map(r=>`<div style=\"font-size:.88rem;margin-top:4px\">${GRAD_LABEL[r.m]} 未達保底：${r.pct}%（保底 ${r.fl}%）</div>`).join('')
+      +`<div style=\"font-size:.8rem;color:var(--mut);margin-top:6px\">答錯的內容已自動標 🔖／進弱點排行——用「只考不熟」刷完再回來考。畢業考每次隨機抽題，可以隨時重考。</div>`;
   }
-  qprompt.innerHTML='<div style="font-size:.95rem;font-weight:400;text-align:left">'+head
-    +'<div style="margin-top:12px;border-top:1px solid #eee;padding-top:8px">'
-    +rows.map(r=>`<div style="display:flex;justify-content:space-between;margin:5px 0"><span>${GRAD_LABEL[r.m]}（門檻 ${GRAD_TH[r.m]}%）</span><span style="font-weight:700;color:${r.pct<GRAD_TH[r.m]?'#b91c1c':'#15803d'}">${r.ok}/${r.tot}（${r.pct}%）</span></div>`).join('')
-    +'</div></div><div style="margin-top:12px"><button class="btn" id="gradAgain">🔄 再考一次</button></div>';
+  qprompt.innerHTML='<div style=\"font-size:.95rem;font-weight:400;text-align:left\">'+head
+    +`<div style=\"margin-top:12px;border-top:1px solid #eee;padding-top:8px;display:flex;justify-content:space-between\"><span style=\"font-weight:700\">總分（門檻 ${GRAD_PASS}%）</span><span style=\"font-weight:800;color:${tPct<GRAD_PASS?'#b91c1c':'#15803d'}\">${tOk}/${tAll}（${tPct}%）</span></div>`
+    +'<div style=\"margin-top:6px;border-top:1px dashed #eee;padding-top:6px\">'
+    +rows.map(r=>`<div style=\"display:flex;justify-content:space-between;margin:5px 0;gap:8px\"><span>${GRAD_LABEL[r.m]}${r.fl?`（保底 ${r.fl}%）`:'<span style=\"color:var(--mut);font-size:.78rem\">（題數少，只計總分）</span>'}</span><span style=\"font-weight:700;white-space:nowrap;color:${r.fl&&r.pct<r.fl?'#b91c1c':'#15803d'}\">${r.ok}/${r.tot}（${r.pct}%）</span></div>`).join('')
+    +'</div></div><div style=\"margin-top:12px\"><button class=\"btn\" id=\"gradAgain\">🔄 再考一次</button></div>';
   const b=document.getElementById('gradAgain');if(b)b.onclick=()=>{buildGrad();qScore=0;qTotal=0;qscore.textContent='分數 0 / 0';newQ();};
 }
 
