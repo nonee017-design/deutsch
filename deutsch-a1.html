@@ -4374,6 +4374,18 @@ async function saveWeakProd(){try{await Store.set('a1:weakProd',JSON.stringify(w
 let prodDone={};
 async function loadProdDone(){try{const v=await Store.get('a1:prodDone');if(v)prodDone=JSON.parse(v);}catch(e){prodDone={};}}
 async function saveProdDone(){try{await Store.set('a1:prodDone',JSON.stringify(prodDone));}catch(e){}}
+/* 2026-08-11 bug fix：取消 mastered 時必須連帶取消 prodDone，否則「✍️ 中→德」的
+   排除依據會卡死——使用者手動取消已會了（承認自己其實不熟）之後，prodDone 仍標記
+   已產出過，UI 上沒有任何入口能改 prodDone，該字就永久消失於中→德題池，
+   刷完一輪後題庫可能歸零、且無法自救。
+   集中成一個函式的原因：清除 mastered 的入口有三處（單字卡「我會了」切換、
+   字義/性別答錯自動取消、測驗頁 qmark「已會了→點取消」），逐一補寫容易漏掉一處
+   （事實上這次就是三處都漏了）；往後任何新增的取消 mastered 入口只要呼叫這裡即可，
+   不必記得 prodDone 這個旁支依賴。 */
+function unmaster(id){
+  if(mastered[id]){delete mastered[id];saveMastered();}
+  if(prodDone[id]){delete prodDone[id];saveProdDone();}
+}
 
 let errors={}; /* M1：錯題統計，key=文法點（sub 冒號前段），value=錯誤次數 */
 async function loadErrors(){try{const v=await Store.get('a1:errors');if(v)errors=JSON.parse(v);}catch(e){errors={};}}
@@ -4549,7 +4561,7 @@ function render(){
 flash.onclick=()=>{flipped=!flipped;render();};
 flash.onkeydown=(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();flipped=!flipped;render();}};
 function next(){idx=idx<deck.length-1?idx+1:0;flipped=false;render();}
-document.getElementById('btnKnow').onclick=()=>{const c=deck[idx];if(!c)return;if(mastered[c.id]){delete mastered[c.id];saveMastered();render();}else{mastered[c.id]=1;saveMastered();next();}};
+document.getElementById('btnKnow').onclick=()=>{const c=deck[idx];if(!c)return;if(mastered[c.id]){unmaster(c.id);render();}else{mastered[c.id]=1;saveMastered();next();}};
 document.getElementById('btnSpeak').onclick=()=>{const c=deck[idx];if(c)speak((ART[c.g]||'')+c.de);};
 document.getElementById('btnNext').onclick=next;
 document.getElementById('btnShuffle').onclick=shuffle;
@@ -6392,7 +6404,7 @@ function satzbauPool(wk,all){
 }
 function errKeyOf(mode,q){const s=q.sub||'';const i=s.indexOf('：');return i>0?s.slice(0,i):s;}
 function recordError(mode,q){
-  if(mode==='mean'||mode==='gender'){if(q.id!==undefined){weak[q.id]=1;saveWeak();if(mastered[q.id]){delete mastered[q.id];saveMastered();delete seen[q.id];saveSeen();}}return;}
+  if(mode==='mean'||mode==='gender'){if(q.id!==undefined){weak[q.id]=1;saveWeak();if(mastered[q.id]){unmaster(q.id);delete seen[q.id];saveSeen();}}return;}
   if(mode==='rf'){const k='🧠 '+(RF_MECH[q.m]||'理解判斷');errors[k]=(errors[k]||0)+1;saveErrors();renderErrPanel();return;}
   if(mode==='listen'||mode==='satzbau'){
     if(q.syn){const k=errKeyOf(mode,q);if(k){errors[k]=(errors[k]||0)+1;saveErrors();renderErrPanel();}return;}   /* N7 生成題 */
@@ -7014,9 +7026,9 @@ function renderQMark(){
  if(_bw)_bw.onclick=()=>{const w=qWordOf();if(!w)return;
    if(weak[w.id])delete weak[w.id];else weak[w.id]=1;saveWeak();renderQMark();};
  if(_bk)_bk.onclick=()=>{const w=qWordOf();if(!w)return;
-   if(mastered[w.id]){delete mastered[w.id];delete seen[w.id];saveSeen();}
-   else{mastered[w.id]=1;if(weak[w.id]){delete weak[w.id];saveWeak();}seen[w.id]=Date.now();saveSeen();}
-   saveMastered();renderQMark();};}
+   if(mastered[w.id]){unmaster(w.id);delete seen[w.id];saveSeen();}
+   else{mastered[w.id]=1;saveMastered();if(weak[w.id]){delete weak[w.id];saveWeak();}seen[w.id]=Date.now();saveSeen();}
+   renderQMark();};}
 function newQ(){
   qnext.hidden=true;qopts.innerHTML='';qprompt.innerHTML='';qSpeak='';
   {const _qm=document.getElementById('qmark');if(_qm)_qm.hidden=true;}
