@@ -442,7 +442,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
   <section id="quiz" hidden>
     <div id="dash" style="font-weight:700;font-size:.9rem;margin:2px 0 10px;color:var(--chrome)"></div>
     <!-- N15：今日學習中心 -->
-    <div id="routeArea" style="margin-bottom:14px">
+    <div id="routeArea" style="margin-bottom:14px;display:none">
       <button id="btnRoute" class="btn" style="width:100%;padding:12px 14px;font-size:1rem;font-weight:700;background:var(--der);color:#fff;border:none;border-radius:10px;text-align:left;cursor:pointer" onclick="doRoute()">
         ▶ 開始今天的練習<br><span class="route-sub" style="font-size:.8rem;font-weight:400;opacity:.88"></span>
       </button>
@@ -477,6 +477,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
       <span class="qlbl">測驗</span>
       <button class="chip" data-qmode="meilen" data-on="false">🏁 總複習</button>
       <button class="chip" data-qmode="grad" data-on="false">🎓 畢業考</button>
+      <button class="chip" id="qLgate" data-on="false" hidden>📄 課後練習</button>
     </div>
     <div class="qhead">
       <span class="qlbl">篩選</span>
@@ -484,6 +485,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
       <button class="chip" id="qInclMastered" data-on="false">含已掌握</button>
       <button class="chip" id="qReshuffle">🔄 重洗題袋</button>
     </div>
+    <div id="lgateBox" hidden></div>
     <div class="qbox">
       <div class="qsub" id="qsub"></div>
       <div class="qprompt" id="qprompt"></div>
@@ -550,10 +552,11 @@ function inLessonScope(l){
 const lessonMatch=(it)=>inLessonScope(it.lesson);
 
 /* ---------- TTS ---------- */
-let deVoice=null;
+let deVoice=null,deVoices=[],dlgTimer=null,audioCtx=null;
 function pickVoice(){
   const vs=window.speechSynthesis?window.speechSynthesis.getVoices():[];
-  deVoice=vs.find(v=>/^de/i.test(v.lang))||null;
+  deVoices=vs.filter(v=>/^de/i.test(v.lang));
+  deVoice=deVoices[0]||null;
   if(!('speechSynthesis' in window)||(vs.length&&!deVoice)) document.getElementById('ttsWarn').style.display='block';
 }
 if('speechSynthesis' in window){pickVoice();window.speechSynthesis.onvoiceschanged=pickVoice;}
@@ -569,7 +572,9 @@ function splitSents(text){
 }
 function speak(text,slow){
   if(!('speechSynthesis' in window))return;
-  window.speechSynthesis.cancel();if(spkTimer){clearTimeout(spkTimer);spkTimer=null;}
+  window.speechSynthesis.cancel();
+  if(spkTimer){clearTimeout(spkTimer);spkTimer=null;}
+  if(dlgTimer){clearTimeout(dlgTimer);dlgTimer=null;}
   const sents=splitSents(text);
   function say(i){
     if(i>=sents.length)return;
@@ -579,6 +584,80 @@ function speak(text,slow){
     window.speechSynthesis.speak(u);
   }
   say(0);
+}
+/* 2026-08-12 對話體朗讀：手機通常只有一個 de-DE 語音，光換 voice 分不出人，
+   所以「換人提示音」是主要線索（A 高音 740Hz／B 低音 440Hz），pitch 與第二語音是輔助。
+   AudioContext 失敗時整個 cue 靜默略過，不影響朗讀。 */
+/* 2026-08-12 手機修正：iOS/Android 的 AudioContext 必須在「使用者手勢當下」建立並播過一次聲音才解鎖。
+   原本在 cue() 裡臨時 new 出來、又沒等 resume() 就 start()，在手機上會整段靜音。
+   改成：全頁第一次觸控／點擊就先解鎖（播一個 1 sample 的無聲 buffer），
+   之後每次 cue 都先確認 state，音量從 0.05 拉到 0.3 並加入起落包絡（避免爆音、也才聽得見）。 */
+function initAudio(){
+  if(audioCtx)return;
+  try{
+    audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    const b=audioCtx.createBuffer(1,1,22050),s=audioCtx.createBufferSource();
+    s.buffer=b;s.connect(audioCtx.destination);s.start(0);
+    if(audioCtx.resume)audioCtx.resume();
+  }catch(e){audioCtx=null;}
+}
+document.addEventListener('touchstart',initAudio,{once:true,passive:true});
+document.addEventListener('click',initAudio,{once:true});
+function cue(hz){
+  initAudio();
+  if(!audioCtx)return;
+  const go=()=>{try{
+    const t=audioCtx.currentTime;
+    const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+    o.type='sine';o.frequency.value=hz;
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(0.3,t+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+0.16);
+    o.connect(g);g.connect(audioCtx.destination);
+    o.start(t);o.stop(t+0.2);
+  }catch(e){}};
+  if(audioCtx.state==='suspended'&&audioCtx.resume)audioCtx.resume().then(go).catch(()=>{});
+  else go();
+}
+function turnUtter(tn){
+  const A=tn.s==='A';
+  const u=new SpeechSynthesisUtterance(tn.de);
+  u.lang='de-DE';
+  const v=A?deVoices[0]:(deVoices[1]||deVoices[0]);
+  if(v)u.voice=v;
+  /* iOS Safari 幾乎無視 pitch，但 rate 一定吃——所以語速差是手機上最可靠的分聲線索 */
+  u.rate=A?1.0:0.78;u.pitch=A?1.2:0.75;
+  return u;
+}
+function speakTurn(tn){
+  if(!('speechSynthesis' in window)||!tn)return;
+  window.speechSynthesis.cancel();
+  if(spkTimer){clearTimeout(spkTimer);spkTimer=null;}
+  if(dlgTimer){clearTimeout(dlgTimer);dlgTimer=null;}
+  cue(tn.s==='A'?740:392);
+  dlgTimer=setTimeout(()=>{window.speechSynthesis.speak(turnUtter(tn));},230);
+}
+/* onTurn(i)：每輪開講時回呼——用來把逐句重播列對應的鈕點亮。
+   提示音在某些裝置可能被系統靜音鍵擋掉，視覺高亮是不會失效的那條線索
+   （只顯示第幾句與 A/B，不顯示德文，所以不破壞聽力練習）。 */
+function speakTurns(turns,onTurn){
+  if(!('speechSynthesis' in window)||!turns||!turns.length)return;
+  window.speechSynthesis.cancel();
+  if(spkTimer){clearTimeout(spkTimer);spkTimer=null;}
+  if(dlgTimer){clearTimeout(dlgTimer);dlgTimer=null;}
+  let i=0;
+  const step=()=>{
+    if(i>=turns.length){if(onTurn)onTurn(-1);return;}
+    const idx=i,tn=turns[i++];
+    cue(tn.s==='A'?740:392);
+    if(onTurn)onTurn(idx);
+    dlgTimer=setTimeout(()=>{
+      const u=turnUtter(tn);
+      u.onend=()=>{dlgTimer=setTimeout(step,480);};
+      window.speechSynthesis.speak(u);
+    },230);
+  };
+  step();
 }
 function spkBtn(text,cls){
   const b=document.createElement('button');
@@ -4271,11 +4350,24 @@ const TEXTS=[
    de:"Donnerstag, 14. August.\n\nWarum ruft meine Mutter eigentlich immer? „Räumt eure Zimmer auf! Deckt den Tisch! Räumt die Spülmaschine aus! Bringt den Abfall raus!\u201c So geht das den ganzen Tag, und das nervt mich total. Und sie selbst sagt nie „bitte\u201c — nur wir müssen das immer sagen.\n\nGestern war Melanie bei mir, und wir haben in meinem Zimmer geredet. Und dann kommt Mama rein: „Räum sofort dein Zimmer auf! Wisch auch gleich den Boden!\u201c Das war mir so peinlich vor Melanie!\n\nOh nein, jetzt ruft sie wieder. Sicher soll ich die Wäsche waschen oder das Bad putzen.",
    zh:"八月十四日，星期四。\n\n為什麼我媽媽老是這樣喊來喊去？「把房間收一收！鋪桌子！把洗碗機清空！把垃圾拿出去！」一整天都這樣，這讓我超級煩。而她自己從來不說「請」——只有我們一定要說。\n\n昨天 Melanie 來我家，我們在我房間裡聊天。然後媽媽就走進來：「馬上把房間收一收！順便拖一下地板！」在 Melanie 面前真的好尷尬！\n\n喔不，她又在叫了。她八成是要我洗衣服或是擦浴室。",
    qs:[{q:"Line 對媽媽最主要的抱怨是什麼？",options:["媽媽整天下命令、自己卻不說「請」","媽媽從不打掃","媽媽不讓朋友來家裡","媽媽忘記做家事"],a:0},{q:"昨天發生了什麼事讓 Line 覺得尷尬？",options:["她自己忘記做家事","媽媽在朋友面前下命令","她跟朋友吵架","她忘記寫日記"],a:1},{q:"「Räumt eure Zimmer auf!」用的是哪一種 Imperativ？",options:["du 形","ihr 形","Sie 形","不是 Imperativ"],a:1}]},
-  {id:"t-l21-1",lesson:"L21",genre:"訪談短文",title:"Montagmorgen am Bahnhof",src:"AI 生成 · 未經母語者校對",
-   map:"<b>本課重點</b>：① dürfen（許可）vs müssen（義務）對比——本課文法核心；② Fahrer 的日常規則：Helm／Fußgänger／Regel；③ weil 從句動詞後置、dann 推進時序。<br><b>建議走法</b>：讀完本文 → 文法「動詞變位②」看 dürfen/müssen → 單字卡交通/規則類 → 例句刷 Kommunikation 句型 → 測驗（dürfen/müssen 對比題最重要）→ 🎓。",
-   de:"Montag, kurz vor sieben Uhr am Bahnhof. Jemand fragt: „Entschuldigung, darf ich Ihnen eine Frage stellen?“\n\nDie Person heißt Jonas und ist Fahrer von Beruf. „Ja, kein Problem“, sagt er.\n\nBei der Arbeit muss Jonas einen Helm tragen. Das ist eine wichtige Regel für alle Fahrer. Er muss auch immer auf die Fußgänger achten, weil die Straße oft gefährlich ist. Aber in der Pause darf er Musik hören — das ist erlaubt.\n\nDann fragt die Person noch weiter. Und Sie? Was erzählen Sie über Ihren Morgen?",
-   zh:"星期一，快七點，在車站。有人問：「不好意思，我可以問您一個問題嗎？」\n\n這位是 Jonas，職業是駕駛。「沒問題」，他說。\n\n上班時，Jonas 必須戴安全帽。這是所有駕駛都要遵守的重要規則。他也必須隨時注意行人，因為路上常常很危險。但休息時他可以聽音樂——這是被允許的。\n\n然後這個人繼續往下問。那你呢？你會怎麼形容你的早晨？",
-   qs:[{q:"訪談中的 Fahrer 為什麼要戴 Helm？",options:["因為天氣冷","這是所有駕駛都要遵守的重要規則","因為他喜歡","文中沒說"],a:1},{q:"Fahrer 在什麼時候可以聽音樂？",options:["開車時","休息時","從不可以","一直都可以"],a:1},{q:"「weil die Straße oft gefährlich ist」中，weil 從句的動詞放在哪裡？",options:["句子第二位","句尾","句首","沒有動詞"],a:1}]},
+  {id:"t-l21-1",lesson:"L21",genre:"對話",title:"In der Bibliothek",src:"AI 生成 · 未經母語者校對",
+   map:"<b>本課重點</b>：① dürfen（許可）vs müssen（義務）——本課文法核心，這段對話從頭到尾就在吵這件事；② 規則場景固定說法 Das ist (nicht) erlaubt／verboten、Hier darf man (nicht)…；③ 被糾正時的反應套組 Das wusste ich nicht／Ich mache es nicht mehr／Sie haben recht。<br><b>建議走法</b>：先用 🎧 播放兩次、<b>不看原文</b>做完 4 題 → 點「👁 顯示原文」對照 → 文法「動詞變位②」看 dürfen/müssen → 單字卡規則類 → 例句刷 Kommunikation → 測驗 → 🎓 → 解鎖 📄 閱讀與 ✍️ 寫作。",
+   turns:[{s:"A",de:"Entschuldigen Sie, aber das ist eine Bibliothek. Hier darf man nicht telefonieren."},
+          {s:"B",de:"Was wollen Sie denn von mir? Ich tue doch keinem was."},
+          {s:"A",de:"Sehen Sie das Schild dort? Handyverbot. Das ist die Regel hier."},
+          {s:"B",de:"Das wusste ich nicht. Entschuldigung, ich mache es nicht mehr."},
+          {s:"A",de:"Danke. Auf der Straße dürfen Sie telefonieren, das ist erlaubt."},
+          {s:"B",de:"Gut. Und darf ich hier etwas essen?"},
+          {s:"A",de:"Nein, essen ist auch verboten. Aber Wasser trinken ist in Ordnung."},
+          {s:"B",de:"Und wie lange haben Sie heute geöffnet?"},
+          {s:"A",de:"Heute bis 20 Uhr. Am Samstag machen wir schon um 14 Uhr zu."},
+          {s:"B",de:"Danke. Sie haben recht, es gibt hier viele Regeln."}],
+   de:"Entschuldigen Sie, aber das ist eine Bibliothek. Hier darf man nicht telefonieren.\nWas wollen Sie denn von mir? Ich tue doch keinem was.\nSehen Sie das Schild dort? Handyverbot. Das ist die Regel hier.\nDas wusste ich nicht. Entschuldigung, ich mache es nicht mehr.\nDanke. Auf der Straße dürfen Sie telefonieren, das ist erlaubt.\nGut. Und darf ich hier etwas essen?\nNein, essen ist auch verboten. Aber Wasser trinken ist in Ordnung.\nUnd wie lange haben Sie heute geöffnet?\nHeute bis 20 Uhr. Am Samstag machen wir schon um 14 Uhr zu.\nDanke. Sie haben recht, es gibt hier viele Regeln.",
+   zh:"A：不好意思，這裡是圖書館。這裡不可以講電話。\nB：你到底想怎樣？我又沒妨礙誰。\nA：您看到那邊的牌子了嗎？禁用手機。這是這裡的規定。\nB：這我不知道。抱歉，我不會再這樣了。\nA：謝謝。在街上您可以講電話，那是允許的。\nB：好。那我可以在這裡吃點東西嗎？\nA：不行，吃東西也是禁止的。不過喝水是可以的。\nB：那你們今天開到幾點？\nA：今天到 20 點。星期六我們 14 點就關了。\nB：謝謝。您說得對，這裡規定真多。",
+   qs:[{st:"Der Mann darf sein Handy auf der Straße benutzen.",a:true,m:1},
+       {st:"In der Bibliothek muss das Handy leise sein.",a:false,m:2},
+       {st:"Der Mann darf in der Bibliothek nichts trinken.",a:false,m:4},
+       {st:"Am Samstag schließt die Bibliothek später als heute.",a:false,m:6}]},
   /* ===ANCHOR:TEXTS_ARRAYS===（新課導讀 {id,lesson,genre,title,src,map,de,zh,qs} 插在這行上方；de 只准用該課及之前的單字＋功能詞，寫完必跑 ROADMAP N12 的白名單驗證腳本）*/
 ];
 
@@ -5605,24 +5697,42 @@ function renderTexts(){
   textsList.innerHTML='';
   TEXTS.filter(lessonMatch).forEach(t=>{
     const card=document.createElement('div');card.className='card gcard textcard';
-    const deHtml=t.de.split(/(\s+)/).map(seg=>/\S/.test(seg)?`<span class="tok">${seg}</span>`:seg).join('');
+    /* 2026-08-12：兩種新形狀——turns＝對話體（Hören 模擬，原文預設遮蔽）；qs[].st＝德文 R/F 題。
+       舊資料（無 turns、qs 為中文四選一）走原路徑，一位元組不受影響。 */
+    const dia=!!(t.turns&&t.turns.length);
+    const rf=!!(t.qs&&t.qs.length&&t.qs[0].st!==undefined);
+    const tokize=s=>s.split(/(\s+)/).map(seg=>/\S/.test(seg)?`<span class="tok">${seg}</span>`:seg).join('');
+    const body=dia?t.turns.map(x=>`<div style="margin:4px 0"><b style="color:var(--mut)">${x.s}：</b>${tokize(x.de)}</div>`).join(''):tokize(t.de);
+    /* 逐句重播列放在模糊區「外面」——遮住原文時仍看得到第幾句、是誰講的 */
+    const turnbar=dia?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 6px">${t.turns.map((x,ti)=>`<button class="chip tturn" data-t="${ti}" style="padding:2px 9px;font-size:.75rem">${ti+1} ${x.s} 🔊</button>`).join('')}</div>`:'';
     card.innerHTML=`<div class="gtitle">📖 ${t.title} <span class="genretag">${t.genre}</span> <span class="lessontag ${t.lesson}">${t.lesson}</span></div>`
       +`<details class="tmap"><summary style="cursor:pointer;font-weight:700">🗺 本課重點＋建議走法（點開）</summary><div style="margin-top:6px">${t.map}</div></details>`
-      +`<div style="margin:6px 0"><button class="btn tplay">▶️ 整段連唸</button></div>`
-      +`<div class="tde">${deHtml}</div>`
+      +`<div style="margin:6px 0"><button class="btn tplay">${dia?'🎧 播放對話':'▶️ 整段連唸'}</button>${dia?' <button class="btn treveal">👁 顯示原文</button>':''}</div>`
+      +(dia?`<div style="font-size:.8rem;color:var(--mut);margin-bottom:4px">聽兩次、先別看原文，做完下面 4 題再揭曉。換人時會有提示音（A 高音／B 低音）、語速也不同（B 較慢）；下面那排鈕會同步亮，指出現在講到第幾句。</div>`+turnbar:'')
+      +`<div class="tde"${dia?' style="filter:blur(6px)"':''}>${body}</div>`
       +`<div class="tokpop">👆 點上面任何一個德文字查意思</div>`
       +`<div class="tzh hidden">${t.zh}</div>`
-      +`<div class="tq"><b style="font-size:.9rem">✏️ 讀懂了嗎？</b>${t.qs.map((q,qi)=>`<div style="margin-top:8px;font-size:.92rem"><b>${qi+1}. ${q.q}</b>${q.options.map((o,oi)=>`<button class="opt" data-q="${qi}" data-o="${oi}">${o}</button>`).join('')}</div>`).join('')}</div>`
+      +(rf?`<div class="tq"><b style="font-size:.9rem">🧠 這句陳述符合原文嗎？</b>${t.qs.map((q,qi)=>`<div style="margin-top:8px;font-size:.92rem"><b>${qi+1}. ${q.st}</b><div><button class="opt" data-q="${qi}" data-o="1">Richtig</button><button class="opt" data-q="${qi}" data-o="0">Falsch</button><span class="rfm" data-q="${qi}" style="font-size:.78rem;color:var(--mut)"></span></div></div>`).join('')}</div>`
+          :`<div class="tq"><b style="font-size:.9rem">✏️ 讀懂了嗎？</b>${t.qs.map((q,qi)=>`<div style="margin-top:8px;font-size:.92rem"><b>${qi+1}. ${q.q}</b>${q.options.map((o,oi)=>`<button class="opt" data-q="${qi}" data-o="${oi}">${o}</button>`).join('')}</div>`).join('')}</div>`)
       +`<div class="srcnote">來源：${t.src}</div>`;
-    card.querySelector('.tplay').onclick=()=>speak(t.de);
+    const lite=i=>card.querySelectorAll('.tturn').forEach(b=>{b.dataset.on=(+b.dataset.t===i)?'true':'false';});
+    card.querySelector('.tplay').onclick=()=>{dia?speakTurns(t.turns,lite):speak(t.de);};
+    card.querySelectorAll('.tturn').forEach(b=>{b.onclick=()=>{lite(+b.dataset.t);speakTurn(t.turns[+b.dataset.t]);};});
+    const rv=card.querySelector('.treveal');
+    if(rv)rv.onclick=()=>{const d=card.querySelector('.tde');d.style.filter=d.style.filter?'':'blur(6px)';};
     const pop=card.querySelector('.tokpop');
     const tks=[...card.querySelectorAll('.tok')].map(x=>x.textContent);
     card.querySelectorAll('.tok').forEach((el,i)=>{el.onclick=()=>tokPopShow(pop,el.textContent,{toks:tks,i:i});});
     const z=card.querySelector('.tzh');z.onclick=()=>z.classList.toggle('hidden');
     card.querySelectorAll('.tq .opt').forEach(b=>{b.onclick=()=>{
-      const q=t.qs[+b.dataset.q],ok=+b.dataset.o===q.a;
+      const qi=+b.dataset.q,q=t.qs[qi];
+      const ok=rf?((+b.dataset.o===1)===!!q.a):(+b.dataset.o===q.a);
       b.classList.add(ok?'correct':'wrong');
-      if(!ok)card.querySelectorAll(`.tq .opt[data-q="${b.dataset.q}"]`).forEach(x=>{if(+x.dataset.o===q.a)x.classList.add('correct');});
+      if(rf){
+        const lb=card.querySelector(`.rfm[data-q="${qi}"]`);
+        if(lb)lb.textContent='　機制：'+(RF_MECH[q.m]||'');
+        if(!ok){const k='🧠 '+(RF_MECH[q.m]||'理解判斷');errors[k]=(errors[k]||0)+1;saveErrors();renderErrPanel();}
+      }else if(!ok){card.querySelectorAll(`.tq .opt[data-q="${qi}"]`).forEach(x=>{if(+x.dataset.o===q.a)x.classList.add('correct');});}
     };});
     textsList.appendChild(card);
   });
@@ -6510,6 +6620,169 @@ const MODUL_TEXTS={
       {q:"文章結尾的開放式問句是要讀者做什麼？",options:["模仿描述自己的通勤情境","回答是非題","訂正錯字"],a:0}]},
  /* ===ANCHOR:MODUL_TEXTS===（新單元整合閱讀插在這行上方，key 對齊 MODULE_DEF 的 id；先跑白名單驗證再入庫）*/
 };
+/* ---------- 課級關卡（🎓 畢業後解鎖）：📄 德文 R/F 閱讀測驗 ＋ ✍️ 寫作 ----------
+   2026-08-12 新增。qs 形狀 {st,a,m}：st＝德文陳述句、a＝真假、m＝RF_MECH 機制編號（見 §3.5 七種機制）。
+   ⚠️ 進度沿用既有 a1:modul／a1:schreib，key 用課號（"L21"）與單元 id（"M7"）天然不衝突，
+      不另開 store——因此備份匯出／匯入零改動。 */
+const LESSON_READS={
+  L21:{genre:"告示",title:"Stadtpark Nord — Regeln",
+   de:"Stadtpark Nord — Regeln\nÖffnungszeiten: von Mai bis September, 7 bis 22 Uhr. Der Eintritt ist frei.\nGrillen ist nur auf der Wiese hinter dem Spielplatz erlaubt.\nBaden im See ist verboten. Angeln ist am Samstag und am Sonntag erlaubt.\nHunde sind erlaubt, aber sie müssen immer bei Ihnen bleiben.\nMan darf im Park kein Fahrrad fahren. Man muss es schieben.\nZelten ist verboten.",
+   zh:"北城市公園 — 規定\n開放時間：五月到九月，7 點到 22 點。入場免費。\n只有在遊樂場後面的草地上才可以烤肉。\n禁止在湖裡游泳。週六與週日可以釣魚。\n可以帶狗，但狗必須隨時待在您身邊。\n公園內不可騎腳踏車，必須用牽的。\n禁止露營。",
+   qs:[{st:"Um 6 Uhr am Morgen darf man in den Park.",a:false,m:6},
+       {st:"Grillen ist im ganzen Park verboten.",a:false,m:7},
+       {st:"Der Eintritt kostet nichts.",a:true,m:1},
+       {st:"Am Sonntag darf man im See baden.",a:false,m:4}]},
+  /* ===ANCHOR:LESSON_READS===（新課閱讀測驗插在這行上方，key＝課號；de 先跑 validate_texts.py）*/
+};
+const LESSON_WRITES={
+  L21:{title:"回覆朋友的烤肉邀約",
+   task:"朋友 Lukas 傳訊息說週末想來你家陽台烤肉。回他一則訊息（約 30–40 字）。",
+   points:["說明你家不能烤肉","提出一個可以烤肉的替代地點","提出一個具體時間"],
+   form:"要有稱呼（Hallo …）與結尾（Viele Grüße …）",
+   model:"Hallo Lukas,\nleider dürfen wir hier nicht auf dem Balkon grillen. Der Vermieter hat sich schon beschwert. Aber im Stadtpark ist Grillen auf der Wiese erlaubt. Hast du am Samstag um 15 Uhr Zeit?\nViele Grüße, Shannon"},
+  /* ===ANCHOR:LESSON_WRITES===（新課寫作題插在這行上方，key＝課號；points＝內容點不是文法點）*/
+};
+/* 📄 課級閱讀：4 題德文 R/F，第一次作答計分，≥3 過關寫入 modul[課號].r */
+function buildLessonRead(lk){
+  const lr=LESSON_READS[lk];
+  const box=document.createElement('div');box.className='modbody textcard';box.id='lread-'+lk;box.hidden=true;
+  const deHtml=lr.de.split(/(\s+)/).map(seg=>/\S/.test(seg)?`<span class="tok">${seg}</span>`:seg).join('');
+  box.innerHTML=`<b>📄 閱讀測驗：${lr.title}</b> <span class="genretag">${lr.genre}</span>
+    <div style="margin-top:4px;font-size:.82rem;color:var(--mut)">題目是德文陳述句，判斷 Richtig／Falsch。答案<b>不能靠找關鍵字</b>——4 題對 3 題過關，答錯會告訴你中的是哪一種陷阱。</div>
+    <div style="margin:6px 0"><button class="btn lrplay">▶️ 整段連唸</button></div>
+    <div class="tde">${deHtml}</div>
+    <div class="tokpop">👆 點上面任何一個德文字查意思</div>
+    <div class="tzh hidden">${lr.zh}</div>
+    <div class="tq">${lr.qs.map((q,qi)=>`<div style="margin-top:8px;font-size:.92rem"><b>${qi+1}. ${q.st}</b><div><button class="opt" data-q="${qi}" data-o="1">Richtig</button><button class="opt" data-q="${qi}" data-o="0">Falsch</button><span class="rfm" data-q="${qi}" style="font-size:.78rem;color:var(--mut)"></span></div></div>`).join('')}</div>
+    <div class="lrres" style="margin-top:8px;font-weight:700"></div>`;
+  box.querySelector('.lrplay').onclick=()=>speak(lr.de);
+  const pop=box.querySelector('.tokpop');
+  const tks=[...box.querySelectorAll('.tok')].map(x=>x.textContent);
+  box.querySelectorAll('.tok').forEach((tk,i)=>{tk.onclick=()=>tokPopShow(pop,tk.textContent,{toks:tks,i:i});});
+  const z=box.querySelector('.tzh');z.onclick=()=>z.classList.toggle('hidden');
+  const answered={};
+  box.querySelectorAll('.tq .opt').forEach(b=>{b.onclick=()=>{
+    const qi=+b.dataset.q;if(answered[qi]!==undefined)return;
+    const q=lr.qs[qi],ok=(+b.dataset.o===1)===!!q.a;
+    answered[qi]=ok;b.classList.add(ok?'correct':'wrong');
+    const lb=box.querySelector(`.rfm[data-q="${qi}"]`);if(lb)lb.textContent='　機制：'+(RF_MECH[q.m]||'');
+    if(!ok){const k='🧠 '+(RF_MECH[q.m]||'理解判斷');errors[k]=(errors[k]||0)+1;saveErrors();renderErrPanel();}
+    if(Object.keys(answered).length!==lr.qs.length)return;
+    const okN=Object.values(answered).filter(Boolean).length;
+    const res=box.querySelector('.lrres');
+    if(okN>=3){
+      const m=modul[lk]||(modul[lk]={});
+      if(!m.r){m.r=new Date().toISOString().slice(0,10);saveModul();}
+      res.innerHTML=`<span style="color:#15803d">📄 通過（${okN}/4）！接著寫 ✍️ 作文。</span>`;
+    }else{
+      res.innerHTML=`<span style="color:#b91c1c">${okN}/4 未過——重讀一遍再試。</span> <button class="btn" style="font-size:.8rem" id="lrre-${lk}">🔄 再試</button>`;
+      const rb=document.getElementById('lrre-'+lk);
+      if(rb)rb.onclick=()=>{Object.keys(answered).forEach(k=>delete answered[k]);
+        box.querySelectorAll('.tq .opt').forEach(x=>x.classList.remove('correct','wrong'));
+        box.querySelectorAll('.rfm').forEach(x=>x.textContent='');res.innerHTML='';};
+    }
+  };});
+  return box;
+}
+/* ✍️ 課級寫作：內容點式（對齊官方評分＝內容點＋文體，不看文法炫技）。範文預設收合。 */
+function buildLessonWrite(lk){
+  const lw=LESSON_WRITES[lk];
+  const box=document.createElement('div');box.className='modbody textcard';box.id='lwrite-'+lk;box.hidden=true;
+  box.innerHTML=`<b>✍️ 寫作：${lw.title}</b>
+    <div style="margin-top:6px">${lw.task}</div>
+    <div style="margin-top:8px;font-size:.85rem"><b>必須寫到（每點都要碰到）：</b><ol style="margin:4px 0 0 18px;padding:0">${lw.points.map(p=>`<li>${p}</li>`).join('')}</ol></div>
+    <div style="margin-top:6px;font-size:.82rem;color:var(--mut)">${lw.form}</div>
+    <textarea id="lw-${lk}" placeholder="在這裡用德文寫。寫完按存檔 → 複製貼給 Claude 批改 → 批改後把修正版再存一筆"></textarea>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      <button class="btn" id="lwSave-${lk}">💾 存檔</button>
+      <button class="btn" id="lwCopy-${lk}">📋 複製</button>
+    </div>
+    <div id="lwMsg-${lk}" style="font-size:.8rem;margin-top:6px;color:var(--mut)"></div>
+    <details style="margin-top:8px"><summary style="cursor:pointer;font-size:.85rem;font-weight:700">📄 範文（先自己寫完再點開）</summary><div class="de2" style="margin-top:6px;white-space:pre-line">${lw.model}</div></details>
+    <div id="lwList-${lk}" style="margin-top:8px"></div>`;
+  setTimeout(()=>{
+    renderLwList(lk);
+    const ta=document.getElementById('lw-'+lk),msg=document.getElementById('lwMsg-'+lk);
+    const sv=document.getElementById('lwSave-'+lk);
+    if(sv)sv.onclick=()=>{
+      const v=(ta.value||'').trim();
+      if(!v){msg.textContent='先寫點東西再存';msg.style.color='#b91c1c';return;}
+      (schreib[lk]=schreib[lk]||[]).unshift({d:new Date().toISOString().slice(0,10),t:v});
+      saveSchreib();
+      const m=modul[lk]||(modul[lk]={});
+      if(!m.w){m.w=new Date().toISOString().slice(0,10);saveModul();}
+      ta.value='';msg.textContent='已存 ✓ 複製這篇貼給 Claude 批改，批改後把修正版再存一筆。';msg.style.color='#15803d';
+      renderLwList(lk);
+    };
+    const cp=document.getElementById('lwCopy-'+lk);
+    if(cp)cp.onclick=async()=>{
+      const v=(ta.value||'').trim()||(swEntries(lk)[0]||{}).t||'';
+      if(!v){msg.textContent='沒有可複製的內容';msg.style.color='#b91c1c';return;}
+      try{await navigator.clipboard.writeText(v);msg.textContent='已複製 ✓ 貼給 Claude：「這是我的 A1 課級寫作，請照 Goethe 內容點評分批改」';msg.style.color='#15803d';}
+      catch(e){msg.textContent='自動複製失敗，請長按全選手動複製';msg.style.color='#b91c1c';}
+    };
+  },0);
+  return box;
+}
+function renderLwList(lk){
+  const el=document.getElementById('lwList-'+lk);if(!el)return;
+  el.innerHTML=swEntries(lk).map(e=>`<div class="swentry"><span class="swdate">${e.d}</span><br>${(e.t||'').replace(/</g,'&lt;')}</div>`).join('');
+}
+/* 📄 課後練習入口（2026-08-12）：整顆 chip 只在「範圍恰為一課」且該課已 🎓 時出現，
+   其餘時候完全隱藏——版面不因為課別變多而變亂，🏆 單元關卡維持原樣不混雜。 */
+function syncLgate(){
+  const chip=document.getElementById('qLgate'),box=document.getElementById('lgateBox');
+  if(!chip||!box)return;
+  const single=curLessons.size===1?[...curLessons][0]:null;
+  const ok=!!(single&&grad[single]&&(LESSON_READS[single]||LESSON_WRITES[single]));
+  chip.hidden=!ok;
+  const qb=document.querySelector('.qbox');
+  if(!ok){box.hidden=true;box.innerHTML='';box.dataset.lesson='';chip.dataset.on='false';if(qb)qb.style.display='';return;}
+  const st=modul[single]||{};
+  chip.textContent=(st.r&&st.w?'✅':'📄')+' 課後練習';
+  if(box.dataset.lesson!==single){box.dataset.lesson=single;box.innerHTML='';box.hidden=true;chip.dataset.on='false';if(qb)qb.style.display='';}
+}
+function toggleLgate(force){
+  const chip=document.getElementById('qLgate'),box=document.getElementById('lgateBox');
+  if(!chip||!box||chip.hidden)return;
+  const on=(force===undefined)?box.hidden:!!force;
+  chip.dataset.on=on?'true':'false';
+  /* 開啟時：題型／測驗列全部取消點選、題框收起——否則畢業考仍亮著、題目被擠到頁面最下面。
+     關閉時：依 qmode 還原點選狀態並放回題框。 */
+  document.querySelectorAll('[data-qmode]').forEach(x=>{x.dataset.on=on?'false':(x.dataset.qmode===qmode?'true':'false');});
+  const qb=document.querySelector('.qbox');if(qb)qb.style.display=on?'none':'';
+  if(on&&!box.children.length){
+    const lk=[...curLessons][0];
+    const row=document.createElement('div');row.className='modrow';
+    row.innerHTML=`<span><b>${lk} 課後練習</b></span>`;
+    const mk=(label,id)=>{
+      const b=document.createElement('button');b.className='chip';b.dataset.on='false';
+      b.style.fontSize='.82rem';b.textContent=label;
+      b.onclick=()=>{
+        const x=document.getElementById(id);if(!x)return;
+        const willOpen=x.hidden;
+        box.querySelectorAll('.modbody').forEach(y=>{y.hidden=true;});
+        row.querySelectorAll('.chip').forEach(y=>{y.dataset.on='false';});
+        x.hidden=!willOpen;b.dataset.on=willOpen?'true':'false';
+      };
+      return b;
+    };
+    if(LESSON_READS[lk])row.appendChild(mk('📄 閱讀測驗','lread-'+lk));
+    if(LESSON_WRITES[lk])row.appendChild(mk('✍️ 寫作','lwrite-'+lk));
+    box.appendChild(row);
+    if(LESSON_READS[lk])box.appendChild(buildLessonRead(lk));
+    if(LESSON_WRITES[lk])box.appendChild(buildLessonWrite(lk));
+  }
+  box.hidden=!on;
+  if(on)box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+(function(){
+  const c=document.getElementById('qLgate');if(c)c.onclick=()=>toggleLgate();
+  /* 點任何題型／測驗 chip 就退出課後練習，題框自動回來 */
+  document.querySelectorAll('[data-qmode]').forEach(x=>x.addEventListener('click',()=>{
+    const b=document.getElementById('lgateBox');if(b&&!b.hidden)toggleLgate(false);
+  }));
+})();
 let modulRun=null; /* 進行中的單元挑戰 id；手動換課別/題型＝放棄本輪判定 */
 function startModulQuiz(id){
   const md=MODULE_DEF.find(m=>m.id===id);if(!md)return;
@@ -6549,7 +6822,7 @@ function renderModulPanel(){
 /* 🏆 第②關：整合閱讀卡——文章渲染重用導讀的點句唸/點字查，4 題各以第一次作答計分，≥3 過關寫入 modul[id].r */
 function buildReadCard(md){
   const id=md.id,mt=MODUL_TEXTS[id];
-  const box=document.createElement('div');box.className='modbody';box.id='modread-'+id;
+  const box=document.createElement('div');box.className='modbody textcard';box.id='modread-'+id;
   if(!mt){box.innerHTML='<b>② 整合閱讀</b><div style="margin-top:6px;color:var(--mut)">（此單元整合閱讀待補——先跳過，直接看下一關會在補上後開放）</div>';return box;}
   const deHtml=mt.de.split(/(\s+)/).map(seg=>/\S/.test(seg)?`<span class="tok">${seg}</span>`:seg).join('');
   box.innerHTML=`<b>② 整合閱讀：${mt.title}</b>
@@ -6801,10 +7074,11 @@ function showGradStats(){
   let head;
   if(pass){
     if(single){
-      if(!grad[single]){grad[single]=new Date().toISOString().slice(0,10);saveGrad();syncLessonChips();renderModulPanel();}
+      if(!grad[single]){grad[single]=new Date().toISOString().slice(0,10);saveGrad();syncLessonChips();renderModulPanel();syncLgate();}
       const md=MODULE_DEF.find(m=>m.lessons.includes(single));
       const unlocked=md&&md.lessons.every(k=>grad[k])&&!(modul[md.id]&&modul[md.id].w);
       head=`<div style=\"color:#15803d;font-weight:800;font-size:1.05rem\">🎓 ${single==='L123'?'L1–3':single} 達畢業標準！</div>`
+        +((LESSON_READS[single]||LESSON_WRITES[single])?`<div style=\"margin-top:6px;font-size:.88rem\">📄 本課閱讀測驗與 ✍️ 寫作已解鎖 <button class=\"btn\" style=\"font-size:.8rem\" id=\"goGate\">前往 →</button></div>`:'')
         +(unlocked?`<div style=\"margin-top:6px;font-size:.88rem\">🏆 ${md.name} 全數畢業——特別測驗已解鎖，往下捲到「單元特別測驗」區。</div>`:'');
     }else{
       head=`<div style=\"color:#15803d;font-weight:800\">🎓 此範圍達畢業標準！</div><div style=\"font-size:.8rem;color:var(--mut);margin-top:4px\">畢業標記只在單選一課時記錄——想給某課掛 🎓，把範圍縮到那一課再考一次。</div>`;
@@ -6821,6 +7095,8 @@ function showGradStats(){
     +rows.map(r=>`<div style=\"display:flex;justify-content:space-between;margin:5px 0;gap:8px\"><span>${GRAD_LABEL[r.m]}${r.fl?`（保底 ${r.fl}%）`:'<span style=\"color:var(--mut);font-size:.78rem\">（題數少，只計總分）</span>'}</span><span style=\"font-weight:700;white-space:nowrap;color:${r.fl&&r.pct<r.fl?'#b91c1c':'#15803d'}\">${r.ok}/${r.tot}（${r.pct}%）</span></div>`).join('')
     +'</div></div><div style=\"margin-top:12px\"><button class=\"btn\" id=\"gradAgain\">🔄 再考一次</button></div>';
   const b=document.getElementById('gradAgain');if(b)b.onclick=()=>{buildGrad();qScore=0;qTotal=0;qscore.textContent='分數 0 / 0';newQ();};
+  const gg=document.getElementById('goGate');
+  if(gg)gg.onclick=()=>{syncLgate();toggleLgate(true);};
 }
 
 function poolFor(mode){
@@ -7943,7 +8219,7 @@ function applyLesson(){
   renderSentences();
   renderTexts();
   bags={};qScore=0;qTotal=0;qscore.textContent='分數 0 / 0';if(qmode==='meilen')buildMeilen();if(qmode==='grad')buildGrad();newQ();
-  updateRouteBtn();renderNewCard();
+  syncLgate();updateRouteBtn();renderNewCard();
 }
 function lessonKeys(){return[...document.querySelectorAll('[data-lesson]')].map(x=>x.dataset.lesson).filter(k=>k!=="ALL");}
 function syncLessonChips(){
@@ -8068,7 +8344,11 @@ function routeDecision(){
 
   /* 分支4：範圍三課皆 🎓 且 🏆 未過 */
   const allGrad=scopeKeys.every(k=>k==='ALL'||grad[k]);
-  const md=MODUL_TOPICS&&MODUL_TOPICS.find(m=>m.lessons.every(k=>curLessons.has(k)));
+  /* 2026-08-12 修：原本寫 MODUL_TOPICS.find——MODUL_TOPICS 是物件沒有 .find，
+     且 lessons 欄位在 MODULE_DEF 上。此分支一到就 TypeError，🏆 從未被路由推薦過。 */
+  const md=MODULE_DEF.find(m=>m.lessons.every(k=>curLessons.has(k)));
+  const lgate=[...curLessons].find(k=>grad[k]&&(LESSON_READS[k]||LESSON_WRITES[k])&&!((modul[k]||{}).r&&(modul[k]||{}).w));
+  if(lgate)return{action:'lgate',label:'📄 '+lgate+' 課後練習'};
   if(allGrad&&md&&!(modul[md.id]&&modul[md.id].w))
     return{action:'modul',label:'🏆 單元特別測驗'};
 
@@ -8104,7 +8384,10 @@ function doRoute(){
     });
     const btn=document.querySelector(`[data-lesson="${r.lesson}"]`);
     if(btn)btn.click();
+  }else if(r.action==='lgate'){
+    syncLgate();toggleLgate(true);
   }else if(r.action==='modul'){
+    renderModulPanel();
     document.getElementById('modulBox').open=true;
     document.getElementById('modulBox').scrollIntoView({behavior:'smooth'});
   }else{
