@@ -457,7 +457,9 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
       <li><b>文法填空</b>已含複數題（複數本來就是文法）。<b>答錯的題再遇到時自動改成 ⌨️ 打字</b>——第一次已經看過四個選項，再給選項等於送分。</li>
       <li><b>🧱 語序</b>＝點字塊排句（句框句加倍）。字塊<b>預設先藏起來</b>，你得先看中文在腦中把整句提取出來再點開；點開時二選一：<b>🧱 顯示字塊</b>（只有正解字）或 <b>🎭 顯示字塊＋干擾</b>（混入同文法點的其他正確形式——冠詞、動詞變位、介系詞、可分離前綴，殺消去法；干擾塊點錯直接算錯）。🏁/🎓 中一律直接出字塊、不加干擾。</li>
       <li><b>🏁 總複習</b>＝範圍內全題型混抽 30 題（其中最多 4 題文法/複數以打字型態出；題目不足就整池出完），結束給各文法點答對率。想複習全部＝課別「全選」。</li>
-      <li>答錯自動記錄：字義/der-die-das→標 🔖 不熟；文法填空→進「弱點排行」。已標「我會了」的字預設不出題；<b>✍️ 中→德</b>則排除「已經自己產出成功過」的字（跟「我會了」是兩本帳——看得懂不等於說得出）。兩者都可用「含已掌握」切回全量。</li>
+      <li>答錯自動記錄：字義/der-die-das→標 🔖 不熟；文法填空→進「弱點排行」。<b>「我會了」是全工具唯一的畢業標記</b>，標了之後字義／der-die-das／👂 單字聽辨／✍️ 中→德 都預設不再出題，用「含已掌握」可切回全量。</li>
+      <li><b>怎麼取消「我會了」</b>：單字卡或測驗頁的狀態鈕點一下即可。另外<b>考單字的題答錯會自動取消</b>（字義／der-die-das／👂 單字聽辨／✍️ 中→德 四種；文法填空與 🧱 語序不會，那兩種考的不是這個字）。畢業字滿 14 天沒答對也會自動回鍋。</li>
+      <li><b>✍️ 中→德要「本輪第一次就答對」才算畢業。</b>答錯的題會插回牌堆重問，所以一輪跑完每題遲早都會答對——重答對只是當下記得，不算掌握，畫面會提示 ↻。下一輪重洗後這個字再拿一次機會。</li>
       <li><b style="color:#b45309">🔖 只考不熟</b>＝跨課只抽標過不熟的內容（不影響總複習與畢業考）。</li>
       <li><b>🎓 畢業考</b>＝一課期末檢定，題數依該課題庫大小自動調整（各維度抽池的 40%，全卷不足 30 題就整份抽滿），<b>含已畢業字全量出題</b>。門檻：<b>全卷加權答對率 ≥85%</b>，另加保底——字義 ≥75%、其餘題數 ≥6 的維度 ≥60%（題數少於 6 的維度不設保底，只計入總分，避免一題定生死）。通過＝畢業、課別鈕掛 🎓。</li>
       <li><b>🏆 單元特別測驗</b>＝每 3 課一關（加難總複習 → 整合閱讀 → 迷你寫作），見最下方區塊。</li>
@@ -4366,25 +4368,32 @@ async function saveWeakGram(){try{await Store.set('a1:weakGram',JSON.stringify(w
 let weakProd={};
 async function loadWeakProd(){try{const v=await Store.get('a1:weakProd');if(v)weakProd=JSON.parse(v);}catch(e){weakProd={};}}
 async function saveWeakProd(){try{await Store.set('a1:weakProd',JSON.stringify(weakProd));}catch(e){}}
-/* ✍️ 中→德的畢業集（2026-08-11，使用者提出）：未用救生圈答對才寫。
-   刻意不共用 mastered 當「排除依據」——mastered 有三個來源（單字卡「我會了」、測驗狀態鈕、
-   中→德答對），前兩者只證明「看得懂」。若拿 mastered 當 prod 的排除條件，靠單字卡畢業的字
-   就永遠不會被要求說出來，正好把本題型的存在理由抵銷掉。
-   產出成功仍會「一併」寫 mastered（產出是比辨識更強的證據，單向往上傳遞，2026-08-07 既有行為不變）。 */
-let prodDone={};
-async function loadProdDone(){try{const v=await Store.get('a1:prodDone');if(v)prodDone=JSON.parse(v);}catch(e){prodDone={};}}
-async function saveProdDone(){try{await Store.set('a1:prodDone',JSON.stringify(prodDone));}catch(e){}}
-/* 2026-08-11 bug fix：取消 mastered 時必須連帶取消 prodDone，否則「✍️ 中→德」的
-   排除依據會卡死——使用者手動取消已會了（承認自己其實不熟）之後，prodDone 仍標記
-   已產出過，UI 上沒有任何入口能改 prodDone，該字就永久消失於中→德題池，
-   刷完一輪後題庫可能歸零、且無法自救。
-   集中成一個函式的原因：清除 mastered 的入口有三處（單字卡「我會了」切換、
-   字義/性別答錯自動取消、測驗頁 qmark「已會了→點取消」），逐一補寫容易漏掉一處
-   （事實上這次就是三處都漏了）；往後任何新增的取消 mastered 入口只要呼叫這裡即可，
-   不必記得 prodDone 這個旁支依賴。 */
+/* ═══ 2026-08-12 里程碑：單一旗標制（使用者提出）═════════════════════════
+   `prodDone`（a1:prodDone）已廢除。全工具只剩 `mastered` 一個畢業旗標，語意由
+   「看得懂」升格為「這個字我會了」——辨識、性別、聽辨、產出全部共用同一格。
+
+   為什麼廢：兩個旗標之間有一條從未被宣告的不變式（prodDone ⊆ mastered），
+   而三個地方會打破它——字義/性別答錯只清 mastered（recordError）、單字卡「重置」
+   直接 mastered={}、以及任何未來新增的清除點。一旦 mastered 沒了而 prodDone 還在，
+   兩顆「我會了」鈕的**文字與行為都以 mastered 為判準**，會顯示成「✓ 我會了」，
+   按下去是設定而不是取消 → unmaster() 永遠碰不到；同時 isDecayDue() 第一行是
+   `if(!mastered[id])return false`，N15 衰退救援也一起失效。**兩條出口被同一行
+   `delete mastered` 同時切斷**，該字永久消失於中→德題池，使用者無計可施
+   （2026-08-12 使用者實測回報，根因在此）。2026-08-11 連兩次修補都只補症狀。
+   單一序數旗標讓這種孤兒狀態在結構上不可能存在。
+
+   代價（知情接受）：單字卡按一次「我會了」＝該字暫時不必說出來。用兩件事兜底——
+   ① N15 衰退：14 天沒答對自動回鍋，含 ✍️ 中→德 ② **考單字的題答錯就取消畢業**
+   （字義／der-die-das／👂 單字聽辨／✍️ 中→德四種，見各自呼叫點）。
+   文法填空與 🧱 語序**刻意不取消**：那兩種考的是變位與語序，qWordOf() 抓到的字
+   是隨機受害者，取消它只會讓畢業數莫名其妙掉。
+
+   遷移：不需要。舊的 a1:prodDone 不再被讀寫，殘留在 storage 無害（留作回頭路）；
+   被卡死的孤兒字因為題池不再過濾 prodDone，套用當下自動釋放。 */
+/* unmaster(id)＝降級的唯一入口。往後任何新增的「取消我會了」都呼叫這裡，
+   不要就地 delete mastered[id]——就地寫是 2026-08-11 兩次事故的共同形狀。 */
 function unmaster(id){
   if(mastered[id]){delete mastered[id];saveMastered();}
-  if(prodDone[id]){delete prodDone[id];saveProdDone();}
 }
 
 let errors={}; /* M1：錯題統計，key=文法點（sub 冒號前段），value=錯誤次數 */
@@ -6404,14 +6413,17 @@ function satzbauPool(wk,all){
 }
 function errKeyOf(mode,q){const s=q.sub||'';const i=s.indexOf('：');return i>0?s.slice(0,i):s;}
 function recordError(mode,q){
-  /* 2026-08-11：字義/性別答錯只清 mastered，不連動 prodDone——答錯是手滑，不是「我確認
-     自己不會產出這個字」的訊號。prodDone 只在使用者主動點取消（單字卡／qmark 兩顆鈕，
-     見 unmaster() 呼叫點）或 N15 自然衰退時才會失去，不該被一次無關的答錯悄悄清掉。 */
-  if(mode==='mean'||mode==='gender'){if(q.id!==undefined){weak[q.id]=1;saveWeak();if(mastered[q.id]){delete mastered[q.id];saveMastered();delete seen[q.id];saveSeen();}}return;}
+  /* 2026-08-12 單一旗標制：一律走 unmaster()，不要就地 delete mastered[q.id]。 */
+  if(mode==='mean'||mode==='gender'){if(q.id!==undefined){weak[q.id]=1;saveWeak();if(mastered[q.id]){unmaster(q.id);delete seen[q.id];saveSeen();}}return;}
   if(mode==='rf'){const k='🧠 '+(RF_MECH[q.m]||'理解判斷');errors[k]=(errors[k]||0)+1;saveErrors();renderErrPanel();return;}
   if(mode==='listen'||mode==='satzbau'){
     if(q.syn){const k=errKeyOf(mode,q);if(k){errors[k]=(errors[k]||0)+1;saveErrors();renderErrPanel();}return;}   /* N7 生成題 */
-    if(q.wl){errors['👂 單字聽辨']=(errors['👂 單字聽辨']||0)+1;saveErrors();renderErrPanel();return;}   /* N22：不動 mastered/weak，要標不熟走 N21 狀態鈕 */
+    /* 2026-08-12 單一旗標制：推翻 N22 原設計（原本刻意不動 mastered，理由是「聽錯≠讀不懂」）。
+       旗標語意升格為「這個字我會了」之後，聽不出來就不算會了。注意 wl 題物件是
+       {wl:1,v:v,zh:…}，**沒有頂層 q.id**，字在 q.v.id——寫成 q.id 會靜默失效。 */
+    if(q.wl){errors['👂 單字聽辨']=(errors['👂 單字聽辨']||0)+1;saveErrors();
+      const wv=q.v;if(wv&&wv.id!==undefined){weak[wv.id]=1;saveWeak();if(mastered[wv.id]){unmaster(wv.id);delete seen[wv.id];saveSeen();}}
+      renderErrPanel();return;}
     if(q.de){weakSent[q.de]=1;saveWeakSent();}return;}
   const k=q.ng?'📚 詞彙/表達':errKeyOf(mode,q);if(k){errors[k]=(errors[k]||0)+1;saveErrors();renderErrPanel();}
 }
@@ -6825,9 +6837,9 @@ function poolFor(mode){
   if(mode==='satzbau')return satzbauPool(qWeak,false);
   if(mode==='prod'){
     const base=VOCAB.filter(prodOK);
-    /* 2026-08-11：預設排除「已產出成功過」的字（比照字義／der-die-das 的已掌握排除），
+    /* 2026-08-12 單一旗標制：排除依據與字義／der-die-das 統一為 mastered。
        「含已掌握」chip 恢復全量；並吃 N15 衰退——久沒碰的字自動回鍋。 */
-    return qWeak?base.filter(v=>weakProd[v.id]):base.filter(v=>lessonMatch(v)&&(qInclM||!prodDone[v.id]||isDecayDue(v.id)));
+    return qWeak?base.filter(v=>weakProd[v.id]):base.filter(v=>lessonMatch(v)&&(qInclM||!mastered[v.id]||isDecayDue(v.id)));
   }
   if(mode==='mean')return qWeak?VOCAB.filter(v=>v.cat!=='數字'&&weak[v.id]):VOCAB.filter(v=>v.cat!=='數字'&&lessonMatch(v)&&(qInclM||!mastered[v.id]||isDecayDue(v.id)));
   if(mode==='gender')return qWeak?VOCAB.filter(v=>v.g&&v.g!=='plu'&&weak[v.id]):VOCAB.filter(v=>v.g&&v.g!=='plu'&&lessonMatch(v)&&(qInclM||!mastered[v.id]||isDecayDue(v.id)));
@@ -6926,6 +6938,31 @@ function saveDrawn(){   /* debounce 500ms：drawQ 每題都會呼叫，不能每
     try{const o={};for(const m in drawn)o[m]=[...drawn[m]];await Store.set('a1:drawn',JSON.stringify(o));}catch(e){}
   },500);
 }
+/* ═══ 2026-08-12（第二批，使用者實測回報）missed＝本輪答錯過的題 ═════════
+   缺口：答錯的題會被 requeue() 插回牌堆中段重問，所以**一輪跑完必然每題都答對過一次**
+   ——✍️ 中→德「答對即畢業」於是退化成「刷完一輪全體畢業」。使用者原話：
+   「有些字只是反覆刷到太多次當下記得而已」。這正好抵銷單一旗標制的證偽機制。
+   改法：本輪被 requeue 過的題 key 記進 missed[mode]，該題本輪再答對**不給畢業**。
+   ⚠️ 必須與 drawn 同輪次、同持久化：輪次由 drawQ 的 seenSet.clear() 定義、跨 session
+   （a1:drawn 是持久化的）。若 missed 只留在記憶體，重新整理就洗掉，
+   使用者刷到一半關掉 app 再開就能靠重答拿畢業——那等於沒修。
+   記錄點放在 requeue() 內部而非各呼叫點：那裡是「答錯要重問」的唯一咽喉，
+   一處寫好全題型通用（現階段只有中→德會授予畢業，但規則不該綁在題型上）。 */
+var missed={};
+async function loadMissed(){
+  try{const v=await Store.get('a1:missed');
+    if(v){const o=JSON.parse(v),n={};for(const m in o)if(Array.isArray(o[m]))n[m]=new Set(o[m]);missed=n;}
+  }catch(e){missed={};}
+}
+let missedTimer=null;
+function saveMissed(){
+  if(missedTimer)clearTimeout(missedTimer);
+  missedTimer=setTimeout(async()=>{
+    missedTimer=null;
+    try{const o={};for(const m in missed)o[m]=[...missed[m]];await Store.set('a1:missed',JSON.stringify(o));}catch(e){}
+  },500);
+}
+function qMissed(mode,it){const k=qKeyOf(mode,it);return !!(k&&missed[mode]&&missed[mode].has(k));}
 /* 2026-08-11：題袋洗牌改 Fisher–Yates。原本用 sort(()=>Math.random()-.5)——這是個
    有名的假洗牌：比較函式不一致，V8 的 TimSort 對長陣列幾乎不動原順序。
    單一題型時看不出來（本來就同質），但這批把 PLURAL 接在 gramBank 後面之後就爆了：
@@ -6937,14 +6974,17 @@ function drawQ(mode){
     const p=poolFor(mode);if(!p.length)return null;
     const seenSet=drawn[mode]||(drawn[mode]=new Set());
     let rest=p.filter(x=>{const k=qKeyOf(mode,x);return k===null||!seenSet.has(k);});
-    if(!rest.length){seenSet.clear();rest=[...p];saveDrawn();roundDoneNote(mode);}   /* 整輪跑完才重洗 */
+    if(!rest.length){seenSet.clear();rest=[...p];saveDrawn();
+      if(missed[mode]){missed[mode].clear();saveMissed();}   /* 2026-08-12：新一輪重新給每題一次「一次答對」的機會 */
+      roundDoneNote(mode);}   /* 整輪跑完才重洗 */
     bags[mode]=shuffle(rest.slice());
   }
   const it=bags[mode].shift();
   if(it){const k=qKeyOf(mode,it);if(k!==null){(drawn[mode]||(drawn[mode]=new Set())).add(k);saveDrawn();}}
   return it;
 }
-function requeue(mode,item){const b=bags[mode]||(bags[mode]=[]);b.splice(Math.min(b.length,2+(Math.random()*3|0)),0,item);}
+function requeue(mode,item){const b=bags[mode]||(bags[mode]=[]);b.splice(Math.min(b.length,2+(Math.random()*3|0)),0,item);
+  const k=qKeyOf(mode,item);if(k!==null){(missed[mode]||(missed[mode]=new Set())).add(k);saveMissed();}}
 
 document.querySelectorAll('[data-qmode]').forEach(b=>b.onclick=()=>{
   modulRun=null; /* 手動換題型＝放棄進行中的單元第①關判定 */
@@ -6978,7 +7018,7 @@ async function renderBkLast(){
   el.style.color=days>7?'#b91c1c':'var(--mut)';
 }
 document.getElementById('bkExport').onclick=()=>{
-  const data={weak,weakSent,weakGram,errors,mastered,grad,modul,schreib,flash:lastFlash||undefined,exportedAt:new Date().toISOString()};
+  const data={weak,weakSent,weakGram,weakProd,errors,mastered,seen,grad,modul,schreib,flash:lastFlash||undefined,exportedAt:new Date().toISOString()};
   document.getElementById('bkArea').value=JSON.stringify(data);
   Store.set('a1:lastExport',new Date().toISOString());renderBkLast();
   bkNote('已產生 ✓ 按「複製」存到備忘錄',1);
@@ -6994,13 +7034,16 @@ document.getElementById('bkImport').onclick=()=>{
   if(!raw){bkNote('先把備份文字貼進上面的框',0);return;}
   let d;try{d=JSON.parse(raw);}catch(e){bkNote('格式不對：不是有效的備份資料，現有進度未被改動',0);return;}
   const uni=(dst,src)=>{if(src&&typeof src==='object')Object.keys(src).forEach(k=>{dst[k]=1;});};
-  uni(weak,d.weak);uni(weakSent,d.weakSent);uni(weakGram,d.weakGram);uni(mastered,d.mastered);
+  uni(weak,d.weak);uni(weakSent,d.weakSent);uni(weakGram,d.weakGram);uni(mastered,d.mastered);uni(weakProd,d.weakProd);
+  /* 2026-08-12：seen 是時間戳，**不能**走 uni（那會把它寫成 1，等於 1970 年答對，
+     匯入當下全部字立刻被 isDecayDue 判定衰退）。取兩邊較新者。 */
+  if(d.seen&&typeof d.seen==='object')Object.entries(d.seen).forEach(([k,v])=>{const t=+v||0;if(t>(seen[k]||0))seen[k]=t;});
   if(d.errors&&typeof d.errors==='object')Object.entries(d.errors).forEach(([k,n])=>{errors[k]=(errors[k]||0)+(+n||0);});
   if(d.grad&&typeof d.grad==='object')Object.entries(d.grad).forEach(([k,v])=>{if(!grad[k])grad[k]=v;});
   if(d.modul&&typeof d.modul==='object')Object.entries(d.modul).forEach(([k,v])=>{const m=modul[k]||(modul[k]={});if(v&&v.q&&!m.q)m.q=v.q;if(v&&v.w&&!m.w)m.w=v.w;});
   if(d.schreib&&typeof d.schreib==='object')Object.entries(d.schreib).forEach(([k,arr])=>{if(!Array.isArray(arr))return;const cur=schreib[k]||(schreib[k]=[]);arr.forEach(e=>{if(e&&e.t&&!cur.some(x=>x.d===e.d&&x.t===e.t))cur.push(e);});cur.sort((a,b)=>(b.d||'').localeCompare(a.d||''));});
   if(d.flash&&d.flash.id!==undefined&&!lastFlash){lastFlash=d.flash;try{Store.set('a1:flash',JSON.stringify(lastFlash));}catch(e){}} /* N11.5：單字卡位置只在本機沒有紀錄時帶入 */
-  saveWeak();saveWeakSent();saveWeakGram();saveMastered();saveErrors();saveGrad();saveModul();saveSchreib();
+  saveWeak();saveWeakSent();saveWeakGram();saveMastered();saveWeakProd();saveSeen();saveErrors();saveGrad();saveModul();saveSchreib();
   renderErrPanel();render();renderSentences();renderGrammar();syncLessonChips();renderModulPanel();
   bkNote(`匯入完成 ✓（不熟單字 ${Object.keys(weak).length}｜例句 ${Object.keys(weakSent).length}｜文法 ${Object.keys(weakGram).length}｜已掌握 ${Object.keys(mastered).length}）`,1);
 };
@@ -7691,20 +7734,29 @@ function renderProd(pre){
       }
       requeue('prod',v);
     }
-    /* 2026-08-07：產出成功是比辨識成功更強的證據，單向往上傳遞——答對即畢業。
-       但**必須未用救生圈**：字母磚給了就不算自己撈出來的。
-       反向不成立（產出失敗不取消畢業），因為 mastered 記的是「看得懂」，那沒有退步。
-       畢業不會讓這個字退出 prod 題池——mastered 只擋 mean/gender。
-       用「看得懂」豁免「說得出」是錯的，退場交給 N15 衰退（DECAY_DAYS）管。 */
-    if(ok&&!usedHint){
+    /* 2026-08-12 單一旗標制：答對即畢業（仍**必須未用救生圈**：字母磚給了就不算自己撈出來的）。
+       **反向現在成立了**：打錯就取消畢業。舊設計不取消，理由是 mastered 只記「看得懂」；
+       旗標合併後那個理由消失，若仍不取消，靠單字卡畢業的字就沒有任何一道題能證偽它，
+       單一旗標會自我封閉。
+       ⚠️ 分界在 `!ok`（真的打錯）而非 `else`：`else` 也涵蓋「用了救生圈但答對」，
+       主動求助不是答錯，不取消畢業、但也不給畢業。 */
+    /* 2026-08-12：畢業條件第三道——**本輪第一次就答對**。第二次才對的是短期記憶，
+       不是掌握。必須在 requeue 之後判斷（上面答錯分支已經呼叫過 requeue，
+       key 這時已在 missed 裡），所以這段不能往上搬。
+       重答對時 weakProd 也刻意不清：這個字本輪確實失手過，該留在「只考不熟」裡。 */
+    if(ok&&!usedHint&&qMissed('prod',v)){
+      h+='<div style="color:#b45309;margin-top:4px">↻ 這題本輪答錯過，重答對不算畢業——下一輪一次答對才算。</div>';
+    }else if(ok&&!usedHint){
       if(weakProd[v.id]){delete weakProd[v.id];saveWeakProd();}
       if(v.id!==undefined){
-        if(!prodDone[v.id]){prodDone[v.id]=1;saveProdDone();}   /* 2026-08-11：本題型自己的畢業集 */
         if(!mastered[v.id]){mastered[v.id]=1;saveMastered();}
         if(weak[v.id]){delete weak[v.id];saveWeak();}
         seen[v.id]=Date.now();saveSeen();
       }
-    }else{weakProd[v.id]=1;saveWeakProd();}
+    }else{
+      weakProd[v.id]=1;saveWeakProd();
+      if(!ok&&v.id!==undefined&&mastered[v.id]){unmaster(v.id);delete seen[v.id];saveSeen();}
+    }
     note.innerHTML=h;
     var cl=document.getElementById('prodClue');
     if(cl){cl.textContent=(needArt?(ART[v.g]||''):'')+ans;cl.style.color=ok?'#15803d':'#b91c1c';cl.style.fontWeight='700';}
@@ -8123,7 +8175,7 @@ function renderNewCard(){
 (async()=>{
   await loadMastered();await loadWeak();await loadWeakSent();await loadWeakGram();await loadWeakProd();await loadErrors();await loadLog();
   await loadGrad();await loadModul();await loadSchreib();
-  await loadSeen();await runDecayMig();await loadDrawn();await loadProdDone();
+  await loadSeen();await runDecayMig();await loadDrawn();await loadMissed();
   /* 記住上次課別選擇；首次使用（含新裝置）預設 L1–3 */
   try{
     const v=await Store.get('a1:lesson');
