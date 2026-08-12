@@ -197,8 +197,8 @@
 <body>
 <div class="wrap">
   <header style="position:relative">
-    <div class="eyebrow">Menschen · A1 · Lektion 1–21</div>
-    <h1>Deutsch A1 — L1–L21</h1>
+    <div class="eyebrow">Menschen · A1 · Lektion 1–22</div>
+    <h1>Deutsch A1 — L1–L22</h1>
     <details class="helpbox" id="outline" style="margin-top:10px;text-align:left"><summary>📚 每課大綱（點開看）</summary><div class="panel-intro" style="margin:8px 0 2px;line-height:1.9">
       L1 打招呼·自我介紹（heißen/kommen aus/wohnen in）·sein·W 問句·拼讀·數字 0–100<br>
       L2 個人資料·職業·規則動詞變位全表·ihr（你們）<br>
@@ -221,6 +221,7 @@ L18 生病看醫生·Imperativ(Sie)命令句·sollen間接建議·seit+時長·�
 L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Perfekt·un-前綴構詞<br>
       L20 家務與同居生活·Imperativ(du/ihr)登場·Personalpronomen im Akkusativ全面實戰<br>
       L21 交通與生活規則·dürfen/müssen（許可 vs 義務）擴充·Modul 7 末課<br>
+      L22 衣物·Komparativ/Superlativ 比較級與最高級·als/(genau)so...wie 比較句型<br>
       <!-- ===ANCHOR:OUTLINE===（新課大綱一行插在這行上方，格式照上）-->
     </div></details>
   </header>
@@ -248,6 +249,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
     <button class="lchip" data-lesson="L19" data-on="false">L19</button>
     <button class="lchip" data-lesson="L20" data-on="false">L20</button>
     <button class="lchip" data-lesson="L21" data-on="false">L21</button>
+    <button class="lchip" data-lesson="L22" data-on="false">L22</button>
     <!-- ===ANCHOR:LESSON_CHIPS===（A1.2 新課按鈕插在這行上方、span#bookA11 之外）-->
     <button class="lchip" data-lesson="ALL" data-on="false">全選 · 模組複習</button>
     <span style="flex-basis:100%;font-size:.72rem;color:var(--mut)">單點換課 · 長按半秒加選複數課 · 📕 收合/展開整冊</span>
@@ -542,7 +544,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
 const SPK_SVG='<svg viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>';
 
 /* ===== 範圍（課別·可多選）===== */
-const DEFAULT_LESSON="L21"; /* ===ANCHOR:DEFAULT_LESSON===（新課上線時改成最新課號；chip 的 data-on 由 syncLessonChips 執行期同步，新 chip 一律 data-on="false"）*/
+const DEFAULT_LESSON="L22"; /* ===ANCHOR:DEFAULT_LESSON===（新課上線時改成最新課號；chip 的 data-on 由 syncLessonChips 執行期同步，新 chip 一律 data-on="false"）*/
 let curLessons=new Set([DEFAULT_LESSON]);
 /* L123 是 L1/L2/L3 的合併篩選鈕，資料本身仍各自標 L1/L2/L3，故用此函式統一判斷範圍是否命中 */
 function inLessonScope(l){
@@ -2045,8 +2047,47 @@ const ADD21=[
 {de:"in Ordnung",zh:"沒問題/合適",g:null,cat:"副詞",lesson:"L21",ex:["Diese Regel ist in Ordnung.","這條規則沒問題。"]},
 {de:"leise",zh:"安靜地",g:null,cat:"形容詞",lesson:"L21",ex:["Man muss in der Bibliothek leise sein.","在圖書館必須保持安靜。"]},
 ];
+const ADD22=[
+/* ── 名詞（23，含 1 個 NO_PL_EXEMPT：Cola）── */
+{de:"Bluse",zh:"女用襯衫",g:"die",cat:"衣物",lesson:"L22",ex:["Im Büro trage ich oft Blusen.","我在辦公室常穿女用襯衫。"]},
+{de:"Jacke",zh:"外套/夾克",g:"die",cat:"衣物",lesson:"L22",ex:["Die Jacken hängen im Schrank.","外套掛在衣櫃裡。"]},
+{de:"Gürtel",zh:"皮帶",g:"der",cat:"衣物",lesson:"L22",ex:["Die Gürtel sind aus Leder.","這些皮帶是皮製的。"]},
+{de:"Hemd",zh:"襯衫",g:"das",cat:"衣物",lesson:"L22",ex:["Er hat drei weiße Hemden.","他有三件白襯衫。"]},
+{de:"Hose",zh:"褲子",g:"die",cat:"衣物",lesson:"L22",ex:["Im Winter trage ich warme Hosen.","冬天我穿保暖的褲子。"]},
+{de:"Hut",zh:"帽子（有帽簷）",g:"der",cat:"衣物",lesson:"L22",ex:["Die Hüte im Schaufenster sind schön.","櫥窗裡的帽子很漂亮。"]},
+{de:"Kleid",zh:"洋裝",g:"das",cat:"衣物",lesson:"L22",ex:["Sie hat viele bunte Kleider.","她有很多彩色洋裝。"]},
+{de:"Mantel",zh:"大衣",g:"der",cat:"衣物",lesson:"L22",ex:["Im Winter tragen wir dicke Mäntel.","冬天我們穿厚大衣。"]},
+{de:"Mütze",zh:"毛帽/便帽（無帽簷）",g:"die",cat:"衣物",lesson:"L22",ex:["Die Kinder tragen bunte Mützen.","孩子們戴著彩色毛帽。"]},
+{de:"Pullover",zh:"毛衣",g:"der",cat:"衣物",lesson:"L22",ex:["Die Pullover sind aus Wolle.","這些毛衣是羊毛做的。"]},
+{de:"Rock",zh:"裙子",g:"der",cat:"衣物",lesson:"L22",ex:["Sie mag lange Röcke.","她喜歡長裙。"]},
+{de:"Schuh",zh:"鞋子",g:"der",cat:"衣物",lesson:"L22",ex:["Am besten sind seine Schuhe!","他的鞋子最棒！"]},
+{de:"Socke",zh:"襪子",g:"die",cat:"衣物",lesson:"L22",ex:["Ich habe zwei Socken verloren.","我弄丟了兩隻襪子。"]},
+{de:"Strumpf",zh:"長筒襪",g:"der",cat:"衣物",lesson:"L22",ex:["Die Strümpfe sind zu warm für den Sommer.","這些長筒襪對夏天來說太熱了。"]},
+{de:"Strumpfhose",zh:"褲襪",g:"die",cat:"衣物",lesson:"L22",ex:["Ich habe drei Strumpfhosen im Schrank.","我衣櫃裡有三件褲襪。"]},
+{de:"T-Shirt",zh:"T恤",g:"das",cat:"衣物",lesson:"L22",ex:["Ich habe viele T-Shirts im Schrank.","我衣櫃裡有很多T恤。"]},
+{de:"Text",zh:"文章/課文",g:"der",cat:"常用",lesson:"L22",ex:["Wir lesen die Texte im Forum.","我們在論壇上讀這些文章。"]},
+{de:"Jeans",zh:"牛仔褲（單複同形）",g:"die",cat:"衣物",lesson:"L22",ex:["Die Jeans hier gefällt mir am besten.","這條牛仔褲我最喜歡。"],tier:"plus"},
+{de:"Orangensaft",zh:"柳橙汁",g:"der",cat:"飲食",lesson:"L22",ex:["Ich mag lieber Orangensaft als Cola.","我比較喜歡柳橙汁，不喜歡可樂。"],tier:"plus"},
+{de:"Räumungsverkauf",zh:"清倉大拍賣",g:"der",cat:"購物",lesson:"L22",ex:["Räumungsverkauf. 50 % auf alle Jacken, Hemden, Blusen und Kleider. Nur noch bis zum 31. März.","清倉大拍賣。所有外套、襯衫、女用襯衫和洋裝五折，只到三月三十一日截止。"],tier:"plus"},
+{de:"Inventur",zh:"盤點/清點存貨",g:"die",cat:"購物",lesson:"L22",ex:["Am Dienstag haben wir Inventur.","星期二我們要盤點存貨。"],tier:"plus"},
+{de:"Fahrgast",zh:"乘客",g:"der",cat:"交通",lesson:"L22",ex:["Sehr geehrte Fahrgäste!","各位親愛的乘客！"],tier:"plus"},
+{de:"Cola",zh:"可樂",g:"die",cat:"飲食",lesson:"L22",ex:["Ich mag lieber Orangensaft als Cola.","我比較喜歡柳橙汁，不喜歡可樂。"]},
+/* ── 動詞（2）── */
+{de:"anhaben",zh:"穿著/戴著（狀態，非動作）",g:null,cat:"動詞",lesson:"L22",ex:["Meine Person hat eine Hose und einen Pullover an.","這個人穿著一件褲子和一件毛衣。"]},
+{de:"anziehen",zh:"穿上（動作）",g:null,cat:"動詞",lesson:"L22",ex:["Ich ziehe es oft an.","我常穿它。"],pex:["Wann habe ich es zuletzt angezogen?","我上次穿它是什麼時候？"]},
+/* ── 形容詞/副詞/感嘆詞（9，Toll!／Super! 因與既有卡 toll／super 重複不重開，見交付說明）── */
+{de:"klug",zh:"聰明的",g:null,cat:"形容詞",lesson:"L22",ex:["Der Hund ist klug.","這隻狗很聰明。"]},
+{de:"dunkel",zh:"深色的/暗的",g:null,cat:"形容詞",lesson:"L22",ex:["Meine Schuhe sind dunkelbraun.","我的鞋子是深咖啡色。"]},
+{de:"zuletzt",zh:"最後一次/上次",g:null,cat:"時間副詞",lesson:"L22",ex:["Ich ziehe es oft an, zuletzt am Montag.","我常穿它，上次穿是星期一。"]},
+{de:"genauso",zh:"一樣地/同樣地（比較用）",g:null,cat:"副詞",lesson:"L22",ex:["Elena mag Lila genauso gern wie Rosa.","Elena喜歡紫色和粉紅色一樣多。"]},
+{de:"golden",zh:"金色的",g:null,cat:"顏色",lesson:"L22",ex:["Alles ist golden: seine Schuhe.","一切都是金色的：他的鞋子。"]},
+{de:"beige",zh:"米色的",g:null,cat:"顏色",lesson:"L22",ex:["Der Mantel ist beige.","這件大衣是米色的。"]},
+{de:"als",zh:"（比較）比",g:null,cat:"常用語",lesson:"L22",ex:["Das Hemd gefällt ihr besser als die Hose.","襯衫比較合她的意。"]},
+{de:"geschlossen",zh:"關閉的/休息中",g:null,cat:"形容詞",lesson:"L22",ex:["Der Supermarkt ist heute geschlossen.","超市今天不營業。"]},
+{de:"Klasse",zh:"太棒了！",g:null,cat:"感嘆詞",lesson:"L22",ex:["Du hast bestanden? – Klasse!","你及格了？－太棒了！"]},
+];
 /* ===ANCHOR:VOCAB_ARRAYS===（新課單字陣列 const ADDn=[...] 宣告在這行上方，並把陣列名加進下面 VOCAB 合併行）*/
-const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B,...ADD18,...ADDP2V,...ADD10S,...ADDCLO,...ADDCLOADJ,...ADD19,...ADD16S,...ADD18S,...ADD13S,...ADD15T,...ADD17S,...ADD20,...ADD21];
+const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B,...ADD18,...ADDP2V,...ADD10S,...ADDCLO,...ADDCLOADJ,...ADD19,...ADD16S,...ADD18S,...ADD13S,...ADD15T,...ADD17S,...ADD20,...ADD21,...ADD22];
 VOCAB.forEach((v,i)=>v.id="v"+i);
 
 
@@ -2292,6 +2333,28 @@ const NOUN_PL={
   "Gepäckraum":"Gepäckräume","Pilot":"Piloten","MP3-Player":"MP3-Player",
   "Verabredung":"Verabredungen","Geschäftsfahrt":"Geschäftsfahrten","Fußgänger":"Fußgänger",
   "Spielstraße":"Spielstraßen","Handyverbot":"Handyverbote",
+  "Bluse":"Blusen",
+  "Jacke":"Jacken",
+  "Gürtel":"Gürtel",
+  "Hemd":"Hemden",
+  "Hose":"Hosen",
+  "Hut":"Hüte",
+  "Kleid":"Kleider",
+  "Mantel":"Mäntel",
+  "Mütze":"Mützen",
+  "Pullover":"Pullover",
+  "Rock":"Röcke",
+  "Schuh":"Schuhe",
+  "Socke":"Socken",
+  "Strumpf":"Strümpfe",
+  "Strumpfhose":"Strumpfhosen",
+  "T-Shirt":"T-Shirts",
+  "Text":"Texte",
+  "Jeans":"Jeans",
+  "Orangensaft":"Orangensäfte",
+  "Räumungsverkauf":"Räumungsverkäufe",
+  "Inventur":"Inventuren",
+  "Fahrgast":"Fahrgäste",
   /* ===ANCHOR:NOUN_PL===（新名詞複數 "單數":"複數", 插在這行上方）*/
 };
 const NOUN_PL_NOTE={
@@ -2477,6 +2540,18 @@ const NOUN_PL_NOTE={
   "Liegestuhl":"複數 die Liegestühle：u→ü 變音 → Forvo。",
   "Gepäckraum":"複數 die Gepäckräume：au→äu 變音 → Forvo。",
   "Picknick":"外來詞複數 die Picknicke，口語也常見 die Picknicks，兩者皆通。",
+  /* L22 老師課堂補充＋KB/AB */
+  "Gürtel":"複數同形 die Gürtel，只能靠冠詞／數詞判斷。",
+  "Hut":"複數 die Hüte：u→ü 變音 → Forvo。",
+  "Mantel":"複數 die Mäntel：a→ä 變音，字尾不加 -e → Forvo。",
+  "Pullover":"複數同形 die Pullover，只能靠冠詞／數詞判斷。",
+  "Rock":"複數 die Röcke：o→ö 變音 → Forvo。",
+  "Strumpf":"複數 die Strümpfe：u→ü 變音 → Forvo。",
+  "Jeans":"複數同形 die Jeans，只能靠冠詞／數詞判斷（單複數同形，常用複數形指一件牛仔褲）。",
+  "T-Shirt":"外來詞複數 die T-Shirts（英語式 +s，非德文原生字尾）。",
+  "Orangensaft":"複數 die Orangensäfte：a→ä 變音（複合詞，變化發生在 Saft）→ Forvo。",
+  "Räumungsverkauf":"複數 die Räumungsverkäufe：a→ä 變音（複合詞，變化發生在 Verkauf），但複數形罕用 → Forvo。",
+  "Fahrgast":"複數 die Fahrgäste：a→ä 變音（複合詞，變化發生在 Gast）→ Forvo。",
   /* ===ANCHOR:NOUN_PL_NOTE===（變音／同形／不規則等複數警語插在這行上方）*/
 };
 const NOUN_PLEX={
@@ -3017,6 +3092,28 @@ const NOUN_PLEX={
   "Fußgänger":["Autofahrer müssen auf Fußgänger achten.","汽車駕駛必須注意行人。"],
   "Spielstraße":["In der Stadt gibt es viele Spielstraßen.","城裡有很多兒童遊戲街。"],
   "Handyverbot":["An manchen Schulen gibt es strenge Handyverbote.","有些學校有嚴格的手機禁令。"],
+  "Bluse":["Im Büro trage ich oft Blusen.","我在辦公室常穿女用襯衫。"],
+  "Jacke":["Die Jacken hängen im Schrank.","外套掛在衣櫃裡。"],
+  "Gürtel":["Die Gürtel sind aus Leder.","這些皮帶是皮製的。"],
+  "Hemd":["Er hat drei weiße Hemden.","他有三件白襯衫。"],
+  "Hose":["Im Winter trage ich warme Hosen.","冬天我穿保暖的褲子。"],
+  "Hut":["Die Hüte im Schaufenster sind schön.","櫥窗裡的帽子很漂亮。"],
+  "Kleid":["Sie hat viele bunte Kleider.","她有很多彩色洋裝。"],
+  "Mantel":["Im Winter tragen wir dicke Mäntel.","冬天我們穿厚大衣。"],
+  "Mütze":["Die Kinder tragen bunte Mützen.","孩子們戴著彩色毛帽。"],
+  "Pullover":["Die Pullover sind aus Wolle.","這些毛衣是羊毛做的。"],
+  "Rock":["Sie mag lange Röcke.","她喜歡長裙。"],
+  "Schuh":["Am besten sind seine Schuhe!","他的鞋子最棒！"],
+  "Socke":["Ich habe zwei Socken verloren.","我弄丟了兩隻襪子。"],
+  "Strumpf":["Die Strümpfe sind zu warm für den Sommer.","這些長筒襪對夏天來說太熱了。"],
+  "Strumpfhose":["Ich habe drei Strumpfhosen im Schrank.","我衣櫃裡有三件褲襪。"],
+  "T-Shirt":["Ich habe viele T-Shirts im Schrank.","我衣櫃裡有很多T恤。"],
+  "Text":["Wir lesen die Texte im Forum.","我們在論壇上讀這些文章。"],
+  "Jeans":["Die Jeans hier gefällt mir am besten.","這條牛仔褲我最喜歡。"],
+  "Orangensaft":["Ich mag lieber Orangensaft als Cola.","我比較喜歡柳橙汁，不喜歡可樂。"],
+  "Räumungsverkauf":["Räumungsverkauf. 50 % auf alle Jacken, Hemden, Blusen und Kleider. Nur noch bis zum 31. März.","清倉大拍賣。所有外套、襯衫、女用襯衫和洋裝五折，只到三月三十一日截止。"],
+  "Inventur":["Am Dienstag haben wir Inventur.","星期二我們要盤點存貨。"],
+  "Fahrgast":["Sehr geehrte Fahrgäste!","各位親愛的乘客！"],
   /* ===ANCHOR:NOUN_PLEX===（複數例句 "單數":["德文","中文"], 插在這行上方）*/
 };
 const VERB_META={
@@ -3264,6 +3361,8 @@ const VERB_META={
   herumlaufen:{t:"irr",du:"läufst … herum",er:"läuft … herum"},
   abgeben:{t:"irr",du:"gibst … ab",er:"gibt … ab"},
   anschnallen:{t:"irr",du:"schnallst … an",er:"schnallt … an"},
+  anhaben:{t:"irr",f:["habe … an","hast … an","hat … an","haben … an","habt … an","haben … an"],p2:"angehabt",aux:"h"},
+  anziehen:{t:"irr",f:["ziehe … an","ziehst … an","zieht … an","ziehen … an","zieht … an","ziehen … an"],p2:"angezogen",aux:"h"},
   /* ===ANCHOR:VERB_META===（新動詞變位 動詞:{t:"reg"|"stemt"|"vowel"|"irr",...}, 插在這行上方）*/
 };
 /* 可分離動詞 Partizip 組字（2026-07-31）：Partizip = 字首 + 母動詞 Partizip，
@@ -4226,6 +4325,28 @@ const SENTENCES=[
   {de:"Das ist doch gefährlich, oder?",zh:"這很危險吧？",lesson:"L21"},
   {de:"Das weiß ich nicht.",zh:"這個我不知道。",lesson:"L21"},
   {de:"Warum sind eigentlich Handys in Flugzeugen verboten?",zh:"為什麼飛機上禁止使用手機呢？",lesson:"L21"},
+  {de:"Meine Person hat eine Hose und einen Pullover an.",zh:"我這個人穿著一件褲子和一件毛衣（Ratespiel 猜謎句型；可換衣物與顏色）",lesson:"L22"},
+  {de:"Ich finde die Kleidung seltsam.",zh:"我覺得這身打扮很奇怪（finden+受詞+形容詞；可換形容詞）",lesson:"L22"},
+  {de:"Das Hemd gefällt ihr besser als die Hose.",zh:"襯衫比較合她的意（比較句型：gefällt…besser als；可換衣物）",lesson:"L22"},
+  {de:"Elena mag Lila genauso gern wie Rosa.",zh:"Elena喜歡紫色和粉紅色一樣多（等量比較：genauso gern wie；可換顏色）",lesson:"L22"},
+  {de:"Welches T-Shirt findest du am schönsten?",zh:"你覺得哪件T恤最好看？（最高級問句；可換物品）",lesson:"L22"},
+  {de:"Mir gefällt das besser. Die Farben sind schöner.",zh:"我比較喜歡那個，顏色比較好看（比較級回應句型，日常對話很常用）",lesson:"L22"},
+  {de:"Ich habe das T-Shirt bei einem Konzert in Berlin gekauft.",zh:"我是在柏林一場演唱會買的這件T恤（Perfekt+bei+Dat；可換地點/物品）",lesson:"L22"},
+  {de:"Ich ziehe es oft an, zuletzt am Montag.",zh:"我常穿它，上次穿是星期一（zuletzt+時間；可換頻率/星期）",lesson:"L22"},
+  {de:"Wow, hast du das Kleid schon gesehen? Total schön.",zh:"哇，你看到那件洋裝了嗎？超好看的（Aussagen verstärken：total+形容詞）",lesson:"L22"},
+  {de:"Das ist doch wahnsinnig langweilig.",zh:"這也太無聊了吧（Aussagen verstärken：wahnsinnig+形容詞）",lesson:"L22"},
+  {de:"Aber seht mal, das hier ist richtig toll.",zh:"但你們看，這個真的很棒（Aussagen verstärken：richtig+形容詞）",lesson:"L22"},
+  {de:"Peters Haus ist größer als Kais Haus, aber am größten ist Pauls Haus.",zh:"Peter的房子比Kai的大，但Paul的房子最大（三方比較：Komparativ+Superlativ連用）",lesson:"L22"},
+  {de:"Ich mag Blau lieber als Grün.",zh:"我比較喜歡藍色，不喜歡綠色（lieber als 偏好比較；可換顏色）",lesson:"L22"},
+  {de:"Blau finde ich hässlich.",zh:"藍色我覺得很醜（受詞前置的finden句型；可換顏色）",lesson:"L22"},
+  {de:"Grün gefällt mir am besten.",zh:"綠色最合我的意（最高級：am besten；可換顏色）",lesson:"L22"},
+  {de:"Meine Schuhe sind dunkelbraun.",zh:"我的鞋子是深咖啡色（dunkel+顏色複合詞；可換顏色）",lesson:"L22"},
+  {de:"Ich habe noch nie einen Gürtel getragen.",zh:"我從來沒繫過皮帶（noch nie+Perfekt；可換衣物）",lesson:"L22"},
+  {de:"Die Bluse hier gefällt mir am besten.",zh:"這件女用襯衫我最喜歡（最高級；可換衣物）",lesson:"L22"},
+  {de:"Ich mag Janas Kostüm am liebsten.",zh:"我最喜歡Jana的服裝（am liebsten；可換人名/物品）",lesson:"L22"},
+  {de:"Ich finde Harrys Hut genauso gut wie Jasmins Mütze.",zh:"我覺得Harry的帽子跟Jasmin的毛帽一樣好看（等量比較）",lesson:"L22"},
+  {de:"Veras Kleid gefällt mir besser als Jasmins Kleid.",zh:"我比較喜歡Vera的洋裝，勝過Jasmin的（比較級+所有格s）",lesson:"L22"},
+  {de:"Ich mag lieber Orangensaft als Cola.",zh:"我比較喜歡柳橙汁，不喜歡可樂（mögen+lieber als；可換飲料）",lesson:"L22"},
   /* ===ANCHOR:SENTENCES===（新例句／Redemittel {de,zh,lesson} 插在這行上方）*/
 ];
 
@@ -4245,6 +4366,7 @@ const RULES=[
   {l:"L13",key:"au",lead:"唸「au」（阿烏，類似英文 ow）——跟已學的 ei（唸ai）、eu/äu（唸oy）是同一組雙元音家族",exs:["Auto","auch","Frau","genau"]},
   {l:"L17",key:"外來語 Wortakzent",lead:"國際詞重音因字而異，無統一規則，逐字記；常見落在字尾前一音節（-tion, -ieren, -isch）",exs:["Politiker","studieren","international"]},
   {l:"L20",key:"satzmelodie",lead:"Imperativ／陳述句尾音下降 ↘，Ja/Nein 問句尾音上升 ↗",exs:["Deckt bitte den Tisch. ↘","Deckt ihr den Tisch? ↗","Ihr deckt den Tisch. ↘"]},
+  {l:"L22",key:"unbetontes e (-e/-el/-en/-er)",lead:"字尾為 -e/-el/-en/-er 的字，字尾的「e」音幾乎聽不到或完全聽不到",exs:["Gürtel","Schuhe","dunkel","golden","Hose","getragen","Mantel","Bluse"]},
   /* ===ANCHOR:RULES===（新發音規則 {l,key,lead,exs} 插在這行上方）*/
 ];
 
@@ -4371,6 +4493,24 @@ const TEXTS=[
        {st:"In der Bibliothek muss das Handy leise sein.",a:false,m:2},
        {st:"Der Mann darf in der Bibliothek nichts trinken.",a:false,m:4},
        {st:"Am Samstag schließt die Bibliothek später als heute.",a:false,m:6}]},
+{id:"t-l22-1",lesson:"L22",genre:"對話",title:"Im Kleidungsgeschäft",src:"AI 生成 · 未經母語者校對",
+   map:"<b>本課重點</b>：① Komparativ/Superlativ——本課文法核心，整段對話都在比較兩件衣物；② als（不相等）比較句型；③ anziehen 描述穿著習慣。<br><b>建議走法</b>：先用 🎧 播放兩次、<b>不看原文</b>做完 4 題 → 點「👁 顯示原文」對照 → 文法「Komparativ und Superlativ」卡 → 單字卡衣物類 → 例句刷 Kommunikation → 測驗 → 🎓 → 解鎖 📄 閱讀與 ✍️ 寫作。",
+   turns:[{s:"A",de:"Ich suche ein Geschenk für meine Freundin. Sie hat bald Geburtstag."},
+          {s:"B",de:"Wie gefällt Ihnen diese Jacke? Sie ist dunkel und kostet fünfzig Euro."},
+          {s:"A",de:"Schön. Und wie ist der Rock hier?"},
+          {s:"B",de:"Der Rock ist golden, aber er kostet mehr als die Jacke."},
+          {s:"A",de:"Was mag sie mehr, Jacken oder Röcke?"},
+          {s:"B",de:"Das weiß ich nicht, aber die Jacke ist praktischer als der Rock."},
+          {s:"A",de:"Meine Freundin zieht lieber Hosen an, keine Röcke."},
+          {s:"B",de:"Dann nehmen Sie die Jacke. Sie gefällt vielen Leuten am besten."},
+          {s:"A",de:"Gut, ich mag die Jacke auch lieber als den Rock. Ich nehme sie."},
+          {s:"B",de:"Klasse! Das ist ein tolles Geschenk."}],
+   de:"Ich suche ein Geschenk für meine Freundin. Sie hat bald Geburtstag.\nWie gefällt Ihnen diese Jacke? Sie ist dunkel und kostet fünfzig Euro.\nSchön. Und wie ist der Rock hier?\nDer Rock ist golden, aber er kostet mehr als die Jacke.\nWas mag sie mehr, Jacken oder Röcke?\nDas weiß ich nicht, aber die Jacke ist praktischer als der Rock.\nMeine Freundin zieht lieber Hosen an, keine Röcke.\nDann nehmen Sie die Jacke. Sie gefällt vielen Leuten am besten.\nGut, ich mag die Jacke auch lieber als den Rock. Ich nehme sie.\nKlasse! Das ist ein tolles Geschenk.",
+   zh:"A：我在找一份給我朋友的禮物。她快生日了。\nB：您覺得這件外套怎麼樣？它是深色的，五十歐元。\nA：不錯。那這裡的裙子呢？\nB：這件裙子是金色的，但它比外套貴。\nA：她比較喜歡外套還是裙子？\nB：這我不知道，不過外套比裙子實用。\nA：我朋友比較喜歡穿褲子，不喜歡裙子。\nB：那就選外套吧。這件很多人最喜歡。\nA：好，我也比較喜歡外套勝過裙子。我要這件。\nB：太棒了！這是份很棒的禮物。",
+   qs:[{st:"Die Jacke ist billiger als der Rock.",a:true,m:1},
+       {st:"Er möchte einen Rock kaufen.",a:false,m:3},
+       {st:"Der Rock kostet fünfzig Euro.",a:false,m:4},
+       {st:"Er nimmt zuerst den Rock und dann die Jacke.",a:false,m:6}]},
   /* ===ANCHOR:TEXTS_ARRAYS===（新課導讀 {id,lesson,genre,title,src,map,de,zh,qs} 插在這行上方；de 只准用該課及之前的單字＋功能詞，寫完必跑 ROADMAP N12 的白名單驗證腳本）*/
 ];
 
@@ -4521,7 +4661,7 @@ function logAnswer(){
 function weekCount(){const cut=Date.now()-7*864e5;let n=0;Object.entries(qlog).forEach(([k,v])=>{const ts=new Date(k+'T00:00:00').getTime();if(isFinite(ts)&&ts>=cut)n+=(+v||0);});return n;}
 function updateDash(){const el=document.getElementById('dash');if(el)el.textContent=`已畢業 ${Object.keys(mastered).length} / ${VOCAB.length} 字 · 本週答題 ${weekCount()} 題`;}
 /* 文法卡穩定 key：由標題衍生（改標題會孤兒化標記，與例句 de-key 同一取捨） */
-const GKEY_MAP=[["疼痛表達","pain"],["人稱代名詞","pron"],["陰陽性線索","gclue"],["複數線索","pclue"],["所有格","poss"],["schon vs erst","advw"],["時間介係詞","zeit"],["序數","datum"],["地方介係詞","lokal"],["冠詞變格","art"],["句框","satz"],["動詞支配格","rekt"],["動詞變位①","konj1"],["動詞變位②","konj2"],["不規則動詞總表","irrv"],["Perfekt 現在完成式","pii"],["價格唸法","preis"],["字母表","abc"],["挑任一數字","numtry"],["大數字","bignum"],["數字測驗","numquiz"],["數字的系統","numsys"],["Imperativ","imp"]];
+const GKEY_MAP=[["疼痛表達","pain"],["人稱代名詞","pron"],["陰陽性線索","gclue"],["複數線索","pclue"],["所有格","poss"],["schon vs erst","advw"],["時間介係詞","zeit"],["序數","datum"],["地方介係詞","lokal"],["冠詞變格","art"],["句框","satz"],["動詞支配格","rekt"],["動詞變位①","konj1"],["動詞變位②","konj2"],["不規則動詞總表","irrv"],["Perfekt 現在完成式","pii"],["價格唸法","preis"],["字母表","abc"],["挑任一數字","numtry"],["大數字","bignum"],["數字測驗","numquiz"],["數字的系統","numsys"],["Imperativ","imp"],["Komparativ","komp"]];
 function gramKeyOf(t){for(const[s,k]of GKEY_MAP)if(t.includes(s))return k;return t.trim().slice(0,8);}
 function gramKeyOfCard(g){const m=g.html.match(/gtitle">([^<]+)/);return gramKeyOf(m?m[1]:g.html);}
 /* 題目→卡片映射（執行期分類，一題可命中多卡） */
@@ -4553,6 +4693,7 @@ function gramCardsOfQ(q){
   if(/疼痛表達|引語/.test(s))ks.add('pain');
   if(/Imperativ/.test(s))ks.add('imp');
   if(/母音變化|字尾/.test(s))ks.add('konj1');
+  if(/比較級|最高級|als vs wie/.test(s))ks.add('komp');
   const m=s.match(/^(?:⭐\s*)?([a-zäöüß]+)：\s*(ich|du|er|es|sie|wir|ihr|Sie)\s*→/);
   if(m)ks.add(KONJ2_VERBS.has(m[1])?'konj2':'konj1');
   return ks;
@@ -4577,7 +4718,7 @@ function posOf(v){
 }
 /* 副詞·片語桶的子分類（僅影響卡面小標籤，不動資料、不加 chip）。新字若屬介/連/疑/代，記得加進對應 Set */
 const POS_SUB_PREP=new Set(["ab","für","im","am","ins","um","seit","unter","zwischen","ohne","von","bis","mit","nach","aus","bei","in","an","auf","vor","neben","hinter","gegen"]);
-const POS_SUB_CONJ=new Set(["aber","oder","denn","und","sondern","weil"]);
+const POS_SUB_CONJ=new Set(["aber","oder","denn","und","sondern","weil","als"]);
 const POS_SUB_QW=new Set(["warum","wann","wo","wer","was","wie","woher","wohin"]);
 const POS_SUB_PRON=new Set(["man","etwas","nichts","alles","alle","jemand","niemand","selbst"]);
 function subPosOf(v){
@@ -5209,6 +5350,33 @@ const GRAM=[
   </table>
   <p style="font-size:.86rem;margin:.5em 0 .2em">句型定位、Sie 不省略、疑問句↗與命令句↘的語調對比 → 完整規則見「🧩句框 Satzklammer」①-2 段；本卡專注在<b>字幹怎麼變</b>。</p>
   <div class="note"><b>⚠️ 最容易錯（來源：老師講義）</b><br>① <b>e→i 換音的動詞，Imperativ 保留 i</b>（極常見）：sprechen→<b>Sprich!</b>、geben→<b>Gib!</b>、lesen→<b>Lies!</b>、vergessen→<b>Vergiss!</b>、helfen→<b>Hilf!</b><br>② <b>a→ä 換音的動詞，Imperativ 反而變回 a</b>：fahren→du fährst→<b>Fahr!</b>、waschen→du wäschst→<b>Wasch!</b><br>③ <b>sein／haben 是特殊形</b>：<b>Sei still!</b>／<b>Seid still!</b>；<b>Hab Geduld!</b>／<b>Habt Spaß!</b><br>④ <b>可分離動詞照樣拆開</b>，字首踢句尾：<b>Räum die Spülmaschine aus!</b>／<b>Ruf ihn zurück!</b></div>
+</div>`},
+{ls:["L22"],html:`
+<div class="card gcard">
+  <div class="gtitle">🧩 Komparativ und Superlativ（比較級與最高級） <span class="lessontag">L22</span></div>
+  <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：形容詞比較分三級——原級（Positiv）、比較級（Komparativ，規則是 +er）、最高級（Superlativ，規則是 am +…sten）。大多數形容詞照這條規則走，只有 <b>gut/gern/viel</b> 三個高頻詞整組換掉，必須直接背，不能套 +er 規則。單音節形容詞（groß/alt/klug/kurz…）另外多一條隱藏規則：<b>母音變化</b> a→ä、o→ö、u→ü，這條規則只發生在單音節詞，多音節詞（lustig）不變。最後，比較句型分兩條路：不相等用 <b>als</b>，相等用 <b>(genau)so...wie</b>，判斷點只有一個——兩者「一樣不一樣」。</p>
+  <p style="font-size:.86rem;font-weight:700;margin:.5em 0 .2em">① 不規則比較級（高頻詞，整組背）</p>
+  <table>
+    <tr><th>Positiv</th><th>Komparativ</th><th>Superlativ</th></tr>
+    <tr><td class="de2">gut</td><td class="de2">besser</td><td class="de2">am besten</td></tr>
+    <tr><td class="de2">gern</td><td class="de2">lieber</td><td class="de2">am liebsten</td></tr>
+    <tr><td class="de2">viel</td><td class="de2">mehr</td><td class="de2">am meisten</td></tr>
+  </table>
+  <p style="font-size:.86rem;font-weight:700;margin:.5em 0 .2em">② 規則變化＋單音節母音變化</p>
+  <table>
+    <tr><th>Positiv</th><th>Komparativ</th><th>Superlativ</th><th>備註</th></tr>
+    <tr><td class="de2">lustig</td><td class="de2">lustiger</td><td class="de2">am lustigsten</td><td>規則，多音節不變音</td></tr>
+    <tr><td class="de2">alt</td><td class="de2">älter</td><td class="de2">am ältesten</td><td>單音節 a→ä；字尾 -t 加 -esten</td></tr>
+    <tr><td class="de2">groß</td><td class="de2">größer</td><td class="de2">am größten</td><td>單音節 o→ö</td></tr>
+    <tr><td class="de2">klug</td><td class="de2">klüger</td><td class="de2">am klügsten</td><td>單音節 u→ü</td></tr>
+  </table>
+  <p style="font-size:.86rem;font-weight:700;margin:.5em 0 .2em">③ 比較句型：als（不相等）vs (genau)so...wie（相等）</p>
+  <table>
+    <tr><th>句型</th><th>語意</th><th>例句</th></tr>
+    <tr><td class="de2">Komparativ ＋ als</td><td>不相等（A 比 B…）</td><td class="de2">Das Hemd gefällt ihr besser <b>als</b> die Hose.</td></tr>
+    <tr><td class="de2">(genau)so ＋ Positiv ＋ wie</td><td>相等（A 跟 B 一樣…）</td><td class="de2">Lila mag sie genauso gern <b>wie</b> Rosa.</td></tr>
+  </table>
+  <div class="note"><b>⚠️ 三個最容易錯</b><br>① <b>gut/gern/viel 不能套 +er 規則</b>：❌ guter／gernder ✓ besser／lieber——這三個字整組換掉，跟規則變化無關。<br>② <b>單音節才變母音，多音節不變</b>：alt→älter（變）但 lustig→lustiger（不變）——判斷點是音節數，不是「聽起來順不順」。<br>③ <b>als／wie 選錯最常見的原因是沒看「相不相等」</b>：genauso...<b>wie</b>＝一樣；單純的比較級句尾用 <b>als</b>。兩個字不能互換。</div>
 </div>`},
 /* ===ANCHOR:GRAM===（新文法卡 {l:"Ln",html:`<div class="card gcard">…`} 插在這行上方）*/
 ];
@@ -6321,6 +6489,27 @@ const GR21=[
  {l:"L21",sub:"⭐ 對比：müssen（義務）vs dürfen（許可）②",before:"Hier ",after:" man (nicht) rauchen.",answer:"darf",options:["darf","muss"],full:"Hier darf man (nicht) rauchen."},
 ];
 GR21.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+const GR22=[
+ {l:"L22",sub:"⭐ 比較級：gut → ?",before:"Das Kleid hier gefällt mir ",after:" als der Rock.",answer:"besser",options:["besser","gutter","am besten"],full:"Das Kleid hier gefällt mir besser als der Rock."},
+ {l:"L22",sub:"⭐ 最高級：gut → am ?",before:"Mir gefällt die Jeans am ",after:".",answer:"besten",options:["besten","gutsten","besser"],full:"Mir gefällt die Jeans am besten."},
+ {l:"L22",sub:"⭐ 比較級：gern → ?",before:"Schwarz mag ich ",after:" als Blau.",answer:"lieber",options:["lieber","gerner","am liebsten"],full:"Schwarz mag ich lieber als Blau."},
+ {l:"L22",sub:"⭐ 最高級：gern → am ?",before:"Ich mag am ",after:" Cola.",answer:"liebsten",options:["liebsten","gernsten","lieber"],full:"Ich mag am liebsten Cola."},
+ {l:"L22",sub:"⭐ 比較級：viel → ?",before:"Karl hat ",after:" Urlaub als Franziska.",answer:"mehr",options:["mehr","vieler","am meisten"],full:"Karl hat mehr Urlaub als Franziska."},
+ {l:"L22",sub:"⭐ 比較級：klug → ?（母音變化）",before:"Der Hund ist ",after:" als die Katze.",answer:"klüger",options:["klüger","kluger","am klügsten"],full:"Der Hund ist klüger als die Katze."},
+ {l:"L22",sub:"⭐ 最高級：klug → am ?（母音變化）",before:"Sie ist am ",after:".",answer:"klügsten",options:["klügsten","klugsten","klüger"],full:"Sie ist am klügsten."},
+ {l:"L22",sub:"⭐ 比較級：groß → ?（母音變化）",before:"Peters Haus ist ",after:" als Kais Haus.",answer:"größer",options:["größer","grosser","am größten"],full:"Peters Haus ist größer als Kais Haus."},
+ {l:"L22",sub:"⭐ 最高級：alt → am ?（母音變化）",before:"Kais Haus ist am ",after:".",answer:"ältesten",options:["ältesten","altesten","älter"],full:"Kais Haus ist am ältesten."},
+ {l:"L22",sub:"⭐ 對比：lustig（不變）vs klug（變）",before:"Diese Geschichte ist ",after:" als die andere.",answer:"lustiger",options:["lustiger","lüstiger","am lustigsten"],full:"Diese Geschichte ist lustiger als die andere."},
+ {l:"L22",sub:"⭐ als vs wie：genauso groß",before:"Sie ist genauso groß ",after:" ihre Freundin.",answer:"wie",options:["wie","als"],full:"Sie ist genauso groß wie ihre Freundin."},
+ {l:"L22",sub:"⭐ als vs wie：mehr Urlaub",before:"Karl hat mehr Urlaub ",after:" Franziska.",answer:"als",options:["als","wie"],full:"Karl hat mehr Urlaub als Franziska."},
+ {l:"L22",sub:"⭐ als vs wie：genauso schön",before:"Hier ist es genauso schön ",after:" in der Schweiz.",answer:"wie",options:["wie","als"],full:"Hier ist es genauso schön wie in der Schweiz."},
+ {l:"L22",sub:"⭐ als vs wie：besser Gitarre",before:"Dominik spielt besser Gitarre ",after:" Udo.",answer:"als",options:["als","wie"],full:"Dominik spielt besser Gitarre als Udo."},
+ {l:"L22",sub:"⭐ als vs wie：der Hut gefällt",before:"Der Hut gefällt mir besser ",after:" die Mütze.",answer:"als",options:["als","wie"],full:"Der Hut gefällt mir besser als die Mütze."},
+ {l:"L22",sub:"⭐ als vs wie：genauso viel",before:"Die Bluse kostet genauso viel ",after:" das T-Shirt.",answer:"wie",options:["wie","als"],full:"Die Bluse kostet genauso viel wie das T-Shirt."},
+ {l:"L22",sub:"⭐ anhaben：du → ?",before:"Du ",after:" eine Hose an.",answer:"hast",options:["hast","habst","hat"],full:"Du hast eine Hose an."},
+ {l:"L22",sub:"⭐ anhaben：er → ?",before:"Er ",after:" ein Hemd an.",answer:"hat",options:["hat","habt","hast"],full:"Er hat ein Hemd an."},
+];
+GR22.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
   /* ===ANCHOR:GRAM_QUIZ===（新課文法填空題插在這行上方：宣告 const GRn=[{l,sub,before,after,answer,options,full},…]; 後接一行 GRn.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full})); ）*/
   return Q;
 }
@@ -6475,6 +6664,26 @@ const PLURAL=[
   {l:"L18",sub:"複數：Tablette（+n）",before:"Nimm zwei ",after:" gegen die Schmerzen. (Tablette)",answer:"Tabletten",options:["Tabletten","Tablette","Tablettes","Tabletter"],full:"Nimm zwei Tabletten gegen die Schmerzen."},
   {l:"L18",sub:"複數：Apotheke（+n）",before:"In der Stadt gibt es drei ",after:". (Apotheke)",answer:"Apotheken",options:["Apotheken","Apotheke","Apothekes","Apotheker"],full:"In der Stadt gibt es drei Apotheken."},
   {l:"L18",sub:"複數：Doktor（重音移位 -en）",before:"Wir haben hier zwei gute ",after:". (Doktor)",answer:"Doktoren",options:["Doktoren","Doktore","Doktors","Döktore"],full:"Wir haben hier zwei gute Doktoren."},
+  {l:"L22",sub:"複數：Bluse（+n）",before:"Im Büro trage ich oft ",after:". (Bluse)",answer:"Blusen",options:["Blusen","Bluse","Blusens","Blusenen"],full:"Im Büro trage ich oft Blusen."},
+  {l:"L22",sub:"複數：Jacke（+n）",before:"Die ",after:" hängen im Schrank. (Jacke)",answer:"Jacken",options:["Jacken","Jacke","Jackes","Jackenen"],full:"Die Jacken hängen im Schrank."},
+  {l:"L22",sub:"複數：Gürtel（單複同形）",before:"Die ",after:" sind aus Leder. (Gürtel)",answer:"Gürtel",options:["Gürtel","Gürtels","Gürtele","Gürteln"],full:"Die Gürtel sind aus Leder."},
+  {l:"L22",sub:"複數：Hemd（+en）",before:"Er hat drei weiße ",after:". (Hemd)",answer:"Hemden",options:["Hemden","Hemde","Hemds","Hemder"],full:"Er hat drei weiße Hemden."},
+  {l:"L22",sub:"複數：Hose（+n）",before:"Im Winter trage ich warme ",after:". (Hose)",answer:"Hosen",options:["Hosen","Hose","Hosens","Hosenen"],full:"Im Winter trage ich warme Hosen."},
+  {l:"L22",sub:"複數：Hut（變音+e）",before:"Die ",after:" im Schaufenster sind schön. (Hut)",answer:"Hüte",options:["Hüte","Hute","Huts","Hüten"],full:"Die Hüte im Schaufenster sind schön."},
+  {l:"L22",sub:"複數：Kleid（+er）",before:"Sie hat viele bunte ",after:". (Kleid)",answer:"Kleider",options:["Kleider","Kleide","Kleids","Kleiden"],full:"Sie hat viele bunte Kleider."},
+  {l:"L22",sub:"複數：Mantel（變音，無字尾）",before:"Im Winter tragen wir dicke ",after:". (Mantel)",answer:"Mäntel",options:["Mäntel","Mantel","Mantele","Mäntele"],full:"Im Winter tragen wir dicke Mäntel."},
+  {l:"L22",sub:"複數：Mütze（+n）",before:"Die Kinder tragen bunte ",after:". (Mütze)",answer:"Mützen",options:["Mützen","Mütze","Mützes","Mützenen"],full:"Die Kinder tragen bunte Mützen."},
+  {l:"L22",sub:"複數：Pullover（單複同形）",before:"Die ",after:" sind aus Wolle. (Pullover)",answer:"Pullover",options:["Pullover","Pullovers","Pulloverer","Pulloveren"],full:"Die Pullover sind aus Wolle."},
+  {l:"L22",sub:"複數：Rock（變音+e）",before:"Sie mag lange ",after:". (Rock)",answer:"Röcke",options:["Röcke","Rocke","Röcks","Röckem"],full:"Sie mag lange Röcke."},
+  {l:"L22",sub:"複數：Schuh（+e）",before:"Am besten sind seine ",after:"! (Schuh)",answer:"Schuhe",options:["Schuhe","Schuh","Schuhs","Schühe"],full:"Am besten sind seine Schuhe!"},
+  {l:"L22",sub:"複數：Socke（+n）",before:"Ich habe zwei ",after:" verloren. (Socke)",answer:"Socken",options:["Socken","Socke","Sockes","Sockenen"],full:"Ich habe zwei Socken verloren."},
+  {l:"L22",sub:"複數：Strumpf（變音+e）",before:"Die ",after:" sind zu warm für den Sommer. (Strumpf)",answer:"Strümpfe",options:["Strümpfe","Strumpfe","Strümpfs","Strümpfen"],full:"Die Strümpfe sind zu warm für den Sommer."},
+  {l:"L22",sub:"複數：Strumpfhose（+n）",before:"Ich habe drei ",after:" im Schrank. (Strumpfhose)",answer:"Strumpfhosen",options:["Strumpfhosen","Strumpfhose","Strumpfhosens","Strumpfhosenen"],full:"Ich habe drei Strumpfhosen im Schrank."},
+  {l:"L22",sub:"複數：T-Shirt（外來詞 +s）",before:"Ich habe viele ",after:" im Schrank. (T-Shirt)",answer:"T-Shirts",options:["T-Shirts","T-Shirt","T-Shirte","T-Shirten"],full:"Ich habe viele T-Shirts im Schrank."},
+  {l:"L22",sub:"複數：Text（+e）",before:"Wir lesen die ",after:" im Forum. (Text)",answer:"Texte",options:["Texte","Text","Texts","Texten"],full:"Wir lesen die Texte im Forum."},
+  {l:"L22",sub:"複數：Jeans（單複同形）",before:"Die ",after:" hier gefällt mir am besten. (Jeans)",answer:"Jeans",options:["Jeans","Jean","Jeanse","Jeansen"],full:"Die Jeans hier gefällt mir am besten."},
+  {l:"L22",sub:"複數：Orangensaft（變音+e）",before:"Wir haben zwei ",after:" im Kühlschrank. (Orangensaft)",answer:"Orangensäfte",options:["Orangensäfte","Orangensafte","Orangensäften","Orangensafts"],full:"Wir haben zwei Orangensäfte im Kühlschrank."},
+  {l:"L22",sub:"複數：Fahrgast（變音+e）",before:"Sehr geehrte ",after:"! (Fahrgast)",answer:"Fahrgäste",options:["Fahrgäste","Fahrgaste","Fahrgästen","Fahrgasts"],full:"Sehr geehrte Fahrgäste!"},
   /* ===ANCHOR:PLURAL_QUIZ===（新複數題 {l,sub,before,after,answer,options,full} 插在這行上方；注意此題庫課別欄位是 l: 不是 lesson:）*/
 ];
 
@@ -6641,6 +6850,13 @@ const LESSON_READS={
    qs:[{st:"Das Haus mit Garten kostet mehr als die Wohnung im Zentrum.",a:true,m:1},{st:"Die Wohnung im Zentrum hat einen Garten mit Blumen und einem Baum.",a:false,m:4},{st:"84 Quadratmeter hat die Wohnung im Zentrum.",a:false,m:7},{st:"Die möblierte Wohnung ist im Zentrum und hat einen Aufzug.",a:false,m:5}]},
   L15:{genre:"部落格",title:"Mein Stadtteil: Giesing",de:"Ich heiße Mailin und wohne seit zwei Jahren in Giesing. Giesing ist ganz normal, und das finde ich gut so. Hier wohnen Studenten und Arbeiter, Deutsche und Ausländer zusammen, und genau das gefällt mir. Es gibt viele kleine Geschäfte und eine Werkstatt an der Ecke. Der Kindergarten ist gleich um die Ecke, und mein Friseur ist auch in der Nähe. Am Wochenende gehe ich oft auf den Markt oder mache einen Spaziergang im Park. Was fehlt in Giesing? Vielleicht ein Kino. Aber hier ist immer etwas los — und genau das gefällt mir an meinem Stadtteil.",zh:"我叫 Mailin，已經在 Giesing 住兩年了。Giesing 很普通，我覺得這樣就好。這裡住著大學生和工人、德國人和外國人，大家住在一起——我很喜歡這一點。這裡有很多小商店，轉角還有一間工作坊。幼兒園就在轉角附近，我的髮廊也在附近。週末我常去市場，或是去公園散步。Giesing 缺少什麼呢？也許是一間電影院。但這裡總是很熱鬧——我就是喜歡我的街區這一點。",
    qs:[{st:"Mailin wohnt schon zwei Jahre in Giesing.",a:true,m:1},{st:"Der Kindergarten ist nicht in der Nähe von der Wohnung.",a:false,m:2},{st:"Der Friseur ist an der Ecke.",a:false,m:4},{st:"In Giesing gibt es kein Kino und auch keine Geschäfte.",a:false,m:5}]},
+  L22:{genre:"論壇短貼",title:"Forum: Mein Lieblingskleidungsstück",
+   de:"Ich mag meine goldene Jacke am liebsten. Ich habe sie im Sommer gekauft. Sie war nicht billig, aber ich trage sie sehr oft, zuletzt am Wochenende. Meine Freundin Nina hat auch eine Jacke. Ihre Jacke ist dunkel. Ich finde meine Jacke schöner als ihre. Ninas Jacke war billiger als meine.",
+   zh:"論壇貼文：我最喜歡的衣物\n我最喜歡我的金色外套。我是夏天買的。它不便宜，但我常穿它，上次穿是週末。我朋友 Nina 也有一件外套。她的外套是深色的。我覺得我的外套比她的好看。Nina 的外套比我的便宜。",
+   qs:[{st:"Die goldene Jacke war teuer.",a:true,m:1},
+       {st:"Die goldene Jacke war ziemlich billig.",a:false,m:2},
+       {st:"Ninas Jacke war golden und billiger als meine.",a:false,m:5},
+       {st:"Ich trage die Jacke nur einmal im Jahr.",a:false,m:7}]},
   /* ===ANCHOR:LESSON_READS===（新課閱讀測驗插在這行上方，key＝課號；de 先跑 validate_texts.py）*/
 };
 const LESSON_WRITES={
@@ -6664,6 +6880,11 @@ const LESSON_WRITES={
    points:["說一件你喜歡這裡的事","說一件這裡缺少的東西","提一個附近的地方或設施"],
    form:"要有稱呼（Hallo Leute …）與結尾（Viele Grüße …）",
    model:"Hallo Leute, ich wohne gern in meinem Stadtteil. Es gibt viele Geschäfte und einen Park in der Nähe. Ein Kino fehlt hier leider. Viele Grüße"},
+  L22:{title:"介紹我最喜歡的一件衣物",
+   task:"寫一則簡短訊息給朋友，介紹你最喜歡的一件衣物（約 30–45 字）。",
+   points:["說出這件衣物是什麼、在哪裡買的","用比較句說明為什麼喜歡它","說出上次穿它是什麼時候"],
+   form:"非正式訊息，要有稱呼（Hallo … ）與結尾（Bis bald / Liebe Grüße …）",
+   model:"Hallo Lisa,\nich trage meinen blauen Pullover am liebsten. Ich habe ihn im Winter gekauft. Er gefällt mir besser als mein alter Mantel. Zuletzt habe ich ihn am Montag getragen.\nBis bald, Shannon"},
   /* ===ANCHOR:LESSON_WRITES===（新課寫作題插在這行上方，key＝課號；points＝內容點不是文法點）*/
 };
 /* 📄 課級閱讀：4 題德文 R/F，第一次作答計分，≥3 過關寫入 modul[課號].r */
