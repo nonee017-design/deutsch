@@ -2554,6 +2554,140 @@ const NOUN_PL_NOTE={
   "Fahrgast":"複數 die Fahrgäste：a→ä 變音（複合詞，變化發生在 Gast）→ Forvo。",
   /* ===ANCHOR:NOUN_PL_NOTE===（變音／同形／不規則等複數警語插在這行上方）*/
 };
+/* ═══ 形容詞比較級／最高級（2026-08-14 里程碑）════════════════════════
+   三層分工，互斥且窮盡——這是 smoke ㊴ 能執法的前提：
+     ① ADJ_NOCOMP 有登記 → 不可比較，compOf() 回 null，永不出題
+     ② ADJ_COMP   有登記 → 例外事實，直接查表
+     ③ 其餘        → compOf() 依規則生成，零資料
+   ⚠️ 不規則六組（gut/viel/gern/hoch/nah/groß）與既有 IRR_GRAD_REV 是同一組事實，
+      該表管「形→原形」反查、本表管「原形→形」正向。改一邊必須同步改另一邊。
+   ⚠️ 規則生不出來、必須逐字登記的四類：異根不規則／單音節變音／母音·h 結尾
+      （neu→neuesten）／-er 真吞 e（teuer→teurer，但 schwer→schwerer 不吞）。 */
+const ADJ_COMP={
+  "gut":["besser","besten"], "viel":["mehr","meisten"], "gern":["lieber","liebsten"],
+  "hoch":["höher","höchsten"], "nah":["näher","nächsten"], "groß":["größer","größten"],
+  "alt":["älter","ältesten"], "dumm":["dümmer","dümmsten"], "gesund":["gesünder","gesündesten"],
+  "jung":["jünger","jüngsten"], "kalt":["kälter","kältesten"], "klug":["klüger","klügsten"],
+  "krank":["kränker","kränksten"], "kurz":["kürzer","kürzesten"], "lang":["länger","längsten"],
+  "scharf":["schärfer","schärfsten"], "schwarz":["schwärzer","schwärzesten"], "stark":["stärker","stärksten"],
+  "warm":["wärmer","wärmsten"], "neu":["neuer","neuesten"], "frei":["freier","freiesten"],
+  "roh":["roher","rohesten"], "blau":["blauer","blauesten"], "grau":["grauer","grauesten"],
+  "teuer":["teurer","teuersten"], "sauer":["saurer","sauersten"], "braun":["brauner","braunsten"],
+  "rund":["runder","rundesten"], "toll":["toller","tollsten"], "falsch":["falscher","falschesten"],
+  "laut":["lauter","lautesten"], "bunt":["bunter","buntesten"], "cool":["cooler","coolsten"],
+  "voll":["voller","vollsten"], "blond":["blonder","blondesten"], "schlank":["schlanker","schlanksten"],
+  "faul":["fauler","faulsten"],
+  /* ===ANCHOR:ADJ_COMP===（新形容詞的例外形式插在這行上方，格式：原級 → [比較級, 最高級]）*/
+};
+/* 不可比較：值＝給人看的理由，會印在單字卡背面。⏳ 開頭＝待老師確認，暫不出題。
+   存在理由與 NO_PL_EXEMPT 一字不差：沒登記和「規則字」長得一模一樣，
+   沒有宣告就沒有東西分得出「查過確定不比較」與「忘了登記」。 */
+const ADJ_NOCOMP={
+  "rosa":"外來色詞，字尾不變化；比較要說 mehr rosa als …",
+  "lila":"外來色詞，字尾不變化；比較要說 mehr lila als …",
+  "beige":"外來色詞，字尾不變化；比較要說 mehr beige als …",
+  "orange":"外來色詞；作顏色時通常不比較，要說 mehr orange als …",
+  "super":"外來詞，不變化也不比較（ein super Film，不是 ein superer Film）",
+  "golden":"材質形容詞，不比較。⚠️ goldener 是變格形（ein goldener Ring），不是比較級",
+  "philippinisch":"國族形容詞，不比較",
+  "erlaubt":"二元狀態（准／不准），不比較",
+  "verboten":"二元狀態（禁／不禁），不比較",
+  "geöffnet":"二元狀態（開／關），不比較",
+  "geschlossen":"二元狀態（開／關），不比較",
+  "möbliert":"二元狀態（有／沒有家具），不比較",
+  "fertig":"二元狀態（完成／未完成），不比較",
+  "geboren":"二元狀態，不比較",
+  "gebraten":"烹調方式，不比較",
+  "gekocht":"烹調方式，不比較",
+  "gegrillt":"烹調方式，不比較",
+  "gleichzeitig":"二元（同時／不同時），不比較",
+  "gleich":"「一樣」本身就是等值，不比較；要比較用 genauso … wie",
+  "total":"程度副詞用法，本身就是極值，不比較",
+  "schade":"感嘆用語，不作程度比較",
+  "letzt":"序列詞（最後的），不比較",
+  "letzt-":"序列詞（最後的），不比較",
+  "nächste":"序列詞；本身已是 nah 的最高級形",
+  "rot":"⏳ 待確認：röter／roter 兩形並存，先不出題",
+  "glatt":"⏳ 待確認：glatter／glätter 兩形並存，先不出題",
+  "vegan":"⏳ 待確認：標準德文視為二元，口語有人比較",
+  "vegetarisch":"⏳ 待確認：標準德文視為二元，口語有人比較",
+  "kaputt":"⏳ 待確認：標準德文視為二元，口語有 kaputter",
+  "verliebt":"⏳ 待確認：標準德文視為二元，口語有 verliebter",
+  /* ===ANCHOR:ADJ_NOCOMP===（新的不可比較宣告插在這行上方，格式：原級 → 理由）*/
+};
+/* 原級 → [比較級, 最高級(am …)]；不可比較回 null。
+   ⚠️ 比較級吞 e（dunkel→dunkler）只發生在比較級，最高級要還原（am dunkelsten）。 */
+function adjRule(a){
+  var c = /e$/.test(a) ? a+"r" : (/[^aeiouäöü]el$/.test(a) ? a.slice(0,-2)+"ler" : a+"er");
+  var s = (/[a-zäöüß]isch$/.test(a)||/end$/.test(a)) ? a+"sten"
+        : (/(t|d|s|ß|z|sch)$/.test(a) ? a+"esten" : a+"sten");
+  return [c,s];
+}
+function compOf(a){
+  if(!a||ADJ_NOCOMP[a])return null;
+  if(ADJ_COMP[a])return ADJ_COMP[a];
+  return adjRule(a);
+}
+function adjUnlocked(l){
+  var n=(l==="L123")?3:parseInt(String(l||"").replace(/\D/g,""),10);
+  return isFinite(n)&&n<=maxLessonNo();
+}
+/* 單字卡背面比較級區：只印「規則生不出來」的例外與不可比較宣告。
+   確認過不變音的規則字（toll/voll…）雖登記在 ADJ_COMP，但不印——那是噪音。 */
+function adjNoteHTML(d){
+  var n=ADJ_NOCOMP[d];
+  if(n)return '<div class="plline"><span class="pltag">比較級</span>'
+    +'<div class="plnote">⚠️ '+n+'</div></div>';
+  var f=ADJ_COMP[d]; if(!f)return '';
+  var r=adjRule(d);
+  if(r[0]===f[0]&&r[1]===f[1])return '';
+  return '<div class="plline"><span class="pllbl">比較級</span>'
+    +'<span class="plword">'+f[0]+'　/　am '+f[1]+'</span>'
+    +'<button class="spk adjspk" aria-label="唇比較級"></button></div>';
+}
+/* 干擾項＝同一文法點的其他正確形式＋規則誤套形，不放隨機字。 */
+function adjOpts(d,f,lvl){
+  var ans=f[lvl],out=[ans],r=adjRule(d);
+  var push=function(x){if(x&&out.indexOf(x)<0&&out.length<4)out.push(x);};
+  var deum=function(s){return s.replace(/[äöü]/g,function(c){return{"ä":"a","ö":"o","ü":"u"}[c];});};
+  if(lvl===0){
+    push(deum(ans)!==ans?deum(ans):null);         /* 忘了變音：kluger */
+    push((r[0]!==ans&&!/er$/.test(d))?r[0]:null); /* 規則誤套：guter；-er 字不放（teuerer 有人用，不能當錯答）*/
+    push("am "+f[1]);                             /* 拿成最高級 */
+    push(/(e|er)$/.test(d)?d:d+"erer");           /* 疊加字尾；-e/-er 結尾改放原級 */
+  }else{
+    push(deum(ans)!==ans?deum(ans):null);
+    push(/esten$/.test(ans)?d+"sten":d+"esten");  /* 墊音錯：gutsten／schönesten */
+    push(f[0]);                                   /* 拿成比較級 */
+    push(d);
+  }
+  return shuffle(out);
+}
+/* 累積題池（2026-08-14）：L22 解鎖後，L1 起所有已教形容詞永久留在文法題袋。
+   ⛔ 不繼承來源課號、不套 lessonMatch——這正是「以前學過的字自動回鍋」的機制。
+   ⛔ 也不吃 mastered：「我會了」標的是字義，不是它的比較級形式，
+      拿來當篩選會把最該複習的舊字（L4 的 groß）永久藏起來。
+   題量上限鏡像既有 numListenPool()：跟著題池等比放大，避免灌爆文法題。 */
+const ADJ_Q_RATIO=0.25, ADJ_Q_MIN=24;
+function adjCompPool(base){
+  if(maxLessonNo()<22)return [];
+  var items=[];
+  VOCAB.forEach(function(v){
+    if(v.g)return;
+    var d=v.de;
+    if(!(posOf(v)==="形容詞"||ADJ_COMP[d]))return;
+    if(!adjUnlocked(v.lesson))return;
+    var f=compOf(d); if(!f)return;
+    var ctx=(v.ex&&v.ex[0])?v.ex[0]+"　":"";
+    var full=d+" – "+f[0]+" – am "+f[1];
+    items.push({lesson:v.lesson,sub:"⭐ 比較級："+d+" → ?",
+      before:ctx+d+" → 比較級 ",after:"",answer:f[0],options:adjOpts(d,f,0),full:full});
+    items.push({lesson:v.lesson,sub:"⭐ 最高級："+d+" → am ?",
+      before:ctx+d+" → 最高級 am ",after:"",answer:f[1],options:adjOpts(d,f,1),full:full});
+  });
+  var cap=Math.max(ADJ_Q_MIN,Math.round((base||0)*ADJ_Q_RATIO));
+  return items.length<=cap?items:shuffle(items).slice(0,cap);
+}
 const NOUN_PLEX={
   "Stuhl":["Wir brauchen vier Stühle.","我們需要四張椅子。"],
   "Tisch":["Im Zimmer sind zwei Tische.","房間裡有兩張桌子。"],
@@ -4839,6 +4973,8 @@ function render(){
       if(c.plNote)html+=`<div class="plnote">⚠️ ${c.plNote}</div>`;
       html+=`</div>`;
     }
+    /* 形容詞比較級（2026-08-14）：只有例外字與不可比較字會印 */
+    if(!c.g)html+=adjNoteHTML(c.de);
     /* 動詞關鍵形 */
     if(c.vm)html+=verbBackHTML(c.vm,c.de);
     /* 例句（單數）*/
@@ -4852,6 +4988,9 @@ function render(){
     if(c.plEx)html+=`<div class="exline plex"><div class="exde">${c.plEx[0]}</div><button class="spk plexspk" aria-label="唸複數例句"></button><div class="exzh">${c.plEx[1]}</div></div>`;
     flashFace.innerHTML=html;
     /* 接線：所有按鈕都 stopPropagation，避免觸發翻面 */
+    const as=flashFace.querySelector('.adjspk');
+    if(as){const _f=ADJ_COMP[c.de];as.innerHTML=SPK_SVG;
+      as.onclick=(e)=>{e.stopPropagation();speak(c.de+', '+_f[0]+', am '+_f[1]);};}
     if(c.pl){
       const ps=flashFace.querySelector('.plspk');if(ps){ps.innerHTML=SPK_SVG;ps.onclick=(e)=>{e.stopPropagation();speak('die '+c.pl);};}
     }
@@ -5443,7 +5582,7 @@ const GRAM=[
     <tr><td class="de2">Komparativ ＋ als</td><td>不相等（A 比 B…）</td><td class="de2">Das Hemd gefällt ihr besser <b>als</b> die Hose.</td></tr>
     <tr><td class="de2">(genau)so ＋ Positiv ＋ wie</td><td>相等（A 跟 B 一樣…）</td><td class="de2">Lila mag sie genauso gern <b>wie</b> Rosa.</td></tr>
   </table>
-  <div class="note"><b>⚠️ 三個最容易錯</b><br>① <b>gut/gern/viel 不能套 +er 規則</b>：❌ guter／gernder ✓ besser／lieber——這三個字整組換掉，跟規則變化無關。<br>② <b>單音節才變母音，多音節不變</b>：alt→älter（變）但 lustig→lustiger（不變）——判斷點是音節數，不是「聽起來順不順」。<br>③ <b>als／wie 選錯最常見的原因是沒看「相不相等」</b>：genauso...<b>wie</b>＝一樣；單純的比較級句尾用 <b>als</b>。兩個字不能互換。</div>
+  <div class="note"><b>⚠️ 六個最容易錯</b><br>① <b>gut/gern/viel 不能套 +er 規則</b>：❌ guter／gernder ✓ besser／lieber——這三個字整組換掉，跟規則變化無關。<br>② <b>變母音是一份「要背的清單」，不是可推導的規則</b>：alt→älter、klug→klüger、lang→länger 會變；但同樣是單音節的 <b>voll／bunt／blond／schlank／faul</b> 不變。多音節原則上不變（lustig→lustiger），唯一常見例外是 <b>gesund→gesünder</b>。⚠️ 所以判斷點不是音節數，是「這個字在不在變音清單裡」——單字卡背面有登記的才變。<br>③ <b>als／wie 選錯最常見的原因是沒看「相不相等」</b>：genauso...<b>wie</b>＝一樣；單純的比較級句尾用 <b>als</b>。兩個字不能互換。<br>④ <b>吞 e 只發生在比較級，最高級要還原</b>：dunkel→<b>dunkler</b> 但 am <b>dunkel</b>sten；teuer→<b>teurer</b> 但 am <b>teuer</b>sten。⚠️ 只有 -el 結尾與 teuer／sauer 吞 e——schwer→schwerer、leer→leerer、sicher→sicherer <u>不吞</u>。<br>⑤ <b>最高級的墊音 e 有兩個例外</b>：字尾 t/d/s/ß/z/sch 要墊（am ält<b>e</b>sten、am kürz<b>e</b>sten）；但 <b>-isch／-end</b> 結尾不墊（am praktisch<b>sten</b>、am spannend<b>sten</b>），groß 也不墊（am größ<b>ten</b>，不是 größesten）。<br>⑥ <b>有些形容詞根本沒有比較級</b>：狀態詞（fertig／verboten／geöffnet／möbliert）、國族詞（philippinisch）、材質詞（golden）、序列詞（letzt／nächst-）。外來色詞 <b>rosa／lila／beige／orange</b> 字尾完全不變化，要比較時說 <b>mehr rosa als …</b>。⚠️ 單字卡背面會標，沒標的就是規則字。</div>
 </div>`},
 /* ===ANCHOR:GRAM===（新文法卡 {l:"Ln",html:`<div class="card gcard">…`} 插在這行上方）*/
 ];
@@ -7496,10 +7635,13 @@ function poolFor(mode){
   if(mode==='gram'){
     if(qWeak){
       const g=gramBank.filter(q=>{for(const k of gramCardsOfQ(q))if(weakGram[k])return true;return false;});
+      /* 只考不熟：🧩 Komparativ 標不熟時，比較級生成題一起回鍋 */
+      const gk=weakGram["komp"]?adjCompPool(g.length):[];
       const ws=weakNounSet();
-      return g.concat(PLURAL.filter(it=>{const m=(it.before+it.after).match(/\(([^)]+)\)/);return m&&ws.has(m[1]);}));
+      return g.concat(gk).concat(PLURAL.filter(it=>{const m=(it.before+it.after).match(/\(([^)]+)\)/);return m&&ws.has(m[1]);}));
     }
-    return gramBank.filter(lessonMatch).concat(PLURAL.filter(it=>inLessonScope(it.l)));
+    const gbase=gramBank.filter(lessonMatch).concat(PLURAL.filter(it=>inLessonScope(it.l)));
+    return gbase.concat(adjCompPool(gbase.length));
   }
   /* N5 ⌨️ 打字：共用文法填空＋複數題庫（含課別範圍與「只考不熟」篩選），包一層 tm 記住原題型供弱點統計 */
   if(mode==='typed')return poolFor('gram').map(q=>({tm:'gram',src:q})).concat(poolFor('plural').map(q=>({tm:'plural',src:q})));
