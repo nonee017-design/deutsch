@@ -7484,6 +7484,7 @@ function buildMeilen(){
   VOCAB.filter(v=>v.g&&v.g!=='plu'&&lessonMatch(v)&&(qInclM||!mastered[v.id])).forEach(v=>pm.gender.push({m:'gender',q:v}));
   PLURAL.filter(q=>inLessonScope(q.l)).forEach(q=>pm.plural.push({m:'plural',q}));
   gramBank.filter(lessonMatch).forEach(q=>{pm.gram.push({m:'gram',q});if((q.sub||'').includes('對比'))pm.gram.push({m:'gram',q});});
+  adjCompPool(gramBank.filter(lessonMatch).length).forEach(q=>pm.gram.push({m:'gram',q}));   /* 2026-08-14：同上，🏁 總複習也要碰得到比較級 */
   listenPool(false,false).forEach(s=>pm.listen.push({m:'listen',q:s}));
   numListenPool(pm.listen.length).forEach(s=>pm.listen.push({m:'listen',q:s}));   /* N7：數字/價格/時間聽寫 */
   satzbauPool(false,false).forEach(s=>pm.satzbau.push({m:'satzbau',q:s}));
@@ -7561,7 +7562,9 @@ function buildGrad(){
     rf:RF_ITEMS.filter(lessonMatch),
     mean:VOCAB.filter(v=>v.cat!=='數字'&&lessonMatch(v)),
     gender:VOCAB.filter(v=>v.g&&v.g!=='plu'&&lessonMatch(v)),
-    gram:[...gramBank.filter(lessonMatch),...dusieBank.filter(lessonMatch)], /* du/Sie 是 L1–2 的核心文法，畢業考必考 */
+    gram:[...gramBank.filter(lessonMatch),...dusieBank.filter(lessonMatch),
+          ...adjCompPool(gramBank.filter(lessonMatch).length)], /* du/Sie 是 L1–2 的核心文法，畢業考必考；
+             2026-08-14：比較級累積題併入——否則 L22 畢業考可以整場不碰比較級就過關 */
     plural:PLURAL.filter(q=>inLessonScope(q.l)),
     listen:listenPool(false,false)
   };
