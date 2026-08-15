@@ -2688,6 +2688,102 @@ function adjCompPool(base){
   var cap=Math.max(ADJ_Q_MIN,Math.round((base||0)*ADJ_Q_RATIO));
   return items.length<=cap?items:shuffle(items).slice(0,cap);
 }
+/* ── Perfekt 生成器核心（2026-08-15 抽出成純函式）────────────────────────────
+   原本兩段判準焊死在 gramBank 建構的 IIFE 裡，只吃 SENTENCES、且題目繼承來源句課號。
+   抽出後同一套判準同時供應兩邊：
+     (a) gramBank 的課別題 ← SENTENCES（維持原行為，⑮⑱ 照舊把關）
+     (b) perfPool() 的累積題 ← 單字卡 pex（本次新接線）
+   ⛔ 零新造德文：兩者都只把既有句子挖空或機械推導錯形，正解永遠逐字等於來源句。 */
+const PERF_HAB=["habe","hast","hat","haben","habt"], PERF_SEI=["bin","bist","ist","sind","seid"];
+const PERF_PAIR={habe:"bin",hast:"bist",hat:"ist",haben:"sind",habt:"seid",
+                 bin:"habe",bist:"hast",ist:"hat",sind:"haben",seid:"habt"};
+/* 2026-08-15 修 bug：原本沒有 i 旗標，句首大寫的 Hast／Haben／Bist／Sind 一律抓不到，
+   Perfekt 疑問句（L12 主打句型 Hast du schon einmal …?）整批被靜默跳過。
+   實測 SENTENCES 因此漏 15 句、pex 漏 5 句。大小寫還原交給 perfCap()。 */
+const PERF_AUXRE=/\b(habe|hast|hat|haben|habt|bin|bist|ist|sind|seid)\b/gi;
+function perfP2Map(){var m={};Object.keys(VERB_META).forEach(function(v){var x=VERB_META[v];
+  if(x.p2&&x.aux)m[x.p2]=x.aux;});return m;}
+/* 來源詞若是句首大寫，選項要跟著大寫，否則四個選項一眼就看得出哪個是原句的那顆 */
+function perfCap(src,x){var c=src.charAt(0);
+  return (c===c.toUpperCase()&&c!==c.toLowerCase())?x.charAt(0).toUpperCase()+x.slice(1):x;}
+function perfAuxQ(de,P2,lesson){
+  if(!de||de.length>90)return null;
+  var hits=de.match(PERF_AUXRE); if(!hits||hits.length!==1)return null;
+  var aux=hits[0], auxL=aux.toLowerCase(), fam=PERF_HAB.indexOf(auxL)>=0?"h":"s";
+  var toks=de.split(/\s+/).map(function(w){return w.replace(/[.,!?;:]+$/,"");});
+  var p2w=toks.filter(function(w){return P2[w];});
+  if(p2w.length!==1)return null;
+  if(P2[p2w[0]]!==fam)return null;            /* ← 狀態被動守衛（vermietet 那個坑） */
+  var idx=de.indexOf(aux);
+  var opts=[aux,perfCap(aux,PERF_PAIR[auxL])];
+  (fam==="h"?PERF_HAB:PERF_SEI).forEach(function(x){
+    if(x!==auxL&&opts.length<4)opts.push(perfCap(aux,x));});
+  return {lesson:lesson,sub:"⭐ Perfekt 助動詞：haben 或 sein",
+    before:de.slice(0,idx),after:de.slice(idx+aux.length),
+    answer:aux,options:opts,full:de};
+}
+function perfWrongP2(p2){
+  /* 已帶 ge 的字要先排除：gefeiert 結尾也是 iert，但那是 feiern 的弱變化，
+     套 -ieren 規則會生出 gegefeiert（2026-07-31 逐題檢視抓到）。 */
+  if((/^(be|ver|er|ent|emp|zer|miss)/.test(p2)||/iert$/.test(p2))&&!/^ge/.test(p2))return "ge"+p2;
+  var m=/^([a-zäöü]+)ge([a-zäöü]+)$/.exec(p2);
+  if(m)return m[2]+" "+m[1];                  /* 可分離誤拆：aufgeräumt → räumt auf */
+  if(/en$/.test(p2))return p2.slice(0,-2)+"t";      /* 強變化誤用弱字尾 */
+  if(/^ge/.test(p2))return p2.slice(2);             /* 弱變化漏 ge */
+  return null;
+}
+/* 整句判斷刻意維持大小寫敏感：門檻本來就排除問句（/[?!–—]/），
+   而陳述句裡助動詞站句首的只有問句語序，放寬沒有收穫、只多一份風險。 */
+function perfRWQ(de,P2,lesson){
+  if(!de||!/\.$/.test(de)||de.length>72||/[?!–—]/.test(de))return null;
+  var t=de.slice(0,-1).split(/\s+/);
+  var p2=t[t.length-1];
+  if(!P2[p2])return null;
+  if(t.filter(function(w){return P2[w];}).length!==1)return null;  /* 兩個 Partizip → 語序干擾項會攪成亂碼 */
+  var ax=t.filter(function(w){return PERF_PAIR[w];});
+  if(ax.length!==1)return null;
+  var aux=ax[0], fam=PERF_HAB.indexOf(aux)>=0?"h":"s";
+  if(P2[p2]!==fam)return null;
+  var ai=t.indexOf(aux);
+  if(ai<0||ai===t.length-1)return null;
+  var wp=perfWrongP2(p2); if(!wp)return null;
+  var opts=[de,
+    t.slice(0,ai).concat([PERF_PAIR[aux]],t.slice(ai+1)).join(" ")+".",
+    t.slice(0,ai+1).concat([p2],t.slice(ai+1,t.length-1)).join(" ")+".",
+    t.slice(0,t.length-1).concat([wp]).join(" ")+"."];
+  if(new Set(opts).size!==4)return null;
+  return {lesson:lesson,sub:"⭐ 整句判斷：哪一句 Perfekt 正確？",
+    before:"",after:"",answer:de,options:opts,full:de};
+}
+function perfUnlocked(l){
+  var n=(l==="L123")?3:parseInt(String(l||"").replace(/\D/g,""),10);
+  return isFinite(n)&&n<=maxLessonNo();
+}
+/* 累積題池（2026-08-15）：L10 解鎖 Perfekt 後，所有登記了 p2/aux 且卡上有 pex 的動詞
+   永久留在文法題袋。⛔ 不繼承課別篩選、不吃 mastered——理由與 adjCompPool 同一條：
+   「我會了」標的是字義，不是它的完成式形態。
+   來源刻意用單字卡 pex 而非 SENTENCES：pex 是 2026-07-31 專門為 Perfekt 寫的，
+   句句剛好「一個助動詞＋一個 Partizip」；SENTENCES 只有 39/143 個動詞湊得出這種句子。
+   與課別生成器同句者跳過，避免同一句在題袋出現兩次。
+   題量上限鏡像 adjCompPool()／numListenPool()：跟著呼叫方 base 等比放大。 */
+const PERF_Q_RATIO=0.25, PERF_Q_MIN=12;
+function perfPool(base){
+  if(maxLessonNo()<10)return [];
+  var P2=perfP2Map(), items=[], seen={};
+  var corpus={}; SENTENCES.forEach(function(s){corpus[s.de]=1;});
+  VOCAB.forEach(function(v){
+    if(!(v.pex&&v.pex[0]))return;
+    var m=VERB_META[v.de]; if(!m||!m.p2||!m.aux)return;
+    if(!perfUnlocked(v.lesson))return;
+    var de=v.pex[0];
+    if(corpus[de]||seen[de])return;
+    seen[de]=1;
+    var a=perfAuxQ(de,P2,v.lesson); if(a)items.push(a);
+    var r=perfRWQ(de,P2,v.lesson);  if(r)items.push(r);
+  });
+  var cap=Math.max(PERF_Q_MIN,Math.round((base||0)*PERF_Q_RATIO));
+  return items.length<=cap?items:shuffle(items).slice(0,cap);
+}
 const NOUN_PLEX={
   "Stuhl":["Wir brauchen vier Stühle.","我們需要四張椅子。"],
   "Tisch":["Im Zimmer sind zwei Tische.","房間裡有兩張桌子。"],
@@ -6493,35 +6589,14 @@ const GR18=[
 ];
 GR18.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
   /* Perfekt 助動詞題自動生成（2026-07-31 Partizip 里程碑）。
-     題幹零新造德文——全部取自既有 SENTENCES。
-     防守：句中助動詞family 必須與 VERB_META 登記的 aux 相符才出題。
-     這條擋掉狀態被動誤判（"Die Wohnung ist vermietet" 的 vermieten 登記為 haben，
-     family 不符 → 跳過），那正是 2026-07-30 收割時踩過的坑。
-     干擾項＝同一文法點的其他正確形式（另一助動詞的同人稱＋同助動詞其他人稱）。 */
+     題幹零新造德文——全部取自既有 SENTENCES。防守判準（助動詞家族必須與 VERB_META
+     登記的 aux 相符，擋掉 "Die Wohnung ist vermietet" 這種狀態被動誤判）已於
+     2026-08-15 抽進 perfAuxQ()，與 perfPool() 的累積題共用同一套規則。 */
   (function(){
-    const HAB=["habe","hast","hat","haben","habt"], SEI=["bin","bist","ist","sind","seid"];
-    const PAIR={habe:"bin",hast:"bist",hat:"ist",haben:"sind",habt:"seid",
-                bin:"habe",bist:"hast",ist:"hat",sind:"haben",seid:"habt"};
-    const P2={};
-    Object.keys(VERB_META).forEach(v=>{const m=VERB_META[v];
-      if(m.p2&&m.aux) P2[m.p2]=m.aux;});
-    const AUXRE=/\b(habe|hast|hat|haben|habt|bin|bist|ist|sind|seid)\b/g;
-    const seen={};
+    const P2=perfP2Map(), seen={};
     SENTENCES.forEach(s=>{
-      const de=String(s.de||""); if(de.length>90) return;
-      const hits=de.match(AUXRE); if(!hits||hits.length!==1) return;
-      const aux=hits[0], fam=HAB.indexOf(aux)>=0?"h":"s";
-      const toks=de.split(/\s+/).map(w=>w.replace(/[.,!?;:]+$/,""));
-      const p2w=toks.filter(w=>P2[w]);
-      if(p2w.length!==1) return;
-      if(P2[p2w[0]]!==fam) return;            /* ← 狀態被動守衛 */
-      if(seen[de]) return; seen[de]=1;
-      const idx=de.indexOf(aux);
-      const opts=[aux,PAIR[aux]];
-      (fam==="h"?HAB:SEI).forEach(x=>{if(x!==aux&&opts.length<4)opts.push(x);});
-      Q.push({lesson:s.lesson,sub:"⭐ Perfekt 助動詞：haben 或 sein",
-        before:de.slice(0,idx), after:de.slice(idx+aux.length),
-        answer:aux, options:opts, full:de});
+      const de=String(s.de||""); if(seen[de])return; seen[de]=1;
+      const q=perfAuxQ(de,P2,s.lesson); if(q)Q.push(q);
     });
   })();
   const GR10P=[
@@ -6577,45 +6652,12 @@ GR18.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answe
      三個干擾項由正解機械推導，各打一個能力點：助動詞／語序／Partizip 形成。
      零新造德文——干擾項是刻意的錯形，本來就該是錯的；正解逐字取自語料庫（斷言⑱ 把關）。
      問法是「哪一句正確」而非「把這句改寫」：語料庫沒有現在式原句，硬生現在式＝憑空造德文。
-     真正的改寫題只手寫（GR10RW，來源＝課堂筆記 Präsens/Perfekt 對照表）。 */
+     真正的改寫題只手寫（GR10RW，來源＝課堂筆記 Präsens/Perfekt 對照表）。
+     2026-08-15：判準抽進 perfRWQ()，與 perfPool() 共用。 */
   (function(){
-    const SW={habe:"bin",hast:"bist",hat:"ist",haben:"sind",habt:"seid",
-              bin:"habe",bist:"hast",ist:"hat",sind:"haben",seid:"habt"};
-    const HAB=["habe","hast","hat","haben","habt"];
-    const INSEP=/^(be|ver|er|ent|emp|zer|miss)/;
-    function wrongP2(p2){
-      /* 已帶 ge 的字要先排除：gefeiert 結尾也是 iert，但那是 feiern 的弱變化，
-         套 -ieren 規則會生出 gegefeiert（2026-07-31 逐題檢視抓到）。 */
-      if((INSEP.test(p2)||/iert$/.test(p2))&&!/^ge/.test(p2)) return "ge"+p2;
-      const m=/^([a-zäöü]+)ge([a-zäöü]+)$/.exec(p2);
-      if(m) return m[2]+" "+m[1];              /* 可分離誤拆：aufgeräumt → räumt auf */
-      if(/en$/.test(p2)) return p2.slice(0,-2)+"t";   /* 強變化誤用弱字尾 */
-      if(/^ge/.test(p2)) return p2.slice(2);          /* 弱變化漏 ge */
-      return null;
-    }
-    const P2={}; Object.keys(VERB_META).forEach(v=>{const m=VERB_META[v];
-      if(m.p2&&m.aux) P2[m.p2]=m.aux;});
+    const P2=perfP2Map();
     SENTENCES.forEach(s=>{
-      const de=String(s.de||"");
-      if(!/\.$/.test(de)||de.length>72||/[?!–—]/.test(de)) return;
-      const t=de.slice(0,-1).split(/\s+/);
-      const p2=t[t.length-1];
-      if(!P2[p2]) return;
-      if(t.filter(w=>P2[w]).length!==1) return;  /* 兩個 Partizip → 語序干擾項會攪成亂碼 */
-      const ax=t.filter(w=>SW[w]);
-      if(ax.length!==1) return;
-      const aux=ax[0], fam=HAB.indexOf(aux)>=0?"h":"s";
-      if(P2[p2]!==fam) return;
-      const ai=t.indexOf(aux);
-      if(ai<0||ai===t.length-1) return;
-      const wp=wrongP2(p2); if(!wp) return;
-      const opts=[de,
-        t.slice(0,ai).concat([SW[aux]],t.slice(ai+1)).join(" ")+".",
-        t.slice(0,ai+1).concat([p2],t.slice(ai+1,t.length-1)).join(" ")+".",
-        t.slice(0,t.length-1).concat([wp]).join(" ")+"."];
-      if(new Set(opts).size!==4) return;
-      Q.push({lesson:s.lesson,sub:"⭐ 整句判斷：哪一句 Perfekt 正確？",
-        before:"",after:"",answer:de,options:opts,full:de});
+      const q=perfRWQ(String(s.de||""),P2,s.lesson); if(q)Q.push(q);
     });
   })();
   const GRCLO=[
@@ -7484,7 +7526,8 @@ function buildMeilen(){
   VOCAB.filter(v=>v.g&&v.g!=='plu'&&lessonMatch(v)&&(qInclM||!mastered[v.id])).forEach(v=>pm.gender.push({m:'gender',q:v}));
   PLURAL.filter(q=>inLessonScope(q.l)).forEach(q=>pm.plural.push({m:'plural',q}));
   gramBank.filter(lessonMatch).forEach(q=>{pm.gram.push({m:'gram',q});if((q.sub||'').includes('對比'))pm.gram.push({m:'gram',q});});
-  adjCompPool(gramBank.filter(lessonMatch).length).forEach(q=>pm.gram.push({m:'gram',q}));   /* 2026-08-14：同上，🏁 總複習也要碰得到比較級 */
+  adjCompPool(gramBank.filter(lessonMatch).length).forEach(q=>pm.gram.push({m:'gram',q}));
+  perfPool(gramBank.filter(lessonMatch).length).forEach(q=>pm.gram.push({m:'gram',q}));      /* 2026-08-15：🏁 總複習也要碰得到 Perfekt 累積題 */   /* 2026-08-14：同上，🏁 總複習也要碰得到比較級 */
   listenPool(false,false).forEach(s=>pm.listen.push({m:'listen',q:s}));
   numListenPool(pm.listen.length).forEach(s=>pm.listen.push({m:'listen',q:s}));   /* N7：數字/價格/時間聽寫 */
   satzbauPool(false,false).forEach(s=>pm.satzbau.push({m:'satzbau',q:s}));
@@ -7563,7 +7606,8 @@ function buildGrad(){
     mean:VOCAB.filter(v=>v.cat!=='數字'&&lessonMatch(v)),
     gender:VOCAB.filter(v=>v.g&&v.g!=='plu'&&lessonMatch(v)),
     gram:[...gramBank.filter(lessonMatch),...dusieBank.filter(lessonMatch),
-          ...adjCompPool(gramBank.filter(lessonMatch).length)], /* du/Sie 是 L1–2 的核心文法，畢業考必考；
+          ...adjCompPool(gramBank.filter(lessonMatch).length),
+          ...perfPool(gramBank.filter(lessonMatch).length)],   /* 2026-08-15：同理，否則畢業考可以整場不碰 Perfekt */ /* du/Sie 是 L1–2 的核心文法，畢業考必考；
              2026-08-14：比較級累積題併入——否則 L22 畢業考可以整場不碰比較級就過關 */
     plural:PLURAL.filter(q=>inLessonScope(q.l)),
     listen:listenPool(false,false)
@@ -7640,11 +7684,13 @@ function poolFor(mode){
       const g=gramBank.filter(q=>{for(const k of gramCardsOfQ(q))if(weakGram[k])return true;return false;});
       /* 只考不熟：🧩 Komparativ 標不熟時，比較級生成題一起回鍋 */
       const gk=weakGram["komp"]?adjCompPool(g.length):[];
+      /* 同上：🧩 Perfekt 現在完成式（pii）標不熟時，Perfekt 累積題一起回鍋 */
+      const gpf=weakGram["pii"]?perfPool(g.length):[];
       const ws=weakNounSet();
-      return g.concat(gk).concat(PLURAL.filter(it=>{const m=(it.before+it.after).match(/\(([^)]+)\)/);return m&&ws.has(m[1]);}));
+      return g.concat(gk).concat(gpf).concat(PLURAL.filter(it=>{const m=(it.before+it.after).match(/\(([^)]+)\)/);return m&&ws.has(m[1]);}));
     }
     const gbase=gramBank.filter(lessonMatch).concat(PLURAL.filter(it=>inLessonScope(it.l)));
-    return gbase.concat(adjCompPool(gbase.length));
+    return gbase.concat(adjCompPool(gbase.length)).concat(perfPool(gbase.length));
   }
   /* N5 ⌨️ 打字：共用文法填空＋複數題庫（含課別範圍與「只考不熟」篩選），包一層 tm 記住原題型供弱點統計 */
   if(mode==='typed')return poolFor('gram').map(q=>({tm:'gram',src:q})).concat(poolFor('plural').map(q=>({tm:'plural',src:q})));
