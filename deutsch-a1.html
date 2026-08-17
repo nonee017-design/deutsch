@@ -2669,6 +2669,53 @@ function adjOpts(d,f,lvl){
       拿來當篩選會把最該複習的舊字（L4 的 groß）永久藏起來。
    題量上限鏡像既有 numListenPool()：跟著題池等比放大，避免灌爆文法題。 */
 const ADJ_Q_RATIO=0.25, ADJ_Q_MIN=24;
+/* 2026-08-17（里程碑）⭐ 比較句情境題池：真實 als/wie/genauso 語料，配額獨立於機械變形題，
+   防止被 adjCompPool() 稀釋（14→33 句語料實測、Shannon 核可跳過未取得的三張課本插圖）。
+   ⛔ full 逐字存在於 SENTENCES（含既有 726 筆），零新造德文——比較級/最高級形態一律
+   由 compOf()/adjOpts() 現有規則引擎推導，不手寫答案與干擾項。 */
+const ADJ_CTX=[
+ {l:"L22",de:"Aber dieses hier finde ich zurzeit am lustigsten.",base:"lustig",lvl:1},
+ {l:"L22",de:"Aber schau mal, dieses T-Shirt finde ich noch lustiger als deins.",base:"lustig",lvl:0},
+ {l:"L22",de:"Dein T-Shirt ist ja noch älter als das von Marco!",base:"alt",lvl:0},
+ {l:"L22",de:"Und das Foto ist cool und die Farbe auch noch schöner als bei Marco.",base:"schön",lvl:0},
+ {l:"L22",de:"Das T-Shirt gefällt mir besser als die Bluse.",base:"gut",lvl:0},
+ {l:"L22",de:"Ich mag lieber Orangensaft als Cola.",base:"gern",lvl:0},
+ {l:"L22",de:"Mir schmeckt das Brot in Deutschland besser als das Brot in meinem Heimatland.",base:"gut",lvl:0},
+ {l:"L22",de:"Ich trage lieber Kleider als Röcke.",base:"gern",lvl:0},
+ {l:"L22",de:"Der Hut gefällt mir besser als die Mütze.",base:"gut",lvl:0},
+ {l:"L22",de:"Die Jacke finde ich schöner als den Mantel.",base:"schön",lvl:0},
+ {l:"L22",de:"Die finde ich viel besser als die Hose.",base:"gut",lvl:0},
+ {l:"L22",de:"Und mir gefällt die Jeans am besten.",base:"gut",lvl:1},
+ {l:"L22",de:"Die blaue finde ich besser als die schwarze.",base:"gut",lvl:0},
+ {l:"L22",de:"Schwarz mag ich lieber als Blau.",base:"gern",lvl:0},
+ {l:"L22",de:"Ich mag am liebsten Cola.",base:"gern",lvl:1},
+ {l:"L22",de:"Peters Haus ist kleiner als Pauls Haus.",base:"klein",lvl:0},
+ {l:"L22",de:"Am kleinsten ist Kais Haus.",base:"klein",lvl:1},
+ {l:"L22",de:"Kais Haus ist am modernsten.",base:"modern",lvl:1},
+ {l:"L22",de:"Pauls Haus ist am ältesten.",base:"alt",lvl:1},
+ {l:"L22",de:"Pauls Haus kostet am meisten.",base:"viel",lvl:1},
+ {l:"L22",de:"Am billigsten ist Kais Haus.",base:"billig",lvl:1},
+];
+const ADJ_CTX_Q_MIN=24,ADJ_CTX_Q_RATIO=.25;
+function adjCtxPool(base){
+  if(maxLessonNo()<22)return [];
+  var items=[];
+  ADJ_CTX.forEach(function(c){
+    if(!adjUnlocked(c.l))return;
+    var f=compOf(c.base); if(!f)return;
+    var bw=c.lvl===1?f[1]:f[0];
+    var cand=c.lvl===1?["am "+bw,"Am "+bw]:[bw];
+    var idx=-1,word="";
+    for(var i=0;i<cand.length;i++){idx=c.de.indexOf(cand[i]);if(idx>=0){word=cand[i];break;}}
+    if(idx<0)return;
+    var before=c.de.slice(0,idx)+(c.lvl===1?word.slice(0,word.length-bw.length):"");
+    var after=c.de.slice(idx+word.length);
+    items.push({lesson:c.l,sub:(c.lvl===1?"⭐ 比較句·最高級：":"⭐ 比較句·比較級：")+c.de,
+      before:before,after:after,answer:bw,options:adjOpts(c.base,f,c.lvl),full:c.de});
+  });
+  var cap=Math.max(ADJ_CTX_Q_MIN,Math.round((base||0)*ADJ_CTX_Q_RATIO));
+  return items.length<=cap?items:shuffle(items).slice(0,cap);
+}
 function adjCompPool(base){
   if(maxLessonNo()<22)return [];
   var items=[];
@@ -4577,6 +4624,31 @@ const SENTENCES=[
   {de:"Ich finde Harrys Hut genauso gut wie Jasmins Mütze.",zh:"我覺得Harry的帽子跟Jasmin的毛帽一樣好看（等量比較）",lesson:"L22"},
   {de:"Veras Kleid gefällt mir besser als Jasmins Kleid.",zh:"我比較喜歡Vera的洋裝，勝過Jasmin的（比較級+所有格s）",lesson:"L22"},
   {de:"Ich mag lieber Orangensaft als Cola.",zh:"我比較喜歡柳橙汁，不喜歡可樂（mögen+lieber als；可換飲料）",lesson:"L22"},
+  {de:"Aber dieses hier finde ich zurzeit am lustigsten.",zh:"不過這件我目前覺得最好笑（lustig 最高級；T-shirt 論壇文）",lesson:"L22"},
+  {de:"Aber schau mal, dieses T-Shirt finde ich noch lustiger als deins.",zh:"不過你看，這件T恤我覺得比你的還好笑（lustig 比較級+als）",lesson:"L22"},
+  {de:"Dein T-Shirt ist ja noch älter als das von Marco!",zh:"你的T恤比Marco的還舊呢！（alt 比較級+als；von 表所有）",lesson:"L22"},
+  {de:"Und das Foto ist cool und die Farbe auch noch schöner als bei Marco.",zh:"而且照片很酷，顏色也比 Marco 的還好看（schön 比較級+als）",lesson:"L22"},
+  {de:"Mir gefällt das besser.",zh:"我比較喜歡這個（gefallen+besser，省略 als 子句）",lesson:"L22"},
+  {de:"Die Farben sind schöner.",zh:"顏色比較好看（schön 比較級，複數主詞）",lesson:"L22"},
+  {de:"Das T-Shirt gefällt mir besser als die Bluse.",zh:"這件T恤我比較喜歡，勝過那件女衫（gefallen+besser als；可換衣物）",lesson:"L22"},
+  {de:"Mir schmeckt das Brot in Deutschland besser als das Brot in meinem Heimatland.",zh:"德國的麵包比我家鄉的還合我口味（schmecken+besser als）",lesson:"L22"},
+  {de:"Ich trage lieber Kleider als Röcke.",zh:"我比較喜歡穿洋裝，不喜歡穿裙子（tragen+lieber als；可換衣物）",lesson:"L22"},
+  {de:"Der Hut gefällt mir besser als die Mütze.",zh:"這頂帽子我比較喜歡，勝過那頂毛帽（gefallen+besser als）",lesson:"L22"},
+  {de:"Schau mal, die Bluse kostet genauso viel wie das T-Shirt.",zh:"你看，這件女衫跟這件T恤一樣貴（genauso viel wie，等量比較）",lesson:"L22"},
+  {de:"Die Jacke finde ich schöner als den Mantel.",zh:"這件外套我覺得比大衣好看（finden+schöner als）",lesson:"L22"},
+  {de:"Die finde ich viel besser als die Hose.",zh:"這件我覺得比長褲好看多了（viel 加強語氣+besser als）",lesson:"L22"},
+  {de:"Ich mag T-Shirts genauso gern wie Blusen.",zh:"我喜歡T恤跟女衫一樣多（genauso gern wie，等量比較）",lesson:"L22"},
+  {de:"Und mir gefällt die Jeans am besten.",zh:"而我最喜歡牛仔褲（gefallen+am besten）",lesson:"L22"},
+  {de:"Die blaue finde ich besser als die schwarze.",zh:"藍色那件我覺得比黑色那件好看（finden+besser als，形容詞名詞化）",lesson:"L22"},
+  {de:"Schwarz mag ich lieber als Blau.",zh:"黑色我比較喜歡，勝過藍色（mögen+lieber als）",lesson:"L22"},
+  {de:"Ich mag Orangen genauso gern wie Äpfel.",zh:"我喜歡柳橙跟蘋果一樣多（genauso gern wie）",lesson:"L22"},
+  {de:"Ich mag am liebsten Cola.",zh:"我最喜歡可樂（mögen+am liebsten）",lesson:"L22"},
+  {de:"Peters Haus ist kleiner als Pauls Haus.",zh:"Peter 的房子比 Paul 的小（klein 比較級+als）",lesson:"L22"},
+  {de:"Am kleinsten ist Kais Haus.",zh:"最小的是 Kai 的房子（klein 最高級，倒裝句首）",lesson:"L22"},
+  {de:"Kais Haus ist am modernsten.",zh:"Kai 的房子最現代（modern 最高級；⏳ 依練習題順序推定，未經課本插圖核實）",lesson:"L22"},
+  {de:"Pauls Haus ist am ältesten.",zh:"Paul 的房子最舊（alt 最高級；⏳ 依練習題順序推定，未經課本插圖核實）",lesson:"L22"},
+  {de:"Pauls Haus kostet am meisten.",zh:"Paul 的房子最貴（viel 最高級，kosten 搭配；⏳ 依練習題順序推定，未經課本插圖核實）",lesson:"L22"},
+  {de:"Am billigsten ist Kais Haus.",zh:"最便宜的是 Kai 的房子（billig 最高級；⏳ 依練習題順序推定，未經課本插圖核實）",lesson:"L22"},
   /* ===ANCHOR:SENTENCES===（新例句／Redemittel {de,zh,lesson} 插在這行上方）*/
 ];
 
@@ -7528,6 +7600,7 @@ function buildMeilen(){
   gramBank.filter(lessonMatch).forEach(q=>{pm.gram.push({m:'gram',q});if((q.sub||'').includes('對比'))pm.gram.push({m:'gram',q});});
   adjCompPool(gramBank.filter(lessonMatch).length).forEach(q=>pm.gram.push({m:'gram',q}));
   perfPool(gramBank.filter(lessonMatch).length).forEach(q=>pm.gram.push({m:'gram',q}));      /* 2026-08-15：🏁 總複習也要碰得到 Perfekt 累積題 */   /* 2026-08-14：同上，🏁 總複習也要碰得到比較級 */
+  adjCtxPool(gramBank.filter(lessonMatch).length).forEach(q=>pm.gram.push({m:'gram',q}));    /* 2026-08-17：比較句情境題獨立配額，不被 adjCompPool 稀釋 */
   listenPool(false,false).forEach(s=>pm.listen.push({m:'listen',q:s}));
   numListenPool(pm.listen.length).forEach(s=>pm.listen.push({m:'listen',q:s}));   /* N7：數字/價格/時間聽寫 */
   satzbauPool(false,false).forEach(s=>pm.satzbau.push({m:'satzbau',q:s}));
@@ -7607,7 +7680,8 @@ function buildGrad(){
     gender:VOCAB.filter(v=>v.g&&v.g!=='plu'&&lessonMatch(v)),
     gram:[...gramBank.filter(lessonMatch),...dusieBank.filter(lessonMatch),
           ...adjCompPool(gramBank.filter(lessonMatch).length),
-          ...perfPool(gramBank.filter(lessonMatch).length)],   /* 2026-08-15：同理，否則畢業考可以整場不碰 Perfekt */ /* du/Sie 是 L1–2 的核心文法，畢業考必考；
+          ...perfPool(gramBank.filter(lessonMatch).length),
+          ...adjCtxPool(gramBank.filter(lessonMatch).length)],   /* 2026-08-17：同理，否則畢業考可以整場不碰比較句情境題 */ /* 2026-08-15：同理，否則畢業考可以整場不碰 Perfekt */ /* du/Sie 是 L1–2 的核心文法，畢業考必考；
              2026-08-14：比較級累積題併入——否則 L22 畢業考可以整場不碰比較級就過關 */
     plural:PLURAL.filter(q=>inLessonScope(q.l)),
     listen:listenPool(false,false)
@@ -7684,13 +7758,15 @@ function poolFor(mode){
       const g=gramBank.filter(q=>{for(const k of gramCardsOfQ(q))if(weakGram[k])return true;return false;});
       /* 只考不熟：🧩 Komparativ 標不熟時，比較級生成題一起回鍋 */
       const gk=weakGram["komp"]?adjCompPool(g.length):[];
+      /* 同上：🧩 Komparativ 標不熟時，比較句情境題也一起回鍋（sub 含「比較級／最高級」，共用 komp 旗標） */
+      const gkc=weakGram["komp"]?adjCtxPool(g.length):[];
       /* 同上：🧩 Perfekt 現在完成式（pii）標不熟時，Perfekt 累積題一起回鍋 */
       const gpf=weakGram["pii"]?perfPool(g.length):[];
       const ws=weakNounSet();
-      return g.concat(gk).concat(gpf).concat(PLURAL.filter(it=>{const m=(it.before+it.after).match(/\(([^)]+)\)/);return m&&ws.has(m[1]);}));
+      return g.concat(gk).concat(gkc).concat(gpf).concat(PLURAL.filter(it=>{const m=(it.before+it.after).match(/\(([^)]+)\)/);return m&&ws.has(m[1]);}));
     }
     const gbase=gramBank.filter(lessonMatch).concat(PLURAL.filter(it=>inLessonScope(it.l)));
-    return gbase.concat(adjCompPool(gbase.length)).concat(perfPool(gbase.length));
+    return gbase.concat(adjCompPool(gbase.length)).concat(perfPool(gbase.length)).concat(adjCtxPool(gbase.length));
   }
   /* N5 ⌨️ 打字：共用文法填空＋複數題庫（含課別範圍與「只考不熟」篩選），包一層 tm 記住原題型供弱點統計 */
   if(mode==='typed')return poolFor('gram').map(q=>({tm:'gram',src:q})).concat(poolFor('plural').map(q=>({tm:'plural',src:q})));
