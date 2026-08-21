@@ -197,8 +197,8 @@
 <body>
 <div class="wrap">
   <header style="position:relative">
-    <div class="eyebrow">Menschen · A1 · Lektion 1–22</div>
-    <h1>Deutsch A1 — L1–L22</h1>
+    <div class="eyebrow">Menschen · A1 · Lektion 1–23</div>
+    <h1>Deutsch A1 — L1–L23</h1>
     <details class="helpbox" id="outline" style="margin-top:10px;text-align:left"><summary>📚 每課大綱（點開看）</summary><div class="panel-intro" style="margin:8px 0 2px;line-height:1.9">
       L1 打招呼·自我介紹（heißen/kommen aus/wohnen in）·sein·W 問句·拼讀·數字 0–100<br>
       L2 個人資料·職業·規則動詞變位全表·ihr（你們）<br>
@@ -222,6 +222,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
       L20 家務與同居生活·Imperativ(du/ihr)登場·Personalpronomen im Akkusativ全面實戰<br>
       L21 交通與生活規則·dürfen/müssen（許可 vs 義務）擴充·Modul 7 末課<br>
       L22 衣物·Komparativ/Superlativ 比較級與最高級·als/(genau)so...wie 比較句型<br>
+      L23 天氣與短假·Konjunktion denn（因果，V2 不變）·構詞 -los（沒有…的）<br>
       <!-- ===ANCHOR:OUTLINE===（新課大綱一行插在這行上方，格式照上）-->
     </div></details>
   </header>
@@ -250,6 +251,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
     <button class="lchip" data-lesson="L20" data-on="false">L20</button>
     <button class="lchip" data-lesson="L21" data-on="false">L21</button>
     <button class="lchip" data-lesson="L22" data-on="false">L22</button>
+    <button class="lchip" data-lesson="L23" data-on="false">L23</button>
     <!-- ===ANCHOR:LESSON_CHIPS===（A1.2 新課按鈕插在這行上方、span#bookA11 之外）-->
     <button class="lchip" data-lesson="ALL" data-on="false">全選 · 模組複習</button>
     <span style="flex-basis:100%;font-size:.72rem;color:var(--mut)">單點換課 · 長按半秒加選複數課 · 📕 收合/展開整冊</span>
@@ -544,7 +546,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
 const SPK_SVG='<svg viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>';
 
 /* ===== 範圍（課別·可多選）===== */
-const DEFAULT_LESSON="L22"; /* ===ANCHOR:DEFAULT_LESSON===（新課上線時改成最新課號；chip 的 data-on 由 syncLessonChips 執行期同步，新 chip 一律 data-on="false"）*/
+const DEFAULT_LESSON="L23"; /* ===ANCHOR:DEFAULT_LESSON===（新課上線時改成最新課號；chip 的 data-on 由 syncLessonChips 執行期同步，新 chip 一律 data-on="false"）*/
 let curLessons=new Set([DEFAULT_LESSON]);
 /* L123 是 L1/L2/L3 的合併篩選鈕，資料本身仍各自標 L1/L2/L3，故用此函式統一判斷範圍是否命中 */
 function inLessonScope(l){
@@ -718,7 +720,7 @@ const L5VOCAB=[
   /* 材料 Materialien（當材料時不可數 kein Plural）*/
   {de:"Holz",zh:"木頭（材料·不可數）",g:"das",cat:"材料",lesson:"L5",ex:["Der Tisch ist aus Holz.","這桌子是木頭做的。"]},
   {de:"Papier",zh:"紙（材料·不可數）",g:"das",cat:"材料",lesson:"L5",ex:["Das Buch ist aus Papier.","這書是紙做的。"]},
-  {de:"Glas",zh:"玻璃（材料·不可數）",g:"das",cat:"材料",lesson:"L5",ex:["Die Flasche ist aus Glas.","這瓶子是玻璃做的。"]},
+  {de:"Glas",zh:"玻璃（材料·不可數；另有「玻璃杯」可數義，複數 Gläser）",g:"das",cat:"材料",lesson:"L5",ex:["Die Flasche ist aus Glas.","這瓶子是玻璃做的。"]},
   {de:"Metall",zh:"金屬（材料·不可數；課本錯字 Metal→Metall）",g:"das",cat:"材料",lesson:"L5",ex:["Der Schlüssel ist aus Metall.","這鑰匙是金屬做的。"]},
   {de:"Kunststoff",zh:"塑膠（= Plastik；課本錯字 Kuststoff→Kunststoff）",g:"der",cat:"材料",lesson:"L5",ex:["Die Brille ist aus Kunststoff.","這眼鏡是塑膠做的。"]},
   {de:"Plastik",zh:"塑膠（= Kunststoff；標準 das，口語有人說 der → 問老師）",g:"das",cat:"材料",lesson:"L5",ex:["Die Tasche ist aus Plastik.","這袋子是塑膠做的。"]},
@@ -773,7 +775,7 @@ const ADD4=[
   {de:"Möbel",zh:"傢俱（die Möbel，集合名詞·常用複數）",g:"die",cat:"傢俱",lesson:"L4",ex:["Die Möbel sind wirklich schön.","這些傢俱真的很美。"]},
   {de:"Geld",zh:"錢（das Geld，不可數）",g:"das",cat:"數字",lesson:"L4",ex:["Ich habe nicht viel Geld.","我錢不多。"]},
   {de:"wissen",zh:"知道（事實）；不規則 ich weiß/du weißt",g:null,cat:"動詞",lesson:"L4",ex:["Weißt du das?","你知道嗎？"],ex2:["Ich weiß es nicht genau.","我不太確定。"]},
-  {de:"denn",zh:"語氣詞：讓問句更自然（無字面意思）；另義「因為」",g:null,cat:"常用",lesson:"L4",ex:["Wie viel kostet denn der Tisch?","這桌子多少錢呢？"]},
+  {de:"denn",zh:"語氣詞：讓問句更自然（無字面意思）；另義「因為」",g:null,cat:"常用",lesson:"L4",ex:["Wie viel kostet denn der Tisch?","這桌子多少錢呢？"],ex2:["Es war wunderbar, denn wir hatten ein Traumwetter.","天氣很好，因為我們遇到夢幻般的好天氣。"]},
   {de:"oder",zh:"一般義「或」；句尾 …, oder? =「對吧？」",g:null,cat:"常用",lesson:"L4",ex:["Die Couch ist schön, oder?","這沙發很美，對吧？"]},
   {de:"aber",zh:"但是；語氣加強「也太…了！」",g:null,cat:"常用",lesson:"L4",ex:["Das ist aber günstig!","這也太便宜了吧！"]},
   {de:"Vielen Dank",zh:"非常感謝（比 Danke 鄭重；vielen 是 ie！）",g:null,cat:"常用",lesson:"L4",ex:["Vielen Dank! – Bitte.","非常感謝！－不客氣。"]},
@@ -2086,8 +2088,66 @@ const ADD22=[
 {de:"geschlossen",zh:"關閉的/休息中",g:null,cat:"形容詞",lesson:"L22",ex:["Der Supermarkt ist heute geschlossen.","超市今天不營業。"]},
 {de:"Klasse",zh:"太棒了！",g:null,cat:"感嘆詞",lesson:"L22",ex:["Du hast bestanden? – Klasse!","你及格了？－太棒了！"]},
 ];
+const ADD23=[
+/* ── 天氣名詞 ── */
+{de:"Gewitter",zh:"雷雨",g:"das",cat:"天氣",lesson:"L23",ex:["Es gibt bald ein Gewitter.","快要有雷雨了。"]},
+{de:"Grad",zh:"度（溫度單位）",g:"das",cat:"天氣",lesson:"L23",ex:["Es sind 25 Grad.","現在是25度。"]},
+{de:"Nebel",zh:"霧",g:"der",cat:"天氣",lesson:"L23",ex:["Es gibt heute viel Nebel.","今天霧很濃。"]},
+{de:"Regen",zh:"雨",g:"der",cat:"天氣",lesson:"L23",ex:["Wir hatten am Wochenende viel Regen.","我們週末雨下得很大。"]},
+{de:"Schnee",zh:"雪",g:"der",cat:"天氣",lesson:"L23",ex:["Es gibt heute viel Schnee.","今天雪很大。"]},
+{de:"Sturm",zh:"暴風",g:"der",cat:"天氣",lesson:"L23",ex:["Es gibt heute einen starken Sturm.","今天有一場強烈的暴風。"]},
+{de:"Wind",zh:"風",g:"der",cat:"天氣",lesson:"L23",ex:["Der Wind ist heute sehr stark.","今天風很大。"]},
+{de:"Wolke",zh:"雲",g:"die",cat:"天氣",lesson:"L23",ex:["Man sieht nicht viele Wolken.","看不到很多雲。"]},
+{de:"Unwetter",zh:"惡劣天氣／暴風雨",g:"das",cat:"天氣",lesson:"L23",ex:["Im Sommer gibt es hier oft ein Unwetter.","夏天這裡常有一場暴風雨。"]},
+{de:"Himmel",zh:"天空",g:"der",cat:"天氣",lesson:"L23",ex:["Die Sonne scheint und der Himmel ist wolkenlos.","太陽在照耀，天空萬里無雲。"]},
+/* ── 方位名詞 ── */
+{de:"Himmelsrichtung",zh:"方位",g:"die",cat:"方位",lesson:"L23",ex:["Wir haben die vier Himmelsrichtungen gelernt.","我們學了四個方位。"]},
+{de:"Norden",zh:"北方",g:"der",cat:"方位",lesson:"L23",ex:["Im Norden ist es oft windig.","北方常常刮風。"]},
+{de:"Süden",zh:"南方",g:"der",cat:"方位",lesson:"L23",ex:["Im Süden ist es oft warm.","南方常常很暖。"]},
+{de:"Osten",zh:"東方",g:"der",cat:"方位",lesson:"L23",ex:["Im Osten ist es heute bewölkt.","東邊今天多雲。"]},
+{de:"Westen",zh:"西方",g:"der",cat:"方位",lesson:"L23",ex:["Im Westen scheint die Sonne.","西邊出太陽。"]},
+/* ── 其他名詞 ── */
+{de:"Dach",zh:"屋頂",g:"das",cat:"房屋",lesson:"L23",ex:["Das Dach war nass vom Regen.","屋頂被雨淋濕了。"]},
+{de:"Frühjahr",zh:"春季（同 Frühling）",g:"das",cat:"季節",lesson:"L23",ex:["Im Frühjahr regnet es oft.","春天常下雨。"]},
+{de:"Laune",zh:"心情",g:"die",cat:"情感",lesson:"L23",ex:["Er hat heute schlechte Laune.","他今天心情不好。"]},
+{de:"Reiseführer",zh:"導遊／旅遊指南",g:"der",cat:"旅遊",lesson:"L23",ex:["Luca und Alina suchen den Reiseführer, denn sie fahren morgen in den Urlaub.","Luca 和 Alina 在找旅遊指南，因為他們明天要去度假。"]},
+{de:"Traum",zh:"夢",g:"der",cat:"抽象",lesson:"L23",ex:["Ich hatte einen schönen Traum im Urlaub.","我在假期做了一個美夢。"]},
+{de:"Ferienwohnung",zh:"度假公寓",g:"die",cat:"旅遊",lesson:"L23",ex:["Wir haben eine schöne Ferienwohnung am Meer.","我們在海邊有一間漂亮的度假公寓。"]},
+{de:"Kurzurlaub",zh:"短假",g:"der",cat:"旅遊",lesson:"L23",ex:["Wir machen oft einen Kurzurlaub am Wochenende.","我們常在週末安排一次短假。"]},
+{de:"Pech",zh:"壞運氣（Glück 反義）",g:"das",cat:"抽象",lesson:"L23",ex:["Ich hatte leider Pech mit dem Wetter.","我天氣運氣不好。"]},
+{de:"Geschwindigkeit",zh:"速度",g:"die",cat:"交通",lesson:"L23",ex:["Die Geschwindigkeit war 160 km/h.","時速是160公里。"]},
+{de:"Ehepaar",zh:"夫妻",g:"das",cat:"人際",lesson:"L23",ex:["Ein Ehepaar fährt gern in die Berge.","一對夫妻喜歡去山裡度假。"]},
+{de:"Beschwerde",zh:"投訴",g:"die",cat:"服務",lesson:"L23",ex:["Das Hotel hatte eine Beschwerde.","這間飯店收到一件投訴。"]},
+{de:"Ausblick",zh:"景色／展望",g:"der",cat:"旅遊",lesson:"L23",ex:["Wir hatten einen schönen Ausblick von den Bergen.","我們從山上看到很棒的景色。"]},
+{de:"Regenjacke",zh:"雨衣",g:"die",cat:"衣物",lesson:"L23",ex:["Ich habe eine neue Regenjacke gekauft.","我買了一件新雨衣。"]},
+{de:"Wohnmobil",zh:"露營車",g:"das",cat:"旅遊",lesson:"L23",ex:["Auf dem Campingplatz steht ein großes Wohnmobil.","露營區停著一台很大的露營車。"]},
+{de:"Mittelmeer",zh:"地中海",g:"das",cat:"地理",lesson:"L23",ex:["Wir machen Urlaub am Mittelmeer.","我們在地中海度假。"]},
+{de:"Ostsee",zh:"波羅的海",g:"die",cat:"地理",lesson:"L23",ex:["Wir machen Urlaub an der Ostsee.","我們在波羅的海度假。"]},
+{de:"Kirchturm",zh:"教堂尖塔",g:"der",cat:"建築",lesson:"L23",ex:["Man kann den Kirchturm im Nebel fast nicht sehen.","霧中幾乎看不到教堂尖塔。"]},
+{de:"Kinofilm",zh:"電影",g:"der",cat:"娛樂",lesson:"L23",ex:["Malte liebt diesen Kinofilm.","Malte 喜歡這部電影。"]},
+/* ── 動詞（規則推導 Partizip，Shannon 已核可） ── */
+{de:"donnern",zh:"打雷",g:null,cat:"動詞",lesson:"L23",ex:["Es donnert und blitzt.","打雷閃電。"],pex:["Es hat gedonnert und geblitzt.","打雷閃電了。"]},
+{de:"blitzen",zh:"閃電",g:null,cat:"動詞",lesson:"L23",ex:["Es donnert und blitzt.","打雷閃電。"],pex:["Es hat gedonnert und geblitzt.","打雷閃電了。"]},
+/* ── 形容詞／副詞 ── */
+{de:"neblig",zh:"有霧的",g:null,cat:"形容詞",lesson:"L23",ex:["Es ist heute sehr neblig.","今天霧很濃。"]},
+{de:"sonnig",zh:"晴朗的",g:null,cat:"形容詞",lesson:"L23",ex:["Es ist sonnig.","是晴天。"]},
+{de:"bewölkt",zh:"多雲的",g:null,cat:"形容詞",lesson:"L23",ex:["Es ist bewölkt.","多雲。"]},
+{de:"lecker",zh:"好吃的",g:null,cat:"形容詞",lesson:"L23",ex:["Dort essen wir fast jeden Abend Fisch: total lecker!","我們在那裡幾乎每天晚上都吃魚，超好吃！"]},
+{de:"anstrengend",zh:"累人的、費力的",g:null,cat:"形容詞",lesson:"L23",ex:["Die Anreise wird sehr anstrengend.","這趟旅程會很累人。"]},
+{de:"unzufrieden",zh:"不滿意的",g:null,cat:"形容詞",lesson:"L23",ex:["Herr Meyer ist unzufrieden mit dem Hotelzimmer.","Meyer 先生對飯店房間不滿意。"]},
+{de:"brauchbar",zh:"有用的、堪用的",g:null,cat:"形容詞",lesson:"L23",ex:["Wir hatten einen Reiseführer mit brauchbaren Tipps dabei.","我們帶了一本有實用建議的旅遊指南。"]},
+/* ── Wortbildung -los（8 張，Shannon 已核可精選常用者） ── */
+{de:"wolkenlos",zh:"沒有雲的（Wolke+los）",g:null,cat:"形容詞",lesson:"L23",ex:["Die Sonne scheint und der Himmel ist wolkenlos.","太陽在照耀，天空萬里無雲。"]},
+{de:"farblos",zh:"沒有色彩的（Farbe+los）",g:null,cat:"形容詞",lesson:"L23",ex:["Der Winter war besonders grau und farblos.","那年冬天特別灰暗、毫無色彩。"]},
+{de:"kostenlos",zh:"免費的（Kosten+los）",g:null,cat:"形容詞",lesson:"L23",ex:["Der Eintritt ist kostenlos.","入場免費。"]},
+{de:"kinderlos",zh:"沒有小孩的（Kinder+los）",g:null,cat:"形容詞",lesson:"L23",ex:["Das Ehepaar ist kinderlos.","這對夫妻沒有小孩。"]},
+{de:"salzlos",zh:"沒放鹽的（Salz+los）",g:null,cat:"形容詞",lesson:"L23",ex:["Das Essen war leider salzlos.","這道菜可惜沒放鹽，很淡。"]},
+{de:"wortlos",zh:"不發一語的（Wort+los）",g:null,cat:"形容詞",lesson:"L23",ex:["Sie ist wortlos gegangen.","她一言不發地走了。"]},
+{de:"fensterlos",zh:"沒有窗戶的（Fenster+los）",g:null,cat:"形容詞",lesson:"L23",ex:["Das Zimmer ist fensterlos.","這房間沒有窗戶。"]},
+{de:"fehlerlos",zh:"零失誤的（Fehler+los）",g:null,cat:"形容詞",lesson:"L23",ex:["Mein Test ist fehlerlos. Ich habe keinen Fehler gemacht!","我的測驗零失誤。我一個錯都沒有！"]},
+];
 /* ===ANCHOR:VOCAB_ARRAYS===（新課單字陣列 const ADDn=[...] 宣告在這行上方，並把陣列名加進下面 VOCAB 合併行）*/
-const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B,...ADD18,...ADDP2V,...ADD10S,...ADDCLO,...ADDCLOADJ,...ADD19,...ADD16S,...ADD18S,...ADD13S,...ADD15T,...ADD17S,...ADD20,...ADD21,...ADD22];
+const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B,...ADD18,...ADDP2V,...ADD10S,...ADDCLO,...ADDCLOADJ,...ADD19,...ADD16S,...ADD18S,...ADD13S,...ADD15T,...ADD17S,...ADD20,...ADD21,...ADD22,...ADD23];
 VOCAB.forEach((v,i)=>v.id="v"+i);
 
 
@@ -2355,6 +2415,28 @@ const NOUN_PL={
   "Räumungsverkauf":"Räumungsverkäufe",
   "Inventur":"Inventuren",
   "Fahrgast":"Fahrgäste",
+  "Gewitter":"Gewitter",
+  "Grad":"Grad",
+  "Sturm":"Stürme",
+  "Wind":"Winde",
+  "Wolke":"Wolken",
+  "Himmelsrichtung":"Himmelsrichtungen",
+  "Dach":"Dächer",
+  "Laune":"Launen",
+  "Reiseführer":"Reiseführer",
+  "Traum":"Träume",
+  "Unwetter":"Unwetter",
+  "Ferienwohnung":"Ferienwohnungen",
+  "Kurzurlaub":"Kurzurlaube",
+  "Geschwindigkeit":"Geschwindigkeiten",
+  "Ehepaar":"Ehepaare",
+  "Beschwerde":"Beschwerden",
+  "Ausblick":"Ausblicke",
+  "Regenjacke":"Regenjacken",
+  "Wohnmobil":"Wohnmobile",
+  "Kirchturm":"Kirchtürme",
+  "Kinofilm":"Kinofilme",
+  "Glas":"Gläser",
   /* ===ANCHOR:NOUN_PL===（新名詞複數 "單數":"複數", 插在這行上方）*/
 };
 const NOUN_PL_NOTE={
@@ -2552,6 +2634,14 @@ const NOUN_PL_NOTE={
   "Orangensaft":"複數 die Orangensäfte：a→ä 變音（複合詞，變化發生在 Saft）→ Forvo。",
   "Räumungsverkauf":"複數 die Räumungsverkäufe：a→ä 變音（複合詞，變化發生在 Verkauf），但複數形罕用 → Forvo。",
   "Fahrgast":"複數 die Fahrgäste：a→ä 變音（複合詞，變化發生在 Gast）→ Forvo。",
+  "Gewitter":"複數同形 das Gewitter：-er結尾中性名詞不加字尾，只能靠冠詞／數詞判斷。",
+  "Grad":"複數同形 das Grad：度數用法不變，靠數詞判斷（25 Grad）。",
+  "Reiseführer":"複數同形 der Reiseführer：-er結尾陽性名詞不加字尾，靠冠詞／數詞判斷。",
+  "Unwetter":"複數同形 das Unwetter：-er結尾中性名詞不加字尾，靠數詞判斷。",
+  "Sturm":"複數 die Stürme：u→ü 變音 → Forvo。",
+  "Dach":"複數 die Dächer：a→ä 變音＋er → Forvo。",
+  "Traum":"複數 die Träume：au→äu 變音 → Forvo。",
+  "Kirchturm":"複數 die Kirchtürme：u→ü 變音（複合詞，變化發生在 Turm）→ Forvo。",
   /* ===ANCHOR:NOUN_PL_NOTE===（變音／同形／不規則等複數警語插在這行上方）*/
 };
 /* ═══ 形容詞比較級／最高級（2026-08-14 里程碑）════════════════════════
@@ -3391,6 +3481,28 @@ const NOUN_PLEX={
   "Räumungsverkauf":["Räumungsverkauf. 50 % auf alle Jacken, Hemden, Blusen und Kleider. Nur noch bis zum 31. März.","清倉大拍賣。所有外套、襯衫、女用襯衫和洋裝五折，只到三月三十一日截止。"],
   "Inventur":["Am Dienstag haben wir Inventur.","星期二我們要盤點存貨。"],
   "Fahrgast":["Sehr geehrte Fahrgäste!","各位親愛的乘客！"],
+  "Wolke":["Man sieht nicht viele Wolken.","看不到很多雲。"],
+  "Grad":["Es sind 25 Grad.","現在是25度。"],
+  "Kinofilm":["Malte liebt Kinofilme.","Malte 喜歡看電影。"],
+  "Gewitter":["Im Sommer gibt es hier oft Gewitter.","夏天這裡常有雷雨。"],
+  "Sturm":["Im Herbst gibt es starke Stürme.","秋天常有強烈暴風。"],
+  "Wind":["Heute gibt es starke Winde.","今天風很大。"],
+  "Dach":["Die Dächer waren nass vom Regen.","屋頂被雨淋濕了。"],
+  "Traum":["Ich hatte schöne Träume im Urlaub.","我在假期做了很多美夢。"],
+  "Laune":["Seine Launen ändern sich schnell.","他的情緒變化很快。"],
+  "Himmelsrichtung":["Wir haben die vier Himmelsrichtungen gelernt.","我們學了四個方位。"],
+  "Reiseführer":["Wir haben zwei Reiseführer für die Reise gekauft.","我們為這趟旅行買了兩本旅遊指南。"],
+  "Unwetter":["Im Herbst gibt es oft mehrere Unwetter.","秋天常常有好幾場暴風雨。"],
+  "Ferienwohnung":["Es gibt viele Ferienwohnungen am Meer.","海邊有很多度假公寓。"],
+  "Kurzurlaub":["Wir machen oft Kurzurlaube am Wochenende.","我們常在週末安排短假。"],
+  "Geschwindigkeit":["Auf der Autobahn gibt es verschiedene Geschwindigkeiten.","高速公路上有不同的速限。"],
+  "Ehepaar":["Viele Ehepaare fahren gern in die Berge.","很多夫妻喜歡去山裡度假。"],
+  "Beschwerde":["Das Hotel hatte viele Beschwerden.","這間飯店收到很多投訴。"],
+  "Ausblick":["Die Ausblicke von den Bergen waren toll.","從山上看出去的景色很棒。"],
+  "Regenjacke":["Wir haben zwei Regenjacken gekauft.","我們買了兩件雨衣。"],
+  "Wohnmobil":["Auf dem Campingplatz stehen viele Wohnmobile.","露營區停了很多露營車。"],
+  "Kirchturm":["In der Stadt gibt es zwei alte Kirchtürme.","城裡有兩座古老的教堂尖塔。"],
+  "Glas":["Wir brauchen noch zwei Gläser Wasser.","我們還需要兩杯水。"],
   /* ===ANCHOR:NOUN_PLEX===（複數例句 "單數":["德文","中文"], 插在這行上方）*/
 };
 const VERB_META={
@@ -3640,6 +3752,8 @@ const VERB_META={
   anschnallen:{t:"irr",du:"schnallst … an",er:"schnallt … an"},
   anhaben:{t:"irr",f:["habe … an","hast … an","hat … an","haben … an","habt … an","haben … an"],p2:"angehabt",aux:"h"},
   anziehen:{t:"irr",f:["ziehe … an","ziehst … an","zieht … an","ziehen … an","zieht … an","ziehen … an"],p2:"angezogen",aux:"h"},
+  donnern:{t:"reg",p2:"gedonnert",aux:"h"},
+  blitzen:{t:"sib",du:"blitzt",er:"blitzt",p2:"geblitzt",aux:"h"},
   /* ===ANCHOR:VERB_META===（新動詞變位 動詞:{t:"reg"|"stemt"|"vowel"|"irr",...}, 插在這行上方）*/
 };
 /* 可分離動詞 Partizip 組字（2026-07-31）：Partizip = 字首 + 母動詞 Partizip，
@@ -4649,6 +4763,50 @@ const SENTENCES=[
   {de:"Pauls Haus ist am ältesten.",zh:"Paul 的房子最舊（alt 最高級；⏳ 依練習題順序推定，未經課本插圖核實）",lesson:"L22"},
   {de:"Pauls Haus kostet am meisten.",zh:"Paul 的房子最貴（viel 最高級，kosten 搭配；⏳ 依練習題順序推定，未經課本插圖核實）",lesson:"L22"},
   {de:"Am billigsten ist Kais Haus.",zh:"最便宜的是 Kai 的房子（billig 最高級；⏳ 依練習題順序推定，未經課本插圖核實）",lesson:"L22"},
+{de:"Ich war nicht im Kino, denn ich gehe lieber ins Theater.",zh:"我沒去看電影，因為我比較想去看戲（denn+原因；可換 Kino/Theater）。",lesson:"L23"},
+{de:"Ich gehe in ein Café. Mit einem Milchkaffee und einem Stück Kuchen geht es mir gleich viel besser!",zh:"我會去咖啡館。喝杯拿鐵配塊蛋糕心情就會好很多！",lesson:"L23"},
+{de:"Es war wunderbar, denn wir hatten ein Traumwetter.",zh:"真是太棒了，因為我們遇到夢幻般的好天氣。（denn 官方標準例句）",lesson:"L23"},
+{de:"Unser Ziel war Südtirol, denn dort ist es im März schon oft sehr warm.",zh:"我們的目的地是南提洛爾，因為那裡三月通常已經很暖了。",lesson:"L23"},
+{de:"Hattest du einen schönen Urlaub? Ja, denn das Wetter war wunderbar.",zh:"你的假期過得好嗎？是啊，因為天氣很棒。",lesson:"L23"},
+{de:"Hast du gestern Hausaufgaben gemacht? Nein, denn ich hatte keine Zeit.",zh:"你昨天寫作業了嗎？沒有，因為我沒時間。",lesson:"L23"},
+{de:"Wie ist das Wetter?",zh:"天氣怎麼樣？",lesson:"L23"},
+{de:"Es ist sonnig.",zh:"是晴天。",lesson:"L23"},
+{de:"Es regnet.",zh:"在下雨。",lesson:"L23"},
+{de:"Es schneit.",zh:"在下雪。",lesson:"L23"},
+{de:"Es ist windig.",zh:"風很大。",lesson:"L23"},
+{de:"Es ist bewölkt.",zh:"多雲。",lesson:"L23"},
+{de:"Es ist neblig.",zh:"有霧。",lesson:"L23"},
+{de:"Es donnert und blitzt.",zh:"打雷閃電。",lesson:"L23"},
+{de:"Die Sonne scheint.",zh:"太陽在照耀。",lesson:"L23"},
+{de:"Es ist warm. Es sind 25 Grad.",zh:"天氣暖，25度。",lesson:"L23"},
+{de:"Es ist kalt. Es sind minus 2 Grad.",zh:"天氣冷，零下2度。",lesson:"L23"},
+{de:"Es ist kühl. Es sind plus 8 Grad.",zh:"天氣涼，8度。",lesson:"L23"},
+{de:"Hatte Celine einen schönen Urlaub? Ja, denn das Wetter war wunderbar.",zh:"Celine 的假期過得好嗎？好，因為天氣很棒。",lesson:"L23"},
+{de:"Hatte Malte einen schönen Urlaub? Nein, denn das Wetter war schlecht.",zh:"Malte 的假期過得好嗎？不好，因為天氣很差。",lesson:"L23"},
+{de:"Ich kann leider nicht kommen, denn ich habe einen Termin beim Zahnarzt.",zh:"我恐怕不能來，因為我有牙醫的預約。",lesson:"L23"},
+{de:"Ich gehe heute zum Zahnarzt, denn ich habe Zahnweh.",zh:"我今天要去看牙醫，因為我牙痛。",lesson:"L23"},
+{de:"Mein Test ist fehlerlos. Ich habe keinen Fehler gemacht!",zh:"我的測驗零失誤。我一個錯都沒有！",lesson:"L23"},
+{de:"Luca und Alina suchen den Reiseführer, denn sie fahren morgen in den Urlaub.",zh:"Luca 和 Alina 在找旅遊指南，因為他們明天要去度假。",lesson:"L23"},
+{de:"Herr Brunner muss noch ein paar Stunden in München bleiben, denn es schneit zu viel.",zh:"Brunner先生還得在慕尼黑多待幾小時，因為雪下太大了。（組合自AB p.85配對題，語意唯一，已核）",lesson:"L23"},
+{de:"Urs ist heute sehr müde, denn er hat gestern lange gefeiert.",zh:"Urs今天很累，因為他昨天狂歡到很晚。（同上，組合句）",lesson:"L23"},
+{de:"Sandra kommt heute nicht pünktlich, denn ihr Fahrrad ist kaputt.",zh:"Sandra今天不會準時到，因為她的腳踏車壞了。（同上，組合句）",lesson:"L23"},
+{de:"Es wird bald sehr windig.",zh:"很快就要起風了。",lesson:"L23"},
+{de:"Es wird kälter.",zh:"要變冷了。",lesson:"L23"},
+{de:"Man sieht nicht viele Wolken.",zh:"看不到很多雲。",lesson:"L23"},
+{de:"Es gibt bald ein Gewitter.",zh:"快要有雷雨了。",lesson:"L23"},
+{de:"Morgen scheint die Sonne. Wollen wir an die See fahren?",zh:"明天出太陽。我們要不要去海邊？",lesson:"L23"},
+{de:"Maria, gehst du gern tanzen? Nein, denn ich kann nicht gut tanzen!",zh:"Maria，你喜歡跳舞嗎？不，因為我不太會跳舞！（老師講義範例）",lesson:"L23"},
+{de:"Timo, putzt du bitte meine Wohnung? Ja, denn ich habe gerade Zeit!",zh:"Timo，可以幫我打掃房子嗎？好，因為我剛好有空！（老師講義範例）",lesson:"L23"},
+{de:"Soll ich das Kleid nehmen, oder findest du den Rock schöner?",zh:"我該選這件洋裝，還是你覺得那件裙子比較好看？（AB p.86配對題，四連接詞組，組合句已核）",lesson:"L23"},
+{de:"Am See darf man nicht grillen und Baden ist auch verboten.",zh:"湖邊不能烤肉，游泳也是禁止的。（同上，組合句）",lesson:"L23"},
+{de:"Ich mache gern Urlaub am Meer, aber am liebsten bin ich in den Bergen.",zh:"我喜歡去海邊度假，但我最喜歡待在山裡。（同上，組合句）",lesson:"L23"},
+{de:"Der Techniker muss kommen, denn die Spülmaschine funktioniert nicht.",zh:"技師得來一趟，因為洗碗機壞了。（同上，組合句）",lesson:"L23"},
+{de:"Die Sonne scheint und der Himmel ist wolkenlos.",zh:"太陽在照耀，天空萬里無雲。（AB p.85推導填空，唯一語意合理解，已核）",lesson:"L23"},
+{de:"Er ist arbeitslos.",zh:"他失業了。（同上，推導填空）",lesson:"L23"},
+{de:"Der Winter war besonders grau und farblos.",zh:"那年冬天特別灰暗、毫無色彩。（同上，推導填空）",lesson:"L23"},
+{de:"Wie wollen wir hinfahren? Mit dem Auto oder mit dem Zug?",zh:"我們要怎麼過去？開車還是搭火車？",lesson:"L23"},
+{de:"Ich denke, wir sollten den Zug nehmen.",zh:"我覺得我們應該搭火車。",lesson:"L23"},
+{de:"Wir möchten ein anderes Zimmer haben.",zh:"我們想換一個房間。",lesson:"L23"},
   /* ===ANCHOR:SENTENCES===（新例句／Redemittel {de,zh,lesson} 插在這行上方）*/
 ];
 
@@ -4880,6 +5038,24 @@ const TEXTS=[
        {st:"Er möchte einen Rock kaufen.",a:false,m:3},
        {st:"Der Rock kostet fünfzig Euro.",a:false,m:4},
        {st:"Er nimmt zuerst den Rock und dann die Jacke.",a:false,m:6}]},
+{id:"t-l23-1",lesson:"L23",genre:"對話",title:"Wie war dein Wochenende?",src:"AI 生成 · 未經母語者校對",
+   map:"<b>本課重點</b>：① Konjunktion denn（Position 0，因果，V2 不變）——本課文法核心，對話中出現兩次；② 天氣描述句 es+動詞/形容詞（regnen／sonnig／bewölkt…）；③ 過去經驗回顧句型（Ich hatte…／Ich bin … geblieben）。<br><b>建議走法</b>：先用 🎧 播放兩次、<b>不看原文</b>做完 4 題 → 點「👁 顯示原文」對照 → 文法「句框 Satzklammer」卡看 denn 位置 → 單字卡天氣類 → 例句刷 Kommunikation → 測驗 → 🎓 → 解鎖 📄 閱讀與 ✍️ 寫作。",
+   turns:[{s:"A",de:"Hallo! Wie war dein Wochenende?"},
+          {s:"B",de:"Nicht so gut, denn wir hatten viel Regen."},
+          {s:"A",de:"Oh, wirklich? Was hast du dann gemacht?"},
+          {s:"B",de:"Ich bin zu Hause geblieben und habe in einem Reiseführer gelesen. Und wie war dein Wochenende?"},
+          {s:"A",de:"Bei mir war es sonnig und ganz ohne Wolken!"},
+          {s:"B",de:"Das klingt schön!"},
+          {s:"A",de:"Ich hatte einen schönen Traum von einem Kurzurlaub in den Bergen."},
+          {s:"B",de:"Fährst du bald in die Berge?"},
+          {s:"A",de:"Ja, denn im Herbst ist es dort nicht mehr so warm."},
+          {s:"B",de:"Viel Spaß dann! Bis bald."}],
+   de:"Hallo! Wie war dein Wochenende?\nNicht so gut, denn wir hatten viel Regen.\nOh, wirklich? Was hast du dann gemacht?\nIch bin zu Hause geblieben und habe in einem Reiseführer gelesen. Und wie war dein Wochenende?\nBei mir war es sonnig und ganz ohne Wolken!\nDas klingt schön!\nIch hatte einen schönen Traum von einem Kurzurlaub in den Bergen.\nFährst du bald in die Berge?\nJa, denn im Herbst ist es dort nicht mehr so warm.\nViel Spaß dann! Bis bald.",
+   zh:"A：嗨！你的週末過得怎麼樣？\nB：不太好，因為我們那邊下了很多雨。\nA：哦，真的嗎？那你後來做了什麼？\nB：我就待在家裡，看了看旅遊指南。那你的週末呢？\nA：我這邊是晴天，完全沒有雲！\nB：聽起來真棒！\nA：我做了一個美夢，夢到去山裡短假。\nB：你快要去山裡了嗎？\nA：對啊，因為秋天那邊就沒那麼暖了。\nB：那祝你玩得開心！再見啦。",
+   qs:[{st:"Eine Person hatte am Wochenende sehr viel Regen.",a:true,m:1},
+       {st:"Die Person mit dem sonnigen Wochenende ist zu Hause geblieben und hat einen Reiseführer gelesen.",a:false,m:4},
+       {st:"Die Person mit dem schönen Wetter fährt im Herbst in die Berge, denn dann ist es dort noch warm.",a:false,m:6},
+       {st:"Am Himmel der sonnigen Person waren nur ein paar Wolken zu sehen.",a:false,m:7}]},
   /* ===ANCHOR:TEXTS_ARRAYS===（新課導讀 {id,lesson,genre,title,src,map,de,zh,qs} 插在這行上方；de 只准用該課及之前的單字＋功能詞，寫完必跑 ROADMAP N12 的白名單驗證腳本）*/
 ];
 
@@ -5050,13 +5226,13 @@ function gramCardsOfQ(q){
   if(/代名詞/.test(s))ks.add('pron');
   if(/定冠詞|不定冠詞|否定：|複數否定|Akkusativ|Dativ|Genitiv/.test(s))ks.add('art');
   if(/Akkusativ|Dativ 動詞/.test(s))ks.add('rekt');
-  if(/Satzklammer|可分離動詞|Position 2|語序|現在式 vs Perfekt/.test(s))ks.add('satz');
+  if(/Satzklammer|可分離動詞|Position 2|語序|現在式 vs Perfekt|四連接詞/.test(s))ks.add('satz');
   if(/Partizip|Perfekt|haben 或 sein|用 sein/.test(s))ks.add('pii');
   if(/介係詞/.test(s)&&!/地方/.test(s))ks.add('zeit');
   if(/序數/.test(s))ks.add('datum');
   if(/地方介係詞/.test(s))ks.add('lokal');
   if(/價格/.test(s))ks.add('preis');
-  if(/Wortbildung/.test(s))ks.add('gclue');
+  if(/Wortbildung|構詞/.test(s))ks.add('gclue');
   if(/所有格/.test(s))ks.add('poss');
   if(/schon vs erst/.test(s))ks.add('advw');
   if(/疼痛表達|引語/.test(s))ks.add('pain');
@@ -5294,7 +5470,7 @@ const GRAM=[
   <p style="font-size:.86rem;margin:.5em 0 .2em"><b>L20 起最常見的組合</b>：「狀況陳述＋Imperativ／請求」，Akkusativ 代名詞在後句回指前句名詞，性別要對上：<span class="de2">Das Bad ist schmutzig! <b>Putz es</b> doch bitte!</span></p>
   <div class="note"><b>最容易錯：</b>① Nominativ 階段 der→<b>er</b>（不是 sie）、das→<b>es</b>；② es 當 Akkusativ 不變、但當 Dativ 變成 <b>ihm</b>（跟 er 一樣）；③ sie（她/單數）的 Dativ 是 <b>ihr</b>，別跟 ihr（你們/Nom）搞混——完全同形但語意不同，要靠句子角色判斷。</div>
 </div>`},
-{l:"L6",ls:["L4","L5","L6","L19"],html:`
+{l:"L6",ls:["L4","L5","L6","L19","L23"],html:`
 <div class="card gcard">
   <div class="gtitle">🧭 陰陽性線索表（用你工具裡的字分類） <span class="lessontag">規則</span></div>
   <p style="font-size:.86rem;margin:.2em 0 .5em">母語者也是一個一個背的，沒人用推的。但下面的線索能把「要硬背」的量從 100% 砍到約 40%。<b>由強到弱</b>套：</p>
@@ -5311,6 +5487,13 @@ const GRAM=[
   <div class="note"><b>複合字別被前字騙：</b>die Schokolade ＋ der Kuchen = <b>der</b> Schokoladenkuchen；die Fischsuppe（+die Suppe）；das Schinkenbrot（+das Brot）。永遠看最後一節。</div>
   <div class="note" style="margin-top:1em"><b>🔤 Wortbildung：形容詞前綴 un-（L19）</b><br>加 <b>un-</b> 可以造反義形容詞：<span class="de2">sympathisch → <b>un</b>sympathisch</span>、<span class="de2">freundlich → <b>un</b>freundlich</span>、<span class="de2">glücklich → <b>un</b>glücklich</span>。</div>
   <div class="note"><b>⚠️ 老師補充的限制（課本沒寫）：</b>① <b>un- 不能跟每個形容詞組合</b>；② 通常優先用<b>反義詞</b>：dick–dünn／groß–klein／hübsch–hässlich／kurz–lang；③ <b>負面形容詞很少用 un-</b>，多半直接用反義詞——說 <b>falsch</b>，不要自己造 <span style="text-decoration:line-through">unrichtig</span>。</div>
+<div class="note" style="margin-top:1em"><b>🔤 Wortbildung：名詞 + -los 尾碼（L23）</b><br>
+加 <b>-los</b> 可以把名詞變成「沒有…的」形容詞：<span class="de2">die Wolke → wolken<b>los</b></span>、
+<span class="de2">die Arbeit → arbeits<b>los</b></span>、<span class="de2">die Farbe → farb<b>los</b></span>、
+<span class="de2">die Kosten → kosten<b>los</b></span>。</div>
+<div class="note"><b>更多例字（構詞規則示範，非全部個別建卡）：</b>
+glücklos（倒楣的）、partnerlos（沒伴的）、zahnlos（沒牙的）、ideenlos（沒點子的）、
+grußlos（不打招呼就）、treppenlos（沒有樓梯的）——來自老師補充的猜字練習，字根組合方式唯一確定（22個音節無剩餘無重複）。</div>
 </div>`},
 {l:"L6",ls:["L4","L5","L6"],html:`
 <div class="card gcard">
@@ -6830,6 +7013,17 @@ const GR22=[
  {l:"L22",sub:"⭐ anhaben：er → ?",before:"Er ",after:" ein Hemd an.",answer:"hat",options:["hat","habt","hast"],full:"Er hat ein Hemd an."},
 ];
 GR22.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+const GR23=[
+ {l:"L23",sub:"四連接詞語意選擇：轉折句",before:"Ich mache gern Urlaub am Meer, ",after:" am liebsten bin ich in den Bergen.",answer:"aber",options:["aber","und","oder","denn"],full:"Ich mache gern Urlaub am Meer, aber am liebsten bin ich in den Bergen."},
+ {l:"L23",sub:"四連接詞語意選擇：因果句",before:"Der Techniker muss kommen, ",after:" die Spülmaschine funktioniert nicht.",answer:"denn",options:["denn","aber","und","oder"],full:"Der Techniker muss kommen, denn die Spülmaschine funktioniert nicht."},
+ {l:"L23",sub:"四連接詞語意選擇：並列句",before:"Am See darf man nicht grillen ",after:" Baden ist auch verboten.",answer:"und",options:["und","aber","oder","denn"],full:"Am See darf man nicht grillen und Baden ist auch verboten."},
+ {l:"L23",sub:"四連接詞語意選擇：選擇句",before:"Soll ich das Kleid nehmen, ",after:" findest du den Rock schöner?",answer:"oder",options:["oder","und","aber","denn"],full:"Soll ich das Kleid nehmen, oder findest du den Rock schöner?"},
+ {l:"L23",sub:"-los構詞語境選擇：晴朗無雲",before:"Heute ist der Himmel ganz blau, keine einzige Wolke. Der Himmel ist ",after:".",answer:"wolkenlos",options:["wolkenlos","arbeitslos","farblos","kostenlos"],full:"Der Himmel ist wolkenlos."},
+ {l:"L23",sub:"-los構詞語境選擇：沒有工作",before:"Hannes hat seit einem Jahr keine Stelle mehr. Er ist ",after:".",answer:"arbeitslos",options:["arbeitslos","wolkenlos","farblos","kinderlos"],full:"Er ist arbeitslos."},
+ {l:"L23",sub:"-los構詞語境選擇：免付費",before:"Diese E-Mails muss man nicht bezahlen. Sie sind ",after:".",answer:"kostenlos",options:["kostenlos","wortlos","salzlos","fensterlos"],full:"Sie sind kostenlos."},
+ {l:"L23",sub:"-los構詞語境選擇：沒有小孩",before:"Frau und Herr Berger haben keine Kinder. Sie sind ",after:".",answer:"kinderlos",options:["kinderlos","arbeitslos","wortlos","fensterlos"],full:"Sie sind kinderlos."},
+];
+GR23.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
   /* ===ANCHOR:GRAM_QUIZ===（新課文法填空題插在這行上方：宣告 const GRn=[{l,sub,before,after,answer,options,full},…]; 後接一行 GRn.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full})); ）*/
   return Q;
 }
@@ -7212,6 +7406,13 @@ const LESSON_READS={
        {st:"In der WG putzt nur eine Person die Küche.",a:false,m:7},
        {st:"Die WG kocht nur einmal im Monat zusammen.",a:false,m:5},
        {st:"Wir putzen die Küche nur einmal im Jahr.",a:false,m:6}]},
+  L23:{genre:"論壇短貼",title:"Forum: Pech im Urlaub",
+   de:"Ich hatte leider Pech mit dem Wetter in meinem letzten Kurzurlaub. Der erste Tag war sonnig und wolkenlos, aber dann hatten wir ein Gewitter. Ich wollte eigentlich in den Bergen wandern, aber das Wetter war zu schlecht dafür. Wir sind dann in unserer Ferienwohnung geblieben und haben Karten gespielt. Am letzten Tag hat es immer noch geregnet. Der ganze Himmel war grau und farblos. Nächstes Mal habe ich hoffentlich mehr Glück!",
+   zh:"我上次的短假天氣運氣不好。第一天是晴天、萬里無雲，但後來遇到雷雨。我原本想去山裡健行，但天氣太糟了不適合。我們後來就待在度假公寓裡打牌。最後一天還是一直在下雨。整片天空灰濛濛的、毫無色彩。希望下次運氣能好一點！",
+   qs:[{st:"Am ersten Tag war es nicht bewölkt. Die Sonne hat geschienen und der Himmel war wolkenlos.",a:true,m:2},
+       {st:"Die Person ist trotzdem in den Bergen wandern gegangen.",a:false,m:3},
+       {st:"Am letzten Tag war der Himmel blau und wolkenlos.",a:false,m:5},
+       {st:"Am ersten Tag hatten wir ein Gewitter, aber am letzten Tag war es sonnig.",a:false,m:6}]},
   /* ===ANCHOR:LESSON_READS===（新課閱讀測驗插在這行上方，key＝課號；de 先跑 validate_texts.py）*/
 };
 const LESSON_WRITES={
@@ -7265,6 +7466,11 @@ const LESSON_WRITES={
    points:["自我介紹（姓名、身分）","說明你在家務上的習慣","詢問後續（例如何時可以看房）"],
    form:"要有稱呼（Liebe …）與結尾（Viele Grüße …）",
    model:"Liebe WG,\nich heiße Paul und studiere Medizin. Ich bin sehr ordentlich und putze gern die Küche. Ich koche auch oft und wasche meine Wäsche selbst. Wann kann ich das Zimmer sehen?\nViele Grüße,\nPaul"},
+  L23:{title:"寫明信片說度假天氣",
+   task:"你正在度假，寫一張明信片給朋友 Nina，說說天氣狀況（約30–40字）。",
+   points:["說明目前的天氣狀況","說明因為天氣而做的一項活動（用 denn 或 und 銜接）","表達整體感受並問候道別"],
+   form:"明信片，開頭 Liebe/r …，結尾 Bis bald／Liebe Grüße",
+   model:"Liebe Nina,\ndas Wetter hier ist bewölkt und windig. Wir bleiben in der Ferienwohnung, denn das Wetter ist heute nicht schön. Wir spielen Karten und haben einen tollen Ausblick auf die Berge. Mir geht es trotzdem gut!\nBis bald, Shannon"},
   /* ===ANCHOR:LESSON_WRITES===（新課寫作題插在這行上方，key＝課號；points＝內容點不是文法點）*/
 };
 /* 📄 課級閱讀：4 題德文 R/F，第一次作答計分，≥3 過關寫入 modul[課號].r */
