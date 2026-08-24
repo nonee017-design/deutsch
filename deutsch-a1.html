@@ -197,8 +197,8 @@
 <body>
 <div class="wrap">
   <header style="position:relative">
-    <div class="eyebrow">Menschen · A1 · Lektion 1–23</div>
-    <h1>Deutsch A1 — L1–L23</h1>
+    <div class="eyebrow">Menschen · A1 · Lektion 1–24</div>
+    <h1>Deutsch A1 — L1–L24</h1>
     <details class="helpbox" id="outline" style="margin-top:10px;text-align:left"><summary>📚 每課大綱（點開看）</summary><div class="panel-intro" style="margin:8px 0 2px;line-height:1.9">
       L1 打招呼·自我介紹（heißen/kommen aus/wohnen in）·sein·W 問句·拼讀·數字 0–100<br>
       L2 個人資料·職業·規則動詞變位全表·ihr（你們）<br>
@@ -223,6 +223,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
       L21 交通與生活規則·dürfen/müssen（許可 vs 義務）擴充·Modul 7 末課<br>
       L22 衣物·Komparativ/Superlativ 比較級與最高級·als/(genau)so...wie 比較句型<br>
       L23 天氣與短假·Konjunktion denn（因果，V2 不變）·構詞 -los（沒有…的）<br>
+      L24 節慶與慶祝·邀請與祝福·Wünsche: Konjunktiv II（würde+Infinitiv）·序數日期複習·Modul 8／A1.2 末課<br>
       <!-- ===ANCHOR:OUTLINE===（新課大綱一行插在這行上方，格式照上）-->
     </div></details>
   </header>
@@ -252,6 +253,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
     <button class="lchip" data-lesson="L21" data-on="false">L21</button>
     <button class="lchip" data-lesson="L22" data-on="false">L22</button>
     <button class="lchip" data-lesson="L23" data-on="false">L23</button>
+    <button class="lchip" data-lesson="L24" data-on="false">L24</button>
     <!-- ===ANCHOR:LESSON_CHIPS===（A1.2 新課按鈕插在這行上方、span#bookA11 之外）-->
     <button class="lchip" data-lesson="ALL" data-on="false">全選 · 模組複習</button>
     <span style="flex-basis:100%;font-size:.72rem;color:var(--mut)">單點換課 · 長按半秒加選複數課 · 📕 收合/展開整冊</span>
@@ -400,7 +402,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
       </table>
     </div>
   <div class="card gcard">
-    <div class="gtitle">🧩 日期與序數（Ordinalzahlen + Datum） <span class="lessontag">L16</span></div>
+    <div class="gtitle">🧩 日期與序數（Ordinalzahlen + Datum） <span class="lessontag">L16</span><span class="lessontag">L24</span></div>
     <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：序數就是「第幾個」的說法——1.–19. 用數字＋<b>-te</b>，20. 以後用數字＋<b>-ste</b>。抓住這條分界，大部分序數都能自己推。要說「在哪一天」時，用 <b>am</b>＋序數，字尾再加 <b>-en</b>。</p>
     <table>
       <tr><th>範圍</th><th>構成規則</th><th>例字</th></tr>
@@ -546,7 +548,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
 const SPK_SVG='<svg viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>';
 
 /* ===== 範圍（課別·可多選）===== */
-const DEFAULT_LESSON="L23"; /* ===ANCHOR:DEFAULT_LESSON===（新課上線時改成最新課號；chip 的 data-on 由 syncLessonChips 執行期同步，新 chip 一律 data-on="false"）*/
+const DEFAULT_LESSON="L24"; /* ===ANCHOR:DEFAULT_LESSON===（新課上線時改成最新課號；chip 的 data-on 由 syncLessonChips 執行期同步，新 chip 一律 data-on="false"）*/
 let curLessons=new Set([DEFAULT_LESSON]);
 /* L123 是 L1/L2/L3 的合併篩選鈕，資料本身仍各自標 L1/L2/L3，故用此函式統一判斷範圍是否命中 */
 function inLessonScope(l){
@@ -2283,8 +2285,41 @@ const ADD_C0821=[
 {de:"einfallen",zh:"想起、突然想到（可分離，非人稱：mir fällt etwas ein）",g:null,cat:"動詞",lesson:"L23",ex:["Mir fällt gerade nichts ein.","我現在什麼都想不起來。"],pex:["Mir ist eine gute Idee eingefallen.","我突然想到一個好主意。"]},
 {de:"Tja",zh:"唉、這個嘛…（無奈、思考的語氣詞）",g:null,cat:"感嘆詞",lesson:"L23",ex:["Tja, das war wohl nichts.","唉，看來是不成了。"]},
 ];
+const ADD24=[
+{de:"Ostern",zh:"復活節（節慶專有名詞，標準德語通常不作複數）",g:"das",cat:"節慶",lesson:"L24",ex:["Wir feiern Ostern mit der ganzen Familie.","我們全家一起過復活節。"]},
+{de:"Weihnachten",zh:"聖誕節（節慶專有名詞，標準德語通常不作複數）",g:"das",cat:"節慶",lesson:"L24",ex:["Frohe Weihnachten!","聖誕快樂！"]},
+{de:"Glückwunsch",zh:"祝賀、恭喜",g:"der",cat:"節慶",lesson:"L24",ex:["Herzliche Glückwünsche zum Geburtstag!","生日快樂的衷心祝福！"]},
+{de:"Bekannte",zh:"熟人、認識的人（形容詞化名詞，複數隨形容詞變格，非規則構詞）",g:"der",cat:"社交",lesson:"L24",ex:["Er ist ein Bekannter von mir.","他是我的一個熟人。"]},
+{de:"CD",zh:"光碟",g:"die",cat:"用品",lesson:"L24",ex:["Ich habe viele CDs.","我有很多光碟。"]},
+{de:"Ticket",zh:"票券",g:"das",cat:"娛樂",lesson:"L24",ex:["Wir haben zwei Tickets für das Konzert.","我們有兩張演唱會的票。"]},
+{de:"Fahrkarte",zh:"車票（德國用法）",g:"die",cat:"交通",lesson:"L24",ex:["Ich kaufe zwei Fahrkarten.","我買兩張車票。"]},
+{de:"Billet",zh:"車票（瑞士用法）",g:"das",cat:"交通",lesson:"L24",ex:["Wir kaufen zwei Billets.","我們買兩張車票（瑞士用語）。"]},
+{de:"Verwandte",zh:"親戚（形容詞化名詞，複數隨形容詞變格，非規則構詞）",g:"der",cat:"社交",lesson:"L24",ex:["Meine Verwandten wohnen in Berlin.","我的親戚住在柏林。"]},
+{de:"Semesterende",zh:"學期結束",g:"das",cat:"學業",lesson:"L24",ex:["Am 28. Juli feiern wir das Semesterende.","我們7月28日慶祝學期結束。"]},
+{de:"Heiliger Abend",zh:"平安夜（12月24日晚，固定用語）",g:"der",cat:"節慶",lesson:"L24",ex:["Wir feiern den Heiligen Abend bei Tante Lissy.","我們在莉西姨媽家過平安夜。"]},
+{de:"Gutschein",zh:"禮券、抵用券",g:"der",cat:"節慶",lesson:"L24",ex:["Ich schenke dir einen Gutschein für ein Fitnessstudio.","我送你一張健身房禮券。"]},
+{de:"Einweihungsparty",zh:"喬遷／落成派對",g:"die",cat:"節慶",lesson:"L24",ex:["Wir feiern unsere Einweihungsparty am Samstag.","我們週六辦喬遷派對。"]},
+{de:"Abschlussprüfung",zh:"畢業考試、結業考試",g:"die",cat:"學業",lesson:"L24",ex:["Isabella hat ihre Abschlussprüfung bestanden!","伊莎貝拉通過了她的畢業考！"]},
+{de:"Überraschungsparty",zh:"驚喜派對",g:"die",cat:"節慶",lesson:"L24",ex:["Kommt alle zur Überraschungsparty!","大家都來參加驚喜派對吧！"]},
+{de:"Hantel",zh:"啞鈴",g:"die",cat:"用品",lesson:"L24",ex:["Hoffentlich magst du die Hanteln!","希望你會喜歡這些啞鈴！"]},
+{de:"Fallschirm",zh:"降落傘",g:"der",cat:"活動",lesson:"L24",ex:["Tom würde gern Fallschirm springen.","湯姆想去跳傘。"]},
+{de:"Bundesfeiertag",zh:"（瑞士）國定假日",g:"der",cat:"節慶",lesson:"L24",ex:["Wann ist der Bundesfeiertag in der Schweiz?","瑞士的國定假日是什麼時候？"]},
+{de:"Nationalfeiertag",zh:"（奧地利）國慶日",g:"der",cat:"節慶",lesson:"L24",ex:["Wann feiert man den Nationalfeiertag in Österreich?","奧地利的國慶日是什麼時候慶祝？"]},
+{de:"bestehen",zh:"通過（考試）",g:null,cat:"動詞",lesson:"L24",pex:["Gestern hat Isabella ihre Prüfung mit einer Drei bestanden.","昨天伊莎貝拉以3分通過了考試。"]},
+{de:"gratulieren",zh:"恭喜、祝賀（+人 Dativ＋zu+事 Dativ）",g:null,cat:"動詞",lesson:"L24"},
+{de:"schenken",zh:"贈送（禮物）",g:null,cat:"動詞",lesson:"L24"},
+{de:"gewinnen",zh:"贏、獲勝",g:null,cat:"動詞",lesson:"L24",pex:["Ihr habt 5:1 gewonnen? Gut gemacht!","你們以5比1贏了？做得好！"]},
+{de:"zufrieden",zh:"滿意的",g:null,cat:"形容詞",lesson:"L24",ex:["Wir sind glücklich und zufrieden.","我們既開心又滿足。"]},
+{de:"draußen",zh:"在外面",g:null,cat:"副詞",lesson:"L24",ex:["Wir feiern draußen im Garten.","我們在花園外面慶祝。"]},
+{de:"vorgestern",zh:"前天",g:null,cat:"副詞",lesson:"L24",ex:["Vorgestern war Montag.","前天是星期一。"]},
+{de:"übermorgen",zh:"後天",g:null,cat:"副詞",lesson:"L24",ex:["Übermorgen ist Mittwoch.","後天是星期三。"]},
+{de:"Frohe Weihnachten!",zh:"聖誕快樂！",g:null,cat:"節慶",lesson:"L24",ex:["Frohe Weihnachten und ein gutes neues Jahr!","聖誕快樂，新年也快樂！"]},
+{de:"Gutes/Frohes neues Jahr!",zh:"新年快樂！",g:null,cat:"節慶",lesson:"L24",ex:["Ich wünsche dir ein gutes neues Jahr!","祝你新年快樂！"]},
+{de:"Gut gemacht!",zh:"做得好！",g:null,cat:"節慶",lesson:"L24",ex:["Du hast die Prüfung bestanden? Gut gemacht!","你通過考試了？做得好！"]},
+{de:"Alles Gute!",zh:"祝一切順利！",g:null,cat:"節慶",lesson:"L24",ex:["Alles Gute zum Geburtstag!","生日快樂，一切順利！"]},
+];
 /* ===ANCHOR:VOCAB_ARRAYS===（新課單字陣列 const ADDn=[...] 宣告在這行上方，並把陣列名加進下面 VOCAB 合併行）*/
-const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B,...ADD18,...ADDP2V,...ADD10S,...ADDCLO,...ADDCLOADJ,...ADD19,...ADD16S,...ADD18S,...ADD13S,...ADD15T,...ADD17S,...ADD20,...ADD21,...ADD22,...ADD23,...ADD_C0821];
+const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B,...ADD18,...ADDP2V,...ADD10S,...ADDCLO,...ADDCLOADJ,...ADD19,...ADD16S,...ADD18S,...ADD13S,...ADD15T,...ADD17S,...ADD20,...ADD21,...ADD22,...ADD23,...ADD_C0821,...ADD24];
 VOCAB.forEach((v,i)=>v.id="v"+i);
 
 
@@ -2590,6 +2625,11 @@ const NOUN_PL={
   "Streifendienst":"Streifendienste","Camper":"Camper","Pfütze":"Pfützen","Hausdach":"Hausdächer",
   "Schauer":"Schauer","Eimer":"Eimer","Gießkanne":"Gießkannen","Schneesturm":"Schneestürme",
   "Katze":"Katzen","Gerät":"Geräte","Tier":"Tiere",
+  "Glückwunsch":"Glückwünsche","CD":"CDs","Ticket":"Tickets","Fahrkarte":"Fahrkarten",
+  "Billet":"Billets","Gutschein":"Gutscheine","Einweihungsparty":"Einweihungspartys",
+  "Abschlussprüfung":"Abschlussprüfungen","Überraschungsparty":"Überraschungspartys",
+  "Hantel":"Hanteln","Fallschirm":"Fallschirme","Bundesfeiertag":"Bundesfeiertage",
+  "Nationalfeiertag":"Nationalfeiertage",
   /* ===ANCHOR:NOUN_PL===（新名詞複數 "單數":"複數", 插在這行上方）*/
 };
 const NOUN_PL_NOTE={
@@ -2810,6 +2850,7 @@ const NOUN_PL_NOTE={
   "Schauer":"複數同形 die Schauer（-er 類）。",
   "Eimer":"複數同形 die Eimer（-er 類）。",
   "Schneesturm":"複數 die Schneestürme：u→ü 變音 → Forvo（同 Sturm→Stürme）。",
+  "Glückwunsch":"複數 die Glückwünsche：u→ü 變音 → Forvo。",
   /* ===ANCHOR:NOUN_PL_NOTE===（變音／同形／不規則等複數警語插在這行上方）*/
 };
 /* ═══ 形容詞比較級／最高級（2026-08-14 里程碑）════════════════════════
@@ -3724,6 +3765,19 @@ const NOUN_PLEX={
   "Katze":["Meine Nachbarin hat drei Katzen.","我鄰居養了三隻貓。"],
   "Gerät":["In der Küche stehen viele elektrische Geräte.","廚房裡有很多電子設備。"],
   "Tier":["Im Zoo gibt es viele verschiedene Tiere.","動物園裡有很多不同的動物。"],
+  "Glückwunsch":["Herzliche Glückwünsche zum Geburtstag!","生日快樂的衷心祝福！"],
+  "CD":["Ich habe viele CDs.","我有很多光碟。"],
+  "Ticket":["Wir haben zwei Tickets für das Konzert.","我們有兩張演唱會的票。"],
+  "Fahrkarte":["Ich kaufe zwei Fahrkarten.","我買兩張車票。"],
+  "Billet":["Wir kaufen zwei Billets.","我們買兩張車票。"],
+  "Gutschein":["Ich habe zwei Gutscheine bekommen.","我拿到了兩張禮券。"],
+  "Einweihungsparty":["Wir waren auf zwei Einweihungspartys dieses Jahr.","我們今年參加了兩場喬遷派對。"],
+  "Abschlussprüfung":["Wir haben dieses Jahr drei Abschlussprüfungen.","我們今年有三場畢業考。"],
+  "Überraschungsparty":["Wir haben schon zwei Überraschungspartys organisiert.","我們已經籌辦過兩場驚喜派對。"],
+  "Hantel":["Ich habe zwei Hanteln zu Hause.","我家裡有兩個啞鈴。"],
+  "Fallschirm":["Im Museum hängen drei alte Fallschirme.","博物館裡掛著三個舊降落傘。"],
+  "Bundesfeiertag":["Die Bundesfeiertage in der Schweiz und in Deutschland sind an unterschiedlichen Tagen.","瑞士和德國的國定假日在不同的日子。"],
+  "Nationalfeiertag":["Viele Länder haben ihre Nationalfeiertage im Sommer.","很多國家的國慶日在夏天。"],
   /* ===ANCHOR:NOUN_PLEX===（複數例句 "單數":["德文","中文"], 插在這行上方）*/
 };
 const VERB_META={
@@ -3988,6 +4042,10 @@ const VERB_META={
   reden:{t:"stemt",du:"redest",er:"redet",p2:"geredet",aux:"h"},
   denken:{t:"reg",p2:"gedacht",aux:"h"},
   einfallen:{t:"irr",f:["falle … ein","fällst … ein","fällt … ein","fallen … ein","fallt … ein","fallen … ein"],p2:"eingefallen",aux:"s"},
+  bestehen:{t:"reg",p2:"bestanden",aux:"h"},
+  gratulieren:{t:"reg"},
+  schenken:{t:"reg"},
+  gewinnen:{t:"reg",p2:"gewonnen",aux:"h"},
   /* ===ANCHOR:VERB_META===（新動詞變位 動詞:{t:"reg"|"stemt"|"vowel"|"irr",...}, 插在這行上方）*/
 };
 /* 可分離動詞 Partizip 組字（2026-07-31）：Partizip = 字首 + 母動詞 Partizip，
@@ -5085,6 +5143,24 @@ const SENTENCES=[
   {de:"Es gießt wie aus Eimern.",zh:"雨下得像從水桶倒出來一樣大。",lesson:"L23"},
   {de:"Mir fällt etwas ein.",zh:"我突然想到一件事。",lesson:"L23"},
   {de:"Denn in der Bibliothek muss ich leise sein.",zh:"因為在圖書館裡我必須保持安靜。",lesson:"L23"},
+  {de:"Herzlichen Glückwunsch!",zh:"衷心恭喜！（固定祝賀語）",lesson:"L24"},
+  {de:"Ich würde dich gern ins Kino einladen.",zh:"我想邀你去看電影（würde+gern+Infinitiv：客氣提出願望；可換 zum Essen/zur Party）",lesson:"L24"},
+  {de:"Wir würden das gern mit dir feiern.",zh:"我們想跟你一起慶祝這件事（可換主詞與慶祝的事）",lesson:"L24"},
+  {de:"Was würdest du gern an deinem nächsten Geburtstag machen?",zh:"你下次生日想做什麼？（可換 Wochenende/Urlaub）",lesson:"L24"},
+  {de:"Ich würde gern eine Reise machen. Am liebsten nach Indien.",zh:"我想去旅行，最想去印度（可換國名）",lesson:"L24"},
+  {de:"Würdest du allein reisen?",zh:"你會一個人去旅行嗎？",lesson:"L24"},
+  {de:"Ich würde gern meine Freunde einladen und eine Party feiern.",zh:"我想邀朋友辦一場派對",lesson:"L24"},
+  {de:"Heute ist der achte Januar.",zh:"今天是一月八日（序數複習：am+序數+ten）",lesson:"L24"},
+  {de:"Am achten Januar.",zh:"在一月八日（回答Wann?的標準句型）",lesson:"L24"},
+  {de:"Vom achten bis (zum) achtzehnten Januar.",zh:"從一月八日到十八日（區間：vom…bis zum…）",lesson:"L24"},
+  {de:"Die Überraschungsparty ist am sechzehnten Oktober.",zh:"驚喜派對在十月十六日（可換日期/場合）",lesson:"L24"},
+  {de:"Kommt Ihr? Bitte gebt uns bis zum 15. Juli Bescheid.",zh:"你們會來嗎？請在7月15日前給我們回覆（邀請信固定收尾句）",lesson:"L24"},
+  {de:"Ich möchte dich gern zum Essen einladen.",zh:"我想邀你來吃飯（可換 zur Party/ins Kino）",lesson:"L24"},
+  {de:"Kannst du kommen? Sag mir bitte bis zum neunten August Bescheid.",zh:"你能來嗎？請在八月九日前跟我說一聲",lesson:"L24"},
+  {de:"Wir laden euch herzlich zu unserer Hochzeit ein.",zh:"我們誠摯邀請你們參加我們的婚禮（可換場合：Party/Feier）",lesson:"L24"},
+  {de:"Ich organisiere eine Überraschungsparty für ihn.",zh:"我在為他籌辦一場驚喜派對（可換 sie/für+人）",lesson:"L24"},
+  {de:"Peer hat sein Examen geschafft.",zh:"皮爾通過了他的考試（可換人名與考試名稱）",lesson:"L24"},
+  {de:"Im Sommer würde ich gern eine Reise machen. Am liebsten nach Las Vegas.",zh:"夏天我想去旅行，最想去拉斯維加斯",lesson:"L24"},
   /* ===ANCHOR:SENTENCES===（新例句／Redemittel {de,zh,lesson} 插在這行上方）*/
 ];
 
@@ -5334,6 +5410,24 @@ const TEXTS=[
        {st:"Die Person mit dem sonnigen Wochenende ist zu Hause geblieben und hat einen Reiseführer gelesen.",a:false,m:4},
        {st:"Die Person mit dem schönen Wetter fährt im Herbst in die Berge, denn dann ist es dort noch warm.",a:false,m:6},
        {st:"Am Himmel der sonnigen Person waren nur ein paar Wolken zu sehen.",a:false,m:7}]},
+{id:"t-l24-1",lesson:"L24",genre:"對話",title:"Eine Party-Einladung",src:"AI 生成 · 未經母語者校對",
+   map:"<b>本課重點</b>：① Konjunktiv II（würde+Infinitiv）——對話核心，至少三種人稱（würde/würdest）；② 序數日期複習（am+序數+ten）；③ 邀請/祝賀 Redemittel。<br><b>建議走法</b>：先用 🎧 播放兩次、<b>不看原文</b>做完 4 題 → 點「👁 顯示原文」對照 → 文法「Wünsche：Konjunktiv II」看würde變位 → 單字卡節慶類 → 例句刷 Kommunikation → 測驗 → 🎓 → 解鎖 📄 閱讀與 ✍️ 寫作。",
+   turns:[{s:"A",de:"Tom, ich habe am sechzehnten Oktober Geburtstag und mache eine Party."},
+          {s:"B",de:"Toll! Wo und wann genau?"},
+          {s:"A",de:"Bei mir zu Hause, ab 18 Uhr am sechzehnten Oktober."},
+          {s:"B",de:"Soll ich etwas mitbringen? Ich habe noch zwei Tickets für ein Konzert. Die schenke ich dir!"},
+          {s:"A",de:"Das ist super, danke! Ich würde mich auch über ein paar Getränke freuen."},
+          {s:"B",de:"Kein Problem. Würdest du noch andere Leute einladen?"},
+          {s:"A",de:"Ja, ich würde gern auch Lisa und Max einladen."},
+          {s:"B",de:"Herzlichen Glückwunsch schon mal! Das wird schön."},
+          {s:"A",de:"Kommst du? Sag mir bitte bis Freitag Bescheid!"},
+          {s:"B",de:"Mach ich. Bis Samstag, Anna!"}],
+   de:"Tom, ich habe am sechzehnten Oktober Geburtstag und mache eine Party.\nToll! Wo und wann genau?\nBei mir zu Hause, ab 18 Uhr am sechzehnten Oktober.\nSoll ich etwas mitbringen? Ich habe noch zwei Tickets für ein Konzert. Die schenke ich dir!\nDas ist super, danke! Ich würde mich auch über ein paar Getränke freuen.\nKein Problem. Würdest du noch andere Leute einladen?\nJa, ich würde gern auch Lisa und Max einladen.\nHerzlichen Glückwunsch schon mal! Das wird schön.\nKommst du? Sag mir bitte bis Freitag Bescheid!\nMach ich. Bis Samstag, Anna!",
+   zh:"A：Tom，我十月十六日生日，要辦一場派對。\nB：太好了！在哪裡、什麼時候？\nA：在我家，十月十六日晚上18點開始。\nB：我要帶什麼嗎？我還有兩張演唱會的票，送給你！\nA：太好了，謝謝！我也希望能有一些飲料。\nB：沒問題。你會邀請其他人嗎？\nA：會，我也想邀請 Lisa 和 Max。\nB：先在這裡跟你說聲恭喜！一定會很棒。\nA：你會來嗎？請在星期五前跟我說一聲！\nB：沒問題。星期六見，Anna！",
+   qs:[{st:"Anna feiert ihren Geburtstag bei sich zu Hause.",a:true,m:1},
+       {st:"Tom hat schon zwei Tickets für ein Konzert von Anna bekommen.",a:false,m:4},
+       {st:"Die Party beginnt am sechzehnten Oktober um 9 Uhr.",a:false,m:6},
+       {st:"Anna würde außer Tom niemanden einladen.",a:false,m:7}]},
   /* ===ANCHOR:TEXTS_ARRAYS===（新課導讀 {id,lesson,genre,title,src,map,de,zh,qs} 插在這行上方；de 只准用該課及之前的單字＋功能詞，寫完必跑 ROADMAP N12 的白名單驗證腳本）*/
 ];
 
@@ -5484,7 +5578,7 @@ function logAnswer(){
 function weekCount(){const cut=Date.now()-7*864e5;let n=0;Object.entries(qlog).forEach(([k,v])=>{const ts=new Date(k+'T00:00:00').getTime();if(isFinite(ts)&&ts>=cut)n+=(+v||0);});return n;}
 function updateDash(){const el=document.getElementById('dash');if(el)el.textContent=`已畢業 ${Object.keys(mastered).length} / ${VOCAB.length} 字 · 本週答題 ${weekCount()} 題`;}
 /* 文法卡穩定 key：由標題衍生（改標題會孤兒化標記，與例句 de-key 同一取捨） */
-const GKEY_MAP=[["疼痛表達","pain"],["人稱代名詞","pron"],["陰陽性線索","gclue"],["複數線索","pclue"],["所有格","poss"],["schon vs erst","advw"],["時間介係詞","zeit"],["序數","datum"],["地方介係詞","lokal"],["冠詞變格","art"],["句框","satz"],["動詞支配格","rekt"],["動詞變位①","konj1"],["動詞變位②","konj2"],["不規則動詞總表","irrv"],["Perfekt 現在完成式","pii"],["價格唸法","preis"],["字母表","abc"],["挑任一數字","numtry"],["大數字","bignum"],["數字測驗","numquiz"],["數字的系統","numsys"],["Imperativ","imp"],["Komparativ","komp"]];
+const GKEY_MAP=[["疼痛表達","pain"],["人稱代名詞","pron"],["陰陽性線索","gclue"],["複數線索","pclue"],["所有格","poss"],["schon vs erst","advw"],["時間介係詞","zeit"],["序數","datum"],["地方介係詞","lokal"],["冠詞變格","art"],["句框","satz"],["動詞支配格","rekt"],["動詞變位①","konj1"],["動詞變位②","konj2"],["不規則動詞總表","irrv"],["Perfekt 現在完成式","pii"],["價格唸法","preis"],["字母表","abc"],["挑任一數字","numtry"],["大數字","bignum"],["數字測驗","numquiz"],["數字的系統","numsys"],["Imperativ","imp"],["Komparativ","komp"],["Wünsche","konjii"]];
 function gramKeyOf(t){for(const[s,k]of GKEY_MAP)if(t.includes(s))return k;return t.trim().slice(0,8);}
 function gramKeyOfCard(g){const m=g.html.match(/gtitle">([^<]+)/);return gramKeyOf(m?m[1]:g.html);}
 /* 題目→卡片映射（執行期分類，一題可命中多卡） */
@@ -5517,6 +5611,7 @@ function gramCardsOfQ(q){
   if(/Imperativ/.test(s))ks.add('imp');
   if(/母音變化|字尾/.test(s))ks.add('konj1');
   if(/比較級|最高級|als vs wie/.test(s))ks.add('komp');
+  if(/Wünsche|würde/i.test(s))ks.add('konjii');
   const m=s.match(/^(?:⭐\s*)?([a-zäöüß]+)：\s*(ich|du|er|es|sie|wir|ihr|Sie)\s*→/);
   if(m)ks.add(KONJ2_VERBS.has(m[1])?'konj2':'konj1');
   return ks;
@@ -5956,7 +6051,7 @@ grußlos（不打招呼就）、treppenlos（沒有樓梯的）——來自老�
   </table>
   <p style="font-size:.86rem;margin:.3em 0 .1em">系統邏輯：weil 引導的是<b>從句</b>（Nebensatz），從句裡的變位動詞被踢到<b>從句句尾</b>，不再站第2位——跟「兩個動詞夾框」是同一條「動詞被踢到底」的邏輯，只是這次整個從句都被框住。對照 <b>denn</b>（並列連接詞，動詞留在原地、正常 V2）。weil 從句也能整個放到句子最前面：<b>Weil</b> es ruhig ist, <b>bleibe</b> ich hier.（此時主句動詞退到第2位，主詞 ich 退到動詞後面）。</p>
   </div></details>
-  <p style="font-size:.86rem;margin:.3em 0">已學會塞進框的：<b>möchten</b>／<b>können</b>＋原形（L6/L7）、<b>可分離動詞</b>（L10）、<b>Perfekt</b> haben/sein＋P.II（L10–L12）、<b>weil 從句</b>動詞後置（L15）、<b>wollen</b>（L17）、<b>sollen</b>＋原形（L18）、<b>Imperativ(Sie)</b> 動詞衝第1位（L18）、<b>Imperativ(du/ihr)</b> 可分離動詞字首同樣踢句尾（L20）。<br>⬜ 之後塞進同一框：dürfen、未來式——A2 解鎖。</p>
+  <p style="font-size:.86rem;margin:.3em 0">已學會塞進框的：<b>möchten</b>／<b>können</b>＋原形（L6/L7）、<b>可分離動詞</b>（L10）、<b>Perfekt</b> haben/sein＋P.II（L10–L12）、<b>weil 從句</b>動詞後置（L15）、<b>wollen</b>（L17）、<b>sollen</b>＋原形（L18）、<b>Imperativ(Sie)</b> 動詞衝第1位（L18）、<b>Imperativ(du/ihr)</b> 可分離動詞字首同樣踢句尾（L20）、<b>Wünsche</b> würde＋原形（Konjunktiv II，L24）。<br>⬜ 之後塞進同一框：dürfen、未來式——A2 解鎖。</p>
   <div class="note"><b>⚠️ 三個最容易錯</b><br>① 換 Leider／Heute 到位置一後，主詞要退到動詞後面：<b>Leider habe ich</b>…（❌ Leider ich habe…）。<br>② <b>nicht 貼在句尾原形動詞前面</b>：Ich kann heute <span style="color:#b45309">nicht</span> kommen. 原形動詞是框的右牆，nicht 站牆內側。（否定名詞才用 kein，見冠詞表；否定動作／形容詞用 nicht。）<br>③ <b>weil 後面動詞一定到句尾</b>：❌ weil es ist ruhig → ✓ weil es ruhig ist。</div>
 </div>`},
 {ls:["L6","L7","L8","L9","L10","L12","L13","L15","L17","L20"],html:`
@@ -6212,6 +6307,21 @@ grußlos（不打招呼就）、treppenlos（沒有樓梯的）——來自老�
     <tr><td class="de2">(genau)so ＋ Positiv ＋ wie</td><td>相等（A 跟 B 一樣…）</td><td class="de2">Lila mag sie genauso gern <b>wie</b> Rosa.</td></tr>
   </table>
   <div class="note"><b>⚠️ 六個最容易錯</b><br>① <b>gut/gern/viel 不能套 +er 規則</b>：❌ guter／gernder ✓ besser／lieber——這三個字整組換掉，跟規則變化無關。<br>② <b>變母音是一份「要背的清單」，不是可推導的規則</b>：alt→älter、klug→klüger、lang→länger 會變；但同樣是單音節的 <b>voll／bunt／blond／schlank／faul</b> 不變。多音節原則上不變（lustig→lustiger），唯一常見例外是 <b>gesund→gesünder</b>。⚠️ 所以判斷點不是音節數，是「這個字在不在變音清單裡」——單字卡背面有登記的才變。<br>③ <b>als／wie 選錯最常見的原因是沒看「相不相等」</b>：genauso...<b>wie</b>＝一樣；單純的比較級句尾用 <b>als</b>。兩個字不能互換。<br>④ <b>吞 e 只發生在比較級，最高級要還原</b>：dunkel→<b>dunkler</b> 但 am <b>dunkel</b>sten；teuer→<b>teurer</b> 但 am <b>teuer</b>sten。⚠️ 只有 -el 結尾與 teuer／sauer 吞 e——schwer→schwerer、leer→leerer、sicher→sicherer <u>不吞</u>。<br>⑤ <b>最高級的墊音 e 有兩個例外</b>：字尾 t/d/s/ß/z/sch 要墊（am ält<b>e</b>sten、am kürz<b>e</b>sten）；但 <b>-isch／-end</b> 結尾不墊（am praktisch<b>sten</b>、am spannend<b>sten</b>），groß 也不墊（am größ<b>ten</b>，不是 größesten）。<br>⑥ <b>有些形容詞根本沒有比較級</b>：狀態詞（fertig／verboten／geöffnet／möbliert）、國族詞（philippinisch）、材質詞（golden）、序列詞（letzt／nächst-）。外來色詞 <b>rosa／lila／beige／orange</b> 字尾完全不變化，要比較時說 <b>mehr rosa als …</b>。⚠️ 單字卡背面會標，沒標的就是規則字。</div>
+</div>`},
+{l:"L24",html:`
+<div class="card gcard">
+  <div class="gtitle">🧩 Wünsche：Konjunktiv II（würde + Infinitiv） <span class="lessontag">L24</span></div>
+  <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：跟情態動詞一樣「動詞拆兩半」——<b>würde</b>（隨人稱變化，站第2位）＋原形動詞（站句尾）。用途：客氣地表達願望或假設（Wünsche äußern），不是在說已經在做的事。</p>
+  <table>
+    <tr><th>人稱</th><th>würde</th></tr>
+    <tr><td>ich</td><td class="de2">würde</td></tr>
+    <tr><td>du</td><td class="de2">würdest</td></tr>
+    <tr><td>er/es/sie</td><td class="de2">würde</td></tr>
+    <tr><td>wir</td><td class="de2">würden</td></tr>
+    <tr><td>ihr</td><td class="de2">würdet</td></tr>
+    <tr><td>sie/Sie</td><td class="de2">würden</td></tr>
+  </table>
+  <div class="note"><b>⚠️ 願望 vs 現實：</b>Ich gehe ins Kino.（現在真的要去）對比 Ich würde gern ins Kino gehen.（只是想，還沒發生）。語序跟句框卡「動詞拆兩半」同一套：würde 站第2位，原形動詞踢句尾——<b>Ich würde gern eine Reise machen.</b> 也常用來客氣提問：<b>Was würdest du gern machen?</b></div>
 </div>`},
 /* ===ANCHOR:GRAM===（新文法卡 {l:"Ln",html:`<div class="card gcard">…`} 插在這行上方）*/
 ];
@@ -7511,6 +7621,18 @@ const GR_C0821=[
  {l:"L23",sub:"⭐ einfallen：er → ?（可分離，母音變化）",before:"Ihm ",after:" sofort eine Lösung ein.",answer:"fällt",options:["fällt","fallt","fällst","fallen"],full:"Ihm fällt sofort eine Lösung ein."},
 ];
 GR_C0821.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+const GR24=[
+ {l:"L24",sub:"⭐ 序數日期：填空（16.）",before:"Die Überraschungsparty ist am ",after:" Oktober (16.).",answer:"sechzehnten",options:["sechzehnten","sechzehnte","sechzehn"],full:"Die Überraschungsparty ist am sechzehnten Oktober (16.)."},
+ {l:"L24",sub:"⭐ 序數日期：填空（8.）",before:"Vom ",after:" bis zum achtzehnten Januar (8.–18.).",answer:"achten",options:["achten","acht","achte"],full:"Vom achten bis zum achtzehnten Januar (8.–18.)."},
+ {l:"L24",sub:"⭐ 序數日期：填空（18.）",before:"Vom achten bis zum ",after:" Januar (8.–18.).",answer:"achtzehnten",options:["achtzehnten","achtzehnte","achtzehn"],full:"Vom achten bis zum achtzehnten Januar (8.–18.)."},
+ {l:"L24",sub:"⭐ Wünsche：ich → ?",before:"Im Urlaub ",after:" ich gern nach Italien fahren.",answer:"würde",options:["würde","würdest","würden"],full:"Im Urlaub würde ich gern nach Italien fahren."},
+ {l:"L24",sub:"⭐ Wünsche：du → ?",before:"",after:" du gern allein verreisen?",answer:"Würdest",options:["Würdest","Würde","Würden"],full:"Würdest du gern allein verreisen?"},
+ {l:"L24",sub:"⭐ Wünsche：er → ?",before:"Bruno ",after:" gern mit dem Fallschirm springen.",answer:"würde",options:["würde","würdest","würden"],full:"Bruno würde gern mit dem Fallschirm springen."},
+ {l:"L24",sub:"⭐ Wünsche：wir → ?",before:"Wir ",after:" das gern zusammen feiern.",answer:"würden",options:["würden","würde","würdet"],full:"Wir würden das gern zusammen feiern."},
+ {l:"L24",sub:"⭐ Wünsche：ihr → ?",before:"",after:" ihr uns gern besuchen?",answer:"Würdet",options:["Würdet","Würde","Würden"],full:"Würdet ihr uns gern besuchen?"},
+ {l:"L24",sub:"⭐ Wünsche：sie → ?",before:"Meine Eltern ",after:" gern zur Party kommen.",answer:"würden",options:["würden","würde","würdet"],full:"Meine Eltern würden gern zur Party kommen."},
+];
+GR24.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
   /* ===ANCHOR:GRAM_QUIZ===（新課文法填空題插在這行上方：宣告 const GRn=[{l,sub,before,after,answer,options,full},…]; 後接一行 GRn.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full})); ）*/
   return Q;
 }
@@ -7768,6 +7890,7 @@ const MODULE_DEF=[
   {id:"M5",name:"Modul 5（L13–15）",lessons:["L13","L14","L15"]},
   {id:"M6",name:"Modul 6（L16–18）",lessons:["L16","L17","L18"]},
   {id:"M7",name:"Modul 7（L19–21）",lessons:["L19","L20","L21"]},
+  {id:"M8",name:"Modul 8（L22–24）",lessons:["L22","L23","L24"]},
   /* ===ANCHOR:MODULE_DEF===（新單元湊滿 3 課時在這行上方登記 {id,name,lessons}）*/
 ];
 const MODUL_TOPICS={
@@ -7778,6 +7901,7 @@ const MODUL_TOPICS={
   M5:{title:"我的新家與新街區",task:"寫 4–6 句描述你（可假想）搬到一個新住處：① 房子/公寓的樣子，用所有格 sein/ihr 或 Genitiv；② 怎麼找到那裡，用地方介係詞或 helfen；③ 對新街區的評價，用 gefallen/gehören/fehlen 等 Dativ 動詞。至少一句要用到完整 Dativ 人稱代名詞（mir/dir/ihm…）。",req:["所有格 sein/ihr","地方介係詞","Dativ 動詞（gefallen/gehören/fehlen/danken）","umziehen"],rm:["Ich bin nach … umgezogen.","Die Wohnung ist neben/an/in der Nähe von …","Was mir an … gefällt, ist …"]},
  M6:{title:"我的一封訊息：飯店插曲、我的計畫、還有最近的身體",task:"寫 4–6 句：①提一件你在飯店或某個約會中遇到、需要改期或客訴的狀況，用時間介係詞（in/nach/vor/für）；②說一件你未來想做或絕對不想做的計畫，用 wollen 完整變位；③說你最近的身體狀況以及別人給你的建議，用 sollen 或 tut/tun weh。三部分至少各一句。",req:["時間介係詞(in/nach/vor/für)","wollen完整變位","tut/tun weh 或 haben+Schmerzen","sollen"],rm:["Ich möchte den Termin verschieben, vor/nach/in …","Ich will unbedingt …, aber ich will auf keinen Fall …","Ich habe seit … Schmerzen. Der Arzt sagt, ich soll …"]},
   M7:{title:"Mal ehrlich: Welche Regeln akzeptieren Sie?",task:"針對三個情境（圖書館手機響/朋友邀約烤肉但有禁令/海邊想游泳但禁止）寫下你會怎麼做，並說明理由。至少各用一句 müssen、一句 dürfen、一句「Das finde ich...」意見句。",req:["müssen","dürfen","Das ist (nicht) erlaubt/verboten","Das finde ich..."],rm:["Das ist (nicht) erlaubt/verboten.","Das finde ich richtig/falsch/nicht so schlimm/gefährlich.","Hier darf man (nicht) ..."]},
+  M8:{title:"Eine Einladung schreiben",task:"寫一封邀請信，邀請朋友參加你的慶祝活動（生日/喬遷/畢業）",req:["活動內容","日期（用序數）","地點","要不要帶東西","回覆期限"],rm:["Wir würden das gern mit dir feiern.","Kommt Ihr? Bitte gebt uns bis zum ... Bescheid.","Am ... würde ich gern ..."]},
   /* ===ANCHOR:MODUL_TOPICS===（新單元寫作題插在這行上方，key 對齊 MODULE_DEF 的 id）*/
 };
 /* 單元整合閱讀（🏆 第②關）：一篇串起單元三課單字、動詞人稱 ≥4 種的文章；生成規則見 ROADMAP「導讀生成管線 v2」，白名單以單元最後一課為截止。4 題以第一次作答計分，答對 ≥3 過關 */
@@ -7831,6 +7955,13 @@ const MODUL_TEXTS={
       {q:"文中用 müssen 表達的是義務還是禁止？",options:["義務","禁止","許可"],a:0},
       {q:"受訪者提到的規則裡，dürfen 用來表達什麼？",options:["被允許做的事","一定要做的事","完全做不到的事"],a:0},
       {q:"文章結尾的開放式問句是要讀者做什麼？",options:["模仿描述自己的通勤情境","回答是非題","訂正錯字"],a:0}]},
+M8:{title:"Julias Woche: Kleidung, Wetter und ein Fest",
+  de:"Hallo! Ich heiße Julia und ich mag schöne Kleidung sehr gern. Am liebsten trage ich bequeme, gemütliche Sachen, wenn ich zu Hause bin. Im Moment ist das Wetter hier aber nicht so schön.\n\nEs regnet seit drei Tagen und der Himmel ist die ganze Zeit bewölkt. Ich lese ein Buch oder höre Musik und warte. Nächste Woche soll es aber wieder sonnig werden, und das finde ich super.\n\nAm sechzehnten Oktober feiere ich ein kleines Fest bei mir zu Hause, denn eine Freundin von mir hat Geburtstag. Ich würde gern eine Überraschungsparty für sie machen. Alle Freunde sollen kommen und ich schreibe schon die Einladungen.\n\nIch habe schon eine kleine Karte mit Herzlichen Glückwunsch für sie gekauft. Das Fest wird schön, auch wenn das Wetter noch nicht sicher ist. Und ihr? Was macht ihr am Wochenende? Schreibt mir gern!",
+  zh:"哈囉！我叫 Julia，我很喜歡漂亮的衣服。在家的時候我最喜歡穿舒適、舒服的衣服。不過現在這裡的天氣不太好。\n\n已經下了三天的雨，天空一直是陰天。我看書、聽音樂，等天氣變好。不過下週應該會轉晴，我覺得太好了。\n\n十月十六日我要在家辦一個小慶祝活動，因為我一個朋友要過生日。我想幫她辦一場驚喜派對。所有朋友都要來，我已經在寫邀請函了。\n\n我已經買了一張寫著「衷心恭喜！」的小卡片給她。這場慶祝活動一定會很棒，儘管天氣還不確定。那你們呢？你們週末要做什麼？歡迎跟我說說！",
+  qs:[{q:"這篇部落格的作者主要在說什麼？",options:["最近的天氣狀況","即將幫朋友辦的驚喜派對","她新買的衣服"],a:1},
+      {q:"作者提到十月十六日的計畫是什麼？",options:["去旅行","幫朋友籌辦驚喜派對","去買新衣服"],a:1},
+      {q:"作者對天氣轉晴的態度是？",options:["不在乎","覺得太好了、很期待","覺得很煩"],a:1},
+      {q:"作者最後邀請讀者做什麼？",options:["跟她說說週末計畫","打電話給她","回覆她的邀請函"],a:0}]},
  /* ===ANCHOR:MODUL_TEXTS===（新單元整合閱讀插在這行上方，key 對齊 MODULE_DEF 的 id；先跑白名單驗證再入庫）*/
 };
 /* ---------- 課級關卡（🎓 畢業後解鎖）：📄 德文 R/F 閱讀測驗 ＋ ✍️ 寫作 ----------
@@ -7900,6 +8031,13 @@ const LESSON_READS={
        {st:"Die Person ist trotzdem in den Bergen wandern gegangen.",a:false,m:3},
        {st:"Am letzten Tag war der Himmel blau und wolkenlos.",a:false,m:5},
        {st:"Am ersten Tag hatten wir ein Gewitter, aber am letzten Tag war es sonnig.",a:false,m:6}]},
+  L24:{genre:"簡訊",title:"Einweihungsparty-Einladung",
+   de:"Hallo Max! Ich mache am sechzehnten Oktober eine Einweihungsparty in meiner neuen Wohnung. Die Party beginnt um 18 Uhr. Getränke habe ich schon, aber bring bitte etwas zu essen mit. Kommst du? Sag mir bitte bis zum neunten Oktober Bescheid! Bis bald! Lisa",
+   zh:"嗨，Max！我十月十六日要在我的新家辦喬遷派對。派對18點開始。飲料我已經有了，但請帶點吃的來。你會來嗎？請在十月九日前跟我說一聲！再見！Lisa",
+   qs:[{st:"Lisa zieht in eine neue Wohnung und feiert das mit einer Party.",a:true,m:1},
+       {st:"Max muss bis zum sechzehnten Oktober Bescheid geben.",a:false,m:6},
+       {st:"Max hat Lisa schon Bescheid gegeben.",a:false,m:3},
+       {st:"Max soll Getränke und Essen mitbringen.",a:false,m:5}]},
   /* ===ANCHOR:LESSON_READS===（新課閱讀測驗插在這行上方，key＝課號；de 先跑 validate_texts.py）*/
 };
 const LESSON_WRITES={
@@ -7958,6 +8096,11 @@ const LESSON_WRITES={
    points:["說明目前的天氣狀況","說明因為天氣而做的一項活動（用 denn 或 und 銜接）","表達整體感受並問候道別"],
    form:"明信片，開頭 Liebe/r …，結尾 Bis bald／Liebe Grüße",
    model:"Liebe Nina,\ndas Wetter hier ist bewölkt und windig. Wir bleiben in der Ferienwohnung, denn das Wetter ist heute nicht schön. Wir spielen Karten und haben einen tollen Ausblick auf die Berge. Mir geht es trotzdem gut!\nBis bald, Shannon"},
+  L24:{title:"回覆生日派對邀請",
+   task:"你收到朋友 Anna 的生日派對邀請，寫一封簡短回信（約 30–45 字）。",
+   points:["說明你會不會出席","說明你會帶什麼（用 würde 表達）","詢問確切時間或地點"],
+   form:"要有稱呼（Liebe/Lieber …）與結尾（Viele Grüße …）",
+   model:"Liebe Anna,\nvielen Dank für die Einladung! Ich komme sehr gern zu deiner Party. Ich würde gern ein paar Getränke mitbringen. Um wie viel Uhr soll ich bei dir sein?\nViele Grüße, Shannon"},
   /* ===ANCHOR:LESSON_WRITES===（新課寫作題插在這行上方，key＝課號；points＝內容點不是文法點）*/
 };
 /* 📄 課級閱讀：4 題德文 R/F，第一次作答計分，≥3 過關寫入 modul[課號].r */
