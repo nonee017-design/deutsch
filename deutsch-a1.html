@@ -608,6 +608,14 @@ function initAudio(){
     s.buffer=b;s.connect(audioCtx.destination);s.start(0);
     if(audioCtx.resume)audioCtx.resume();
   }catch(e){audioCtx=null;}
+  /* N25（2026-08-25）：同一次使用者手勢順便解鎖對話導讀用的 <audio> 元素——
+     放一段極短靜音 mp3 播放並立刻暫停，之後非同步 .play() 才不會被 iOS Safari 擋下。
+     跟上面 AudioContext 解鎖同一個時機點、同一個 once 事件，理由見 iOS 手機修正註解。 */
+  try{
+    const a=dlgAudio();
+    a.src='data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAEluZm8AAAAPAAAAAwAAAbAAqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV////////////////////////////////////////////AAAAAExhdmM2MC4zMQAAAAAAAAAAAAAAACQC8AAAAAAAAAGw9wruFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+MYxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MYxDsAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MYxHYAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV';
+    a.play().then(()=>a.pause()).catch(()=>{});
+  }catch(e){}
 }
 document.addEventListener('touchstart',initAudio,{once:true,passive:true});
 document.addEventListener('click',initAudio,{once:true});
@@ -627,6 +635,30 @@ function cue(hz){
   if(audioCtx.state==='suspended'&&audioCtx.resume)audioCtx.resume().then(go).catch(()=>{});
   else go();
 }
+/* N25（2026-08-25）：對話導讀優先播放預生成神經語音（Piper thorsten-high/thorsten_emotional-medium，
+   見 ROADMAP_to_B1.md N25），檔案不存在或載入失敗（例如尚未配音的新課）才退回 speechSynthesis。
+   單一 <audio> 元素重複使用（iOS Safari 限制，見 GUIDE_B §已知結構事實）。 */
+let dlgAudioEl=null;
+function dlgAudio(){
+  if(!dlgAudioEl){dlgAudioEl=new Audio();dlgAudioEl.preload='none';}
+  return dlgAudioEl;
+}
+function dlgAudioPath(lesson,idx){
+  return 'audio/dialogue/l'+lesson.replace(/^L/,'')+'_'+idx+'.mp3';
+}
+function playDlgAudio(lesson,idx){
+  return new Promise((resolve,reject)=>{
+    if(!lesson){reject();return;}
+    const a=dlgAudio();
+    const cleanup=()=>{a.removeEventListener('ended',onEnd);a.removeEventListener('error',onErr);};
+    const onEnd=()=>{cleanup();resolve();};
+    const onErr=()=>{cleanup();reject();};
+    a.addEventListener('ended',onEnd,{once:true});
+    a.addEventListener('error',onErr,{once:true});
+    a.src=dlgAudioPath(lesson,idx);
+    a.play().catch(onErr);
+  });
+}
 function turnUtter(tn){
   const A=tn.s==='A';
   const u=new SpeechSynthesisUtterance(tn.de);
@@ -637,20 +669,24 @@ function turnUtter(tn){
   u.rate=A?1.0:0.78;u.pitch=A?1.2:0.75;
   return u;
 }
-function speakTurn(tn){
-  if(!('speechSynthesis' in window)||!tn)return;
-  window.speechSynthesis.cancel();
+function speakTurn(tn,lesson,idx){
+  if(!tn)return;
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
   if(spkTimer){clearTimeout(spkTimer);spkTimer=null;}
   if(dlgTimer){clearTimeout(dlgTimer);dlgTimer=null;}
   cue(tn.s==='A'?740:392);
-  dlgTimer=setTimeout(()=>{window.speechSynthesis.speak(turnUtter(tn));},230);
+  dlgTimer=setTimeout(()=>{
+    playDlgAudio(lesson,idx).catch(()=>{
+      if('speechSynthesis' in window)window.speechSynthesis.speak(turnUtter(tn));
+    });
+  },230);
 }
 /* onTurn(i)：每輪開講時回呼——用來把逐句重播列對應的鈕點亮。
    提示音在某些裝置可能被系統靜音鍵擋掉，視覺高亮是不會失效的那條線索
    （只顯示第幾句與 A/B，不顯示德文，所以不破壞聽力練習）。 */
-function speakTurns(turns,onTurn){
-  if(!('speechSynthesis' in window)||!turns||!turns.length)return;
-  window.speechSynthesis.cancel();
+function speakTurns(turns,onTurn,lesson){
+  if(!turns||!turns.length)return;
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
   if(spkTimer){clearTimeout(spkTimer);spkTimer=null;}
   if(dlgTimer){clearTimeout(dlgTimer);dlgTimer=null;}
   let i=0;
@@ -660,9 +696,15 @@ function speakTurns(turns,onTurn){
     cue(tn.s==='A'?740:392);
     if(onTurn)onTurn(idx);
     dlgTimer=setTimeout(()=>{
-      const u=turnUtter(tn);
-      u.onend=()=>{dlgTimer=setTimeout(step,480);};
-      window.speechSynthesis.speak(u);
+      playDlgAudio(lesson,idx).then(
+        ()=>{dlgTimer=setTimeout(step,480);},
+        ()=>{
+          if(!('speechSynthesis' in window)){dlgTimer=setTimeout(step,480);return;}
+          const u=turnUtter(tn);
+          u.onend=()=>{dlgTimer=setTimeout(step,480);};
+          window.speechSynthesis.speak(u);
+        }
+      );
     },230);
   };
   step();
@@ -7378,8 +7420,8 @@ function renderTexts(){
           :`<div class="tq"><b style="font-size:.9rem">✏️ 讀懂了嗎？</b>${t.qs.map((q,qi)=>`<div style="margin-top:8px;font-size:.92rem"><b>${qi+1}. ${q.q}</b>${q.options.map((o,oi)=>`<button class="opt" data-q="${qi}" data-o="${oi}">${o}</button>`).join('')}</div>`).join('')}</div>`)
       +`<div class="srcnote">來源：${t.src}</div>`;
     const lite=i=>card.querySelectorAll('.tturn').forEach(b=>{b.dataset.on=(+b.dataset.t===i)?'true':'false';});
-    card.querySelector('.tplay').onclick=()=>{dia?speakTurns(t.turns,lite):speak(t.de);};
-    card.querySelectorAll('.tturn').forEach(b=>{b.onclick=()=>{lite(+b.dataset.t);speakTurn(t.turns[+b.dataset.t]);};});
+    card.querySelector('.tplay').onclick=()=>{dia?speakTurns(t.turns,lite,t.lesson):speak(t.de);};
+    card.querySelectorAll('.tturn').forEach(b=>{b.onclick=()=>{lite(+b.dataset.t);speakTurn(t.turns[+b.dataset.t],t.lesson,+b.dataset.t);};});
     const rv=card.querySelector('.treveal');
     if(rv)rv.onclick=()=>{const d=card.querySelector('.tde');d.style.filter=d.style.filter?'':'blur(6px)';};
     const pop=card.querySelector('.tokpop');
