@@ -1,0 +1,178 @@
+name: gen-dialogue-audio
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install piper-tts and ffmpeg, download locked-in voices
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install piper-tts
+          python3 -m piper.download_voices de_DE-thorsten-high
+          python3 -m piper.download_voices de_DE-thorsten_emotional-medium
+
+      - name: Extract turns, generate missing audio, bulk-commit via Git Data API
+        run: |
+          cat > run.py << 'PYEOF'
+          import re, os, subprocess, json, base64, urllib.request, urllib.error
+
+          REPO = os.environ["GH_REPO"]  # e.g. nonee017-design/deutsch
+          TOKEN = os.environ["GH_TOKEN"]
+          API = f"https://api.github.com/repos/{REPO}"
+          HEADERS = {"Authorization": f"Bearer {TOKEN}", "Accept": "application/vnd.github+json"}
+
+          def gh(method, path, data=None):
+              url = f"{API}{path}"
+              body = json.dumps(data).encode() if data is not None else None
+              req = urllib.request.Request(url, data=body, headers=HEADERS, method=method)
+              try:
+                  with urllib.request.urlopen(req) as r:
+                      return json.loads(r.read().decode())
+              except urllib.error.HTTPError as e:
+                  if e.code == 404:
+                      return None
+                  raise RuntimeError(f"{method} {path} -> {e.code}: {e.read().decode()[:500]}")
+
+          # 1) 抓最新 deutsch-a1.html (公開,免 token)
+          html = urllib.request.urlopen(
+              "https://raw.githubusercontent.com/nonee017-design/deutsch/main/deutsch-a1.html"
+          ).read().decode("utf-8")
+          print("html bytes:", len(html))
+
+          # 2) 抽取所有對話 turns
+          pattern = re.compile(r'id:"t-l(\d+)-1".*?turns:\[(.*?)\],\s*\n\s*de:"', re.DOTALL)
+          turn_pattern = re.compile(r'\{s:"([AB])",de:"((?:[^"\\]|\\.)*)"\}')
+
+          dialogues = []
+          for m in pattern.finditer(html):
+              lesson = int(m.group(1))
+              turns_block = m.group(2)
+              turns = []
+              for sp, txt in turn_pattern.findall(turns_block):
+                  txt = txt.replace('\\"', '"').replace('\\\\', '\\')
+                  turns.append((sp, txt))
+              if turns:
+                  dialogues.append((lesson, turns))
+
+          dialogues.sort()
+          total_turns = sum(len(t) for _, t in dialogues)
+          print(f"找到 {len(dialogues)} 課對話, 共 {total_turns} 輪")
+          for lesson, turns in dialogues:
+              print(f"  L{lesson}: {len(turns)} 輪")
+
+          # 3) 查詢 audio/dialogue/ 現有檔案(避免重複生成)
+          listing = gh("GET", "/contents/audio/dialogue")
+          existing = set()
+          if listing:
+              existing = {item["name"] for item in listing}
+          print(f"repo 既有音檔數: {len(existing)}")
+
+          VOICE_MAP = {"A": "de_DE-thorsten-high", "B": "de_DE-thorsten_emotional-medium"}
+
+          new_files = {}  # path -> local file bytes
+          for lesson, turns in dialogues:
+              for idx, (sp, text) in enumerate(turns):
+                  fname = f"l{lesson}_{idx}.mp3"
+                  if fname in existing:
+                      continue
+                  voice = VOICE_MAP[sp]
+                  wav_out = f"tmp_{fname}.wav"
+                  p = subprocess.run(
+                      ["python3", "-m", "piper", "-m", voice,
+                       "--length-scale", "1.2", "--sentence-silence", "0.4",
+                       "-f", wav_out],
+                      input=text.encode("utf-8"), capture_output=True,
+                  )
+                  if p.returncode != 0:
+                      print(f"FAIL {fname}: {p.stderr.decode()[-300:]}")
+                      continue
+                  mp3_out = f"tmp_{fname}"
+                  subprocess.run(
+                      ["ffmpeg", "-y", "-i", wav_out, "-ar", "22050", "-ac", "1",
+                       "-codec:a", "libmp3lame", "-b:a", "56k", mp3_out],
+                      capture_output=True,
+                  )
+                  with open(mp3_out, "rb") as f:
+                      new_files[f"audio/dialogue/{fname}"] = f.read()
+                  print(f"生成 {fname} ({len(new_files[f'audio/dialogue/{fname}'])} bytes)")
+
+          print(f"本次新生成 {len(new_files)} 個檔案")
+
+          if not new_files:
+              print("沒有新檔案要 commit,結束")
+              with open("summary.json", "w") as f:
+                  json.dump({"new_files": 0, "total_dialogues": len(dialogues), "total_turns": total_turns}, f)
+              raise SystemExit(0)
+
+          # 4) 用 Git Data API 一次 commit 所有新檔案
+          ref = gh("GET", "/git/ref/heads/main")
+          head_sha = ref["object"]["sha"]
+          commit = gh("GET", f"/git/commits/{head_sha}")
+          base_tree_sha = commit["tree"]["sha"]
+
+          tree_items = []
+          for path, content in new_files.items():
+              blob = gh("POST", "/git/blobs", {
+                  "content": base64.b64encode(content).decode(),
+                  "encoding": "base64",
+              })
+              tree_items.append({
+                  "path": path, "mode": "100644", "type": "blob", "sha": blob["sha"],
+              })
+
+          new_tree = gh("POST", "/git/trees", {
+              "base_tree": base_tree_sha,
+              "tree": tree_items,
+          })
+
+          new_commit = gh("POST", "/git/commits", {
+              "message": f"audio: 對話導讀配音批次生成 ({len(new_files)} 個檔案)",
+              "tree": new_tree["sha"],
+              "parents": [head_sha],
+          })
+
+          gh("PATCH", "/git/refs/heads/main", {"sha": new_commit["sha"]})
+          print(f"commit 完成: {new_commit['sha']}")
+
+          with open("summary.json", "w") as f:
+              json.dump({
+                  "new_files": len(new_files),
+                  "total_dialogues": len(dialogues),
+                  "total_turns": total_turns,
+                  "commit_sha": new_commit["sha"],
+              }, f)
+          PYEOF
+          python3 run.py 2>&1 | tee run.log
+
+      - name: Commit log back for inspection
+        if: always()
+        run: |
+          set +e
+          python3 << 'LOGPAYLOAD'
+          import base64, json, subprocess, os
+          for local, remote in [("run.log", "_tmp_gen_audio.log"), ("summary.json", "_tmp_gen_audio_summary.json")]:
+              if not os.path.exists(local):
+                  continue
+              with open(local, "rb") as f:
+                  b64 = base64.b64encode(f.read()).decode()
+              payload = {"message": f"debug: {remote}", "content": b64, "branch": "main"}
+              with open("p.json", "w") as pf:
+                  json.dump(payload, pf)
+              r = subprocess.run(
+                  ["curl", "-sS", "-X", "PUT",
+                   "-H", "Authorization: Bearer " + os.environ["GH_TOKEN"],
+                   "-H", "Accept: application/vnd.github+json",
+                   f"https://api.github.com/repos/{os.environ['GH_REPO']}/contents/{remote}",
+                   "--data-binary", "@p.json"],
+                  capture_output=True, text=True,
+              )
+              print(remote, r.returncode)
+          LOGPAYLOAD
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
