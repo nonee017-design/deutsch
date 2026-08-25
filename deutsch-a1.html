@@ -224,6 +224,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
       L22 衣物·Komparativ/Superlativ 比較級與最高級·als/(genau)so...wie 比較句型<br>
       L23 天氣與短假·Konjunktion denn（因果，V2 不變）·構詞 -los（沒有…的）<br>
       L24 節慶與慶祝·邀請與祝福·Wünsche: Konjunktiv II（würde+Infinitiv）·序數日期複習·Modul 8／A1.2 末課<br>
+      GA1 官方 A1 Wortliste 補充字（Goethe-Institut，非 Menschen 課序）<br>
       <!-- ===ANCHOR:OUTLINE===（新課大綱一行插在這行上方，格式照上）-->
     </div></details>
   </header>
@@ -254,6 +255,7 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
     <button class="lchip" data-lesson="L22" data-on="false">L22</button>
     <button class="lchip" data-lesson="L23" data-on="false">L23</button>
     <button class="lchip" data-lesson="L24" data-on="false">L24</button>
+    <button class="lchip" data-lesson="GA1" data-on="false">📘 GA1 官方補字</button>
     <!-- ===ANCHOR:LESSON_CHIPS===（A1.2 新課按鈕插在這行上方、span#bookA11 之外）-->
     <button class="lchip" data-lesson="ALL" data-on="false">全選 · 模組複習</button>
     <span style="flex-basis:100%;font-size:.72rem;color:var(--mut)">單點換課 · 長按半秒加選複數課 · 📕 收合/展開整冊</span>
@@ -2318,8 +2320,144 @@ const ADD24=[
 {de:"Gut gemacht!",zh:"做得好！",g:null,cat:"節慶",lesson:"L24",ex:["Du hast die Prüfung bestanden? Gut gemacht!","你通過考試了？做得好！"]},
 {de:"Alles Gute!",zh:"祝一切順利！",g:null,cat:"節慶",lesson:"L24",ex:["Alles Gute zum Geburtstag!","生日快樂，一切順利！"]},
 ];
+const ADD_GA1=[
+{de:"Abfahrt",zh:"出發、發車",g:"die",cat:"交通",lesson:"GA1",ex:["Vor der Abfahrt rufe ich an.","出發前我會打電話。"]},
+{de:"Abflug",zh:"（飛機）起飛",g:"der",cat:"交通",lesson:"GA1",ex:["Der Abflug ist um 11.20 Uhr.","起飛時間是11點20分。"]},
+{de:"Absender",zh:"寄件人",g:"der",cat:"行政文件",lesson:"GA1",ex:["Da ist ein Brief für dich ohne Absender.","有一封沒寫寄件人的信給你。"]},
+{de:"Achtung",zh:"注意、小心",g:"die",cat:"慣用語",lesson:"GA1",ex:["Achtung! Das dürfen Sie nicht tun.","注意！這您不能做。"]},
+{de:"Alter",zh:"年齡",g:"das",cat:"個人資料",lesson:"GA1",ex:["Alter: 26 Jahre.","年齡：26歲。"]},
+{de:"Anfang",zh:"開始",g:"der",cat:"時間",lesson:"GA1",ex:["Sie wohnt am Anfang der Straße.","她住在這條街的起點。"]},
+{de:"Ankunft",zh:"抵達",g:"die",cat:"交通",lesson:"GA1",ex:["Auf diesem Plan steht nur die Ankunft der Züge.","這張時刻表上只有列車的抵達時間。"]},
+{de:"Anmeldung",zh:"報名、登記",g:"die",cat:"行政文件",lesson:"GA1",ex:["Eine Anmeldung für diesen Kurs ist nicht mehr möglich.","這門課已經無法報名了。"]},
+{de:"Anrede",zh:"稱謂、稱呼語",g:"die",cat:"書信",lesson:"GA1",ex:["Schreiben Sie auch eine Anrede und einen Gruß.","也請寫上稱謂和問候語。"],ex2:["Liebe Anna, lieber Tom, wie geht es euch?","親愛的安娜、親愛的湯姆，你們好嗎？"]},
+{de:"Ansage",zh:"（廣播）播報",g:"die",cat:"交通",lesson:"GA1",ex:["Hören Sie die Ansagen.","請聽播報。"]},
+{de:"Anschluss",zh:"轉乘、（電話）接通",g:"der",cat:"交通",lesson:"GA1",ex:["In Mannheim haben Sie Anschluss nach Saarbrücken.","在曼海姆您可以轉乘往薩爾布魯根的車。"]},
+{de:"Apartment",zh:"小型公寓",g:"das",cat:"居住",lesson:"GA1",ex:["Wir haben ein Apartment gemietet.","我們租了一間小公寓。"]},
+{de:"Appetit",zh:"食慾",g:"der",cat:"飲食",lesson:"GA1",ex:["Guten Appetit!","祝用餐愉快！"]},
+{de:"Ausgang",zh:"出口",g:"der",cat:"交通／建築",lesson:"GA1",ex:["Wo ist der Ausgang?","出口在哪裡？"]},
+{de:"Aussage",zh:"（測驗）陳述句、說法",g:"die",cat:"測驗用語",lesson:"GA1",ex:["Ist die Aussage richtig oder falsch?","這個陳述句是對還是錯？"]},
+{de:"Ausweis",zh:"證件、身份證",g:"der",cat:"行政文件",lesson:"GA1",ex:["Hier ist mein Ausweis.","這是我的證件。"]},
+{de:"Autobahn",zh:"高速公路",g:"die",cat:"交通",lesson:"GA1",ex:["Wo geht's hier bitte zur Autobahn?","請問去高速公路怎麼走？"]},
+{de:"Automat",zh:"自動販賣機／自動機器",g:"der",cat:"交通／購物",lesson:"GA1",ex:["Die Fahrkarten gibt es nur am Automaten.","車票只能在自動售票機買。"]},
+{de:"Bahn",zh:"鐵路、火車",g:"die",cat:"交通",lesson:"GA1",ex:["Wir fahren lieber mit der Bahn.","我們比較喜歡搭火車。"]},
+{de:"Banane",zh:"香蕉",g:"die",cat:"飲食",lesson:"GA1",ex:["Drei Bananen, bitte!","請給我三根香蕉！"]},
+{de:"Beamte",zh:"公務員（形容詞化名詞，複數需隨形容詞變格）",g:"der",cat:"職業",lesson:"GA1",ex:["Fragen Sie die Beamtin an Schalter acht!","請去八號窗口問那位女公務員！"]},
+{de:"Birne",zh:"梨子",g:"die",cat:"飲食",lesson:"GA1",ex:["Ein Kilo Birnen, bitte!","請給我一公斤梨子！"]},
+{de:"Bogen",zh:"（答案）卷、弧形",g:"der",cat:"測驗用語",lesson:"GA1",ex:["Schreiben Sie Ihre Lösungen bitte auf den Antwortbogen.","請把答案寫在答案卷上。"]},
+{de:"Dame",zh:"女士",g:"die",cat:"稱謂",lesson:"GA1",ex:["Damen (an der Toilette)","女士（廁所標示）"]},
+{de:"Dank",zh:"感謝",g:"der",cat:"慣用語",lesson:"GA1",ex:["Vielen Dank!","非常感謝！"]},
+{de:"Datum",zh:"日期",g:"das",cat:"時間",lesson:"GA1",ex:["Bitte schreiben Sie noch das Datum auf das Formular.","請在表格上寫上日期。"]},
+{de:"Durchsage",zh:"（廣播）通告",g:"die",cat:"交通",lesson:"GA1",ex:["Ich habe die Durchsage nicht verstanden.","我沒聽懂這則廣播通告。"]},
+{de:"Ende",zh:"結尾",g:"das",cat:"時間",lesson:"GA1",ex:["Sie wohnt am Ende der Straße.","她住在這條街的盡頭。"]},
+{de:"Ergebnis",zh:"結果",g:"das",cat:"測驗用語",lesson:"GA1",ex:["Das Ergebnis des Tests bekommen Sie in zwei Wochen.","您將在兩週後收到測驗結果。"]},
+{de:"Erwachsene",zh:"成年人（形容詞化名詞，複數需隨形容詞變格）",g:"der",cat:"身份／人物",lesson:"GA1",ex:["Dieser Film ist nur für Erwachsene.","這部電影只限成人觀看。"]},
+{de:"Europäer",zh:"歐洲人",g:"der",cat:"國籍",lesson:"GA1",ex:["Er fühlt sich als Europäer.","他認為自己是歐洲人。"]},
+{de:"Feuer",zh:"火",g:"das",cat:"慣用語",lesson:"GA1",ex:["Haben Sie Feuer?","您有火（打火機）嗎？"]},
+{de:"Foto",zh:"照片",g:"das",cat:"日常",lesson:"GA1",ex:["Darf ich ein Foto machen?","我可以拍張照嗎？"]},
+{de:"Führung",zh:"導覽",g:"die",cat:"旅遊",lesson:"GA1",ex:["Die Führung durch das Haus beginnt in 3 Minuten.","這棟房子的導覽三分鐘後開始。"]},
+{de:"Geburtsjahr",zh:"出生年",g:"das",cat:"個人資料",lesson:"GA1",ex:["Das Geburtsjahr Ihres Sohnes, bitte?","請問您兒子的出生年？"]},
+{de:"Geburtsort",zh:"出生地",g:"der",cat:"個人資料",lesson:"GA1",ex:["Bitte schreiben Sie Ihren Geburtsort auf das Formular.","請把出生地寫在表格上。"]},
+{de:"Gewicht",zh:"重量、體重",g:"das",cat:"身體",lesson:"GA1",ex:["Bei ‚Gewicht‘ schreibst du: 62 Kilo.","在「體重」欄你寫：62公斤。"]},
+{de:"Gruppe",zh:"小組",g:"die",cat:"學習",lesson:"GA1",ex:["Die erste Gruppe beginnt um 16 Uhr.","第一組16點開始。"]},
+{de:"Halbpension",zh:"半食宿（含早晚餐）",g:"die",cat:"旅遊",lesson:"GA1",ex:["Möchten Sie Vollpension oder Halbpension?","您要全食宿還是半食宿？"]},
+{de:"Halle",zh:"大廳、館",g:"die",cat:"建築",lesson:"GA1",ex:["Wir treffen uns in Halle B.","我們在B廳見面。"]},
+{de:"Hausmann",zh:"家庭主夫",g:"der",cat:"職業",lesson:"GA1",ex:["Die Hausfrau/der Hausmann wäscht, kocht und kauft ein.","家庭主婦/主夫洗衣、煮飯、買東西。"]},
+{de:"Heimat",zh:"故鄉",g:"die",cat:"個人資料",lesson:"GA1",ex:["Ich komme aus der Schweiz. Das ist meine Heimat.","我來自瑞士，那是我的故鄉。"]},
+{de:"Jugendliche",zh:"青少年（形容詞化名詞，複數需隨形容詞變格）",g:"der",cat:"身份／人物",lesson:"GA1",ex:["Viele Jugendliche kaufen gern ein.","很多青少年喜歡購物。"]},
+{de:"Kasse",zh:"收銀台",g:"die",cat:"購物",lesson:"GA1",ex:["Zahlen Sie bitte an der Kasse.","請在收銀台付款。"]},
+{de:"Kiosk",zh:"小賣店、書報攤",g:"der",cat:"購物",lesson:"GA1",ex:["Am Kiosk bekommen Sie Getränke, Zigaretten und Zeitungen.","小賣店可以買到飲料、香菸和報紙。"]},
+{de:"Konto",zh:"帳戶",g:"das",cat:"銀行",lesson:"GA1",ex:["Das Geld überweisen wir am ersten März auf Ihr Konto.","我們將在3月1日把錢匯入您的帳戶。"]},
+{de:"Kunde",zh:"顧客",g:"der",cat:"購物",lesson:"GA1",ex:["Einen Moment, bitte. Ich habe eine Kundin.","請稍等，我在服務一位女顧客。"]},
+{de:"Lkw",zh:"貨車",g:"der",cat:"交通",lesson:"GA1",ex:["Dieser Lastkraftwagen ist sehr groß.","這輛貨車很大。"]},
+{de:"Lokal",zh:"小餐館、店面",g:"das",cat:"飲食",lesson:"GA1",ex:["In unserer Straße gibt es ein neues Lokal.","我們這條街上有一家新的小餐館。"]},
+{de:"Lösung",zh:"解答",g:"die",cat:"測驗用語",lesson:"GA1",ex:["Die Lösung ist ganz einfach.","答案很簡單。"]},
+{de:"Maschine",zh:"機器、洗衣機",g:"die",cat:"家電",lesson:"GA1",ex:["Die Waschmaschine ist günstig.","這台洗衣機很便宜。"]},
+{de:"Papiere",zh:"證件、文件（只用複數形；單數 das Papier 是「紙」，意義不同）",g:"plu",cat:"行政文件",lesson:"GA1",ex:["Haben Sie Ihre Papiere dabei?","您有帶證件嗎？"]},
+{de:"Prospekt",zh:"（旅遊/廣告）小冊子",g:"der",cat:"旅遊",lesson:"GA1",ex:["Bitte schicken Sie mir einen Prospekt von Ihrem Hotel.","請寄給我貴飯店的介紹手冊。"]},
+{de:"Reparatur",zh:"維修",g:"die",cat:"日常",lesson:"GA1",ex:["Die Reparatur ist sehr teuer.","這次維修很貴。"]},
+{de:"Salz",zh:"鹽",g:"das",cat:"飲食",lesson:"GA1",ex:["Herr Ober, kann ich bitte Salz haben?","服務生，我可以要點鹽嗎？"]},
+{de:"Schalter",zh:"（服務）窗口",g:"der",cat:"行政文件",lesson:"GA1",ex:["Gehen Sie bitte zum Schalter drei!","請到三號窗口！"]},
+{de:"Schluss",zh:"結束",g:"der",cat:"日常",lesson:"GA1",ex:["Ich muss jetzt Schluss machen.","我現在得結束了。"]},
+{de:"Studium",zh:"大學學業",g:"das",cat:"教育",lesson:"GA1",ex:["Das Studium beginnt im Oktober.","大學學業十月開始。"]},
+{de:"Teil",zh:"部分",g:"der",cat:"日常",lesson:"GA1",ex:["Lies bitte auch den zweiten Teil.","請也讀一下第二部分。"]},
+{de:"Test",zh:"測驗",g:"der",cat:"測驗用語",lesson:"GA1",ex:["Der Test war einfach.","這個測驗很簡單。"]},
+{de:"Thema",zh:"主題",g:"das",cat:"學習",lesson:"GA1",ex:["Wir sprechen heute über das Thema ‚Essen und Trinken‘.","我們今天談「飲食」這個主題。"]},
+{de:"Unterricht",zh:"上課、教學",g:"der",cat:"教育",lesson:"GA1",ex:["Der Unterricht fängt gleich an.","課馬上要開始了。"]},
+{de:"Unterschrift",zh:"簽名",g:"die",cat:"行政文件",lesson:"GA1",ex:["Hier fehlt noch Ihre Unterschrift.","這裡還缺您的簽名。"]},
+{de:"Verein",zh:"協會、社團",g:"der",cat:"社交",lesson:"GA1",ex:["Es gibt einen neuen Sportverein in der Stadt.","城裡有一個新的體育社團。"]},
+{de:"Vorwahl",zh:"（電話）區碼",g:"die",cat:"電話",lesson:"GA1",ex:["Wie ist die Vorwahl von München?","慕尼黑的區碼是多少？"]},
+{de:"Wiederhören",zh:"（電話）再會",g:"das",cat:"慣用語",lesson:"GA1",ex:["Auf Wiederhören!","（電話中）再見！"]},
+{de:"Zigarette",zh:"香菸",g:"die",cat:"購物",lesson:"GA1",ex:["Wie teuer sind die Zigaretten?","這些香菸多少錢？"]},
+{de:"Zoll",zh:"海關",g:"der",cat:"交通",lesson:"GA1",ex:["Wir müssen noch durch den Zoll.","我們還得通過海關。"]},
+{de:"Öl",zh:"油",g:"das",cat:"飲食",lesson:"GA1",ex:["Den Salat machen wir ohne Öl.","我們做沙拉不放油。"]},
+{de:"Gramm",zh:"公克",g:"das",cat:"度量衡",lesson:"GA1",ex:["Ich hätte gern 200 Gramm Käse.","我想要200公克起司。"]},
+{de:"Kilo",zh:"公斤",g:"das",cat:"度量衡",lesson:"GA1",ex:["Ein Kilo(gramm) sind 1000 Gramm.","一公斤是1000公克。"]},
+{de:"Kilogramm",zh:"公斤",g:"das",cat:"度量衡",lesson:"GA1",ex:["Wie viel Kilogramm wiegt der Koffer?","這個行李箱有幾公斤重？"]},
+{de:"Liter",zh:"公升",g:"der",cat:"度量衡",lesson:"GA1",ex:["Ein Liter Milch, bitte.","請給我一公升牛奶。"]},
+{de:"Milliarde",zh:"十億",g:"die",cat:"度量衡",lesson:"GA1",ex:["Die Stadt hat eine Milliarde Euro investiert.","這座城市投資了十億歐元。"]},
+{de:"Million",zh:"百萬",g:"die",cat:"度量衡",lesson:"GA1",ex:["Die Firma macht jedes Jahr eine Million Euro Gewinn.","這家公司每年賺一百萬歐元。"]},
+{de:"Pfund",zh:"磅（500公克）",g:"das",cat:"度量衡",lesson:"GA1",ex:["Ein Pfund Tomaten, bitte.","請給我一磅番茄。"]},
+{de:"Prozent",zh:"百分比",g:"das",cat:"度量衡",lesson:"GA1",ex:["Ein Prozent ist sehr wenig.","百分之一很少。"]},
+{de:"Sekunde",zh:"秒",g:"die",cat:"時間",lesson:"GA1",ex:["Einen Moment, das dauert nur eine Sekunde.","稍等，只要一秒鐘。"]},
+{de:"Sonnabend",zh:"星期六（=Samstag）",g:"der",cat:"時間",lesson:"GA1",ex:["Am Sonnabend habe ich frei.","星期六我休假。"]},
+{de:"Wochentag",zh:"平日、星期幾",g:"der",cat:"時間",lesson:"GA1",ex:["An welchem Wochentag hast du Zeit?","你哪個平日有空？"]},
+{de:"Zentimeter",zh:"公分",g:"der",cat:"度量衡",lesson:"GA1",ex:["Der Tisch ist achtzig Zentimeter breit.","這張桌子寬八十公分。"]},
+{de:"anklicken",zh:"點擊（滑鼠）",g:null,cat:"動詞",lesson:"GA1",ex:["Da musst du dieses Wort anklicken.","你要點擊這個字。"]},
+{de:"ausfüllen",zh:"填寫（表格）",g:null,cat:"動詞",lesson:"GA1",ex:["Füllen Sie bitte dieses Formular aus.","請填寫這份表格。"]},
+{de:"bedeuten",zh:"意味著、意思是",g:null,cat:"動詞",lesson:"GA1",ex:["Was bedeutet das Wort?","這個字是什麼意思？"]},
+{de:"besichtigen",zh:"參觀",g:null,cat:"動詞",lesson:"GA1",ex:["Ich möchte gern den Dom besichtigen.","我想參觀這座大教堂。"]},
+{de:"bitten",zh:"請求",g:null,cat:"動詞",lesson:"GA1",ex:["Darf ich Sie um etwas bitten?","我可以請您幫個忙嗎？"]},
+{de:"drucken",zh:"列印",g:null,cat:"動詞",lesson:"GA1",ex:["Bitte drucke das Formular für mich.","請幫我列印這份表格。"]},
+{de:"drücken",zh:"按、擠",g:null,cat:"動詞",lesson:"GA1",ex:["Drück hier, dann geht der Computer an.","按這裡，電腦就會開機。"]},
+{de:"empfehlen",zh:"推薦",g:null,cat:"動詞",lesson:"GA1",ex:["Welchen Wein können Sie mir empfehlen?","您能推薦我什麼酒？"]},
+{de:"enden",zh:"結束",g:null,cat:"動詞",lesson:"GA1",ex:["Die Straße endet hier.","這條街到這裡就結束了。"]},
+{de:"erklären",zh:"解釋",g:null,cat:"動詞",lesson:"GA1",ex:["Kannst du mir das erklären?","你能跟我解釋一下嗎？"]},
+{de:"halten",zh:"停、拿著",g:null,cat:"動詞",lesson:"GA1",ex:["Dieser Zug hält nicht in Rüdesheim.","這班火車不停靠呂德斯海姆。"]},
+{de:"kriegen",zh:"得到（口語）",g:null,cat:"動詞",lesson:"GA1",ex:["Ich kriege 15 Euro in der Stunde für meine Arbeit.","我的工作一小時可以拿到15歐元。"]},
+{de:"legen",zh:"放（平放）",g:null,cat:"動詞",lesson:"GA1",ex:["Legen Sie das Buch auf den Tisch.","請把書放在桌上。"]},
+{de:"mieten",zh:"租",g:null,cat:"動詞",lesson:"GA1",ex:["Ich möchte ein Auto mieten.","我想租一輛車。"]},
+{de:"mitmachen",zh:"一起參加",g:null,cat:"動詞",lesson:"GA1",ex:["Warum macht ihr nicht mit?","你們為什麼不一起參加？"],pex:["Habt ihr nicht mitgemacht?","你們沒有一起參加嗎？"]},
+{de:"unterschreiben",zh:"簽名",g:null,cat:"動詞",lesson:"GA1",ex:["Wo muss ich unterschreiben?","我要在哪裡簽名？"]},
+{de:"wiederholen",zh:"重複",g:null,cat:"動詞",lesson:"GA1",ex:["Können Sie das bitte wiederholen?","您可以再說一次嗎？"]},
+{de:"zahlen",zh:"付款",g:null,cat:"動詞",lesson:"GA1",ex:["Zahlen, bitte!","買單，謝謝！"]},
+{de:"öffnen",zh:"打開",g:null,cat:"動詞",lesson:"GA1",ex:["Ich öffne die Tür.","我把門打開。"]},
+{de:"überweisen",zh:"匯款",g:null,cat:"動詞",lesson:"GA1",ex:["Sie können das Geld auch überweisen.","您也可以匯款。"]},
+{de:"sterben",zh:"死、過世",g:null,cat:"動詞",lesson:"GA1",pex:["Meine Frau ist gestern gestorben.","我太太昨天過世了。"]},
+{de:"ausländisch",zh:"外國的",g:null,cat:"形容詞",lesson:"GA1",ex:["Leider habe ich nur ausländisches Geld.","可惜我只有外幣。"]},
+{de:"automatisch",zh:"自動的、自動地",g:null,cat:"形容詞",lesson:"GA1",ex:["Du musst nichts machen. Das geht automatisch.","你什麼都不用做，這是自動的。"]},
+{de:"beide",zh:"兩者、兩個都",g:null,cat:"代詞",lesson:"GA1",ex:["Beide Eltern arbeiten.","父母兩人都工作。"]},
+{de:"besetzt",zh:"（座位/線路）已被佔用",g:null,cat:"形容詞",lesson:"GA1",ex:["Die Nummer ist immer besetzt.","這個號碼一直佔線。"]},
+{de:"böse",zh:"生氣的、壞的",g:null,cat:"形容詞",lesson:"GA1",ex:["Sie ist böse auf mich.","她在生我的氣。"]},
+{de:"breit",zh:"寬的",g:null,cat:"形容詞",lesson:"GA1",ex:["Wie breit ist der Schrank?","這個櫃子有多寬？"]},
+{de:"danke",zh:"謝謝",g:null,cat:"慣用語",lesson:"GA1",ex:["Soll ich Ihnen helfen? - Nein, danke!","要我幫您嗎？－不用，謝謝！"]},
+{de:"daneben",zh:"在旁邊",g:null,cat:"副詞",lesson:"GA1",ex:["Du kennst doch die Post. Daneben ist die Bank.","你知道郵局吧，銀行就在旁邊。"]},
+{de:"dritte",zh:"第三（序數）",g:null,cat:"序數",lesson:"GA1",ex:["Lies bitte auch den dritten Teil.","請也讀一下第三部分。"]},
+{de:"eilig",zh:"匆忙的、緊急的",g:null,cat:"形容詞",lesson:"GA1",ex:["Hast du es eilig?","你在趕時間嗎？"]},
+{de:"einundzwanzig",zh:"二十一",g:null,cat:"數字",lesson:"GA1",ex:["Ich bin einundzwanzig Jahre alt.","我二十一歲。"]},
+{de:"erste",zh:"第一（序數）",g:null,cat:"序數",lesson:"GA1",ex:["Die erste Gruppe beginnt um 16 Uhr.","第一組16點開始。"]},
+{de:"europäisch",zh:"歐洲的",g:null,cat:"形容詞",lesson:"GA1",ex:["Das ist ein europäisches Land.","這是一個歐洲國家。"]},
+{de:"gültig",zh:"有效的",g:null,cat:"形容詞",lesson:"GA1",ex:["Der Pass ist nicht mehr gültig.","這本護照已經失效了。"]},
+{de:"herzlich",zh:"衷心的、熱情的",g:null,cat:"形容詞",lesson:"GA1",ex:["Herzlichen Glückwunsch!","衷心祝賀！"]},
+{de:"international",zh:"國際的",g:null,cat:"形容詞",lesson:"GA1",ex:["Unser Deutschkurs ist international.","我們的德文課很國際化。"]},
+{de:"kulturell",zh:"文化上的",g:null,cat:"形容詞",lesson:"GA1",ex:["Ich bin kulturell interessiert.","我對文化很有興趣。"]},
+{de:"männlich",zh:"男性的",g:null,cat:"形容詞",lesson:"GA1",ex:["Kreuzen Sie bitte an: ‚weiblich‘ oder ‚männlich‘.","請勾選「女性」或「男性」。"]},
+{de:"möglich",zh:"可能的",g:null,cat:"形容詞",lesson:"GA1",ex:["Mit dieser Fahrkarte ist die Fahrt ab 9 Uhr möglich.","持這張票可以在9點後搭乘。"]},
+{de:"selbstständig",zh:"獨立自主的、自營的",g:null,cat:"形容詞",lesson:"GA1",ex:["Er ist selbstständig.","他是自營業者。"]},
+{de:"später",zh:"之後、稍後",g:null,cat:"副詞",lesson:"GA1",ex:["Das können wir später machen.","這個我們可以之後再做。"]},
+{de:"tot",zh:"死的",g:null,cat:"形容詞",lesson:"GA1",ex:["Sein Vater ist schon lange tot.","他父親已經過世很久了。"]},
+{de:"tschüss",zh:"再見（口語）",g:null,cat:"慣用語",lesson:"GA1",ex:["Tschüss, bis morgen!","再見，明天見！"]},
+{de:"vierte",zh:"第四（序數）",g:null,cat:"序數",lesson:"GA1",ex:["Bitte lies auch den vierten Teil.","請也讀一下第四部分。"]},
+{de:"weiblich",zh:"女性的",g:null,cat:"形容詞",lesson:"GA1",ex:["Kreuzen Sie bitte an: ‚weiblich‘ oder ‚männlich‘.","請勾選「女性」或「男性」。"]},
+{de:"wunderbar",zh:"太好了、極好的",g:null,cat:"形容詞",lesson:"GA1",ex:["Das Essen schmeckt wunderbar.","這道菜好吃極了。"]},
+{de:"zurück",zh:"回、往回",g:null,cat:"副詞",lesson:"GA1",ex:["Einmal Frankfurt und zurück.","一張到法蘭克福的來回票。"]},
+{de:"zweite",zh:"第二（序數）",g:null,cat:"序數",lesson:"GA1",ex:["Lies bitte auch den zweiten Teil.","請也讀一下第二部分。"]},
+];
+const ADD_GA1B=[
+{de:"andere",zh:"別的、其他的（規則形容詞，隨性別格位變化）",g:null,cat:"形容詞",lesson:"GA1",ex:["Ich möchte die andere Jacke.","我想要另一件外套。"]},
+{de:"die meisten",zh:"大多數的（＋複數名詞；量詞用法，跟副詞 am meisten「最喜歡…」是不同功能）",g:null,cat:"常用",lesson:"GA1",ex:["Die meisten Leute mögen Kaffee.","大多數人喜歡咖啡。"]},
+];
 /* ===ANCHOR:VOCAB_ARRAYS===（新課單字陣列 const ADDn=[...] 宣告在這行上方，並把陣列名加進下面 VOCAB 合併行）*/
-const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B,...ADD18,...ADDP2V,...ADD10S,...ADDCLO,...ADDCLOADJ,...ADD19,...ADD16S,...ADD18S,...ADD13S,...ADD15T,...ADD17S,...ADD20,...ADD21,...ADD22,...ADD23,...ADD_C0821,...ADD24];
+const VOCAB=[...L4VOCAB,...ADD4,...L5VOCAB,...ADD5,...ADD6,...ADD5B,...ADDART,...ADD123,...ADD7,...ADD8,...ADD9,...ADD_EXPAND,...ADD10,...ADD11,...ADD12,...ADD123X,...ADD13,...ADD13B,...ADD14,...ADDFIXF,...ADDFIXV1,...ADDFIXL8,...ADD15,...ADD15B,...ADD16,...ADD16B,...ADD15S,...ADD17,...ADD17B,...ADD18,...ADDP2V,...ADD10S,...ADDCLO,...ADDCLOADJ,...ADD19,...ADD16S,...ADD18S,...ADD13S,...ADD15T,...ADD17S,...ADD20,...ADD21,...ADD22,...ADD23,...ADD_C0821,...ADD24,...ADD_GA1,...ADD_GA1B];
 VOCAB.forEach((v,i)=>v.id="v"+i);
 
 
@@ -2630,6 +2768,72 @@ const NOUN_PL={
   "Abschlussprüfung":"Abschlussprüfungen","Überraschungsparty":"Überraschungspartys",
   "Hantel":"Hanteln","Fallschirm":"Fallschirme","Bundesfeiertag":"Bundesfeiertage",
   "Nationalfeiertag":"Nationalfeiertage",
+  "Abfahrt":"Abfahrten",
+  "Abflug":"Abflüge",
+  "Absender":"Absender",
+  "Anfang":"Anfänge",
+  "Ankunft":"Ankünfte",
+  "Anmeldung":"Anmeldungen",
+  "Anrede":"Anreden",
+  "Ansage":"Ansagen",
+  "Anschluss":"Anschlüsse",
+  "Apartment":"Apartments",
+  "Ausgang":"Ausgänge",
+  "Aussage":"Aussagen",
+  "Ausweis":"Ausweise",
+  "Autobahn":"Autobahnen",
+  "Automat":"Automaten",
+  "Bahn":"Bahnen",
+  "Banane":"Bananen",
+  "Birne":"Birnen",
+  "Bogen":"Bögen",
+  "Dame":"Damen",
+  "Datum":"Daten",
+  "Durchsage":"Durchsagen",
+  "Ende":"Enden",
+  "Ergebnis":"Ergebnisse",
+  "Europäer":"Europäer",
+  "Foto":"Fotos",
+  "Führung":"Führungen",
+  "Geburtsjahr":"Geburtsjahre",
+  "Geburtsort":"Geburtsorte",
+  "Gewicht":"Gewichte",
+  "Gruppe":"Gruppen",
+  "Halle":"Hallen",
+  "Hausmann":"Hausmänner",
+  "Kasse":"Kassen",
+  "Kiosk":"Kioske",
+  "Konto":"Konten",
+  "Kunde":"Kunden",
+  "Lkw":"Lkws",
+  "Lokal":"Lokale",
+  "Lösung":"Lösungen",
+  "Maschine":"Maschinen",
+  "Prospekt":"Prospekte",
+  "Reparatur":"Reparaturen",
+  "Schalter":"Schalter",
+  "Schluss":"Schlüsse",
+  "Studium":"Studien",
+  "Teil":"Teile",
+  "Test":"Tests",
+  "Thema":"Themen",
+  "Unterschrift":"Unterschriften",
+  "Verein":"Vereine",
+  "Vorwahl":"Vorwahlen",
+  "Zigarette":"Zigaretten",
+  "Zoll":"Zölle",
+  "Gramm":"Gramm",
+  "Kilo":"Kilo",
+  "Kilogramm":"Kilogramm",
+  "Liter":"Liter",
+  "Milliarde":"Milliarden",
+  "Million":"Millionen",
+  "Pfund":"Pfund",
+  "Prozent":"Prozent",
+  "Sekunde":"Sekunden",
+  "Sonnabend":"Sonnabende",
+  "Wochentag":"Wochentage",
+  "Zentimeter":"Zentimeter",
   /* ===ANCHOR:NOUN_PL===（新名詞複數 "單數":"複數", 插在這行上方）*/
 };
 const NOUN_PL_NOTE={
@@ -2851,6 +3055,32 @@ const NOUN_PL_NOTE={
   "Eimer":"複數同形 die Eimer（-er 類）。",
   "Schneesturm":"複數 die Schneestürme：u→ü 變音 → Forvo（同 Sturm→Stürme）。",
   "Glückwunsch":"複數 die Glückwünsche：u→ü 變音 → Forvo。",
+  "Abflug":"複數 die Abflüge：母音變化 → Forvo。",
+  "Absender":"-er 結尾，複數同形，不加詞尾。",
+  "Anfang":"複數 die Anfänge：母音變化 → Forvo。",
+  "Ankunft":"複數 die Ankünfte：母音變化 → Forvo。",
+  "Anschluss":"複數 die Anschlüsse：母音變化 → Forvo。",
+  "Ausgang":"複數 die Ausgänge：母音變化 → Forvo。",
+  "Automat":"弱變化名詞：單數屬格/賓格/與格都是 Automaten。",
+  "Bogen":"複數 die Bögen：母音變化 → Forvo。",
+  "Datum":"不規則複數：Datum→Daten（與「資料」的 Daten 同形，注意語境）。",
+  "Ende":"日常多用單數；複數 Enden 較少見（如「兩端」）。",
+  "Europäer":"-er 結尾，複數同形。",
+  "Hausmann":"複合詞尾隨 Mann：複數 die Hausmänner。",
+  "Konto":"不規則複數：Konto→Konten。",
+  "Kunde":"弱變化名詞：單數屬格/賓格/與格都是 Kunden。",
+  "Schalter":"-er 結尾，複數同形。",
+  "Schluss":"複數 die Schlüsse：母音變化，多用於「結論」義 → Forvo。",
+  "Studium":"不規則複數：Studium→Studien。",
+  "Thema":"不規則複數：Thema→Themen。",
+  "Zoll":"複數 die Zölle：母音變化，另指「關稅」 → Forvo。",
+  "Gramm":"計量單位，數字後不變複數（如 zweihundert Gramm）。",
+  "Kilo":"計量單位，數字後不變複數。",
+  "Kilogramm":"計量單位，數字後不變複數。",
+  "Liter":"計量單位，數字後不變複數。",
+  "Pfund":"計量單位，數字後不變複數。",
+  "Prozent":"計量單位，數字後不變複數。",
+  "Zentimeter":"計量單位，數字後不變複數。",
   /* ===ANCHOR:NOUN_PL_NOTE===（變音／同形／不規則等複數警語插在這行上方）*/
 };
 /* ═══ 形容詞比較級／最高級（2026-08-14 里程碑）════════════════════════
@@ -2913,6 +3143,7 @@ const ADJ_NOCOMP={
   "vegetarisch":"⏳ 待確認：標準德文視為二元，口語有人比較",
   "kaputt":"⏳ 待確認：標準德文視為二元，口語有 kaputter",
   "verliebt":"⏳ 待確認：標準德文視為二元，口語有 verliebter",
+  "tot":"二元狀態語意詞（死／活），不比較",
   /* ===ANCHOR:ADJ_NOCOMP===（新的不可比較宣告插在這行上方，格式：原級 → 理由）*/
 };
 /* 原級 → [比較級, 最高級(am …)]；不可比較回 null。
@@ -3778,6 +4009,72 @@ const NOUN_PLEX={
   "Fallschirm":["Im Museum hängen drei alte Fallschirme.","博物館裡掛著三個舊降落傘。"],
   "Bundesfeiertag":["Die Bundesfeiertage in der Schweiz und in Deutschland sind an unterschiedlichen Tagen.","瑞士和德國的國定假日在不同的日子。"],
   "Nationalfeiertag":["Viele Länder haben ihre Nationalfeiertage im Sommer.","很多國家的國慶日在夏天。"],
+  "Abfahrt":["Die Abfahrten sind auf dem Bahnsteig angezeigt.","發車時刻表在月台上顯示。"],
+  "Abflug":["Heute gibt es viele Abflüge nach Berlin.","今天有很多班飛往柏林的航班。"],
+  "Absender":["Die Absender auf den Briefen sind unbekannt.","這些信上的寄件人不明。"],
+  "Anfang":["Alle Anfänge sind schwer.","萬事起頭難。"],
+  "Ankunft":["Alle Ankünfte stehen auf der Tafel.","所有抵達時間都顯示在看板上。"],
+  "Anmeldung":["Die Anmeldungen laufen bis Freitag.","報名到星期五截止。"],
+  "Anrede":["In E-Mails gibt es verschiedene Anreden.","電子郵件裡有不同的稱謂用法。"],
+  "Ansage":["Am Bahnhof hört man viele Ansagen.","在火車站可以聽到很多播報。"],
+  "Anschluss":["Es gibt heute mehrere Anschlüsse nach Hamburg.","今天有好幾班往漢堡的轉乘車。"],
+  "Apartment":["In diesem Haus gibt es zehn Apartments.","這棟樓裡有十間小公寓。"],
+  "Ausgang":["Dieses Gebäude hat drei Ausgänge.","這棟大樓有三個出口。"],
+  "Aussage":["Lesen Sie die Aussagen genau.","請仔細讀這些陳述句。"],
+  "Ausweis":["Bitte zeigen Sie Ihre Ausweise.","請出示您的證件。"],
+  "Autobahn":["In Deutschland gibt es viele Autobahnen.","德國有很多條高速公路。"],
+  "Automat":["An diesem Bahnhof stehen zwei Automaten.","這個車站有兩台自動售票機。"],
+  "Bahn":["Die Bahnen fahren heute pünktlich.","今天火車準時發車。"],
+  "Banane":["Die Bananen sind schon reif.","這些香蕉已經熟了。"],
+  "Birne":["Die Birnen im Korb sind süß.","籃子裡的梨子很甜。"],
+  "Bogen":["Bitte geben Sie alle Bögen ab.","請把所有的答案卷交回來。"],
+  "Dame":["Sehr geehrte Damen und Herren!","敬啟者（各位女士先生）！"],
+  "Datum":["Bitte tragen Sie alle Daten korrekt ein.","請正確填寫所有日期／資料。"],
+  "Durchsage":["Die Durchsagen am Flughafen sind oft leise.","機場的廣播通告常常很小聲。"],
+  "Ende":["Das Seil hat zwei Enden.","這條繩子有兩端。"],
+  "Ergebnis":["Die Ergebnisse sind noch nicht da.","結果還沒出來。"],
+  "Europäer":["Viele Europäer reisen gern nach Asien.","很多歐洲人喜歡去亞洲旅遊。"],
+  "Foto":["Ich habe viele Fotos vom Urlaub.","我有很多度假的照片。"],
+  "Führung":["Wir bieten jeden Tag zwei Führungen an.","我們每天提供兩場導覽。"],
+  "Geburtsjahr":["Bitte tragen Sie die Geburtsjahre aller Kinder ein.","請填寫所有孩子的出生年。"],
+  "Geburtsort":["Die Geburtsorte der Eltern stehen auch im Formular.","表格裡也有父母的出生地欄位。"],
+  "Gewicht":["Die Pakete haben unterschiedliche Gewichte.","這些包裹的重量不同。"],
+  "Gruppe":["Wir teilen die Klasse in drei Gruppen.","我們把班級分成三組。"],
+  "Halle":["Die Messe hat sechs Hallen.","這個展覽有六個館。"],
+  "Hausmann":["Immer mehr Hausmänner kümmern sich um die Kinder.","越來越多家庭主夫照顧孩子。"],
+  "Kasse":["Es gibt hier drei Kassen.","這裡有三個收銀台。"],
+  "Kiosk":["In dieser Straße gibt es zwei Kioske.","這條街上有兩家小賣店。"],
+  "Konto":["Ich habe zwei Konten bei dieser Bank.","我在這家銀行有兩個帳戶。"],
+  "Kunde":["Die Kunden warten schon lange.","顧客們已經等了很久。"],
+  "Lkw":["Auf der Autobahn fahren viele Lkws.","高速公路上有很多貨車。"],
+  "Lokal":["In der Altstadt gibt es viele Lokale.","舊城區有很多小餐館。"],
+  "Lösung":["Vergleichen wir unsere Lösungen.","我們來比較一下答案。"],
+  "Maschine":["In der Fabrik stehen viele Maschinen.","工廠裡有很多機器。"],
+  "Prospekt":["Am Schalter liegen viele Prospekte.","櫃檯上有很多小冊子。"],
+  "Reparatur":["Wir machen zurzeit mehrere Reparaturen.","我們目前在進行好幾項維修。"],
+  "Schalter":["Heute sind alle Schalter geöffnet.","今天所有窗口都開放。"],
+  "Schluss":["Er zieht daraus falsche Schlüsse.","他從中得出了錯誤的結論。"],
+  "Studium":["Sie macht mehrere Studien zu diesem Thema.","她針對這個主題做了好幾項研究。"],
+  "Teil":["Das Buch hat drei Teile.","這本書有三個部分。"],
+  "Test":["Wir schreiben diese Woche zwei Tests.","我們這週要考兩次測驗。"],
+  "Thema":["Wir haben schon viele Themen besprochen.","我們已經討論過很多主題了。"],
+  "Unterschrift":["Auf dem Vertrag fehlen zwei Unterschriften.","合約上還缺兩個簽名。"],
+  "Verein":["In dieser Stadt gibt es viele Vereine.","這座城市裡有很多社團。"],
+  "Vorwahl":["Die Vorwahlen der Städte stehen im Telefonbuch.","各城市的區碼都在電話簿裡。"],
+  "Zigarette":["Zigaretten gibt es am Kiosk.","香菸在小賣店有賣。"],
+  "Zoll":["An der Grenze gibt es mehrere Zölle.","邊境上有好幾個海關。"],
+  "Gramm":["Zweihundert Gramm Käse, bitte.","請給我兩百公克起司。"],
+  "Kilo":["Ich kaufe drei Kilo Kartoffeln.","我買三公斤馬鈴薯。"],
+  "Kilogramm":["Der Koffer wiegt zwanzig Kilogramm.","這個行李箱重二十公斤。"],
+  "Liter":["Wir brauchen fünf Liter Wasser.","我們需要五公升的水。"],
+  "Milliarde":["Das Projekt kostet mehrere Milliarden Euro.","這個計畫要花好幾十億歐元。"],
+  "Million":["In dieser Stadt leben zwei Millionen Menschen.","這座城市住著兩百萬人。"],
+  "Pfund":["Zwei Pfund Äpfel, bitte.","請給我兩磅蘋果。"],
+  "Prozent":["Fünfzig Prozent der Studenten kommen aus Asien.","百分之五十的學生來自亞洲。"],
+  "Sekunde":["Der Film dauert neunzig Minuten und zehn Sekunden.","這部電影長九十分鐘又十秒。"],
+  "Sonnabend":["Die nächsten zwei Sonnabende bin ich in Berlin.","接下來的兩個星期六我會在柏林。"],
+  "Wochentag":["An allen Wochentagen ist die Bibliothek geöffnet.","圖書館所有平日都開放。"],
+  "Zentimeter":["Zehn Zentimeter sind nicht viel.","十公分不算多。"],
   /* ===ANCHOR:NOUN_PLEX===（複數例句 "單數":["德文","中文"], 插在這行上方）*/
 };
 const VERB_META={
@@ -4046,6 +4343,27 @@ const VERB_META={
   gratulieren:{t:"reg"},
   schenken:{t:"reg"},
   gewinnen:{t:"reg",p2:"gewonnen",aux:"h"},
+anklicken:{t:"irr",f:["klicke … an","klickst … an","klickt … an","klicken … an","klickt … an","klicken … an"]},
+ausfüllen:{t:"irr",f:["fülle … aus","füllst … aus","füllt … aus","füllen … aus","füllt … aus","füllen … aus"]},
+bedeuten:{t:"stemt",du:"bedeutest",er:"bedeutet"},
+besichtigen:{t:"reg"},
+bitten:{t:"stemt",du:"bittest",er:"bittet"},
+drucken:{t:"reg"},
+drücken:{t:"reg"},
+empfehlen:{t:"vowel",du:"empfiehlst",er:"empfiehlt"},
+enden:{t:"stemt",du:"endest",er:"endet"},
+erklären:{t:"reg"},
+halten:{t:"vowel",du:"hältst",er:"hält"},
+kriegen:{t:"reg"},
+legen:{t:"reg"},
+mieten:{t:"stemt",du:"mietest",er:"mietet"},
+mitmachen:{t:"irr",f:["mache … mit","machst … mit","macht … mit","machen … mit","macht … mit","machen … mit"]},
+unterschreiben:{t:"reg"},
+wiederholen:{t:"reg"},
+zahlen:{t:"reg"},
+öffnen:{t:"stemt",du:"öffnest",er:"öffnet"},
+überweisen:{t:"sib",du:"überweist",er:"überweist"},
+sterben:{t:"vowel",du:"stirbst",er:"stirbt",p2:"gestorben",aux:"s"},
   /* ===ANCHOR:VERB_META===（新動詞變位 動詞:{t:"reg"|"stemt"|"vowel"|"irr",...}, 插在這行上方）*/
 };
 /* 可分離動詞 Partizip 組字（2026-07-31）：Partizip = 字首 + 母動詞 Partizip，
@@ -5578,7 +5896,7 @@ function logAnswer(){
 function weekCount(){const cut=Date.now()-7*864e5;let n=0;Object.entries(qlog).forEach(([k,v])=>{const ts=new Date(k+'T00:00:00').getTime();if(isFinite(ts)&&ts>=cut)n+=(+v||0);});return n;}
 function updateDash(){const el=document.getElementById('dash');if(el)el.textContent=`已畢業 ${Object.keys(mastered).length} / ${VOCAB.length} 字 · 本週答題 ${weekCount()} 題`;}
 /* 文法卡穩定 key：由標題衍生（改標題會孤兒化標記，與例句 de-key 同一取捨） */
-const GKEY_MAP=[["疼痛表達","pain"],["人稱代名詞","pron"],["陰陽性線索","gclue"],["複數線索","pclue"],["所有格","poss"],["schon vs erst","advw"],["時間介係詞","zeit"],["序數","datum"],["地方介係詞","lokal"],["冠詞變格","art"],["句框","satz"],["動詞支配格","rekt"],["動詞變位①","konj1"],["動詞變位②","konj2"],["不規則動詞總表","irrv"],["Perfekt 現在完成式","pii"],["價格唸法","preis"],["字母表","abc"],["挑任一數字","numtry"],["大數字","bignum"],["數字測驗","numquiz"],["數字的系統","numsys"],["Imperativ","imp"],["Komparativ","komp"],["Wünsche","konjii"]];
+const GKEY_MAP=[["疼痛表達","pain"],["人稱代名詞","pron"],["陰陽性線索","gclue"],["複數線索","pclue"],["所有格","poss"],["schon vs erst","advw"],["時間介係詞","zeit"],["序數","datum"],["地方介係詞","lokal"],["冠詞變格","art"],["句框","satz"],["動詞支配格","rekt"],["動詞變位①","konj1"],["動詞變位②","konj2"],["不規則動詞總表","irrv"],["Perfekt 現在完成式","pii"],["價格唸法","preis"],["字母表","abc"],["挑任一數字","numtry"],["大數字","bignum"],["數字測驗","numquiz"],["數字的系統","numsys"],["Imperativ","imp"],["Komparativ","komp"],["Wünsche","konjii"],["der-Wörter","derw"]];
 function gramKeyOf(t){for(const[s,k]of GKEY_MAP)if(t.includes(s))return k;return t.trim().slice(0,8);}
 function gramKeyOfCard(g){const m=g.html.match(/gtitle">([^<]+)/);return gramKeyOf(m?m[1]:g.html);}
 /* 題目→卡片映射（執行期分類，一題可命中多卡） */
@@ -5612,6 +5930,7 @@ function gramCardsOfQ(q){
   if(/母音變化|字尾/.test(s))ks.add('konj1');
   if(/比較級|最高級|als vs wie/.test(s))ks.add('komp');
   if(/Wünsche|würde/i.test(s))ks.add('konjii');
+  if(/der-Wörter/.test(s))ks.add('derw');
   const m=s.match(/^(?:⭐\s*)?([a-zäöüß]+)：\s*(ich|du|er|es|sie|wir|ihr|Sie)\s*→/);
   if(m)ks.add(KONJ2_VERBS.has(m[1])?'konj2':'konj1');
   return ks;
@@ -5638,7 +5957,7 @@ function posOf(v){
 const POS_SUB_PREP=new Set(["ab","für","im","am","ins","um","seit","unter","zwischen","ohne","von","bis","mit","nach","aus","bei","in","an","auf","vor","neben","hinter","gegen"]);
 const POS_SUB_CONJ=new Set(["aber","oder","denn","und","sondern","weil","als","bevor"]);
 const POS_SUB_QW=new Set(["warum","wann","wo","wer","was","wie","woher","wohin"]);
-const POS_SUB_PRON=new Set(["man","etwas","nichts","alles","alle","jemand","niemand","selbst"]);
+const POS_SUB_PRON=new Set(["man","etwas","nichts","alles","alle","jemand","niemand","selbst","beide"]);
 function subPosOf(v){
   const d=v.de;
   if(POS_SUB_PREP.has(d))return"介係詞";
@@ -6306,6 +6625,12 @@ grußlos（不打招呼就）、treppenlos（沒有樓梯的）——來自老�
     <tr><td class="de2">Komparativ ＋ als</td><td>不相等（A 比 B…）</td><td class="de2">Das Hemd gefällt ihr besser <b>als</b> die Hose.</td></tr>
     <tr><td class="de2">(genau)so ＋ Positiv ＋ wie</td><td>相等（A 跟 B 一樣…）</td><td class="de2">Lila mag sie genauso gern <b>wie</b> Rosa.</td></tr>
   </table>
+  <p style="font-size:.86rem;font-weight:700;margin:.5em 0 .2em">④ 最高級／viel 當形容詞直接修飾名詞（跟著名詞變格，不是只有 am+…sten 副詞形式）</p>
+  <table>
+    <tr><th>用法</th><th>例句</th><th>說明</th></tr>
+    <tr><td class="de2">best- ＋ 名詞</td><td class="de2">Das ist das beste Restaurant der Stadt.</td><td>最高級當形容詞用，字尾隨性別/格位變化，跟一般形容詞規則相同</td></tr>
+    <tr><td class="de2">meist- ＋ 複數名詞</td><td class="de2">Die meisten Leute mögen Kaffee.</td><td>「大多數的…」量詞用法，只接複數名詞，跟 am meisten（我最喜歡…）是不同功能</td></tr>
+  </table>
   <div class="note"><b>⚠️ 六個最容易錯</b><br>① <b>gut/gern/viel 不能套 +er 規則</b>：❌ guter／gernder ✓ besser／lieber——這三個字整組換掉，跟規則變化無關。<br>② <b>變母音是一份「要背的清單」，不是可推導的規則</b>：alt→älter、klug→klüger、lang→länger 會變；但同樣是單音節的 <b>voll／bunt／blond／schlank／faul</b> 不變。多音節原則上不變（lustig→lustiger），唯一常見例外是 <b>gesund→gesünder</b>。⚠️ 所以判斷點不是音節數，是「這個字在不在變音清單裡」——單字卡背面有登記的才變。<br>③ <b>als／wie 選錯最常見的原因是沒看「相不相等」</b>：genauso...<b>wie</b>＝一樣；單純的比較級句尾用 <b>als</b>。兩個字不能互換。<br>④ <b>吞 e 只發生在比較級，最高級要還原</b>：dunkel→<b>dunkler</b> 但 am <b>dunkel</b>sten；teuer→<b>teurer</b> 但 am <b>teuer</b>sten。⚠️ 只有 -el 結尾與 teuer／sauer 吞 e——schwer→schwerer、leer→leerer、sicher→sicherer <u>不吞</u>。<br>⑤ <b>最高級的墊音 e 有兩個例外</b>：字尾 t/d/s/ß/z/sch 要墊（am ält<b>e</b>sten、am kürz<b>e</b>sten）；但 <b>-isch／-end</b> 結尾不墊（am praktisch<b>sten</b>、am spannend<b>sten</b>），groß 也不墊（am größ<b>ten</b>，不是 größesten）。<br>⑥ <b>有些形容詞根本沒有比較級</b>：狀態詞（fertig／verboten／geöffnet／möbliert）、國族詞（philippinisch）、材質詞（golden）、序列詞（letzt／nächst-）。外來色詞 <b>rosa／lila／beige／orange</b> 字尾完全不變化，要比較時說 <b>mehr rosa als …</b>。⚠️ 單字卡背面會標，沒標的就是規則字。</div>
 </div>`},
 {l:"L24",html:`
@@ -6322,6 +6647,23 @@ grußlos（不打招呼就）、treppenlos（沒有樓梯的）——來自老�
     <tr><td>sie/Sie</td><td class="de2">würden</td></tr>
   </table>
   <div class="note"><b>⚠️ 願望 vs 現實：</b>Ich gehe ins Kino.（現在真的要去）對比 Ich würde gern ins Kino gehen.（只是想，還沒發生）。語序跟句框卡「動詞拆兩半」同一套：würde 站第2位，原形動詞踢句尾——<b>Ich würde gern eine Reise machen.</b> 也常用來客氣提問：<b>Was würdest du gern machen?</b></div>
+</div>`},
+{l:"GA1",html:`<div class="card gcard">
+  <div class="gtitle">🧩 der-Wörter：dieser／jeder／welcher 跟著 der/die/das 變格 <span class="lessontag">GA1</span></div>
+  <p style="font-size:.88rem;margin:.2em 0 .6em">系統邏輯：這三個字的字尾變化<b>完全照抄定冠詞 der/das/die</b>，字幹換掉就好——把 der 換成 dies-／jed-／welch-，其餘規則一模一樣：<b>只有陽性 Akkusativ 那一格會變</b>。jeder 天生只有單數（意思是「每一個」）；dieser／welcher 有複數形，複數統一用 diese／welche。</p>
+  <table>
+    <tr><th>字幹</th><th>格</th><th>陽性</th><th>中性</th><th>陰性</th><th>複數</th></tr>
+    <tr><td rowspan="3">dies-（這個）</td><td>Nom</td><td class="de2">dieser</td><td class="de2">dieses</td><td class="de2">diese</td><td class="de2">diese</td></tr>
+    <tr><td>Akk</td><td class="de2"><span class="infl">diesen</span></td><td class="de2">dieses</td><td class="de2">diese</td><td class="de2">diese</td></tr>
+    <tr><td>Dativ</td><td class="de2"><span class="infl">diesem</span></td><td class="de2"><span class="infl">diesem</span></td><td class="de2"><span class="infl">dieser</span></td><td class="de2"><span class="infl">diesen</span></td></tr>
+    <tr><td rowspan="3">jed-（每一個，僅單數）</td><td>Nom</td><td class="de2">jeder</td><td class="de2">jedes</td><td class="de2">jede</td><td class="de2">—</td></tr>
+    <tr><td>Akk</td><td class="de2"><span class="infl">jeden</span></td><td class="de2">jedes</td><td class="de2">jede</td><td class="de2">—</td></tr>
+    <tr><td>Dativ</td><td class="de2"><span class="infl">jedem</span></td><td class="de2"><span class="infl">jedem</span></td><td class="de2"><span class="infl">jeder</span></td><td class="de2">—</td></tr>
+    <tr><td rowspan="3">welch-（哪一個，疑問）</td><td>Nom</td><td class="de2">welcher</td><td class="de2">welches</td><td class="de2">welche</td><td class="de2">welche</td></tr>
+    <tr><td>Akk</td><td class="de2"><span class="infl">welchen</span></td><td class="de2">welches</td><td class="de2">welche</td><td class="de2">welche</td></tr>
+    <tr><td>Dativ</td><td class="de2"><span class="infl">welchem</span></td><td class="de2"><span class="infl">welchem</span></td><td class="de2"><span class="infl">welcher</span></td><td class="de2"><span class="infl">welchen</span></td></tr>
+  </table>
+  <div class="note">最容易錯：welcher 問句常常忘記跟名詞的性別對——問「der Film」要說「Welcher Film?」，不能說「Welche Film?」。jeder 沒有複數，「每一個人」用 jeder，「所有人」才用 alle。</div>
 </div>`},
 /* ===ANCHOR:GRAM===（新文法卡 {l:"Ln",html:`<div class="card gcard">…`} 插在這行上方）*/
 ];
@@ -6562,6 +6904,10 @@ const FUNC_GLOSS={
   bisschen:"一點點（固定說法 ein bisschen＝一點點）",
   andere:"別的、其他的（陰／複數）",anderes:"別的（中性）",anderen:"別的（陽第四格／複數第三格）",
   anderer:"別的（陽第一格）",anderem:"別的（第三格 陽/中）",
+  dieser:"這個（陽性第一格）",diese:"這個（陰性／複數第一格）",dieses:"這個（中性第一格）",
+  diesen:"這個（陽性第四格／複數第三格）",diesem:"這個（陽／中性第三格）",
+  jeder:"每一個（陽性第一格，僅單數）",jede:"每一個（陰性第一格）",jedes:"每一個（中性第一格）",
+  jeden:"每一個（陽性第四格）",jedem:"每一個（陽／中性第三格）",
   /* ===ANCHOR:FUNC_GLOSS===（新功能詞 "小寫形":"中文" 插在這行上方，記得上一行補逗號）*/
 };
 /* ===== 2026-08-23 導讀點字缺口修復（使用者回報，非 N 系列）=====
@@ -7633,6 +7979,23 @@ const GR24=[
  {l:"L24",sub:"⭐ Wünsche：sie → ?",before:"Meine Eltern ",after:" gern zur Party kommen.",answer:"würden",options:["würden","würde","würdet"],full:"Meine Eltern würden gern zur Party kommen."},
 ];
 GR24.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+const GRGA1=[
+ {l:"GA1",sub:"⭐ empfehlen：du → ?",before:"Was ",after:" du mir?",answer:"empfiehlst",options:["empfiehlst","empfehlst","empfehlest"],full:"Was empfiehlst du mir?"},
+ {l:"GA1",sub:"⭐ empfehlen：er → ?",before:"Der Kellner ",after:" den Fisch.",answer:"empfiehlt",options:["empfiehlt","empfehlt","empfehlet"],full:"Der Kellner empfiehlt den Fisch."},
+ {l:"GA1",sub:"⭐ halten：du → ?",before:"Wo ",after:" du den Bus an?",answer:"hältst",options:["hältst","haltst","haltest"],full:"Wo hältst du den Bus an?"},
+ {l:"GA1",sub:"⭐ halten：er → ?",before:"Der Zug ",after:" hier nicht.",answer:"hält",options:["hält","haltet","haltest"],full:"Der Zug hält hier nicht."},
+];
+GRGA1.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
+const GRGA1B=[
+ {l:"GA1",sub:"⭐ der-Wörter：dies- 陽性 Akk → ?",before:"Ich nehme ",after:" Rock.",answer:"diesen",options:["diesen","dieser","diesem"],full:"Ich nehme diesen Rock."},
+ {l:"GA1",sub:"⭐ der-Wörter：jed- 陽性 Nom → ?",before:"",after:" Tag ist anders.",answer:"Jeder",options:["Jeder","Jede","Jedes"],full:"Jeder Tag ist anders."},
+ {l:"GA1",sub:"⭐ der-Wörter：welch- 陰性 Nom → ?",before:"",after:" Farbe gefällt dir?",answer:"Welche",options:["Welche","Welcher","Welches"],full:"Welche Farbe gefällt dir?"},
+ {l:"GA1",sub:"⭐ der-Wörter：dies- 陰性 Dativ → ?",before:"Ich helfe ",after:" Frau.",answer:"dieser",options:["dieser","diese","diesen"],full:"Ich helfe dieser Frau."},
+ {l:"GA1",sub:"⭐ andere：複數 Akk → ?",before:"Ich nehme die ",after:" Schuhe.",answer:"anderen",options:["anderen","andere","anderem"],full:"Ich nehme die anderen Schuhe."},
+ {l:"GA1",sub:"⭐ best- 當形容詞：中性 Nom → ?",before:"Das ist das ",after:" Restaurant der Stadt.",answer:"beste",options:["beste","bester","bestes"],full:"Das ist das beste Restaurant der Stadt."},
+ {l:"GA1",sub:"⭐ meist- 當量詞：搭配複數名詞",before:"",after:" Leute mögen Kaffee.",answer:"Die meisten",options:["Die meisten","Der meiste","Das meiste"],full:"Die meisten Leute mögen Kaffee."},
+];
+GRGA1B.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full}));
   /* ===ANCHOR:GRAM_QUIZ===（新課文法填空題插在這行上方：宣告 const GRn=[{l,sub,before,after,answer,options,full},…]; 後接一行 GRn.forEach(q=>Q.push({lesson:q.l,sub:q.sub,before:q.before,after:q.after,answer:q.answer,options:[...q.options],full:q.full})); ）*/
   return Q;
 }
