@@ -108,10 +108,16 @@
   .tde{font-size:1.02rem;line-height:1.9;margin:10px 0;white-space:pre-line}
   .textcard .tok{cursor:pointer;border-bottom:1px dotted #b9c2cf}
   .textcard .tok:hover{background:#eef3fa}
+  .textcard .tturn{cursor:pointer;border-radius:8px;padding:2px 6px;margin:2px -6px}
+  .textcard .tturn:hover{background:#eef3fa}
+  .textcard .tturn[data-on="true"]{background:#dde8f7}
+  .textcard .tplayico{background:none;border:none;padding:0 4px 0 0;font-size:.92em;cursor:pointer;vertical-align:middle;line-height:1}
   .textcard .tokpop{font-size:.86rem;min-height:1.4em;color:var(--chrome);background:#fbfcfe;border:1px dashed var(--line);border-radius:8px;padding:6px 10px;margin:6px 0}
   .textcard .tokpop.miss{color:var(--mut)}
   .tzh{font-size:.92rem;color:var(--mut);line-height:1.8;margin:8px 0;white-space:pre-line}
-  .textcard .tzh.hidden{filter:blur(6px);cursor:pointer}
+  .textcard .tzh{cursor:pointer}
+  .textcard .tzh.hidden{display:none}
+  .textcard .tzhToggle{cursor:pointer;color:var(--l2);font-size:.85rem;margin:6px 0;font-weight:700}
   .textcard .tq{margin-top:12px;border-top:1px dashed var(--line);padding-top:10px}
   .textcard .tq .opt{display:block;width:100%;text-align:left;margin-top:6px;padding:9px 12px;font-size:.92rem}
   .textcard .genretag{display:inline-block;font-size:.72rem;background:#eef;border-radius:6px;padding:1px 7px;margin-left:6px;color:var(--chrome)}
@@ -192,6 +198,13 @@
   .tournav{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:8px}
   .tourdots{font-size:.78rem;color:var(--mut)}
   footer{margin-top:26px;color:var(--mut);font-size:.78rem;text-align:center;line-height:1.6}
+  .playerbar{display:flex;align-items:center;gap:8px;background:#f3f6fb;border:1px solid var(--line);border-radius:10px;padding:6px 10px;margin:4px 0 6px;font-size:.82rem}
+  .playerbar[hidden]{display:none}
+  .playerbar .pbBtn{background:#fff;border:1px solid var(--line);color:var(--chrome);border-radius:8px;padding:3px 9px;font-size:.82rem;cursor:pointer;min-width:2.2em;font-family:var(--ui)}
+  .playerbar .pbBtn:hover{background:#eef3fa}
+  .playerbar .pbBtn.on{background:var(--chrome);color:#fff;border-color:var(--chrome)}
+  .playerbar .pbLb{flex:1;font-size:.76rem;color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .playerbar .pbX{margin-left:auto;color:var(--no);border-color:#f1c9d3}
 </style>
 </head>
 <body>
@@ -646,6 +659,104 @@ function dlgAudio(){
 function dlgAudioPath(lesson,idx){
   return 'audio/dialogue/l'+lesson.replace(/^L/,'')+'_'+idx+'.mp3';
 }
+/* 里程碑（2026-08-25）：對話播放器控制列——速度／暫停／循環，整段連播與逐句重播共用同一顆播放器。
+   設計原則：<audio> 音檔路徑（N25 主線）暫停/續播/調速都是原生可靠操作，直接用 .pause()/.play()/
+   .playbackRate；退回 speechSynthesis 的分支（僅發生在該課還沒配音時）維持既有已知限制——
+   speechSynthesis.pause()/resume() 在部分瀏覽器不保證精準，這是舊功能既有的降級路徑，
+   不是本次新增的風險。輪間空檔（dlgTimer 排程中）暫停時沒有正在播放的東西可暫停，
+   用 pendingResume 記錄、續播時重新觸發該輪。*/
+let pbState={mode:null,turns:null,lesson:null,idx:-1,tn:null,onTurn:null,
+  rate:1,loop:false,playing:false,paused:false,pendingResume:false,stepFn:null};
+/* 播放器啟用中（正在播或暫停中）時，點字不該自動唸出那個字——speechSynthesis 全域只能講一句，
+   自動唸字會把播放中的內容打斷掉，且被打斷的那個回呼不知道自己被打斷、狀態會亂掉
+   （使用者 2026-08-25 實測回報）。改法：播放器啟用時 tokPopShow 只查義不出聲，
+   由 renderTexts() 在彈窗裡另外補一顆「▶ 播放這句」，明確交還控制權給使用者。*/
+function pbActive(){return pbState.playing||pbState.paused;}
+function wordSpeak(text){if(!pbActive())speak(text);}
+const PB_RATES=[0.75,1,1.25,1.5];
+/* 播放器元素只建立一次：用模組變數 pbEl 快取，不能靠 document.getElementById 判斷是否
+   已建立——這顆元素常態上是「建立時還沒插入 DOM」（要等 pbMount 找到對應卡片才插入），
+   getElementById 找不到尚未插入的節點，會誤判成「還沒建立」而重複 new 出第二顆，
+   造成畫面上真正顯示的那顆與程式碼實際操作的那顆是兩個不同物件、狀態對不起來。*/
+let pbEl=null;
+function pbBar(){
+  if(pbEl)return pbEl;
+  const el=document.createElement('div');el.id='playerBar';el.className='playerbar';el.hidden=true;
+  el.innerHTML='<button type="button" class="pbBtn" id="pbPP" aria-label="播放/暫停">▶️</button>'
+    +'<button type="button" class="pbBtn" id="pbRt" aria-label="調整速度">1x</button>'
+    +'<button type="button" class="pbBtn" id="pbLp" aria-label="循環播放">🔁</button>'
+    +'<span class="pbLb" id="pbLb"></span>'
+    +'<button type="button" class="pbBtn pbX" id="pbSt" aria-label="停止">✕</button>';
+  el.querySelector('#pbPP').onclick=()=>{pbState.paused?pbResume():pbPause();};
+  el.querySelector('#pbRt').onclick=pbCycleRate;
+  el.querySelector('#pbLp').onclick=pbToggleLoop;
+  el.querySelector('#pbSt').onclick=pbStop;
+  pbEl=el;
+  return el;
+}
+/* 播放器掛回觸發它的那張導讀卡片內（renderTexts() 卡片模板裡原本逐句按鈕列的位置，
+   見 .pbSlot）——不是畫面底部浮動列。同一顆播放器元素在卡片之間搬移：同時只會有一項
+   在播，搬到正在播的那張卡就好，不必每卡各自一份。找不到對應 .pbSlot（例如使用者切換
+   課別範圍、renderTexts() 已把舊卡整批重繪掉）就靜默不掛，播放邏輯本身不受影響，
+   只是控制列暫時沒地方顯示。*/
+function pbMount(lesson){
+  const slot=lesson&&document.querySelector(`.pbSlot[data-lsn="${lesson}"]`);
+  if(slot&&slot!==pbBar().parentElement)slot.appendChild(pbBar());
+}
+function pbBarSync(){
+  if(pbState.lesson)pbMount(pbState.lesson);
+  const el=pbBar();
+  el.hidden=!pbState.playing&&!pbState.paused;
+  el.querySelector('#pbPP').textContent=pbState.paused?'▶️':'⏸';
+  el.querySelector('#pbRt').textContent=pbState.rate+'x';
+  el.querySelector('#pbLp').classList.toggle('on',pbState.loop);
+  el.querySelector('#pbLb').textContent=pbState.mode==='all'?'🎧 播放對話':(pbState.mode==='single'?'🔊 單句播放':'');
+}
+
+function pbCycleRate(){
+  const i=(PB_RATES.indexOf(pbState.rate)+1)%PB_RATES.length;
+  pbState.rate=PB_RATES[i];
+  if(dlgAudioEl&&!dlgAudioEl.paused)dlgAudioEl.playbackRate=pbState.rate;
+  pbBarSync();
+}
+function pbToggleLoop(){pbState.loop=!pbState.loop;pbBarSync();}
+function pbPause(){
+  if(!pbState.playing||pbState.paused)return;
+  pbState.paused=true;pbState.pendingResume=true;
+  const a=dlgAudioEl;
+  if(a&&!a.paused){a.pause();pbState.pendingResume=false;}
+  else if('speechSynthesis' in window&&window.speechSynthesis.speaking){window.speechSynthesis.pause();pbState.pendingResume=false;}
+  if(dlgTimer){clearTimeout(dlgTimer);dlgTimer=null;}
+  pbBarSync();
+}
+function pbResume(){
+  if(!pbState.paused)return;
+  pbState.paused=false;
+  const a=dlgAudioEl;
+  if(!pbState.pendingResume&&a&&a.src&&a.paused&&!a.ended){
+    try{const p=a.play();if(p&&p.catch)p.catch(()=>{});}catch(e){}
+    pbBarSync();return;
+  }
+  if(!pbState.pendingResume&&'speechSynthesis' in window&&window.speechSynthesis.paused){window.speechSynthesis.resume();pbBarSync();return;}
+  pbState.pendingResume=false;
+  if(pbState.mode==='single')speakTurn(pbState.tn,pbState.lesson,pbState.idx);
+  else if(pbState.mode==='all'&&pbState.stepFn)pbState.stepFn();
+  pbBarSync();
+}
+function pbStop(){
+  pbState.paused=false;pbState.playing=false;pbState.loop=false;pbState.pendingResume=false;
+  const a=dlgAudioEl;if(a){a.pause();try{a.currentTime=0;}catch(e){}}
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  if(dlgTimer){clearTimeout(dlgTimer);dlgTimer=null;}
+  if(pbState.onTurn)pbState.onTurn(-1);
+  pbBarSync();
+}
+function pbTurnEnded(){
+  pbState.playing=false;pbBarSync();
+  if(pbState.loop&&pbState.mode==='single'&&!pbState.paused){
+    dlgTimer=setTimeout(()=>speakTurn(pbState.tn,pbState.lesson,pbState.idx),500);
+  }
+}
 function playDlgAudio(lesson,idx){
   return new Promise((resolve,reject)=>{
     if(!lesson){reject();return;}
@@ -655,6 +766,7 @@ function playDlgAudio(lesson,idx){
     const onErr=()=>{cleanup();reject();};
     a.addEventListener('ended',onEnd,{once:true});
     a.addEventListener('error',onErr,{once:true});
+    a.playbackRate=pbState.rate;
     a.src=dlgAudioPath(lesson,idx);
     a.play().catch(onErr);
   });
@@ -665,8 +777,9 @@ function turnUtter(tn){
   u.lang='de-DE';
   const v=A?deVoices[0]:(deVoices[1]||deVoices[0]);
   if(v)u.voice=v;
-  /* iOS Safari 幾乎無視 pitch，但 rate 一定吃——所以語速差是手機上最可靠的分聲線索 */
-  u.rate=A?1.0:0.78;u.pitch=A?1.2:0.75;
+  /* iOS Safari 幾乎無視 pitch，但 rate 一定吃——所以語速差是手機上最可靠的分聲線索。
+     全域速度倍率疊乘在既有的角色語速上，退回 TTS 時「調速」仍生效於下一句。*/
+  u.rate=(A?1.0:0.78)*pbState.rate;u.pitch=A?1.2:0.75;
   return u;
 }
 function speakTurn(tn,lesson,idx){
@@ -674,11 +787,21 @@ function speakTurn(tn,lesson,idx){
   if('speechSynthesis' in window)window.speechSynthesis.cancel();
   if(spkTimer){clearTimeout(spkTimer);spkTimer=null;}
   if(dlgTimer){clearTimeout(dlgTimer);dlgTimer=null;}
+  pbState.mode='single';pbState.turns=null;pbState.lesson=lesson;pbState.idx=idx;pbState.tn=tn;
+  pbState.paused=false;pbState.playing=true;pbState.pendingResume=false;pbBarSync();
   cue(tn.s==='A'?740:392);
   dlgTimer=setTimeout(()=>{
-    playDlgAudio(lesson,idx).catch(()=>{
-      if('speechSynthesis' in window)window.speechSynthesis.speak(turnUtter(tn));
-    });
+    if(pbState.paused)return; /* 起播延遲內按了暫停 */
+    playDlgAudio(lesson,idx).then(
+      ()=>{if(!pbState.paused)pbTurnEnded();},
+      ()=>{
+        if(pbState.paused)return; /* 音檔失敗當下已按暫停，不能接著唸 TTS */
+        if(!('speechSynthesis' in window)){pbTurnEnded();return;}
+        const u=turnUtter(tn);
+        u.onend=()=>{if(!pbState.paused)pbTurnEnded();};
+        window.speechSynthesis.speak(u);
+      }
+    );
   },230);
 }
 /* onTurn(i)：每輪開講時回呼——用來把逐句重播列對應的鈕點亮。
@@ -689,25 +812,37 @@ function speakTurns(turns,onTurn,lesson){
   if('speechSynthesis' in window)window.speechSynthesis.cancel();
   if(spkTimer){clearTimeout(spkTimer);spkTimer=null;}
   if(dlgTimer){clearTimeout(dlgTimer);dlgTimer=null;}
-  let i=0;
-  const step=()=>{
-    if(i>=turns.length){if(onTurn)onTurn(-1);return;}
-    const idx=i,tn=turns[i++];
+  pbState.mode='all';pbState.turns=turns;pbState.lesson=lesson;pbState.onTurn=onTurn;
+  pbState.paused=false;pbState.playing=true;pbState.pendingResume=false;pbBarSync();
+  /* playIdx(idx) 而非遞增中的閉包變數：pbState.stepFn 需要能「重播目前這一輪」
+     （續播時用），跟「推進到下一輪」是兩件事——舊版只有一個 step() 兩者共用，
+     暫停在音檔失敗、正要退回 TTS 的那個瞬間時，續播會誤跳過目前這輪。 */
+  const playIdx=(idx)=>{
+    if(idx>=turns.length){
+      pbState.playing=false;pbBarSync();if(onTurn)onTurn(-1);
+      if(pbState.loop&&!pbState.paused){pbState.playing=true;pbBarSync();dlgTimer=setTimeout(()=>playIdx(0),600);}
+      return;
+    }
+    const tn=turns[idx];
+    pbState.idx=idx;pbState.tn=tn;
     cue(tn.s==='A'?740:392);
     if(onTurn)onTurn(idx);
     dlgTimer=setTimeout(()=>{
+      if(pbState.paused)return; /* 起播延遲內按了暫停 */
       playDlgAudio(lesson,idx).then(
-        ()=>{dlgTimer=setTimeout(step,480);},
+        ()=>{if(!pbState.paused)dlgTimer=setTimeout(()=>playIdx(idx+1),480);},
         ()=>{
-          if(!('speechSynthesis' in window)){dlgTimer=setTimeout(step,480);return;}
+          if(pbState.paused)return; /* 音檔失敗當下已按暫停，不能接著唸 TTS */
+          if(!('speechSynthesis' in window)){dlgTimer=setTimeout(()=>playIdx(idx+1),480);return;}
           const u=turnUtter(tn);
-          u.onend=()=>{dlgTimer=setTimeout(step,480);};
+          u.onend=()=>{if(!pbState.paused)dlgTimer=setTimeout(()=>playIdx(idx+1),480);};
           window.speechSynthesis.speak(u);
         }
       );
     },230);
   };
-  step();
+  pbState.stepFn=()=>playIdx(pbState.idx);
+  playIdx(0);
 }
 function spkBtn(text,cls){
   const b=document.createElement('button');
@@ -7322,12 +7457,29 @@ function demGloss(w){
   return'';
 }
 function miscGloss(w){const s=String(w||'');return MISC_GLOSS[s]||MISC_GLOSS[s.toLowerCase()]||'';}
+/* 中文翻譯預設真的隱藏（不是模糊），要點一下才展開——四個用到 .tzh 的地方
+   （📖 導讀、🏆 單元整合閱讀常駐版、📄 課級閱讀關卡、🏆 單元整合閱讀關卡版）共用同一顆，
+   改行為只要改這裡，不用四處同步。展開提示是動態插入的 .tzhToggle，不是模板裡寫死的，
+   所以四個模板字串本身不用動。*/
+function wireZhToggle(root){
+  const z=root.querySelector('.tzh');
+  if(!z||z.dataset.zhWired)return;
+  z.dataset.zhWired='1';
+  const toggle=document.createElement('div');
+  toggle.className='tzhToggle';
+  toggle.textContent='👆 點擊顯示中文翻譯';
+  z.parentElement.insertBefore(toggle,z);
+  const sync=()=>{toggle.style.display=z.classList.contains('hidden')?'':'none';};
+  toggle.onclick=()=>{z.classList.remove('hidden');sync();};
+  z.onclick=()=>{z.classList.add('hidden');sync();};
+  sync();
+}
 function tokPopShow(pop,raw,ctx){
   const sr=ctx?sepResolve(ctx.toks,ctx.i):null;
   if(sr){const sh=VOCAB.find(v=>v.de===sr.inf);
     if(sh){pop.classList.remove('miss');
       pop.innerHTML=`<b>${sr.verb} … ${sr.pre}</b> → <b>${sh.de}</b> <span style="font-size:.78rem;color:#0d9488">可分離動詞（框架結構：前綴丟到子句末）</span> — ${sh.zh}`;
-      speak(sh.de);return;}}
+      wordSpeak(sh.de);return;}}
   const r=tokLookup(raw);if(!r)return;
   /* 所有格覆寫：sein／meinen／ihr 這類「本身就是別的字」的裸形，字面比對會先命中單字卡；
      後方接大寫名詞時改判所有格，並把原本的字義留在括號裡（不替使用者二選一）。*/
@@ -7335,7 +7487,7 @@ function tokPopShow(pop,raw,ctx){
     if(pz&&possCtx(ctx&&ctx.toks,ctx&&ctx.i)){
       pop.classList.remove('miss');
       const alt=r.hit?('也可能是 '+r.hit.de+'（'+r.hit.zh+'）'):possAltOf(pw);
-      pop.innerHTML=possHTML(r.w,pz,alt);speak(r.w);return;}}
+      pop.innerHTML=possHTML(r.w,pz,alt);wordSpeak(r.w);return;}}
   if(r.poss){pop.classList.remove('miss');
     /* 裸形若在 FUNC_GLOSS 有手打字義（ihr＝你們／她的、mein＝我的），那份字義比程式化推導精確：
        後方沒有大寫名詞就照舊顯示功能詞，只在旁邊提示「接名詞時是所有格」。
@@ -7344,7 +7496,7 @@ function tokPopShow(pop,raw,ctx){
       pop.innerHTML=`<b>${r.w}</b> — ${r.gloss} <span style="font-size:.78rem;color:var(--mut)">功能詞</span>`
         +` <span style="font-size:.78rem;color:#be185d">（後接名詞時＝所有格「${r.poss.zh}」）</span>`;
     }else{pop.innerHTML=possHTML(r.w,r.poss,r.alt);}
-    speak(r.w);return;}
+    wordSpeak(r.w);return;}
   /* ③-c 同形歧義覆寫（2026-08-23）：weiß／frage 這種「字面就是別的單字卡」的動詞變位形。
      沿用所有格覆寫的處理法——上下文判得出來就翻轉，判不出來照舊顯示卡、把另一種可能攤在旁邊。*/
   if(r.hit&&!r.via&&LEMMA_HOMO){
@@ -7359,7 +7511,7 @@ function tokPopShow(pop,raw,ctx){
         pop.innerHTML=`<b>${(ART[r.hit.g]||'')+r.hit.de}</b> — ${r.hit.zh}`
           +` <span style="font-size:.78rem;color:var(--mut)">（也可能是動詞 ${vh.de}「${vh.zh}」的變位形）</span>`;
       }
-      speak(r.w);return;
+      wordSpeak(r.w);return;
     }
   }
   if(r.hit){
@@ -7371,11 +7523,11 @@ function tokPopShow(pop,raw,ctx){
     else if(r.via==='p')head=`<b>${r.w}</b> → ${base} <span style="font-size:.78rem;color:#b45309">Partizip II</span>`;
     else if(r.via==='a')head=`<b>${r.w}</b> → ${base} <span style="font-size:.78rem;color:var(--mut)">形容詞變格／比較級</span>`;
     else if(r.via==='g')head=`<b>${r.w}</b> → ${base} <span style="font-size:.78rem;color:#7c3aed">比較級/最高級</span>`;
-    pop.innerHTML=`${head} — ${r.hit.zh}`;speak(r.w);
+    pop.innerHTML=`${head} — ${r.hit.zh}`;wordSpeak(r.w);
   }else if(r.gloss){
     pop.classList.remove('miss');
     const gvia=r.via==='g'?'<span style="font-size:.78rem;color:#7c3aed">比較級/最高級</span>':'<span style="font-size:.78rem;color:var(--mut)">動詞變位形</span>';
-    const gh=(r.inf&&r.inf.toLowerCase()!==r.w.toLowerCase())?`<b>${r.w}</b> → <b>${r.inf}</b> ${gvia}`:`<b>${r.w}</b>`;const glbl=r.misc?'補充字義・尚未建卡':'功能詞';pop.innerHTML=`${gh} — ${r.gloss} <span style="font-size:.78rem;color:var(--mut)">${glbl}</span>`;speak(r.w);
+    const gh=(r.inf&&r.inf.toLowerCase()!==r.w.toLowerCase())?`<b>${r.w}</b> → <b>${r.inf}</b> ${gvia}`:`<b>${r.w}</b>`;const glbl=r.misc?'補充字義・尚未建卡':'功能詞';pop.innerHTML=`${gh} — ${r.gloss} <span style="font-size:.78rem;color:var(--mut)">${glbl}</span>`;wordSpeak(r.w);
   }else{
     /* ⑤ 兜底分層（2026-08-23，Scope C）：數字 → 專有名詞 → 真的查無。
        原本這裡一律回「庫內無此字」，把「47」「Hamburg」和真缺口混為一談，
@@ -7383,17 +7535,17 @@ function tokPopShow(pop,raw,ctx){
     const nn=r.w.match(/^(\d{1,3})$/);
     if(nn&&+nn[1]<=100){const nw=numWord(+nn[1]);pop.classList.remove('miss');
       pop.innerHTML=`<b>${r.w}</b> — 數字 <b>${nw}</b> <span style="font-size:.78rem;color:var(--mut)">（拆解與唸法見「數字」分頁）</span>`;
-      speak(nw);return;}
+      wordSpeak(nw);return;}
     if(/^\d+$/.test(r.w)){pop.classList.remove('miss');
       pop.innerHTML=`<b>${r.w}</b> — 數字（超過 100 的門牌／電話一律逐位唸：${r.w.split('').map(d=>numWord(+d)).join('・')}）`;
-      speak(r.w.split('').map(d=>numWord(+d)).join(' '));return;}
+      wordSpeak(r.w.split('').map(d=>numWord(+d)).join(' '));return;}
     const pg=PROPER_GLOSS[r.w];
     if(pg){pop.classList.remove('miss');
-      pop.innerHTML=`<b>${r.w}</b> — ${pg} <span style="font-size:.78rem;color:#0d9488">專有名詞</span>`;speak(r.w);return;}
+      pop.innerHTML=`<b>${r.w}</b> — ${pg} <span style="font-size:.78rem;color:#0d9488">專有名詞</span>`;wordSpeak(r.w);return;}
     if(/^[A-ZÄÖÜ][a-zäöü]+$/.test(r.w)&&ctx&&typeof ctx.i==='number'&&homoNear(ctx.toks,ctx.i,-1)&&!/[.,!?:;—–]$/.test(String((ctx.toks||[])[ctx.i-1]||''))){
       pop.classList.add('miss');
       pop.innerHTML=`<b>${r.w}</b> — <span style="font-size:.78rem;color:var(--mut)">庫內無此字。句中大寫且非句首，多半是人名／地名（不用背）；若看起來像普通名詞，就是還沒建卡</span>`;
-      speak(r.w);return;}
+      wordSpeak(r.w);return;}
     pop.classList.add('miss');pop.textContent=`「${r.w}」庫內無此字（可能是專有名詞）`;
   }
 }
@@ -7406,28 +7558,50 @@ function renderTexts(){
     const dia=!!(t.turns&&t.turns.length);
     const rf=!!(t.qs&&t.qs.length&&t.qs[0].st!==undefined);
     const tokize=s=>s.split(/(\s+)/).map(seg=>/\S/.test(seg)?`<span class="tok">${seg}</span>`:seg).join('');
-    const body=dia?t.turns.map(x=>`<div style="margin:4px 0"><b style="color:var(--mut)">${x.s}：</b>${tokize(x.de)}</div>`).join(''):tokize(t.de);
-    /* 逐句重播列放在模糊區「外面」——遮住原文時仍看得到第幾句、是誰講的 */
-    const turnbar=dia?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 6px">${t.turns.map((x,ti)=>`<button class="chip tturn" data-t="${ti}" style="padding:2px 9px;font-size:.75rem">${ti+1} ${x.s} 🔊</button>`).join('')}</div>`:'';
+    const body=dia?t.turns.map((x,ti)=>`<div class="tturn" data-t="${ti}"><button type="button" class="tplayico" aria-label="播放這句">🔊</button> <b style="color:var(--mut)">${x.s}：</b>${tokize(x.de)}</div>`).join(''):tokize(t.de);
+    /* 對話逐句重播改成直接點句子本身（每輪包成一個 .tturn 區塊，點擊觸發單句重播；
+       點字查義的 .tok 是它的子節點，在 .tturn 的點擊處理裡用 closest('.tok') 排除，
+       兩個功能不互相搶）。.pbSlot 是播放器控制列的佔位——注意屬性名用 data-lsn，
+       不能用 data-lesson：那個名字已經被全域課別篩選按鈕的 [data-lesson] 選擇器占用，
+       撞名會讓 lessonKeys()／nChips 之類讀 [data-lesson] 的既有邏輯把這裡也算進去。*/
     card.innerHTML=`<div class="gtitle">📖 ${t.title} <span class="genretag">${t.genre}</span> <span class="lessontag ${t.lesson}">${t.lesson}</span></div>`
       +`<details class="tmap"><summary style="cursor:pointer;font-weight:700">🗺 本課重點＋建議走法（點開）</summary><div style="margin-top:6px">${t.map}</div></details>`
       +`<div style="margin:6px 0"><button class="btn tplay">${dia?'🎧 播放對話':'▶️ 整段連唸'}</button>${dia?' <button class="btn treveal">👁 顯示原文</button>':''}</div>`
-      +(dia?`<div style="font-size:.8rem;color:var(--mut);margin-bottom:4px">聽兩次、先別看原文，做完下面 4 題再揭曉。換人時會有提示音（A 高音／B 低音）、語速也不同（B 較慢）；下面那排鈕會同步亮，指出現在講到第幾句。</div>`+turnbar:'')
-      +`<div class="tde"${dia?' style="filter:blur(6px)"':''}>${body}</div>`
+      +(dia?`<div style="font-size:.8rem;color:var(--mut);margin-bottom:4px">聽兩次、先別看原文，做完下面 4 題再揭曉。換人時會有提示音（A 高音／B 低音）。點任一句可以單獨重播，正在播放的句子會反白提示。</div>`:'')
+      +(dia?`<div class="pbSlot" data-lsn="${t.lesson}"></div>`:'')
       +`<div class="tokpop">👆 點上面任何一個德文字查意思</div>`
+      +`<div class="tde"${dia?' style="filter:blur(6px)"':''}>${body}</div>`
       +`<div class="tzh hidden">${t.zh}</div>`
       +(rf?`<div class="tq"><b style="font-size:.9rem">🧠 這句陳述符合原文嗎？</b>${t.qs.map((q,qi)=>`<div style="margin-top:8px;font-size:.92rem"><b>${qi+1}. ${q.st}</b><div><button class="opt" data-q="${qi}" data-o="1">Richtig</button><button class="opt" data-q="${qi}" data-o="0">Falsch</button><span class="rfm" data-q="${qi}" style="font-size:.78rem;color:var(--mut)"></span></div></div>`).join('')}</div>`
           :`<div class="tq"><b style="font-size:.9rem">✏️ 讀懂了嗎？</b>${t.qs.map((q,qi)=>`<div style="margin-top:8px;font-size:.92rem"><b>${qi+1}. ${q.q}</b>${q.options.map((o,oi)=>`<button class="opt" data-q="${qi}" data-o="${oi}">${o}</button>`).join('')}</div>`).join('')}</div>`)
       +`<div class="srcnote">來源：${t.src}</div>`;
     const lite=i=>card.querySelectorAll('.tturn').forEach(b=>{b.dataset.on=(+b.dataset.t===i)?'true':'false';});
     card.querySelector('.tplay').onclick=()=>{dia?speakTurns(t.turns,lite,t.lesson):speak(t.de);};
-    card.querySelectorAll('.tturn').forEach(b=>{b.onclick=()=>{lite(+b.dataset.t);speakTurn(t.turns[+b.dataset.t],t.lesson,+b.dataset.t);};});
+    card.querySelectorAll('.tturn').forEach(b=>{
+      const ti=+b.dataset.t;
+      const ico=b.querySelector('.tplayico');
+      if(ico)ico.onclick=(e)=>{e.stopPropagation();lite(ti);speakTurn(t.turns[ti],t.lesson,ti);};
+      b.addEventListener('click',(e)=>{
+        if(e.target.closest('.tok')||e.target.closest('.tplayico'))return;
+        lite(ti);speakTurn(t.turns[ti],t.lesson,ti);
+      });
+    });
+
     const rv=card.querySelector('.treveal');
     if(rv)rv.onclick=()=>{const d=card.querySelector('.tde');d.style.filter=d.style.filter?'':'blur(6px)';};
     const pop=card.querySelector('.tokpop');
     const tks=[...card.querySelectorAll('.tok')].map(x=>x.textContent);
-    card.querySelectorAll('.tok').forEach((el,i)=>{el.onclick=()=>tokPopShow(pop,el.textContent,{toks:tks,i:i});});
-    const z=card.querySelector('.tzh');z.onclick=()=>z.classList.toggle('hidden');
+    card.querySelectorAll('.tok').forEach((el,i)=>{el.onclick=()=>{
+      const tEl=dia?el.closest('.tturn'):null;
+      const turnCtx=tEl?{lesson:t.lesson,idx:+tEl.dataset.t,tn:t.turns[+tEl.dataset.t]}:null;
+      tokPopShow(pop,el.textContent,{toks:tks,i:i});
+      if(turnCtx&&pbActive()&&!pop.classList.contains('miss')){
+        pop.innerHTML+=' <button type="button" class="btn tplayseg" style="padding:2px 10px;font-size:.78rem;margin-left:4px">▶ 播放這句</button>';
+        const pb=pop.querySelector('.tplayseg');
+        if(pb)pb.onclick=(e)=>{e.stopPropagation();lite(turnCtx.idx);speakTurn(turnCtx.tn,turnCtx.lesson,turnCtx.idx);};
+      }
+    };});
+    wireZhToggle(card);
     card.querySelectorAll('.tq .opt').forEach(b=>{b.onclick=()=>{
       const qi=+b.dataset.q,q=t.qs[qi];
       const ok=rf?((+b.dataset.o===1)===!!q.a):(+b.dataset.o===q.a);
@@ -7449,15 +7623,15 @@ function renderTexts(){
     const deHtml=mt.de.split(/(\s+)/).map(seg=>/\S/.test(seg)?`<span class="tok">${seg}</span>`:seg).join('');
     card.innerHTML=`<div class="gtitle">🏆 ${mt.title} <span class="genretag">單元整合閱讀</span> <span class="lessontag">${md.name}</span></div>`
       +`<div style="margin:6px 0"><button class="btn tplay">▶️ 整段連唸</button></div>`
-      +`<div class="tde">${deHtml}</div>`
       +`<div class="tokpop">👆 點上面任何一個德文字查意思</div>`
+      +`<div class="tde">${deHtml}</div>`
       +`<div class="tzh hidden">${mt.zh}</div>`
       +`<div class="tq"><b style="font-size:.9rem">✏️ 自由練習（隨時可重答，不計分、不影響單元關卡進度）</b>${mt.qs.map((q,qi)=>`<div style="margin-top:8px;font-size:.92rem"><b>${qi+1}. ${q.q}</b>${q.options.map((o,oi)=>`<button class="opt" data-q="${qi}" data-o="${oi}">${o}</button>`).join('')}</div>`).join('')}</div>`;
     card.querySelector('.tplay').onclick=()=>speak(mt.de);
     const pop=card.querySelector('.tokpop');
     const tks=[...card.querySelectorAll('.tok')].map(x=>x.textContent);
     card.querySelectorAll('.tok').forEach((el,i)=>{el.onclick=()=>tokPopShow(pop,el.textContent,{toks:tks,i:i});});
-    const z=card.querySelector('.tzh');z.onclick=()=>z.classList.toggle('hidden');
+    wireZhToggle(card);
     card.querySelectorAll('.tq .opt').forEach(b=>{b.onclick=()=>{
       const q=mt.qs[+b.dataset.q],ok=+b.dataset.o===q.a;
       b.classList.add(ok?'correct':'wrong');
@@ -8525,7 +8699,7 @@ function buildLessonRead(lk){
   const pop=box.querySelector('.tokpop');
   const tks=[...box.querySelectorAll('.tok')].map(x=>x.textContent);
   box.querySelectorAll('.tok').forEach((tk,i)=>{tk.onclick=()=>tokPopShow(pop,tk.textContent,{toks:tks,i:i});});
-  const z=box.querySelector('.tzh');z.onclick=()=>z.classList.toggle('hidden');
+  wireZhToggle(box);
   const answered={};
   box.querySelectorAll('.tq .opt').forEach(b=>{b.onclick=()=>{
     const qi=+b.dataset.q;if(answered[qi]!==undefined)return;
@@ -8703,7 +8877,7 @@ function buildReadCard(md){
   const pop=box.querySelector('.tokpop');
   const tks=[...box.querySelectorAll('.tok')].map(x=>x.textContent);
   box.querySelectorAll('.tok').forEach((tk,i)=>{tk.onclick=()=>tokPopShow(pop,tk.textContent,{toks:tks,i:i});});
-  const z=box.querySelector('.tzh');z.onclick=()=>z.classList.toggle('hidden');
+  wireZhToggle(box);
   const answered={};
   const finish=()=>{
     const okN=Object.values(answered).filter(Boolean).length;
