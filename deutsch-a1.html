@@ -666,14 +666,14 @@ function dlgAudioPath(lesson,idx){
    不是本次新增的風險。輪間空檔（dlgTimer 排程中）暫停時沒有正在播放的東西可暫停，
    用 pendingResume 記錄、續播時重新觸發該輪。*/
 let pbState={mode:null,turns:null,lesson:null,idx:-1,tn:null,onTurn:null,
-  rate:1,loop:false,playing:false,paused:false,pendingResume:false,stepFn:null};
+  rate:1.1,loop:false,playing:false,paused:false,pendingResume:false,stepFn:null};
 /* 播放器啟用中（正在播或暫停中）時，點字不該自動唸出那個字——speechSynthesis 全域只能講一句，
    自動唸字會把播放中的內容打斷掉，且被打斷的那個回呼不知道自己被打斷、狀態會亂掉
    （使用者 2026-08-25 實測回報）。改法：播放器啟用時 tokPopShow 只查義不出聲，
    由 renderTexts() 在彈窗裡另外補一顆「▶ 播放這句」，明確交還控制權給使用者。*/
 function pbActive(){return pbState.playing||pbState.paused;}
 function wordSpeak(text){if(!pbActive())speak(text);}
-const PB_RATES=[0.75,1,1.25,1.5];
+const PB_RATES=[0.75,1,1.1,1.25,1.5];
 /* 播放器元素只建立一次：用模組變數 pbEl 快取，不能靠 document.getElementById 判斷是否
    已建立——這顆元素常態上是「建立時還沒插入 DOM」（要等 pbMount 找到對應卡片才插入），
    getElementById 找不到尚未插入的節點，會誤判成「還沒建立」而重複 new 出第二顆，
