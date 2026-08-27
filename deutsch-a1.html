@@ -4276,8 +4276,8 @@ const VERB_META={
   fragen:{t:"reg"},
   heißen:{t:"sib",du:"heißt",er:"heißt",p2:"geheißen",aux:"h"},
   antworten:{t:"stemt",du:"antwortest",er:"antwortet"},
-  sein:{t:"irr",f:["bin","bist","ist","sind","seid","sind"],pt:["war","warst","war","waren","wart","waren"],p2:"gewesen",aux:"s"},
-  haben:{t:"irr",f:["habe","hast","hat","haben","habt","haben"],pt:["hatte","hattest","hatte","hatten","hattet","hatten"],p2:"gehabt",aux:"h"},
+  sein:{t:"irr",f:["bin","bist","ist","sind","seid","sind"],pt:["war","warst","war","waren","wart","waren"],k2:["wäre","wärst","wäre","wären","wärt","wären"],p2:"gewesen",aux:"s"},
+  haben:{t:"irr",f:["habe","hast","hat","haben","habt","haben"],pt:["hatte","hattest","hatte","hatten","hattet","hatten"],k2:["hätte","hättest","hätte","hätten","hättet","hätten"],p2:"gehabt",aux:"h"},
   buchstabieren:{t:"reg"},
   arbeiten:{t:"stemt",du:"arbeitest",er:"arbeitet",p2:"gearbeitet",aux:"h"},
   leben:{t:"reg",p2:"gelebt",aux:"h"},
@@ -4382,7 +4382,7 @@ const VERB_META={
   stören:{t:"reg"},
   hinkommen:{t:"reg"},
   wollen:{t:"irr",f:["will","willst","will","wollen","wollt","wollen"]},
-  werden:{t:"irr",f:["werde","wirst","wird","werden","werdet","werden"],p2:"geworden",aux:"s"},
+  werden:{t:"irr",f:["werde","wirst","wird","werden","werdet","werden"],k2:["würde","würdest","würde","würden","würdet","würden"],p2:"geworden",aux:"s"},
   abschließen:{t:"irr",f:["schließe … ab","schließt … ab","schließt … ab","schließen … ab","schließt … ab","schließen … ab"],p2:"abgeschlossen",aux:"h"},
   anmelden:{t:"irr",f:["melde … an","meldest … an","meldet … an","melden … an","meldet … an","melden … an"],p2:"angemeldet",aux:"h"},
   komponieren:{t:"reg"},
@@ -7185,6 +7185,13 @@ function buildLemma(){
      實例：ihr wart（你們曾經是）原本被判成 warten。*/
   Object.entries(VERB_META).forEach(([inf,m])=>{
     if(m&&Array.isArray(m.pt))m.pt.forEach(f=>{const k=String(f||'').toLowerCase();if(k)LEMMA_V[k]=inf;});});
+  /* ── ①b Konjunktiv II 進索引（2026-08-27，使用者回報 Würde/würde 導讀查無）。
+     VERB_META 原本沒有 k2 欄位——跟 pt 不同：pt 是「有欄位沒接線」，這裡是欄位本身
+     不存在，此次一併新增（只加語料實際用到的 sein/haben/werden 三個）。寫法比照 pt，
+     直接指派而非 addV：würde/wäre/hätte 系列不會跟任何動詞的規則字幹切法衝突，
+     沒有「真形應該贏」的覆寫顧慮，但保持與 pt 同一寫法方便對照維護。*/
+  Object.entries(VERB_META).forEach(([inf,m])=>{
+    if(m&&Array.isArray(m.k2))m.k2.forEach(f=>{const k=String(f||'').toLowerCase();if(k)LEMMA_V[k]=inf;});});
   /* ── ② 命令式進索引（2026-08-23），含可分離動詞。
      推導不能用「du 形去掉 -st」：字幹以 s／ss／ß 結尾的動詞，du 形是「字幹＋t」而非「＋st」
      （du liest ← lies、du vergisst ← vergiss），照那個規則會得到 lie／vergis 兩個不存在的形。
@@ -7276,9 +7283,16 @@ function buildLemma(){
         if(!LEMMA_POSS[k])LEMMA_POSS[k]={base:b,zh:zh,cs:cs};});});
   });
   const ADJ_STEM_ALT={hoch:'hoh'};
+  /* 2026-08-27：非形容詞排除表（使用者回報 ersten 被誤判成副詞 erst「才／直到才」）。
+     erst（cat:"常用"，L9）跟序數 erste（GA1）字根相同，兩者都會產生 erste/ersten/erster/
+     erstes/erstem 這組 key；VOCAB.forEach 先到先得，erst 排在 erste 前面（L9 早於 GA1）
+     先卡位，序數語境的 ersten 因此被誤判。erst 是副詞，本來就不該變格——排除它不影響
+     erst 這個字本身的查詢（字面比對在 tokLookup 最上方就命中，跟 LEMMA_A 無關），
+     只移除它原本就不該產生的變格形，讓 erste 的變格形不再被搶。*/
+  const ADJ_A_EXEMPT=new Set(['erst']);
   VOCAB.forEach(v=>{
     const b=v.de;
-    if(v.g||!/^[a-zäöüß]{2,}$/.test(b)||v.cat==='動詞'||v.cat==='指令動詞'||VERB_META[b])return;
+    if(v.g||!/^[a-zäöüß]{2,}$/.test(b)||v.cat==='動詞'||v.cat==='指令動詞'||VERB_META[b]||ADJ_A_EXEMPT.has(b))return;
     const stems=[b];
     if(ADJ_STEM_ALT[b])stems.push(ADJ_STEM_ALT[b]);                /* hoch→hoh（hohe/hohen）*/
     if(b.endsWith('e'))stems.push(b.slice(0,-1));                  /* müde→müd（müden）*/
@@ -7328,6 +7342,32 @@ function gradToBase(w){
   }
   return null;
 }
+/* 2026-08-27：序數詞（Ordinalzahl）反查——涵蓋 1–31 全部變格形，不開新卡
+   （見 tokLookup 內呼叫處註解，決策理由與範圍見對話紀錄）。
+   詞幹規則：1–19＝基數＋t，20–31＝基數＋st，4 個不規則詞幹另列（見課本文法卡「日期與序數」）。
+   詞幹之後接一般形容詞變格詞尾（e/en/er/es/em），寫法比照 addA()／LEMMA_A 的變格生成邏輯。
+   numWord()／NUM_TEEN 等定義在檔案後段（數字分頁），但都是頂層 const／function，
+   本函式只在使用者點字時才會被呼叫，屆時整份 script 早已執行過一輪，可放心引用。*/
+const ORD_IRR_STEM={1:'erst',3:'dritt',7:'siebt',8:'acht'};
+function ordStemOf(n){
+  if(ORD_IRR_STEM[n])return ORD_IRR_STEM[n];
+  if(n>=1&&n<=19)return numWord(n)+'t';
+  if(n>=20&&n<=31)return numWord(n)+'st';
+  return null;
+}
+let ORD_REV=null;
+function buildOrdRev(){
+  ORD_REV={};
+  for(let n=1;n<=31;n++){
+    const st=ordStemOf(n);if(!st)continue;
+    ['e','en','er','es','em'].forEach(e=>{const k=(st+e).toLowerCase();if(ORD_REV[k]===undefined)ORD_REV[k]=n;});
+  }
+}
+function ordGloss(w){
+  if(!ORD_REV)buildOrdRev();
+  const n=ORD_REV[String(w||'').toLowerCase()];
+  return n===undefined?'':'第'+n+'（序數，Ordinalzahl）';
+}
 function tokLookup(raw){
   const w=raw.replace(/[.,!?:;„“”"—–()]/g,'');
   if(!w)return null;
@@ -7356,6 +7396,17 @@ function tokLookup(raw){
   /* 2026-08-23：功能詞之後再兩層——指示冠詞（程式化）與補充字義（待建卡帳本）*/
   const dg=demGloss(w);
   if(dg)return{w,hit:null,gloss:dg};
+  /* 2026-08-27：序數詞兜底（使用者回報 sechzehnten 導讀查無）。只補 5. 以後——
+     1–4 已有 VOCAB 卡（GA1），字面比對在最上方就命中，不會走到這裡。序數是規則
+     封閉集（1–19：-t，20+：-st，4 個不規則詞幹 erst/dritt/siebt/acht），比照
+     POSS_BASE/DEM_BASE 用程式化查表，不開 27 張卡——理由與範圍見對話紀錄。
+     ⚠️ 已知邊界：achten（8. 的變格形）與既有動詞卡 achten「注意/留意」字面完全相同，
+     VOCAB 字面比對優先序更高，會先攔截，這裡永遠打不進來。目前語料的序數 achten
+     只出現在測驗選項／answer 欄位（不經過 tokLookup），尚未影響導讀，暫不處理，
+     若未來課次的導讀或閱讀正文出現「第八」語境的 achten，需仿 weiß/frage 的
+     homoCtx 上下文覆寫另外處理。*/
+  const og=ordGloss(w);
+  if(og)return{w,hit:null,gloss:og};
   const mg=miscGloss(w);
   if(mg)return{w,hit:null,gloss:mg,misc:1};
   return{w,hit:null};
