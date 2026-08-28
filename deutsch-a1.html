@@ -7724,7 +7724,29 @@ const LESEN_MOCK={
   qs:[{st:"Am Samstag fährt der Bus genauso oft wie am Montag.",a:false,m:7},
       {st:"Kinder müssen für den Bus nichts bezahlen.",a:true,m:1},
       {st:"Ein Ticket kostet 35 Euro.",a:false,m:4},
-      {st:"Der Bus fährt die ganze Nacht.",a:false,m:7}]}]
+      {st:"Der Bus fährt die ganze Nacht.",a:false,m:7}]}],
+"飲食購物":[
+ {genre:"分類廣告",title:"Restaurant Sonne — Mittagsmenü",
+  de:"Restaurant Sonne. Montag bis Freitag haben wir ein Mittagsmenü: Suppe, Hauptgericht und ein Getränk für 9,90 Euro. Am Wochenende ist das Restaurant erst ab 18 Uhr geöffnet. Es gibt auch vegetarische Gerichte. Ein Kind bis vier Jahre isst kostenlos, wenn ein Erwachsener bestellt.",
+  zh:"太陽餐廳。週一到週五我們有午間套餐：湯、主餐和一杯飲料，共9.90歐元。週末餐廳要到18點才開門。也有素食餐點。四歲以下兒童若有大人一起點餐，就能免費用餐。",
+  qs:[{st:"Am Samstag kann man dort schon mittags essen.",a:false,m:7},
+      {st:"Ein Kind mit fünf Jahren muss für das Essen bezahlen.",a:true,m:4},
+      {st:"Das Essen mit Suppe und Hauptgericht gibt es nur am Wochenende.",a:false,m:6},
+      {st:"Ein Getränk ist im Preis inklusive.",a:true,m:1}]},
+ {genre:"告示",title:"Supermarkt Frisch — Öffnungszeiten",
+  de:"Supermarkt Frisch ist von Montag bis Samstag von 7 bis 20 Uhr geöffnet. Sonntags ist geschlossen. Heute gibt es Äpfel im Angebot: statt 2,50 Euro nur 1,80 Euro pro Kilo. Die Kasse Nummer 3 ist heute leider kaputt, bitte gehen Sie zu einer anderen Kasse.",
+  zh:"新鮮超市週一到週六7點到20點營業。週日公休。今天蘋果特價：原價2.50歐元，現在每公斤只要1.80歐元。3號收銀台今天故障，請到別的收銀台。",
+  qs:[{st:"Am Sonntag kann man dort einkaufen.",a:false,m:2},
+      {st:"Die Äpfel kosten heute mehr als gestern.",a:false,m:6},
+      {st:"Der Supermarkt hat heute den ganzen Tag geöffnet.",a:false,m:7},
+      {st:"Der Supermarkt öffnet um 9 Uhr.",a:false,m:6}]},
+ {genre:"分類廣告",title:"Bäckerei Krumm — Frisch jeden Tag",
+  de:"Bäckerei Krumm backt jeden Morgen frisches Brot und Brötchen. Ein Brötchen kostet 60 Cent, ein Brot 3,20 Euro. Am Samstag gibt es Kuchen zum halben Preis, aber nur bis 12 Uhr. Lieferung nach Hause ist ab 20 Euro Bestellwert kostenlos.",
+  zh:"Krumm麵包店每天早上烘烤新鮮的麵包和小圓麵包。一個小圓麵包60分錢，一條麵包3.20歐元。週六蛋糕半價，但只到12點。訂購滿20歐元免費送到府。",
+  qs:[{st:"Am Samstag ist der Kuchen den ganzen Tag billiger.",a:false,m:7},
+      {st:"Ein Brot kostet weniger als ein Brötchen.",a:false,m:4},
+      {st:"Die Bäckerei backt nur am Wochenende.",a:false,m:2},
+      {st:"Ein Brötchen kostet mehr als drei Euro.",a:false,m:4}]}]
 };
 function renderMockReads(theme){
   textsList.innerHTML='';
