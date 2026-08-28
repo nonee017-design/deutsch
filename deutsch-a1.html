@@ -29,6 +29,8 @@
   .lchip{border:1px solid var(--line);background:#f6f8fb;border-radius:999px;padding:6px 14px;font-size:.84rem;font-weight:700;cursor:pointer;color:var(--mut);font-family:var(--ui)}
   .lchip[data-on="true"]{background:var(--l2);color:#fff;border-color:var(--l2)}
   .lchip{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
+  .mchip{border:1px solid var(--line);background:#f6f8fb;border-radius:999px;padding:6px 14px;font-size:.84rem;font-weight:700;cursor:pointer;color:var(--mut);font-family:var(--ui);-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
+  .mchip[data-on="true"]{background:var(--l2);color:#fff;border-color:var(--l2)}
   nav{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 18px;position:sticky;top:0;background:var(--bg);padding:10px 0;z-index:20}
   .tab{border:1px solid var(--line);background:var(--card);color:var(--ink);font-family:var(--ui);font-weight:600;font-size:.86rem;padding:8px 14px;border-radius:999px;cursor:pointer;transition:.15s}
   .tab[aria-selected="true"]{background:var(--chrome);color:#fff;border-color:var(--chrome)}
@@ -296,6 +298,11 @@ L19 描述外貌與性格·sein/haben Präteritum正式教·不可分離動詞Pe
       <li>短文只用「該課及之前」教過的字——讀不懂＝該回去刷單字。</li>
       <li>⚠️ AI 生成、未經母語者校對，覺得怪的句子記下來問老師。</li>
     </ul></details>
+    <div style="margin:8px 0;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="mchip" id="modeLesson" data-on="true">📚 依課次</button>
+      <button class="mchip" id="modeTheme" data-on="false">🎯 依主題模擬</button>
+    </div>
+    <div id="themeChips" style="margin-bottom:8px;display:none;gap:8px;flex-wrap:wrap"></div>
     <div class="grid" id="textsList"></div>
   </section>
 
@@ -7693,6 +7700,81 @@ function renderTexts(){
   if(!textsList.children.length)textsList.innerHTML='<p style="color:#888;padding:8px">此範圍還沒有導讀——換個課別範圍看看。</p>';
 }
 
+/* ===ANCHOR:LESEN_MOCK===（新主題模擬閱讀組插在這行上方；de 需跑 validate_texts.py 白名單驗證通過才收，
+   st 一律禁止超綱字；每篇原文最多 3 個超綱實詞，只能出現在 de、不能出現在 st——2026-08-28 使用者拍板） */
+const LESEN_MOCK={
+"城市交通旅館":[
+ {genre:"告示",title:"Am Bahnhof — Hinweise",
+  de:"Achtung: Der Zug nach Bremen fährt heute nicht von Gleis 3, sondern von Gleis 7. Der Zug fährt um 14.20 Uhr, nicht um 14.00 Uhr. Sie können die Fahrkarten im Bahnhof kaufen. Der Bahnhof ist von 6 bis 21 Uhr geöffnet. Auf dem ganzen Bahnsteig ist Rauchen verboten. Der Bahnhof hat auch einen Fahrstuhl und Schließfächer für Ihr Gepäck.",
+  zh:"注意：往不來梅的火車今天不從3號月台出發，改從7號月台。發車時間是14點20分，不是14點整。車票可在車站購買。車站開放時間為6點到21點。整個月台禁止吸菸。車站裡也有電梯和寄物櫃可以放行李。",
+  qs:[{st:"Der Zug fährt heute von Gleis 3.",a:false,m:4},
+      {st:"Der Zug fährt pünktlich um 14 Uhr.",a:false,m:6},
+      {st:"Man darf am Bahnsteig nicht rauchen.",a:true,m:1},
+      {st:"Der Bahnhof ist die ganze Nacht geöffnet.",a:false,m:7}]},
+ {genre:"分類廣告",title:"Zimmer frei — Hotel am See",
+  de:"Hotel am See. Wir haben Einzelzimmer und Doppelzimmer, jedes Zimmer hat Dusche und Bad. Das Frühstück ist im Preis. Ein Doppelzimmer kostet 75 Euro für eine Nacht, ein Einzelzimmer kostet 45 Euro. Sie können nur mit E-Mail reservieren. Das Hotel hat eine schöne Terrasse mit Blick auf den See und einen kostenlosen Parkplatz.",
+  zh:"湖邊旅館。我們有單人房和雙人房，每間房都有淋浴和浴室。早餐已含在價格內。雙人房一晚75歐元，單人房45歐元。只能透過電子郵件訂房。旅館有一個漂亮的湖景露台，還有免費停車場。",
+  qs:[{st:"Das Frühstück ist nicht im Preis.",a:false,m:2},
+      {st:"Ein Einzelzimmer kostet mehr als ein Doppelzimmer.",a:false,m:4},
+      {st:"In jedem Zimmer gibt es eine Dusche.",a:true,m:1},
+      {st:"Man kann mit dem Telefon reservieren.",a:false,m:7}]},
+ {genre:"告示",title:"Bus 12 — Fahrplan",
+  de:"Der Bus 12 fährt vom Bahnhof zum Flughafen. Der Bus fährt jede Stunde, von 5 bis 23 Uhr. Am Wochenende fährt der Bus nur alle zwei Stunden. Die Fahrt dauert 35 Minuten. Ein Ticket kostet 3,50 Euro. Kinder fahren kostenlos. An Feiertagen gilt ein spezieller Fahrplan.",
+  zh:"12號公車行駛於車站到機場之間。每小時一班，從5點到23點。週末只有每兩小時一班。車程35分鐘。單程票3.50歐元。兒童免費搭乘。假日則適用特別時刻表。",
+  qs:[{st:"Am Samstag fährt der Bus genauso oft wie am Montag.",a:false,m:7},
+      {st:"Kinder müssen für den Bus nichts bezahlen.",a:true,m:1},
+      {st:"Ein Ticket kostet 35 Euro.",a:false,m:4},
+      {st:"Der Bus fährt die ganze Nacht.",a:false,m:7}]}]
+};
+function renderMockReads(theme){
+  textsList.innerHTML='';
+  (LESEN_MOCK[theme]||[]).forEach(t=>{
+    const card=document.createElement('div');card.className='card gcard textcard';
+    const tokize=s=>s.split(/(\s+)/).map(seg=>/\S/.test(seg)?`<span class="tok">${seg}</span>`:seg).join('');
+    card.innerHTML=`<div class="gtitle">🎯 ${t.title} <span class="genretag">${t.genre}</span></div>`
+      +`<div style="margin:6px 0"><button class="btn tplay">▶️ 整段連唸</button></div>`
+      +`<div class="tokpop">👆 點上面任何一個德文字查意思</div>`
+      +`<div class="tde">${tokize(t.de)}</div>`
+      +`<div class="tzh hidden">${t.zh}</div>`
+      +`<div class="tq"><b style="font-size:.9rem">🧠 這句陳述符合原文嗎？</b>${t.qs.map((q,qi)=>`<div style="margin-top:8px;font-size:.92rem"><b>${qi+1}. ${q.st}</b><div><button class="opt" data-q="${qi}" data-o="1">Richtig</button><button class="opt" data-q="${qi}" data-o="0">Falsch</button><span class="rfm" data-q="${qi}" style="font-size:.78rem;color:var(--mut)"></span></div></div>`).join('')}</div>`
+      +`<div class="srcnote">來源：AI 生成 · 未經母語者校對 · 主題模擬題</div>`;
+    card.querySelector('.tplay').onclick=()=>speak(t.de);
+    const pop=card.querySelector('.tokpop');
+    const tks=[...card.querySelectorAll('.tok')].map(x=>x.textContent);
+    card.querySelectorAll('.tok').forEach((el,i)=>{el.onclick=()=>tokPopShow(pop,el.textContent,{toks:tks,i:i});});
+    wireZhToggle(card);
+    card.querySelectorAll('.tq .opt').forEach(b=>{b.onclick=()=>{
+      const qi=+b.dataset.q,q=t.qs[qi],ok=(+b.dataset.o===1)===!!q.a;
+      b.classList.add(ok?'correct':'wrong');
+      const lb=card.querySelector(`.rfm[data-q="${qi}"]`);if(lb)lb.textContent='　機制：'+(RF_MECH[q.m]||'');
+      if(!ok){const k='🧠 '+(RF_MECH[q.m]||'理解判斷');errors[k]=(errors[k]||0)+1;saveErrors();renderErrPanel();}
+    };});
+    textsList.appendChild(card);
+  });
+  if(!textsList.children.length)textsList.innerHTML='<p style="color:#888;padding:8px">這個主題還沒有內容。</p>';
+}
+document.getElementById('modeLesson').onclick=()=>{
+  document.getElementById('modeLesson').dataset.on='true';
+  document.getElementById('modeTheme').dataset.on='false';
+  document.getElementById('themeChips').style.display='none';
+  renderTexts();
+};
+document.getElementById('modeTheme').onclick=()=>{
+  document.getElementById('modeLesson').dataset.on='false';
+  document.getElementById('modeTheme').dataset.on='true';
+  const tc=document.getElementById('themeChips');
+  tc.style.display='flex';
+  if(!tc.children.length){
+    Object.keys(LESEN_MOCK).forEach((th,i)=>{
+      const b=document.createElement('button');
+      b.className='mchip';b.textContent=th;b.dataset.on=i===0?'true':'false';
+      b.onclick=()=>{[...tc.children].forEach(x=>x.dataset.on='false');b.dataset.on='true';renderMockReads(th);};
+      tc.appendChild(b);
+    });
+  }
+  const first=tc.querySelector('.mchip');
+  if(first)renderMockReads(first.textContent);
+};
 /* ---------- QUIZ ---------- */
 let qmode='mean',qScore=0,qTotal=0,qCur=null,qSpeak='';
 const REG={
